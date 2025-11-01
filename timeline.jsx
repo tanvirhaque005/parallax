@@ -2,9 +2,9 @@ const { useEffect, useRef, useState } = React;
 
 // Gradient colors that transition as you scroll
 const GRADIENT_COLORS = [
-  { from: '#000000', via: '#1a0033', to: '#330066' }, // Deep purple/black
-  { from: '#1a0033', via: '#4d0066', to: '#660099' }, // Purple
-  { from: '#4d0066', via: '#0066cc', to: '#0099ff' }, // Purple to blue
+  { from: '#1a0033', via: '#330066', to: '#4d0099' }, // Start with purple (not black)
+  { from: '#330066', via: '#4d0099', to: '#6600cc' }, // Purple
+  { from: '#4d0099', via: '#0066cc', to: '#0099ff' }, // Purple to blue
   { from: '#0066cc', via: '#00ccff', to: '#66ffff' }, // Blue to cyan
   { from: '#00ccff', via: '#0099cc', to: '#006699' }, // Cyan to dark blue
   { from: '#006699', via: '#003366', to: '#000033' }, // Dark blue to black
@@ -12,7 +12,9 @@ const GRADIENT_COLORS = [
 
 function ParallaxGradient() {
   const containerRef = useRef(null);
+  const contentRef = useRef(null);
   const [scrollY, setScrollY] = useState(0);
+  const [maxScroll, setMaxScroll] = useState(10000);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -22,18 +24,34 @@ function ParallaxGradient() {
       setScrollY(container.scrollTop);
     };
 
-    container.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial call
+    const updateMaxScroll = () => {
+      if (contentRef.current) {
+        const height = contentRef.current.scrollHeight - window.innerHeight;
+        setMaxScroll(Math.max(height, 1000));
+      }
+    };
 
-    return () => container.removeEventListener('scroll', handleScroll);
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', updateMaxScroll);
+    handleScroll(); // Initial call
+    updateMaxScroll();
+
+    // Update after a short delay to ensure content is rendered
+    const timeout = setTimeout(updateMaxScroll, 100);
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', updateMaxScroll);
+      clearTimeout(timeout);
+    };
   }, []);
 
   // Calculate which gradient to use based on scroll position
-  const maxScroll = 3000; // Total scrollable height for smooth transitions
-  const scrollProgress = Math.min(scrollY / maxScroll, 1);
-  const gradientIndex = Math.floor(scrollProgress * (GRADIENT_COLORS.length - 1));
+  const scrollProgress = Math.max(0, Math.min(scrollY / maxScroll, 1));
+  const normalizedProgress = scrollProgress * (GRADIENT_COLORS.length - 1);
+  const gradientIndex = Math.min(Math.floor(normalizedProgress), GRADIENT_COLORS.length - 1);
   const nextGradientIndex = Math.min(gradientIndex + 1, GRADIENT_COLORS.length - 1);
-  const localProgress = (scrollProgress * (GRADIENT_COLORS.length - 1)) % 1;
+  const localProgress = normalizedProgress - gradientIndex;
 
   const currentGradient = GRADIENT_COLORS[gradientIndex];
   const nextGradient = GRADIENT_COLORS[nextGradientIndex];
@@ -88,7 +106,7 @@ function ParallaxGradient() {
       ))}
 
       {/* Content sections to enable scrolling */}
-      <div className="relative z-10">
+      <div ref={contentRef} className="relative z-10">
         {Array.from({ length: 10 }, (_, i) => (
           <section
             key={i}
