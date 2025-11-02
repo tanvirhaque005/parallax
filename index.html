@@ -2,29 +2,55 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <title>3D Bookshelf (Full-Screen Details)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Parallax Sci‑Fi Timeline</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      html, body, #root { height: 100%; }
-      body { background: #000; }
-    </style>
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div id="root"></div>
+    <div id="controls">
+      <button id="scrollLeft" aria-label="Scroll left">⟵</button>
+      <button id="scrollRight" aria-label="Scroll right">⟶</button>
+    </div>
 
-    <!-- React 18 UMD -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Base shelf canvas (all covers) -->
+    <canvas id="bookCanvas" aria-label="Interactive 3D bookshelf"></canvas>
+    <h1>whats up my slimes</h1>
+    <h2>BTW i didnt include the dates on the bookshelf since idk if we wanna use a bookshelf given the perspective of the 3d books / the floating animation</h2>
 
-    <!-- Framer Motion UMD (pinned version) -->
-    <script src="https://cdn.jsdelivr.net/npm/framer-motion@10.16.4/dist/framer-motion.umd.min.js"></script>
+    <canvas id="activeBookCanvas" aria-hidden="true"></canvas>
 
-    <!-- Babel for in-browser JSX transform (dev only) -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- card overlay -->
+    <div id="bookinfo" aria-hidden="true">
+      
+      <div class="card" role="dialog" aria-modal="true" aria-labelledby="bookTitle">
+        <p>Library > Film</p>
+        <button id="closeInfo" class="btn close" aria-label="Close details">✕</button>
 
-    <!-- Load external JSX file that renders the app -->
-    <script type="text/babel" data-presets="react" src="./timeline.jsx"></script>
+        <button id="cardPrev" class="btn cardNav" aria-label="Previous book">⟵</button>
+        <button id="cardNext" class="btn cardNav" aria-label="Next book">⟶</button>
+        <h6>BTW guys I made the cover on the right because the math to get the tilt ok on the left was really annoying</h6>
+        <h1 class="title" id="bookTitle">Title</h1>
+        <div class="meta" id="bookMeta">Author · Year</div>
+        <p class="blurb" id="bookBlurb">Blurb</p>
+
+
+        <div class="row" id="pillContainer"></div>
+
+        <div class="long">
+          <h2>More Information</h2>
+          <p>
+            This area will eventually contain a lot of information. 
+          </p>
+          <button class="btn" onclick="location.href='/infoPage.html?trope=AI&randnum=25'">Explore This Trope</button>
+          <div id="tropeDiv"></div>
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="backToShelf">← Back to shelf</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./index.js"></script>
   </body>
-  </html>
-
+</html>

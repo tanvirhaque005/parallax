@@ -1,0 +1,25 @@
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Trope Information Page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="./styles.css" />
+    </head>
+    <body>
+        <h1>Trope Information Page</h1>
+        <h1>Audrey this is prolly where youll have your stuff</h1>
+        <div id="tropeInfo"></div>
+    
+        <script>
+        // Parse URL parameters
+        const params = new URLSearchParams(window.location.search);
+        const trope = params.get("trope");
+        const randnum = params.get("randnum");
+    
+        // Display trope information
+        const tropeInfoDiv = document.getElementById("tropeInfo");
+        tropeInfoDiv.innerHTML = `<h2>Trope: ${trope}</h2><p>Random Number: ${randnum}</p><p>This page contains information about the "${trope}" trope. More details will be added here soon!</p>`;
+        </script>
+    </body>

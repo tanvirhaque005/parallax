@@ -1,0 +1,156 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  background: radial-gradient(#0b1020, #05060b);
+  overflow: hidden;
+  color: #e5e7eb;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+}
+
+/* Base shelf canvas */
+#bookCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1; /* base layer */
+}
+
+/* Overlay canvas: draws only the selected book ABOVE the overlay card */
+#activeBookCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;        /* shown only when overlay is open */
+  pointer-events: none; /* let clicks go to UI */
+  z-index: 6;           /* higher than the full-screen card */
+}
+
+/* Scroll controls */
+#controls {
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 2;
+}
+#controls button {
+  pointer-events: all;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e5e7eb;
+  font-size: 1.8rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+#controls button:hover { background: rgba(255,255,255,0.2); transform: scale(1.08); }
+#controls button:active { transform: scale(0.96); }
+
+/* ---------------- Full-screen overlay ---------------- */
+#bookinfo {
+  position: absolute;
+  inset: 0;
+  z-index: 5;          /* below activeBookCanvas (6), above shelf (1) */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+
+#bookinfo.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* The card is now the entire screen, with solid background and its own scroll */
+#bookinfo .card {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;                 /* important: scroll large content */
+  background: #0e111a;            /* SOLID color (change as desired) */
+  color: #e5e7eb;
+  padding: clamp(16px, 4vw, 40px) clamp(16px, 5vw, 60px);
+  box-shadow: none;               /* no transparency/blur/border */
+  border: none;
+}
+
+/* Content styling */
+.title { font-size: clamp(1.6rem, 3vw, 2rem); font-weight: 800; margin: 0 0 6px; }
+.meta  { opacity: 0.9; margin-bottom: 14px; font-size: 1rem; }
+.blurb { line-height: 1.6; font-size: 1.05rem; margin-bottom: 16px; }
+
+.row   { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.pill  {
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.long { margin-top: 18px; }
+.long h2 { margin: 14px 0 8px; font-size: 1.25rem; }
+.long p { margin: 0 0 10px; line-height: 1.65; }
+
+.actions { display: flex; gap: 10px; margin-top: 16px; }
+
+.btn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #e5e7eb;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform .15s ease, background .2s ease;
+}
+.btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.16); }
+.btn:active { transform: translateY(1px); }
+
+.btn.close {
+  float: right;
+  line-height: 1;
+  padding: 6px 10px;
+  margin: -6px -6px 8px 8px;
+}
+
+/* Color swatches */
+.colorSwatch {
+  width: 14px; height: 14px; border-radius: 4px; display: inline-block; margin-right: 6px;
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  #bookinfo { transition: none !important; }
+  #controls button { transition: none !important; }
+}
+
+/* Card-view next/prev arrows */
+.btn.cardNav {
+  position: fixed;          /* stays visible while the card scrolls */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 7;               /* above the card content (card is z=5) */
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  font-size: 1.6rem;
+  line-height: 1;
+  padding: 10px 14px;
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+}
+#cardPrev { left: 16px; }
+#cardNext { right: 16px; }
+
+#cardPrev:hover, #cardNext:hover { background: rgba(255,255,255,0.2); }
+#cardPrev:active, #cardNext:active { transform: translateY(-50%) scale(0.96); }
