@@ -303,12 +303,10 @@ function rebuildOverlayForIndex() {
   blurbEl.textContent = meta.blurb;
   // swFront.style.background = `#${colors.front.toString(16).padStart(6,'0')}`;
   // swBack.style.background  = `#${colors.back.toString(16).padStart(6,'0')}`;
-  tropeDiv.innerHTML = meta.tropes.map(trope => {
-    const randNum = Math.floor(Math.random() * 100);
-    return `<button class="btn" onclick="location.href='/infoPage.html?trope=${trope}&randnum=${randNum}'">
-              Go to ${trope} (RNG:${randNum})
+  // Placeholder: All movies currently show 2001: A Space Odyssey chord graph
+  tropeDiv.innerHTML = `<button class="btn" onclick="location.href='/infoPage.html?movie=${encodeURIComponent('2001: A Space Odyssey')}'">
+              View Theme Analysis (Placeholder: 2001: A Space Odyssey)
             </button>`;
-  }).join('');
   
   pillContainer.innerHTML = meta.tropes.map(trope => {
     return `<span class="pill">

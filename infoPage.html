@@ -1,25 +1,343 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>Trope Information Page</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="./styles.css" />
-    </head>
-    <body>
-        <h1>Trope Information Page</h1>
-        <h1>Audrey this is prolly where youll have your stuff</h1>
-        <div id="tropeInfo"></div>
-    
-        <script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sci-Fi Themes Network</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Anonymous+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Space Mono', 'Courier New', monospace;
+            background: #f5f7fa;
+            min-height: 100vh;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            font-size: 2em;
+            font-weight: 700;
+            letter-spacing: 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        #chordContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            background: #ffffff;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .loading {
+            text-align: center;
+            font-size: 0.9em;
+            color: #6b7280;
+            padding: 50px;
+            font-weight: 400;
+            letter-spacing: 0;
+        }
+
+        .error {
+            text-align: center;
+            font-size: 0.9em;
+            color: #ef4444;
+            padding: 50px;
+            font-weight: 400;
+            letter-spacing: 0;
+        }
+
+        .movie-info {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            border-radius: 8px;
+            color: white;
+        }
+
+        .movie-info h3 {
+            margin: 0 0 10px 0;
+            color: white;
+            font-size: 1.4em;
+            font-weight: 700;
+            letter-spacing: 0;
+        }
+
+        .movie-info p {
+            margin: 5px 0;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.7;
+            font-weight: 400;
+            font-size: 0.9em;
+        }
+
+        .movie-info strong {
+            font-weight: 700;
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #1e3a8a;
+            letter-spacing: 0;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: #6b7280;
+            margin-top: 5px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 400;
+            transition: all 0.2s;
+            letter-spacing: 0;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .control-btn:hover {
+            background: #0f172a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.4);
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #1e3a8a;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+            transition: all 0.3s;
+            font-weight: 400;
+            letter-spacing: 0;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85em;
+        }
+
+        .back-button:hover {
+            background: #0f172a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.4);
+        }
+
+        .info-section {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .info-section h3 {
+            margin-top: 0;
+            color: #1a1a1a;
+            font-weight: 700;
+            font-size: 1em;
+            letter-spacing: 0;
+        }
+
+        .info-section p {
+            color: #4b5563;
+            line-height: 1.7;
+            font-weight: 400;
+            font-size: 0.85em;
+        }
+
+        #movieInfo {
+            display: none;
+        }
+
+        #stats {
+            display: none;
+        }
+
+        #controls {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sci-Fi Themes Network</h1>
+        <p class="subtitle">Explore how different sci-fi themes connect across cinema. Hover over nodes and connections to see details.</p>
+
+        <div id="movieInfo" class="movie-info">
+            <h3 id="movieTitle"></h3>
+            <p><strong>Year:</strong> <span id="movieYear"></span> | <strong>Rating:</strong> <span id="movieRating"></span></p>
+            <p id="movieThemes"></p>
+        </div>
+
+        <div class="stats" id="stats">
+            <div class="stat-item">
+                <div class="stat-value" id="themeCount">0</div>
+                <div class="stat-label">Themes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="connectionCount">0</div>
+                <div class="stat-label">Connections</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="movieCount">0</div>
+                <div class="stat-label">Related Movies</div>
+            </div>
+        </div>
+
+        <div class="controls" id="controls">
+            <button class="control-btn" onclick="resetZoom()">Reset View</button>
+        </div>
+
+        <div id="chordContainer">
+            <div class="loading">Loading network graph...</div>
+        </div>
+
+        <div class="info-section">
+            <h3>About This Visualization</h3>
+            <p>
+                This circular network graph shows how the themes in this movie co-occur with themes in other sci-fi films.
+                Each node (circle) represents a theme from the selected movie. The curved lines connecting themes
+                indicate how many other movies share both themes. Hover over any connection to see which specific
+                movies have that theme combination. You can also zoom and pan the visualization for a closer look.
+            </p>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="/index.html" class="back-button">← Back to Library</a>
+        </div>
+    </div>
+
+    <!-- Chord Graph Visualization -->
+    <script src="./chordGraph.js"></script>
+
+    <script>
         // Parse URL parameters
         const params = new URLSearchParams(window.location.search);
-        const trope = params.get("trope");
-        const randnum = params.get("randnum");
-    
-        // Display trope information
-        const tropeInfoDiv = document.getElementById("tropeInfo");
-        tropeInfoDiv.innerHTML = `<h2>Trope: ${trope}</h2><p>Random Number: ${randnum}</p><p>This page contains information about the "${trope}" trope. More details will be added here soon!</p>`;
-        </script>
-    </body>
+        const movieTitle = params.get("movie");
+
+        // Global reference to chord graph for control buttons
+        let chordGraph = null;
+
+        // Initialize and render the network graph
+        async function initVisualization() {
+            if (!movieTitle) {
+                document.getElementById('chordContainer').innerHTML =
+                    '<div class="error">No movie specified. Please select a movie from the library.</div>';
+                return;
+            }
+
+            try {
+                // Create chord graph instance
+                chordGraph = new ChordGraph('chordContainer');
+
+                // Load data
+                await chordGraph.loadData('./merged_movies_data.csv');
+
+                // Get movie info
+                const movie = chordGraph.movies.find(m => m.title === movieTitle);
+
+                if (!movie) {
+                    document.getElementById('chordContainer').innerHTML =
+                        `<div class="error">Movie "${movieTitle}" not found in database.</div>`;
+                    return;
+                }
+
+                // Update movie info section
+                document.getElementById('movieInfo').style.display = 'block';
+                document.getElementById('movieTitle').textContent = movie.title;
+                document.getElementById('movieYear').textContent = movie.year;
+                document.getElementById('movieRating').textContent = movie.rating || 'N/A';
+                document.getElementById('movieThemes').textContent =
+                    `Themes: ${movie.themes.join(', ')}`;
+
+                // Render network graph
+                const stats = chordGraph.render(movieTitle, {
+                    width: 1200,
+                    height: 900
+                });
+
+                // Update stats section
+                if (stats) {
+                    document.getElementById('stats').style.display = 'flex';
+                    document.getElementById('controls').style.display = 'flex';
+                    document.getElementById('themeCount').textContent = stats.themeCount;
+                    document.getElementById('connectionCount').textContent = stats.connectionCount;
+                    document.getElementById('movieCount').textContent = stats.relatedMovieCount;
+                }
+
+            } catch (error) {
+                console.error('Error loading visualization:', error);
+                document.getElementById('chordContainer').innerHTML =
+                    `<div class="error">Error loading visualization: ${error.message}</div>`;
+            }
+        }
+
+        // Control functions
+        function resetZoom() {
+            if (chordGraph) {
+                chordGraph.resetZoom();
+            }
+        }
+
+        // Initialize when page loads
+        initVisualization();
+    </script>
+</body>
+</html>
