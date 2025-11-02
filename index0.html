@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Parallax Sci‑Fi Timeline</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      html, body, #root { 
+        height: 100%; 
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      body { 
+        background: #000;
+        font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      }
+      /* Hide scrollbars */
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      * {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div style="color: white; padding: 20px; text-align: center;">
+        Loading...
+      </div>
+    </div>
+
+    <!-- Three.js UMD Build - Load First -->
+    <script src="https://unpkg.com/three@0.164.0/build/three.min.js"></script>
+    <script>
+      // Ensure THREE is available globally
+      if (typeof THREE === 'undefined' && typeof window !== 'undefined') {
+        console.error('Three.js failed to load');
+      } else {
+        console.log('Three.js loaded successfully');
+      }
+    </script>
+
+    <!-- React 18 UMD -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Babel for in-browser JSX transform -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Load external JSX file that renders the app -->
+    <script type="text/babel" data-presets="react" src="./timeline.jsx"></script>
+    <script>
+      // Fallback error handler
+      window.addEventListener('error', (e) => {
+        console.error('Global error:', e.error);
+        const root = document.getElementById('root');
+        if (root && !root.querySelector('.loaded')) {
+          root.innerHTML = '<div style="color: white; padding: 20px;">Error: ' + (e.error ? e.error.message : 'Unknown error') + '. Check console for details.</div>';
+        }
+      });
+    </script>
+  </body>
+  </html>
+
