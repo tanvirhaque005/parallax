@@ -468,7 +468,7 @@ function rebuildOverlayForIndex() {
 
   // Default pose in card view (edit to taste)
   overlayBook.rotation.set(0, 0.90, 0); // X (pitch), Y (yaw), Z (roll) in radians
-  overlayBook.position.set(1.6, 1.2, 0.4);
+  overlayBook.position.set(1.6, 0.6, 0.4); // Lowered y position from 1.2 to 0.6
 
   overlayScene.add(overlayBook);
 }

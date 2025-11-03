@@ -189,7 +189,7 @@ html, body {
 /* Card-view next/prev arrows */
 .btn.cardNav {
   position: fixed;          /* stays visible while the card scrolls */
-  top: 50%;
+  top: 15%;
   transform: translateY(-50%);
   z-index: 7;               /* above the card content (card is z=5) */
   background: rgba(106, 106, 106, 0.231);
@@ -325,6 +325,7 @@ html, body {
   font-size: 14px;
   color: #6b7280;
   margin-bottom: 24px;
+  width: 50vw;
 }
 
 .motifs-container {
