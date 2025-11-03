@@ -160,12 +160,18 @@ const titleEl = document.getElementById('bookTitle');
 const blurbEl = document.getElementById('bookBlurb');
 const swFront = document.getElementById('swatchFront');
 const swBack  = document.getElementById('swatchBack');
-// const tropeDiv = document.getElementById('tropeDiv');
+const tropeDiv = document.getElementById('tropeDiv');
 const pillContainer = document.getElementById('pillContainer');
 const directorEl = document.getElementById('director');
 const releasedEl = document.getElementById('released');
 const depictedEl = document.getElementById('depicted');
 const motifsContainer = document.getElementById('motifsContainer');
+
+// Placeholder: All movies currently show 2001: A Space Odyssey chord graph
+// ! i assume this should go elsewhere?
+tropeDiv.innerHTML =`<button class="btn" onclick="location.href='/infoPage.html?movie=${encodeURIComponent("2001: A Space Odyssey")}'">
+              View Theme Analysis (2001: A Space Odyssey)
+            </button>`;
 
 /* Scroll buttons and wheel */
 let shelfOffset = 0;
@@ -420,13 +426,8 @@ function rebuildOverlayForIndex() {
   depictedEl.textContent = `${meta.depicted || 'N/A'}, Washington DC, USA`;
   // swFront.style.background = `#${colors.front.toString(16).padStart(6,'0')}`;
   // swBack.style.background  = `#${colors.back.toString(16).padStart(6,'0')}`;
-  // Placeholder: All movies currently show 2001: A Space Odyssey chord graph
-  // ! Audrey's circle graph is visible if you set trope="2001: A Space Odyssey" 
-  // tropeDiv.innerHTML = meta.tropes.map(trope => {
-  //   return `<button class="btn" onclick="location.href='/infoPage.html?movie=${encodeURIComponent(trope)}'">
-  //             View Theme Analysis (${trope})
-  //           </button>`;;
-  // }).join('');
+  
+  
 
   
   const tags = meta.tags || meta.tropes || [];
