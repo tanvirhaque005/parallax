@@ -437,22 +437,21 @@ function rebuildOverlayForIndex() {
   
   motifsContainer.innerHTML = displayMotifs.map((motif, i) => {
     const isHighlighted = i === 0;
-    // return `<div class="motif-circle ${isHighlighted ? 'highlighted' : ''}" data-motif="${motif}">
-    //           ${motif}
-    //         </div>`;
-    return `<div class="motif-circle data-motif="${motif}">
+    // Properly include the data-motif attribute separate from the class
+    return `<div class="motif-circle" data-motif="${motif}" onclick="location.href='/tropeInfo.html?trope=${encodeURIComponent(motif)}'">
               ${motif}
             </div>`;
   }).join('');
   
-  // Add click handlers to motif circles
-  motifsContainer.querySelectorAll('.motif-circle').forEach(circle => {
-  circle.addEventListener('click', () => {
-    const motifName = circle.dataset.motif;
-    // Redirect to infoPage.html with the motif name encoded
-    location.href = `/infoPage.html?trope=${encodeURIComponent(motifName)}`;
-  });
-});
+//   // Add click handlers to motif circles
+//   motifsContainer.querySelectorAll('.motif-circle').forEach(circle => {
+//     circle.addEventListener('click', () => {
+//       const motifName = circle.dataset.motif;
+//       console.log(motifName)
+//       // Redirect to tropeInfo.html with the motif name encoded
+//       location.href = `/tropeInfo.html?trope=${motifName}`;
+//     });
+// });
 
   // Update chord graph button with actual movie title
   tropeDiv.innerHTML = `<button class="btn" onclick="location.href='/infoPage.html?movie=${encodeURIComponent(meta.title)}'">

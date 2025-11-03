@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sci-Fi Themes Network</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Anonymous+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+</head>
+<body>
+    <div class="container">
+        <h1>trope-specific data viz. not implemented yet</h1>
+        <div id="tropename">
+            trope
+        </div>
+    </div>
+
+    <script>
+        // Parse URL parameters
+        const params = new URLSearchParams(window.location.search);
+        const movieTitle = params.get("movie");
+        const trope = params.get("trope");
+        
+        document.getElementById('tropename').textContent = trope;
+       
+    </script>
+</body>
+</html>
