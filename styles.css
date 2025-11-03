@@ -387,3 +387,33 @@ html, body {
 .back-btn:hover {
   background: #d1d5db;
 }
+
+/* Chord Graph Button */
+.chord-button-container {
+  margin: 20px 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.chord-button-container .btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.chord-button-container .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.chord-button-container .btn:active {
+  transform: translateY(0px);
+}

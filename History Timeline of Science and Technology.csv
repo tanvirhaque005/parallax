@@ -1,0 +1,123 @@
+Date,Category,Type of Innovation,Historical Event,Region
+3500 BCE,Engineering,Irrigation,Canal and levee systems emerge in Mesopotamia,Middle East (Mesopotamia)
+3200 BCE,Mathematics,Numeral Systems,Sumerians develop cuneiform numerals and accounting,Middle East (Sumer)
+3000 BCE,Astronomy,Calendars,Egyptians formalize a 365-day solar calendar,Africa (Egypt)
+2700 BCE,Medicine,Surgery,Earliest surgical papyri document wound care techniques,Africa (Egypt)
+2600 BCE,Engineering,Monumental Architecture,Great Pyramid demonstrates advanced surveying and logistics,Africa (Egypt)
+2000 BCE,Metallurgy,Bronze Casting,Standardized bronze tools and weapons spread widely,Global (Eurasia)
+1200 BCE,Metallurgy,Ironworking,Iron smelting and forging drive new agriculture and warfare,Anatolia / Levant
+800 BCE,Mathematics,Zero Concept (proto),Early zero-like placeholders appear in Babylonian notation,Middle East
+700 BCE,Mathematics,Geometry,"Greek geometry foundations (Thales, Pythagoras, Euclid later)",Europe (Greece)
+600 BCE,Philosophy/Science,Natural Philosophy,Pre-Socratics propose material explanations of nature,Europe (Greece)
+500 BCE,Astronomy,Geocentrism (early),Greek models of celestial spheres take shape,Europe (Greece)
+400 BCE,Medicine,Hippocratic Medicine,Systematic observation and ethics in clinical practice,Europe (Greece)
+250 BCE,Engineering,Archimedean Screw,Device for lifting water invented,Europe (Sicily)
+240 BCE,Astronomy,Earth’s Circumference,Eratosthenes measures Earth with remarkable accuracy,Africa (Egypt)
+150 BCE,Astronomy,Antikythera Mechanism,Analog computer predicts eclipses and games cycles,Europe (Greece)
+100 CE,Astronomy,Geocentric Model,Ptolemy codifies Earth-centered universe in Almagest,Africa (Egypt)
+200 CE,Engineering,Papermaking,Cai Lun improves paper production,Asia (China)
+300 CE,Agriculture,Horse Collar,Improved harness increases plowing efficiency,Europe
+500 CE,Mathematics,Zero (formalized),Indian mathematicians formalize zero as a number,Asia (India)
+620,Chemistry,Alchemy,Islamic scholars preserve and expand chemical techniques,Middle East
+800,Mathematics,Algebra,Al-Khwarizmi writes foundational texts on algebra,Middle East (Baghdad)
+1000,Engineering,Windmills,First vertical-axis windmills recorded in Persia,Middle East (Persia)
+1044,Chemistry,Gunpowder,Chinese texts describe gunpowder mixtures,Asia (China)
+1088,Education,University,University of Bologna exemplifies institutional science learning,Europe (Italy)
+1126,Optics,Camera Obscura,Ibn al-Haytham advances experimental optics,Middle East (Cairo)
+1206,Engineering,Automata,Al-Jazari documents programmable mechanical devices,Middle East
+1250,Navigation,Magnetic Compass,Maritime magnetic compass spreads to Europe,Asia → Europe
+1271,Engineering,Eyeglasses,Early spectacles used in Italy for vision correction,Europe (Italy)
+1450,Engineering,Printing Press,Gutenberg’s movable type enables mass literacy,Europe (Germany)
+1492,Navigation,Oceanic Navigation,Caravel + celestial navigation enable transatlantic voyages,Europe / Americas
+1543,Astronomy,Heliocentrism,Copernicus publishes De revolutionibus,Europe (Poland/Prussia)
+1600,Physics,Magnetism,William Gilbert describes Earth as a magnet,Europe (England)
+1609,Astronomy,Telescope,Galileo’s telescope observations transform cosmology,Europe (Italy)
+1610,Astronomy,Moons of Jupiter,Galileo observes four Jovian moons,Europe (Italy)
+1637,Mathematics,Analytic Geometry,Descartes links algebra and geometry,Europe (France)
+1660,Chemistry,Air Pump,Boyle’s experiments lead to Boyle’s law of gases,Europe (England)
+1665,Biology,Microscopy,Hooke and van Leeuwenhoek reveal cells and microbes,Europe (England/Netherlands)
+1687,Physics,Classical Mechanics,Newton publishes Principia; laws of motion and gravity,Europe (England)
+1714,Engineering,Steam Engine,Newcomen’s atmospheric engine aids mining,Europe (England)
+1733,Engineering,Flying Shuttle,Kay’s loom innovation accelerates weaving,Europe (England)
+1752,Physics,Electricity,Franklin’s kite experiment demonstrates lightning as electricity,North America (USA)
+1765,Engineering,Improved Steam Engine,James Watt’s separate condenser revolutionizes power,Europe (Scotland)
+1774,Chemistry,Oxygen,Scheele and Priestley isolate oxygen (named by Lavoisier),Europe
+1783,Aviation,Hot Air Balloon,Montgolfier brothers achieve first manned flight,Europe (France)
+1796,Medicine,Vaccination,Jenner introduces smallpox vaccine,Europe (England)
+1800,Physics,Battery,Volta invents the voltaic pile,Europe (Italy)
+1821,Physics,Electromagnetism,Faraday demonstrates electric motor principle,Europe (England)
+1826,Photography,Photograph,Niépce creates first permanent photo,Europe (France)
+1837,Telecom,Telegraph,"Cooke, Wheatstone, and Morse develop electrical telegraph",Europe / North America
+1851,Materials,Steel,Bessemer process enables mass steel production,Europe (UK)
+1859,Biology,Evolution,Darwin publishes On the Origin of Species,Europe (England)
+1869,Chemistry,Periodic Table,Mendeleev organizes elements by periodicity,Europe (Russia)
+1876,Telecom,Telephone,Bell patents the telephone,North America (USA)
+1879,Electricity,Incandescent Lamp,Edison commercializes electric lighting,North America (USA)
+1895,Physics,X-Rays,Röntgen discovers X-rays; medical imaging begins,Europe (Germany)
+1897,Physics,Electron,Thomson identifies the electron,Europe (UK)
+1905,Physics,Relativity (Special),Einstein’s annus mirabilis papers reshape physics,Europe (Switzerland)
+1911,Physics,Atomic Nucleus,Rutherford’s gold foil experiment,Europe (UK)
+1915,Physics,Relativity (General),Einstein finalizes general relativity,Europe (Germany)
+1928,Medicine,Antibiotics,Fleming discovers penicillin,Europe (Scotland)
+1936,Computing,Computation Theory,Alan Turing defines the Turing machine,Europe (UK)
+1942,Nuclear,Chain Reaction,First controlled nuclear fission (Chicago Pile-1),North America (USA)
+1945,Computing,Stored-Program Concept,Von Neumann architecture disseminated,North America (USA)
+1947,Electronics,Transistor,"Bardeen, Brattain, and Shockley invent the transistor",North America (USA)
+1953,Genetics,DNA Structure,"Watson, Crick, Franklin, and Wilkins elucidate double helix",Europe (UK)
+1957,Space,Sputnik,First artificial satellite,Europe/Asia (USSR)
+1958,Materials,Integrated Circuit,Kilby and Noyce pioneer microchips,North America (USA)
+1962,Telecom,Satellite Comms,Telstar enables transatlantic TV via satellite,North America / Europe
+1965,Computing,Moore’s Law,Observation of exponential transistor scaling,North America (USA)
+1969,Space,Moon Landing,Apollo 11 lands humans on the Moon,North America (USA)
+1971,Computing,Microprocessor,Intel 4004 launches general microprocessors,North America (USA)
+1973,Telecom,Mobile Phone,First handheld cellular call by Martin Cooper,North America (USA)
+1977,Computing,Personal Computer,Apple II and Commodore PET popularize PCs,North America (USA)
+1980,Biotech,Recombinant DNA,First GMO products and biotech firms emerge,North America / Europe
+1983,Networking,DNS,Domain Name System standardizes internet addressing,Global
+1989,Web,World Wide Web,Tim Berners-Lee proposes the web at CERN,Europe (Switzerland)
+1990,Astronomy,Hubble Telescope,Launch of HST revolutionizes observational astronomy,Global (NASA/ESA)
+1995,Robotics,Humanoids,Honda’s P-series leads to ASIMO,Asia (Japan)
+1996,Biology,Cloning,Dolly the sheep cloned via somatic cell nuclear transfer,Europe (Scotland)
+1998,Navigation,GPS,Global Positioning System becomes fully operational,Global
+2001,Astronomy,Human Genome Draft,First draft published by HGP and Celera,Global
+2003,Energy,Lithium-Ion Maturation,Li-ion density & safety improve; portable electronics boom,Global
+2004,Robotics,DARPA Challenge,Autonomous vehicle trials spark self-driving research,North America (USA)
+2007,Computing,Smartphone Era,"iPhone integrates multi-touch, web, sensors",North America (USA)
+2010,Materials,Graphene,Andre Geim & Kostya Novoselov’s work catalyzes 2D materials,Europe (UK)
+2012,AI,Deep Learning Breakthrough,AlexNet wins ImageNet; GPU DL era begins,North America (USA)
+2012,Biotech,CRISPR-Cas9,Programmable genome editing demonstrated,Europe / North America
+2014,Space,Reusable Rockets,SpaceX lands booster; reusability era,North America (USA)
+2016,Physics,Gravitational Waves,LIGO directly detects gravitational waves,North America (USA)
+2017,Energy,Solar + Wind Parity,Renewables reach cost parity with fossil in many markets,Global
+2019,Astronomy,Black Hole Image,Event Horizon Telescope captures M87* shadow,Global Collaboration
+2019,Health,mRNA Vaccines (platform),mRNA tech validated; rapid vaccine pipelines,Global
+2020,Computing,Quantum Advantage (debated),Milestones from Google/IBM in quantum supremacy claims,North America (USA)
+2021,Space,Commercial Spaceflight,Regular orbital/edge-of-space private missions,Global
+2022,Astronomy,JWST First Light,Webb reveals early galaxies & exoplanet spectra,Global (NASA/ESA/CSA)
+2023,AI,Generative AI Adoption,Large language models enter mainstream products,Global
+2024,Biotech,Base Editing Therapies,First CRISPR-based medicines reach approval in some regions,Global
+2025,Energy,Grid-Scale Storage,Flow batteries & sodium-ion scale in pilot deployments,Global
+1950,Artificial Intelligence,Theory,"Alan Turing publishes 'Computing Machinery and Intelligence', proposing the Turing Test",Europe (UK)
+1956,Artificial Intelligence,Foundation,The Dartmouth Conference coins the term 'Artificial Intelligence',North America (USA)
+1966,Artificial Intelligence,Language Processing,"Joseph Weizenbaum develops ELIZA, the first chatbot simulating psychotherapy",North America (USA)
+1972,Artificial Intelligence,Robotics,"WABOT-1, world’s first full-scale humanoid robot, created at Waseda University",Asia (Japan)
+1980,Artificial Intelligence,Expert Systems,XCON automates computer configuration — first commercial expert system,North America (USA)
+1987,Artificial Intelligence,Advertising Automation,Early ad targeting algorithms emerge in digital bulletin boards and marketing software,North America (USA)
+1997,Artificial Intelligence,Game AI,IBM’s Deep Blue defeats chess champion Garry Kasparov,North America (USA)
+1998,Artificial Intelligence,Search / Ranking,Google's PageRank algorithm revolutionizes web search and advertising,North America (USA)
+2001,Artificial Intelligence,Voice Recognition,IBM ViaVoice and Dragon NaturallySpeaking make commercial speech input accessible,North America (USA)
+2002,Robotics,Domestic Robotics,iRobot Roomba brings autonomous robots into households,North America (USA)
+2006,Artificial Intelligence,Deep Learning,Geoffrey Hinton reintroduces neural networks via deep learning architectures,North America (Canada)
+2011,Artificial Intelligence,Conversational AI,"IBM Watson wins Jeopardy!, milestone in question-answering systems",North America (USA)
+2011,Artificial Intelligence,Voice Assistant,"Apple Siri launches on iPhone 4S, popularizing consumer voice AI",North America (USA)
+2012,Artificial Intelligence,Computer Vision,AlexNet achieves breakthrough image recognition performance,North America (USA)
+2014,Artificial Intelligence,Chatbots,Facebook Messenger Bots and Microsoft Xiaoice bring AI conversation to social platforms,Global
+2016,Artificial Intelligence,Reinforcement Learning,DeepMind’s AlphaGo defeats Go champion Lee Sedol,Europe / Asia
+2017,Artificial Intelligence,Advertising & Personalization,Neural networks drive YouTube and Facebook recommendation engines,Global
+2018,Artificial Intelligence,Natural Language Generation,OpenAI’s GPT-2 demonstrates large-scale text generation,North America (USA)
+2020,Artificial Intelligence,Social Interaction,AI companions and Replika apps reach mass adoption blending chatbots and emotion,Global
+2021,Artificial Intelligence,Creative Tools,OpenAI’s DALL·E and CLIP merge vision and language for creative generation,North America (USA)
+2022,Artificial Intelligence,Large Language Models,ChatGPT popularizes conversational generative AI globally,Global
+2023,Artificial Intelligence,Multi-Modal AI,"GPT-4, Claude, Gemini integrate text, vision, and audio reasoning",Global
+2024,Artificial Intelligence,Voice & Embodied AI,Text-to-speech avatars and real-time voice cloning reach mainstream entertainment,Global
+2025,Artificial Intelligence,Advertising Ecosystems,Personalized AI storytelling and emotional targeting reshape advertising,Global

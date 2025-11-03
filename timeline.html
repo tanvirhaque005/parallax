@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sci-Fi Timeline - Movies & Historical Events</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Space Mono', 'Courier New', monospace;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            font-size: 2em;
+            font-weight: 700;
+            letter-spacing: 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .timeline-scroll-container {
+            max-height: 1450px;
+        }
+
+        .timeline-scroll-container::-webkit-scrollbar {
+            height: 12px;
+            width: 12px;
+        }
+
+        .timeline-scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 6px;
+        }
+
+        .timeline-scroll-container::-webkit-scrollbar-thumb {
+            background: #1e3a8a;
+            border-radius: 6px;
+        }
+
+        .timeline-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #0f172a;
+        }
+
+        .timeline-scroll-container::-webkit-scrollbar-corner {
+            background: #f1f1f1;
+        }
+
+        .info-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9fa;
+            border-radius: 8px;
+        }
+
+        .info-section h3 {
+            margin-top: 0;
+            color: #1a1a1a;
+            font-weight: 700;
+            font-size: 1em;
+            letter-spacing: 0;
+        }
+
+        .info-section p {
+            color: #4b5563;
+            line-height: 1.7;
+            font-weight: 400;
+            font-size: 0.85em;
+            margin: 8px 0;
+        }
+
+        .info-section ul {
+            color: #4b5563;
+            line-height: 1.7;
+            font-size: 0.85em;
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 0.9em;
+            color: #6b7280;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #1e3a8a;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+            transition: all 0.3s;
+            font-weight: 400;
+            letter-spacing: 0;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85em;
+        }
+
+        .back-button:hover {
+            background: #0f172a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.4);
+        }
+
+        .stats-box {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 2em;
+            font-weight: 700;
+            color: #1e3a8a;
+            letter-spacing: 0;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: #6b7280;
+            margin-top: 5px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sci-Fi Timeline</h1>
+        <p class="subtitle">
+            Explore how science fiction movies reflect and respond to historical events in technology, politics, society, and economics.
+        </p>
+
+        <div class="stats-box" id="stats" style="display: none;">
+            <div class="stat-item">
+                <div class="stat-value" id="movieCount">0</div>
+                <div class="stat-label">Movies</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="eventCount">0</div>
+                <div class="stat-label">Events</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="yearSpan">0</div>
+                <div class="stat-label">Year Span</div>
+            </div>
+        </div>
+
+        <div id="timelineContainer">
+            <div class="loading">Loading timeline data...</div>
+        </div>
+
+        <div class="info-section">
+            <h3>How to Use This Timeline</h3>
+            <ul>
+                <li><strong>Scroll horizontally</strong> to explore different time periods (1925-2025)</li>
+                <li><strong>Click theme buttons</strong> to filter and highlight related movies and events</li>
+                <li><strong>Hover over movies</strong> (blue rectangles) to see details</li>
+                <li><strong>Hover over events</strong> (colored dots) to see how they connect to sci-fi themes</li>
+                <li><strong>Multiple themes</strong> can be selected simultaneously to see overlapping influences</li>
+            </ul>
+
+            <h3>Event Categories</h3>
+            <p>
+                <strong>Technology:</strong> AI breakthroughs, computing milestones, internet development<br/>
+                <strong>Political:</strong> Wars, government changes, surveillance policies<br/>
+                <strong>Social:</strong> Civil rights movements, cultural shifts, social media<br/>
+                <strong>Economic:</strong> Financial crises, economic policies, digital currency
+            </p>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="/index.html" class="back-button">← Back to Library</a>
+        </div>
+    </div>
+
+    <!-- Timeline Visualization -->
+    <script src="./timeline.js"></script>
+
+    <script>
+        // Initialize and render the timeline
+        async function initTimeline() {
+            try {
+                // Create timeline instance
+                const timeline = new Timeline('timelineContainer');
+
+                // Load data
+                await timeline.loadData('./merged_movies_data.csv');
+
+                // Render timeline
+                timeline.render();
+
+                // Update stats
+                document.getElementById('stats').style.display = 'flex';
+                document.getElementById('movieCount').textContent = timeline.movies.length;
+                document.getElementById('eventCount').textContent = timeline.events.length;
+
+                const years = timeline.movies.map(m => m.year);
+                const minYear = Math.min(...years);
+                const maxYear = Math.max(...years);
+                document.getElementById('yearSpan').textContent = `${minYear}-${maxYear}`;
+
+            } catch (error) {
+                console.error('Error loading timeline:', error);
+                document.getElementById('timelineContainer').innerHTML =
+                    `<div class="loading" style="color: #ef4444;">Error loading timeline: ${error.message}</div>`;
+            }
+        }
+
+        // Initialize when page loads
+        initTimeline();
+    </script>
+</body>
+</html>

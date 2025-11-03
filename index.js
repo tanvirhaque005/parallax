@@ -167,11 +167,7 @@ const releasedEl = document.getElementById('released');
 const depictedEl = document.getElementById('depicted');
 const motifsContainer = document.getElementById('motifsContainer');
 
-// Placeholder: All movies currently show 2001: A Space Odyssey chord graph
-// ! i assume this should go elsewhere?
-tropeDiv.innerHTML =`<button class="btn" onclick="location.href='/infoPage.html?movie=${encodeURIComponent("2001: A Space Odyssey")}'">
-              View Theme Analysis (2001: A Space Odyssey)
-            </button>`;
+// This will be updated when a movie is selected
 
 /* Scroll buttons and wheel */
 let shelfOffset = 0;
@@ -458,6 +454,11 @@ function rebuildOverlayForIndex() {
   });
 });
 
+  // Update chord graph button with actual movie title
+  tropeDiv.innerHTML = `<button class="btn" onclick="location.href='/infoPage.html?movie=${encodeURIComponent(meta.title)}'">
+              🔗 Explore Theme Network
+            </button>`;
+
 
   // Rebuild the overlay book mesh
   if (overlayBook) {
@@ -513,3 +514,24 @@ function animate() {
   }
 }
 animate();
+
+/* Check for movie URL parameter and auto-open */
+window.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const movieTitle = urlParams.get('movie');
+
+  if (movieTitle) {
+    // Find the movie by title
+    const movieIndex = booksMeta.findIndex(m => m.title === movieTitle);
+
+    if (movieIndex !== -1) {
+      // Auto-open the movie overlay
+      setTimeout(() => {
+        openOverlayForIndex(movieIndex);
+      }, 500); // Small delay to ensure scene is ready
+    } else {
+      // Movie not in the 3D shelf, redirect directly to chord graph
+      window.location.href = `/infoPage.html?movie=${encodeURIComponent(movieTitle)}`;
+    }
+  }
+});
