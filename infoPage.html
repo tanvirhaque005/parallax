@@ -271,6 +271,8 @@
         // Parse URL parameters
         const params = new URLSearchParams(window.location.search);
         const movieTitle = params.get("movie");
+        const trope = params.get("trope");
+        console.log(trope);
 
         // Global reference to chord graph for control buttons
         let chordGraph = null;

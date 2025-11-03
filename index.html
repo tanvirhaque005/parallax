@@ -14,21 +14,24 @@
 
     <!-- Base shelf canvas (all covers) -->
     <canvas id="bookCanvas" aria-label="Interactive 3D bookshelf"></canvas>
-    <h1>whats up my slimes</h1>
-    <h2>BTW i didnt include the dates on the bookshelf since idk if we wanna use a bookshelf given the perspective of the 3d books / the floating animation</h2>
-
+    <div id="header">
+      <h1>Library of Futures</h1>
+      <p>An archive of sci-fi films arranged by how far they imagined the future. Click on a movie (rectangle in this demo) to explore.</p>
+    </div>
     <canvas id="activeBookCanvas" aria-hidden="true"></canvas>
+
+    
 
     <!-- card overlay -->
     <div id="bookinfo" aria-hidden="true">
       
       <div class="card" role="dialog" aria-modal="true" aria-labelledby="bookTitle">
-        <p>Library > Film</p>
+        <div class="breadcrumb">Library > Film</div>
         <button id="closeInfo" class="btn close" aria-label="Close details">✕</button>
 
-        <button id="cardPrev" class="btn cardNav" aria-label="Previous book">⟵</button>
-        <button id="cardNext" class="btn cardNav" aria-label="Next book">⟶</button>
-        <h6>BTW guys I made the cover on the right because the math to get the tilt ok on the left was really annoying</h6>
+        <button id="cardPrev" class="btn cardNav" aria-label="Previous book">L</button>
+        <button id="cardNext" class="btn cardNav" aria-label="Next book">R</button>
+        <!-- <h6>BTW guys I made the cover on the right because the math to get the tilt ok on the left was really annoying</h6>
         <h1 class="title" id="bookTitle">Title</h1>
         <div class="meta" id="bookMeta">Author · Year</div>
         <p class="blurb" id="bookBlurb">Blurb</p>
@@ -47,7 +50,53 @@
 
         <div class="actions">
           <button class="btn" id="backToShelf">← Back to shelf</button>
-        </div>
+        </div> -->
+        <div class="film-details">
+            <!-- Film Header -->
+            <div class="film-header">
+              <div class="title-row">
+                <h1 class="title" id="bookTitle">Title</h1>
+                <div class="rating-badge" id="ratingBadge">7.6/10</div>
+              </div>
+              
+              <div class="tags-row" id="pillContainer"></div>
+
+              <p class="plot" id="bookBlurb">Blurb</p>
+
+              <div class="film-info-grid">
+                <div class="info-item">
+                  <div class="info-label">Director</div>
+                  <div class="info-value" id="director">Director Name</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Released</div>
+                  <div class="info-value" id="released">Year, Location</div>
+                </div>
+                
+              </div>
+              <div class="info-item">
+                  <div class="info-label">Depicted</div>
+                  <div class="info-value" id="depicted">Year, Location</div>
+                </div>
+            </div>
+
+            <!-- Technological Motifs -->
+            <div class="motifs-section">
+              <div class="row" id="pillContainer"></div>
+              <h2 class="motifs-title">Technological Motifs</h2>
+              <p class="motifs-desc">Click on any motif to explore how it connects to other films across decades.</p>
+              <div class="motifs-container" id="motifsContainer">
+                <!-- Motif circles will be inserted here -->
+              </div>
+            </div>
+
+            <!-- Navigation -->
+             <div class="bottomBox">
+            <div class="actions">
+              <button class="btn back-btn" id="backToShelf">← Back to Library</button>
+            </div>
+            </div>
+          </div>
       </div>
     </div>
 

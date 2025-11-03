@@ -2,29 +2,540 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <title>Library of Futures - 3D Bookshelf</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Parallax Sci‑Fi Timeline</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./styles.css" />
     <style>
-      html, body, #root { height: 100%; }
-      body { background: #000; }
+      /* Parallax background */
+      #parallaxBackground {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        transition: background 0.3s ease;
+        pointer-events: none;
+      }
+      
+      #parallaxLayer {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        opacity: 0.2;
+        pointer-events: none;
+        transition: transform 0.1s linear, background 0.3s ease;
+      }
+      
+      /* Timeline at bottom */
+      #timeline {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 120px;
+        z-index: 15;
+        pointer-events: none;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 20px;
+      }
+      
+      .timeline-year {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 12px;
+      }
+      
+      .timeline-year::before {
+        content: '';
+        width: 2px;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.4);
+        margin-bottom: 4px;
+      }
+      
+      /* Header */
+      #header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 15;
+        padding: 20px;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+        pointer-events: none;
+      }
+      
+      #header h1 {
+        color: white;
+        font-size: 2rem;
+        margin: 0 0 8px 0;
+        pointer-events: auto;
+      }
+      
+      #header p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+        margin: 0;
+        pointer-events: auto;
+      }
+      
+      /* Film Section Styling */
+      .breadcrumb {
+        position: absolute;
+        top: 24px;
+        left: 24px;
+        color: #6b7280;
+        font-size: 14px;
+        font-weight: 500;
+        z-index: 10;
+      }
+      
+      .film-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 80px 40px 40px;
+      }
+      
+      .film-poster {
+        order: 1;
+      }
+      
+      .poster-placeholder {
+        width: 100%;
+        height: 400px;
+        background: #d1d5db;
+        border: 1px solid #9ca3af;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+        font-size: 18px;
+      }
+      
+      .film-details {
+        order: 2;
+      }
+      
+      .title-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+      
+      .title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        color: #111827;
+      }
+      
+      .rating-badge {
+        padding: 6px 16px;
+        background: #e5e7eb;
+        border-radius: 9999px;
+        color: #374151;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      
+      .tags-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+      }
+      
+      .tag-pill {
+        padding: 4px 12px;
+        background: #e5e7eb;
+        border: 1px solid #d1d5db;
+        border-radius: 9999px;
+        color: #374151;
+        font-size: 14px;
+      }
+      
+      .plot {
+        color: #374151;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 24px;
+        max-width: 600px;
+      }
+      
+      .film-info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        margin-bottom: 48px;
+      }
+      
+      .info-item {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .info-label {
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 4px;
+        font-weight: 500;
+      }
+      
+      .info-value {
+        font-size: 16px;
+        color: #111827;
+      }
+      
+      .motifs-section {
+        margin-top: 48px;
+      }
+      
+      .motifs-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #111827;
+        margin: 0 0 8px 0;
+      }
+      
+      .motifs-desc {
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 24px;
+      }
+      
+      .motifs-container {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      
+      .motif-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #d1d5db;
+        border: 2px solid #9ca3af;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-weight: 600;
+        font-size: 12px;
+        color: #374151;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+      }
+      
+      .motif-circle:hover {
+        background: #9ca3af;
+        border-color: #6b7280;
+        transform: scale(1.05);
+      }
+      
+      .motif-circle.highlighted::after {
+        content: '';
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        width: 12px;
+        height: 12px;
+        background: #ec4899;
+        border-radius: 50%;
+        border: 2px solid white;
+      }
+      
+      .back-btn {
+        margin-top: 32px;
+        padding: 12px 24px;
+        background: #e5e7eb;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        color: #374151;
+      }
+      
+      .back-btn:hover {
+        background: #d1d5db;
+      }
+      
+      @media (max-width: 768px) {
+        .film-content {
+          grid-template-columns: 1fr;
+          gap: 32px;
+        }
+        .film-poster {
+          order: 2;
+        }
+        .film-details {
+          order: 1;
+        }
+      }
+      
+      /* Section Overlays */
+      .section-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+        background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
+      }
+      
+      .section-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      
+      .section-content {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        padding: 80px 40px 40px;
+      }
+      
+      .section-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      
+      .section-title {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 0 0 16px 0;
+        text-align: center;
+      }
+      
+      .section-desc {
+        font-size: 18px;
+        color: #374151;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 48px;
+        line-height: 1.6;
+      }
+      
+      .network-container {
+        width: 100%;
+        height: 500px;
+        background: white;
+        border: 2px solid #d1d5db;
+        border-radius: 8px;
+        margin: 0 auto 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      
+      .chart-container {
+        width: 100%;
+        height: 500px;
+        background: white;
+        border: 2px solid #d1d5db;
+        border-radius: 8px;
+        margin: 0 auto 32px;
+        position: relative;
+        padding: 32px;
+      }
+      
+      .section-actions {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        margin-top: 32px;
+      }
+      
+      .primary-btn {
+        background: #3b82f6;
+        color: white;
+        border: none;
+      }
+      
+      .primary-btn:hover {
+        background: #2563eb;
+      }
+      
+      .conclusion-content {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      
+      .conclusion-content p {
+        font-size: 18px;
+        line-height: 1.8;
+        color: #374151;
+        margin-bottom: 24px;
+      }
     </style>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Parallax Background -->
+    <div id="parallaxBackground"></div>
+    <div id="parallaxLayer"></div>
+    
+    <!-- Header -->
+    <div id="header">
+      <h1>Library of Futures</h1>
+      <p>An archive of sci-fi films arranged by how far they imagined the future. Click on a book to explore.</p>
+    </div>
+    
+    <div id="controls">
+      <button id="scrollLeft" aria-label="Scroll left">⟵</button>
+      <button id="scrollRight" aria-label="Scroll right">⟶</button>
+    </div>
 
-    <!-- React 18 UMD -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Base shelf canvas (all covers) -->
+    <canvas id="bookCanvas" aria-label="Interactive 3D bookshelf"></canvas>
 
-    <!-- Framer Motion UMD (pinned version) -->
-    <script src="https://cdn.jsdelivr.net/npm/framer-motion@10.16.4/dist/framer-motion.umd.min.js"></script>
+    <canvas id="activeBookCanvas" aria-hidden="true"></canvas>
+    
+    <!-- Timeline -->
+    <div id="timeline"></div>
 
-    <!-- Babel for in-browser JSX transform (dev only) -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Film Section Overlay -->
+    <div id="bookinfo" aria-hidden="true">
+      <div class="card" role="dialog" aria-modal="true">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">Library > Film</div>
+        <button id="closeInfo" class="btn close" aria-label="Close details">✕</button>
 
-    <!-- Load external JSX file that renders the app -->
-    <script type="text/babel" data-presets="react" src="./timeline.jsx"></script>
+        <div class="film-content">
+          <!-- Left: Film Poster Placeholder -->
+          <div class="film-poster">
+            <div class="poster-placeholder">Film Poster Placeholder</div>
+          </div>
+
+          <!-- Right: Film Details -->
+          <div class="film-details">
+            <!-- Film Header -->
+            <div class="film-header">
+              <div class="title-row">
+                <h1 class="title" id="bookTitle">Title</h1>
+                <div class="rating-badge" id="ratingBadge">7.6/10</div>
+              </div>
+              
+              <div class="tags-row" id="pillContainer"></div>
+
+              <p class="plot" id="bookBlurb">Plot description goes here...</p>
+
+              <div class="film-info-grid">
+                <div class="info-item">
+                  <div class="info-label">Director</div>
+                  <div class="info-value" id="director">Director Name</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Released</div>
+                  <div class="info-value" id="released">Year, Location</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Depicted</div>
+                  <div class="info-value" id="depicted">Year, Location</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Technological Motifs -->
+            <div class="motifs-section">
+              <h2 class="motifs-title">Technological Motifs</h2>
+              <p class="motifs-desc">Click on any motif to explore how it connects to other films across decades.</p>
+              
+              <div class="motifs-container" id="motifsContainer">
+                <!-- Motif circles will be inserted here -->
+              </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="actions">
+              <button class="btn back-btn" id="backToShelf">← Back to Library</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Motif Section Overlay -->
+    <div id="motifSection" aria-hidden="true" class="section-overlay">
+      <div class="section-content">
+        <div class="breadcrumb">Library > Film > Motif</div>
+        <button class="btn close" onclick="closeMotifSection()">✕</button>
+        
+        <div class="section-inner">
+          <h1 id="motifTitle" class="section-title">Surveillance</h1>
+          <p class="section-desc">Recurring technological motifs linking films across decades and cultures. The idea of shared ideas - from robots to dystopias to family bonds.</p>
+          
+          <div id="motifNetwork" class="network-container"></div>
+          
+          <div class="section-actions">
+            <button class="btn back-btn" onclick="window.history.back()">← Back</button>
+            <button class="btn primary-btn" onclick="showFictionSection()">Fiction vs Reality →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fiction vs Reality Section Overlay -->
+    <div id="fictionSection" aria-hidden="true" class="section-overlay">
+      <div class="section-content">
+        <div class="breadcrumb">Library > Film > Motif > Fiction vs Reality</div>
+        <button class="btn close" onclick="closeFictionSection()">✕</button>
+        
+        <div class="section-inner">
+          <h1 class="section-title">Fiction vs. Reality</h1>
+          <p class="section-desc">Compare each film's predicted year to real technological milestones. See which imagined futures have already arrived — and which remain fiction.</p>
+          
+          <div id="fictionChart" class="chart-container"></div>
+          
+          <div class="section-actions">
+            <button class="btn back-btn" onclick="window.history.back()">← Back</button>
+            <button class="btn primary-btn" onclick="showReimagineSection()">Reimagine →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reimagine Section Overlay -->
+    <div id="reimagineSection" aria-hidden="true" class="section-overlay">
+      <div class="section-content">
+        <div class="breadcrumb">Library > Film > Motif > Fiction vs Reality > Reimagine</div>
+        <button class="btn close" onclick="closeReimagineSection()">✕</button>
+        
+        <div class="section-inner" id="reimagineContent">
+          <!-- Content will be populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Conclusion Section Overlay -->
+    <div id="conclusionSection" aria-hidden="true" class="section-overlay">
+      <div class="section-content">
+        <div class="breadcrumb">Library > Film > Motif > Fiction vs Reality > Reimagine</div>
+        <button class="btn close" onclick="closeConclusionSection()">✕</button>
+        
+        <div class="section-inner">
+          <h1 class="section-title">Mirror of Imagination</h1>
+          <p class="section-desc">In the 1950s, the future stretched light-years away. Today, it feels only a few clicks ahead. Have we become better realists - or smaller dreamers?</p>
+          
+          <div id="conclusionContent" class="conclusion-content"></div>
+          
+          <div class="section-actions">
+            <button class="btn back-btn" onclick="window.history.back()">Take Again</button>
+            <button class="btn primary-btn" onclick="closeAllSections()">Explore the Library</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./index0.js"></script>
   </body>
-  </html>
-
+</html>

@@ -8,13 +8,13 @@ let currentIndex = -1;  // which book is currently shown in card view (overlay)
 
 /* ---------- Book metadata ---------- */
 const booksMeta = [
-  { id: 'bk-1', title: 'Minority Report', author: 'director name', year: 2021, blurb: 'blurb....', tropes: ['AI', 'Surveillance'] },
-  { id: 'bk-2', title: '2001 A Space Odyssey', author: 'director name', year: 2024, blurb: 'blurb....', tropes: ['Space', 'AI'] },
-  { id: 'bk-3', title: 'Science movie A', author: 'director name', year: 2020, blurb: 'blurb....', tropes: ['Science', 'Fiction'] },
-  { id: 'bk-4', title: 'Science movie B', author: 'director name', year: 2013, blurb: 'blurb....', tropes: ['Science', 'Adventure'] },
-  { id: 'bk-5', title: 'Science movie C', author: 'director name', year: 2019, blurb: 'blurb....', tropes: ['Science', 'Drama'] },
-  { id: 'bk-6', title: 'Science movie D', author: 'director name', year: 2022, blurb: 'blurb....', tropes: ['Science', 'Thriller'] },
-  { id: 'bk-7', title: 'Science movie E', author: 'director name', year: 2018, blurb: 'blurb....', tropes: ['Science', 'Mystery'] },
+  { id: 1, title: '2001 A Space Odyssey', director: 'Stanley Kubrick', year: 1968, depicted: 2001, rating: 8.3, tropes: ['AI', 'Space'], location: 'Los Angeles, CA, USA', blurb: 'After discovering a mysterious artifact buried beneath the Lunar surface, humanity sets off on a quest to Saturn with the sentient computer HAL to uncover the artifact\'s origins.' },
+  { id: 2, title: 'Blade Runner', director: 'Ridley Scott', year: 1982, depicted: 2019, rating: 8.1, tropes: ['Dystopia', 'AI'], location: 'Los Angeles, CA, USA', blurb: 'In a dystopian future, a blade runner must pursue and terminate four replicants who stole a ship in space and returned to Earth to find their creator.' },
+  { id: 3, title: 'Minority Report', director: 'Steven Spielberg', year: 2002, depicted: 2054, rating: 7.6, tropes: ['Dystopia', 'Surveillance Capitalism'], location: 'Los Angeles, CA, USA', blurb: 'In a future where a special police unit can arrest people before they commit their crimes, an officer is accused of a future murder. In 2054, the federal government plans to nationally [See more].' },
+  { id: 4, title: 'Gattaca', director: 'Andrew Niccol', year: 1997, depicted: 2150, rating: 7.8, tropes: ['Genetic Engineering', 'Dystopia'], location: 'Los Angeles, CA, USA', blurb: 'A genetically inferior man assumes the identity of a superior one in order to pursue his lifelong dream of space travel.' },
+  { id: 5, title: 'Total Recall', director: 'Paul Verhoeven', year: 1990, depicted: 2084, rating: 7.5, tropes: ['Memory', 'Mars'], location: 'Los Angeles, CA, USA', blurb: 'When a man goes in to have virtual vacation memories of the planet Mars implanted in his mind, an unexpected and harrowing series of events forces him to go to the planet for real - or is he?' },
+  { id: 6, title: 'Metropolis', director: 'Fritz Lang', year: 1927, depicted: 2026, rating: 8.3, tropes: ['Robots', 'Dystopia'], location: 'Berlin, Germany', blurb: 'In a futuristic city sharply divided between the working class and the city planners, the son of the city\'s mastermind falls in love with a working-class prophet who predicts the coming of a savior to mediate their differences.' },
+  { id: 7, title: 'The Matrix', director: 'The Wachowskis', year: 1999, depicted: 2199, rating: 8.7, tropes: ['Virtual Reality', 'Free Will'], location: 'Sydney, Australia', blurb: 'When a beautiful stranger leads computer hacker Neo to a forbidding underworld, he discovers the shocking truth--the life he knows is the elaborate deception of an evil cyber-intelligence.' },
 ];
 
 /* ---------- Base scene (shelf) ---------- */
@@ -32,6 +32,7 @@ scene.add(new THREE.AmbientLight(0xffffff, 0.75));
 const dir = new THREE.DirectionalLight(0xffffff, 1.2);
 dir.position.set(3, 5, 6);
 scene.add(dir);
+
 
 /* ---------- Overlay scene (active book above full-screen card) ---------- */
 const overlayScene = new THREE.Scene();
@@ -89,6 +90,8 @@ function createBook(x, colors, meta) {
     isPresented: false,
     targetRotY: Math.PI / 2,
     targetPosZ: 0,
+    targetRotZ: 0,
+    targetRotX: 0,
     tiltX: 0,
     tiltY: 0,
   };
@@ -108,12 +111,15 @@ const bookinfo = document.getElementById('bookinfo');
 const closeInfo = document.getElementById('closeInfo');
 const backToShelf = document.getElementById('backToShelf');
 const titleEl = document.getElementById('bookTitle');
-const metaEl  = document.getElementById('bookMeta');
 const blurbEl = document.getElementById('bookBlurb');
 const swFront = document.getElementById('swatchFront');
 const swBack  = document.getElementById('swatchBack');
-const tropeDiv = document.getElementById('tropeDiv');
+// const tropeDiv = document.getElementById('tropeDiv');
 const pillContainer = document.getElementById('pillContainer');
+const directorEl = document.getElementById('director');
+const releasedEl = document.getElementById('released');
+const depictedEl = document.getElementById('depicted');
+const motifsContainer = document.getElementById('motifsContainer');
 
 /* Scroll buttons */
 let shelfOffset = 0;
@@ -140,7 +146,32 @@ const MAX_TILT_X = 0.12;
 const MAX_TILT_Y = 0.18;
 
 window.addEventListener('mousemove', (e) => {
-  if (!bookinfo.classList.contains('open')) return;
+  if (!bookinfo.classList.contains('open')) {
+    // Handle shelf book hover
+    setMouseFromEvent(e);
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(books.map(b => b.mesh));
+    
+    // Update cursor style based on hover state
+    baseCanvas.style.cursor = intersects.length ? 'pointer' : 'default';
+    
+    // Reset all books that aren't being hovered
+    books.forEach(b => {
+      if (!intersects.length || b.mesh !== intersects[0].object) {
+        b.targetRotY = Math.PI/2; // Return to spine-out position
+      }
+    });
+
+    // Apply tilt to hovered book
+    if (intersects.length) {
+      const hovered = books.find(b => b.mesh === intersects[0].object);
+      // Rotate from spine (Math.PI/2) towards face (Math.PI/4)
+      hovered.targetRotY = Math.PI/4; // Turn the face partially towards camera
+    }
+    return;
+  }
+  
+  // Handle overlay book tilt
   const x = (e.clientX / window.innerWidth) * 1 - 1;
   const y = (e.clientY / window.innerHeight) * 1 - 1;
   targetTiltY = x * MAX_TILT_Y;
@@ -299,20 +330,49 @@ function rebuildOverlayForIndex() {
 
   // Update text/swatches
   titleEl.textContent = meta.title;
-  metaEl.textContent  = `${meta.author} · ${meta.year}`;
-  blurbEl.textContent = meta.blurb;
+  blurbEl.textContent = meta.plot || meta.blurb || 'No description available.';
+  directorEl.textContent = meta.director || 'Unknown';
+  releasedEl.textContent = `${meta.year}, ${meta.location || 'Unknown'}`;
+  depictedEl.textContent = `${meta.depicted || 'N/A'}, Washington DC, USA`;
   // swFront.style.background = `#${colors.front.toString(16).padStart(6,'0')}`;
   // swBack.style.background  = `#${colors.back.toString(16).padStart(6,'0')}`;
   // Placeholder: All movies currently show 2001: A Space Odyssey chord graph
-  tropeDiv.innerHTML = `<button class="btn" onclick="location.href='/infoPage.html?movie=${encodeURIComponent('2001: A Space Odyssey')}'">
-              View Theme Analysis (Placeholder: 2001: A Space Odyssey)
-            </button>`;
+  // ! Audrey's circle graph is visible if you set trope="2001: A Space Odyssey" 
+  // tropeDiv.innerHTML = meta.tropes.map(trope => {
+  //   return `<button class="btn" onclick="location.href='/infoPage.html?movie=${encodeURIComponent(trope)}'">
+  //             View Theme Analysis (${trope})
+  //           </button>`;;
+  // }).join('');
+
   
-  pillContainer.innerHTML = meta.tropes.map(trope => {
-    return `<span class="pill">
-            <span class="colorSwatch" id="swatchFront"></span>${trope}
-      </span>`;
+  const tags = meta.tags || meta.tropes || [];
+  pillContainer.innerHTML = tags.map(tag => {
+    return `<span class="tag-pill">${tag}</span>`;
   }).join('');
+
+  // Update motifs - use default motifs if film doesn't have enough
+  const defaultMotifs = ['Surveillance', 'Free Will', 'Artificial Intelligence', 'Crime'];
+  const displayMotifs = tags;
+  
+  motifsContainer.innerHTML = displayMotifs.map((motif, i) => {
+    const isHighlighted = i === 0;
+    // return `<div class="motif-circle ${isHighlighted ? 'highlighted' : ''}" data-motif="${motif}">
+    //           ${motif}
+    //         </div>`;
+    return `<div class="motif-circle data-motif="${motif}">
+              ${motif}
+            </div>`;
+  }).join('');
+  
+  // Add click handlers to motif circles
+  motifsContainer.querySelectorAll('.motif-circle').forEach(circle => {
+  circle.addEventListener('click', () => {
+    const motifName = circle.dataset.motif;
+    // Redirect to infoPage.html with the motif name encoded
+    location.href = `/infoPage.html?trope=${encodeURIComponent(motifName)}`;
+  });
+});
+
 
   // Rebuild the overlay book mesh
   if (overlayBook) {
@@ -344,7 +404,13 @@ function animate() {
     b.mesh.rotation.y += (b.targetRotY - b.mesh.rotation.y) * 0.1;
     b.mesh.position.z += (b.targetPosZ - b.mesh.position.z) * 0.1;
     if (!b.isPresented) {
-      b.mesh.rotation.z = Math.sin(t + idx) * 0.02;
+      // Apply hover rotation or gentle wave animation
+      b.mesh.rotation.y += (b.targetRotY - b.mesh.rotation.y) * 0.1;
+      if (!b.isPresented && b.targetRotY === Math.PI/2) { // Only wave if not hovered
+        b.mesh.rotation.z = Math.sin(t + idx) * 0.02;
+      } else {
+        b.mesh.rotation.z = 0;
+      }
     } else {
       b.mesh.rotation.z = 0;
     }
