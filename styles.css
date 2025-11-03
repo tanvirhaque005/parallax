@@ -69,14 +69,26 @@ html, body {
 /* Scroll controls */
 #controls {
   position: absolute;
-  top: 50%;
-  left: 0; right: 0;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 2rem;
-  transform: translateY(-50%);
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
   pointer-events: none;
   z-index: 2;
+}
+
+#scrollLeft {
+  position: fixed;
+  left: 2rem;
+  top: 50%;
+  /* transform: translateY(-50%); */
+}
+
+#scrollRight {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  /* transform: translateY(-50%); */
 }
 #controls button {
   pointer-events: all;

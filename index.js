@@ -81,7 +81,7 @@ function makeMaterials(coverHex, backHex) {
 
 function createBook(x, colors, meta) {
   const mesh = new THREE.Mesh(geometry, makeMaterials(colors.front, colors.back));
-  mesh.position.set(x, 0, 0);
+  mesh.position.set(x, 0.2, 0);
   mesh.rotation.y = Math.PI / 2; // spine toward viewer
   mesh.userData.meta = meta;
   mesh.userData.colors = colors;
@@ -101,9 +101,55 @@ const spacing = BOOK_W + 0.75;
 const startX = -((palette.length - 1) * spacing) / 2;
 const books = palette.map((colors, i) => createBook(startX + i * spacing, colors, booksMeta[i]));
 
+/* Create timeline */
+const timelineGroup = new THREE.Group();
+
+// Create the main timeline line
+const timelineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.7, transparent: true });
+const timelineGeometry = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3(-((palette.length - 1) * spacing) / 2 - 1, -1.8, 0),  // Extend slightly beyond books
+  new THREE.Vector3(((palette.length - 1) * spacing) / 2 + 1, -1.8, 0)
+]);
+const timelineLine = new THREE.Line(timelineGeometry, timelineMaterial);
+timelineGroup.add(timelineLine);
+
+// Create tick marks and year labels
+const sortedYears = [...new Set(booksMeta.map(b => b.year))].sort((a, b) => a - b);
+const minYear = sortedYears[0];
+const maxYear = sortedYears[sortedYears.length - 1];
+const yearSpan = maxYear - minYear;
+
+booksMeta.forEach((book, i) => {
+  // Tick mark
+  const tickGeometry = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(startX + i * spacing, -1.7, 0),
+    new THREE.Vector3(startX + i * spacing, -1.9, 0)
+  ]);
+  const tick = new THREE.Line(tickGeometry, timelineMaterial);
+  timelineGroup.add(tick);
+
+  // Year label using sprite
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = 128;
+  canvas.height = 64;
+  ctx.font = 'bold 48px Arial';
+  ctx.fillStyle = 'white';
+  ctx.textAlign = 'center';
+  ctx.fillText(book.year.toString(), canvas.width/2, canvas.height);
+  
+  const texture = new THREE.CanvasTexture(canvas);
+  const spriteMaterial = new THREE.SpriteMaterial({ map: texture, opacity: 0.7 });
+  const sprite = new THREE.Sprite(spriteMaterial);
+  sprite.scale.set(0.8, 0.4, 1);
+  sprite.position.set(startX + i * spacing, -2, 0);
+  timelineGroup.add(sprite);
+});
+
 /* Group for shelf scrolling */
 const shelfGroup = new THREE.Group();
 books.forEach(b => shelfGroup.add(b.mesh));
+shelfGroup.add(timelineGroup); // Add timeline to shelf group so it moves with books
 scene.add(shelfGroup);
 
 /* ---------- Overlay UI references ---------- */
@@ -121,11 +167,49 @@ const releasedEl = document.getElementById('released');
 const depictedEl = document.getElementById('depicted');
 const motifsContainer = document.getElementById('motifsContainer');
 
-/* Scroll buttons */
+/* Scroll buttons and wheel */
 let shelfOffset = 0;
 let targetShelfOffset = 0;
-document.getElementById('scrollLeft').addEventListener('click', () => { targetShelfOffset += 2.5; });
-document.getElementById('scrollRight').addEventListener('click', () => { targetShelfOffset -= 2.5; });
+const MAX_SCROLL_LEFT = 5;  // Maximum scroll to the left (positive)
+const MAX_SCROLL_RIGHT = -5; // Maximum scroll to the right (negative)
+
+const scrollLeftBtn = document.getElementById('scrollLeft');
+const scrollRightBtn = document.getElementById('scrollRight');
+
+function updateScrollButtons() {
+    // Hide/show buttons based on scroll position
+    scrollRightBtn.style.display = targetShelfOffset <= MAX_SCROLL_RIGHT ? 'none' : 'block';
+    scrollLeftBtn.style.display = targetShelfOffset >= MAX_SCROLL_LEFT ? 'none' : 'block';
+}
+
+scrollLeftBtn.addEventListener('click', () => { 
+    if (targetShelfOffset < MAX_SCROLL_LEFT) {
+        targetShelfOffset += 2.5;
+        updateScrollButtons();
+    }
+});
+
+scrollRightBtn.addEventListener('click', () => { 
+    if (targetShelfOffset > MAX_SCROLL_RIGHT) {
+        targetShelfOffset -= 2.5;
+        updateScrollButtons();
+    }
+});
+
+// Handle trackpad/mouse wheel scrolling
+window.addEventListener('wheel', (e) => {
+  if (bookinfo.classList.contains('open')) return; // Don't scroll shelf when overlay is open
+  
+  // deltaY is positive when scrolling down, negative when scrolling up
+  if (e.deltaY > 0 && targetShelfOffset < MAX_SCROLL_LEFT) {
+    targetShelfOffset += 0.8; // Scroll down = move left
+  } else if (e.deltaY < 0 && targetShelfOffset > MAX_SCROLL_RIGHT) {
+    targetShelfOffset -= 0.8; // Scroll up = move right
+  }
+  
+  updateScrollButtons();
+  e.preventDefault(); // Prevent page scrolling
+}, { passive: false });
 
 /* Raycasting (woahhh) */
 const raycaster = new THREE.Raycaster();
@@ -396,6 +480,7 @@ function animate() {
   // Shelf slide
   shelfOffset += (targetShelfOffset - shelfOffset) * 0.1;
   shelfGroup.position.x = shelfOffset;
+  updateScrollButtons(); // Update button visibility during animation
 
   const t = performance.now() * 0.0015;
   shelfGroup.position.y = Math.sin(t) * 0.03;
