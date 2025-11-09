@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Location Connection Map</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Space Mono', 'Courier New', monospace;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+            line-height: 1.7;
+        }
+
+        #map {
+            width: 100%;
+            height: 700px;
+            border: none;
+            border-radius: 8px;
+            background: #fafbfc;
+        }
+
+        .info-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9fa;
+            border-radius: 8px;
+        }
+
+        .info-section h3 {
+            margin-top: 0;
+            color: #1a1a1a;
+            font-weight: 700;
+            font-size: 1em;
+        }
+
+        .info-section p {
+            color: #4b5563;
+            line-height: 1.7;
+            font-size: 0.85em;
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.85em;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-line {
+            width: 30px;
+            height: 3px;
+            background: #1e3a8a;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 0.9em;
+            color: #6b7280;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #1e3a8a;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+            transition: all 0.3s;
+            font-weight: 400;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85em;
+        }
+
+        .back-button:hover {
+            background: #0f172a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.4);
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: #6b7280;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1000;
+            max-width: 300px;
+            line-height: 1.5;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                stroke-opacity: 0.3;
+            }
+            50% {
+                stroke-opacity: 0.7;
+            }
+        }
+
+        path.connection {
+            fill: none;
+            stroke: #1e3a8a;
+            stroke-width: 1.5;
+            stroke-opacity: 0.3;
+            cursor: pointer;
+            animation: pulse 3s ease-in-out infinite;
+            transition: stroke-width 0.2s, stroke-opacity 0.2s;
+        }
+
+        path.connection.highlighted {
+            stroke-width: 3;
+            stroke-opacity: 0.9;
+            animation: none;
+        }
+
+        circle.city {
+            fill: #1e3a8a;
+            stroke: white;
+            stroke-width: 1;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        circle.city:hover {
+            fill: #0f172a;
+        }
+
+        .decade-selector {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .decade-selector-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+        }
+
+        .decade-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .decade-btn {
+            padding: 8px 16px;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .decade-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .decade-btn.active {
+            background: #1e3a8a;
+            color: white;
+            border-color: #1e3a8a;
+        }
+
+        .decade-btn.all {
+            background: #e5e7eb;
+            border-color: #e5e7eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Movie Location Connection Map</h1>
+        <p class="subtitle">
+            Directional connections showing where movies were filmed (origin) and where they take place (destination)
+        </p>
+
+        <div class="decade-selector">
+            <div class="decade-selector-title">Filter by Decade:</div>
+            <div class="decade-buttons" id="decadeButtons"></div>
+        </div>
+
+        <div class="stats" id="stats" style="display: none;">
+            <div class="stat-item">
+                <div class="stat-value" id="connectionCount">0</div>
+                <div class="stat-label">Connections</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="cityCount">0</div>
+                <div class="stat-label">Cities</div>
+            </div>
+        </div>
+
+        <div id="map"></div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-line" style="background: #1e3a8a; opacity: 0.5;"></div>
+                <span>Filming → Depicted Location</span>
+            </div>
+            <div class="legend-item">
+                <svg width="12" height="12">
+                    <circle cx="6" cy="6" r="3" fill="#1e3a8a" stroke="white" stroke-width="1"/>
+                </svg>
+                <span>Location</span>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>About This Map</h3>
+            <p>
+                This map shows the geographical connections between where science fiction movies were filmed
+                and where they are depicted to take place. Animated arcs pulse gently to show the flow of connections:
+                filming location → first depicted location → subsequent depicted locations (in order from the data).
+            </p>
+            <p>
+                <strong>How to use:</strong> Select a decade to filter movies by their production year.
+                Hover over arcs to see movie details. Hover over location dots to see their names.
+                The stats update to show only connections and cities for the selected decade.
+            </p>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="/timeline.html" class="back-button">← Back to Timeline</a>
+        </div>
+    </div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v4.min.js"></script>
+    <script>
+        let tooltip;
+        let allConnections = [];
+        let allCoordinates = {};
+        let svg, projection, connectionGroup, cityGroup;
+        let selectedDecade = null;
+
+        function getDecade(year) {
+            const y = parseInt(year);
+            if (isNaN(y)) return null;
+            return Math.floor(y / 10) * 10;
+        }
+
+        function createDecadeButtons(connections) {
+            // Extract unique decades
+            const decades = new Set();
+            connections.forEach(conn => {
+                const decade = getDecade(conn.year);
+                if (decade) decades.add(decade);
+            });
+
+            const sortedDecades = Array.from(decades).sort((a, b) => a - b);
+
+            const buttonsContainer = document.getElementById('decadeButtons');
+            buttonsContainer.innerHTML = '';
+
+            // Add "All" button
+            const allBtn = document.createElement('button');
+            allBtn.className = 'decade-btn all';
+            allBtn.textContent = 'All';
+            allBtn.onclick = () => {
+                selectedDecade = null;
+                updateDecadeButtons();
+                filterByDecade();
+            };
+            buttonsContainer.appendChild(allBtn);
+
+            // Add decade buttons
+            sortedDecades.forEach(decade => {
+                const btn = document.createElement('button');
+                btn.className = 'decade-btn';
+                btn.textContent = `${decade}s`;
+                btn.dataset.decade = decade;
+                btn.onclick = () => {
+                    selectedDecade = decade;
+                    updateDecadeButtons();
+                    filterByDecade();
+                };
+                buttonsContainer.appendChild(btn);
+            });
+        }
+
+        function updateDecadeButtons() {
+            const buttons = document.querySelectorAll('.decade-btn');
+            buttons.forEach(btn => {
+                if (!btn.dataset.decade) {
+                    // "All" button
+                    btn.classList.toggle('active', selectedDecade === null);
+                } else {
+                    const decade = parseInt(btn.dataset.decade);
+                    btn.classList.toggle('active', selectedDecade === decade);
+                }
+            });
+        }
+
+        function filterByDecade() {
+            // Filter connections by decade
+            const filteredConnections = selectedDecade === null
+                ? allConnections
+                : allConnections.filter(conn => getDecade(conn.year) === selectedDecade);
+
+            // Update stats
+            document.getElementById('connectionCount').textContent = filteredConnections.length;
+
+            // Get cities used in filtered connections
+            const usedCities = new Set();
+            filteredConnections.forEach(conn => {
+                usedCities.add(conn.from);
+                usedCities.add(conn.to);
+            });
+
+            document.getElementById('cityCount').textContent = usedCities.size;
+
+            // Redraw map with filtered data
+            drawConnections(filteredConnections);
+            drawCities(usedCities);
+        }
+
+        function drawConnections(connections) {
+            // Clear existing connections
+            connectionGroup.selectAll('*').remove();
+
+            connections.forEach((conn, index) => {
+                const from = allCoordinates[conn.from];
+                const to = allCoordinates[conn.to];
+
+                if (!from || !to) return;
+
+                const start = projection([from.lon, from.lat]);
+                const end = projection([to.lon, to.lat]);
+
+                // Create curved path
+                const dx = end[0] - start[0];
+                const dy = end[1] - start[1];
+                const dr = Math.sqrt(dx * dx + dy * dy) * 1.5;
+
+                connectionGroup.append('path')
+                    .attr('class', 'connection')
+                    .attr('data-movie', conn.movie)
+                    .attr('d', `M${start[0]},${start[1]}A${dr},${dr} 0 0,1 ${end[0]},${end[1]}`)
+                    .style('animation-delay', `${(index * 0.05) % 3}s`)
+                    .on('mouseover', function(event) {
+                        const currentMovie = d3.select(this).attr('data-movie');
+
+                        // Highlight all segments from the same movie
+                        connectionGroup.selectAll('.connection').each(function() {
+                            const path = d3.select(this);
+                            if (path.attr('data-movie') === currentMovie) {
+                                path.classed('highlighted', true);
+                            }
+                        });
+
+                        tooltip.transition()
+                            .duration(200)
+                            .style('opacity', 0.95);
+
+                        tooltip.html(`
+                            <strong>${conn.movie}</strong> (${conn.year})<br/>
+                            Filmed in: ${conn.from}<br/>
+                            Takes place in: ${conn.to}
+                        `)
+                            .style('left', (event.pageX + 15) + 'px')
+                            .style('top', (event.pageY - 28) + 'px');
+                    })
+                    .on('mouseout', function() {
+                        // Remove highlighting from all segments
+                        connectionGroup.selectAll('.connection')
+                            .classed('highlighted', false);
+
+                        tooltip.transition()
+                            .duration(500)
+                            .style('opacity', 0);
+                    });
+            });
+        }
+
+        function drawCities(usedCities) {
+            // Clear existing cities
+            cityGroup.selectAll('*').remove();
+
+            // Only draw cities that are in the usedCities set
+            Object.entries(allCoordinates).forEach(([city, coords]) => {
+                if (!usedCities.has(city)) return;
+
+                const pos = projection([coords.lon, coords.lat]);
+
+                cityGroup.append('circle')
+                    .attr('class', 'city')
+                    .attr('cx', pos[0])
+                    .attr('cy', pos[1])
+                    .attr('r', 3)
+                    .on('mouseover', function(event) {
+                        d3.select(this).attr('r', 5);
+
+                        tooltip.transition()
+                            .duration(200)
+                            .style('opacity', 0.95);
+
+                        tooltip.html(`<strong>${city}</strong>`)
+                            .style('left', (event.pageX + 15) + 'px')
+                            .style('top', (event.pageY - 28) + 'px');
+                    })
+                    .on('mouseout', function() {
+                        d3.select(this).attr('r', 3);
+
+                        tooltip.transition()
+                            .duration(500)
+                            .style('opacity', 0);
+                    });
+            });
+        }
+
+        async function initMap() {
+            try {
+                // Try to load the generated coordinates file
+                let coordinatesData;
+                try {
+                    const response = await fetch('./movie-coordinates.json');
+                    coordinatesData = await response.json();
+                } catch (error) {
+                    document.getElementById('map').innerHTML =
+                        '<div class="loading">' +
+                        'Coordinates file not found. Please run: node generate-coordinates.js' +
+                        '</div>';
+                    return;
+                }
+
+                const { coordinates, connections } = coordinatesData;
+                allConnections = connections;
+                allCoordinates = coordinates;
+
+                // Create decade buttons
+                createDecadeButtons(connections);
+                updateDecadeButtons();
+
+                // Update stats
+                document.getElementById('stats').style.display = 'flex';
+                document.getElementById('connectionCount').textContent = connections.length;
+                document.getElementById('cityCount').textContent = Object.keys(coordinates).length;
+
+                // Set up SVG dimensions
+                const width = 1200;
+                const height = 700;
+
+                // Create SVG
+                svg = d3.select('#map')
+                    .append('svg')
+                    .attr('width', width)
+                    .attr('height', height);
+
+                // Create projection
+                projection = d3.geoMercator()
+                    .scale(150)
+                    .translate([width / 2, height / 2]);
+
+                // Create path generator
+                const path = d3.geoPath().projection(projection);
+
+                // Load world map
+                const worldData = await d3.json('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson');
+
+                // Draw world map
+                svg.append('g')
+                    .selectAll('path')
+                    .data(worldData.features)
+                    .enter()
+                    .append('path')
+                    .attr('d', path)
+                    .attr('fill', '#f3f4f6')
+                    .attr('stroke', '#fff')
+                    .attr('stroke-width', 0.5);
+
+                // Create defs element for arrow markers (movie-specific markers added dynamically)
+                svg.append('defs');
+
+                // Create tooltip
+                tooltip = d3.select('body')
+                    .append('div')
+                    .attr('class', 'tooltip')
+                    .style('opacity', 0);
+
+                // Create groups for connections and cities
+                connectionGroup = svg.append('g').attr('class', 'connections');
+                cityGroup = svg.append('g').attr('class', 'cities');
+
+                // Get all cities used in connections
+                const usedCities = new Set();
+                connections.forEach(conn => {
+                    usedCities.add(conn.from);
+                    usedCities.add(conn.to);
+                });
+
+                // Initial draw with all connections
+                drawConnections(connections);
+                drawCities(usedCities);
+
+            } catch (error) {
+                console.error('Error loading map:', error);
+                document.getElementById('map').innerHTML =
+                    `<div class="loading" style="color: #ef4444;">Error loading map: ${error.message}</div>`;
+            }
+        }
+
+        // Initialize map when page loads
+        initMap();
+    </script>
+</body>
+</html>

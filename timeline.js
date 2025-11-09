@@ -11,18 +11,19 @@ class Timeline {
     this.events = [];
     this.selectedThemes = new Set();
     this.svg = null;
-    this.width = 0;
-    this.height = 1400;
-    this.margin = { top: 600, right: 40, bottom: 60, left: 80 };
+    this.width = 1200; // Fixed width for vertical layout
+    this.height = 0; // Will be calculated based on year range
+    this.margin = { top: 40, right: 300, bottom: 40, left: 300 };
     this.yearScale = null;
 
-    // Track positions (movies now above the timeline axis at y=0)
+    // Track positions for vertical layout (x positions relative to center axis at x=0)
+    // Events on left (negative x), Movies on right (positive x)
     this.tracks = {
-      movies: { y: -560, height: 500, label: 'Movies' },
-      technology: { y: 80, height: 60, label: 'Technology' },
-      political: { y: 160, height: 60, label: 'Political' },
-      social: { y: 240, height: 60, label: 'Social' },
-      economic: { y: 320, height: 60, label: 'Economic' }
+      movies: { x: 200, width: 250, label: 'Movies' },
+      technology: { x: -150, width: 180, label: 'Technology' },
+      political: { x: -200, width: 180, label: 'Political' },
+      social: { x: -250, width: 180, label: 'Social' },
+      economic: { x: -300, width: 180, label: 'Economic' }
     };
   }
 
@@ -119,9 +120,9 @@ class Timeline {
     const minYear = 1925;
     const maxYear = 2025;
 
-    // Calculate width based on year range (more pixels per year for better spacing)
-    const pixelsPerYear = 100; // Increased to 100 for maximum horizontal space
-    this.width = (maxYear - minYear) * pixelsPerYear;
+    // Calculate height based on year range (pixels per year for vertical spacing)
+    const pixelsPerYear = 50; // Vertical spacing between years
+    this.height = (maxYear - minYear) * pixelsPerYear;
 
     // Clear previous content
     this.container.html('');
@@ -129,13 +130,13 @@ class Timeline {
     // Create theme selector
     this.createThemeSelector();
 
-    // Create scrollable container
+    // Create scrollable container (vertical scrolling)
     const scrollContainer = this.container
       .append('div')
       .attr('class', 'timeline-scroll-container')
       .style('width', '100%')
-      .style('height', `${this.height}px`)
-      .style('overflow-x', 'auto')
+      .style('height', '800px') // Fixed viewport height
+      .style('overflow-x', 'hidden')
       .style('overflow-y', 'auto')
       .style('border', '1px solid #e5e7eb')
       .style('border-radius', '8px')
@@ -145,16 +146,17 @@ class Timeline {
     this.svg = scrollContainer
       .append('svg')
       .attr('width', this.width + this.margin.left + this.margin.right)
-      .attr('height', this.height)
-      .style('display', 'block');
+      .attr('height', this.height + this.margin.top + this.margin.bottom)
+      .style('display', 'block')
+      .style('margin', '0 auto');
 
     const g = this.svg.append('g')
       .attr('transform', `translate(${this.margin.left},${this.margin.top})`);
 
-    // Create year scale
+    // Create year scale (vertical - y-axis)
     this.yearScale = d3.scaleLinear()
       .domain([minYear, maxYear])
-      .range([0, this.width]);
+      .range([0, this.height]);
 
     // Draw timeline axis
     this.drawAxis(g);
@@ -282,9 +284,9 @@ class Timeline {
    * Draw timeline axis
    */
   drawAxis(g) {
-    const axis = d3.axisBottom(this.yearScale)
+    const axis = d3.axisLeft(this.yearScale)
       .tickFormat(d => d)
-      .ticks(50); // More ticks for better readability with wider timeline
+      .ticks(50); // More ticks for better readability
 
     g.append('g')
       .attr('class', 'timeline-axis')
@@ -293,77 +295,97 @@ class Timeline {
       .style('font-size', '16px')
       .style('font-weight', '700');
 
-    // Draw main timeline line
+    // Draw main timeline line (vertical)
     g.append('line')
       .attr('x1', 0)
-      .attr('x2', this.width)
+      .attr('x2', 0)
       .attr('y1', 0)
-      .attr('y2', 0)
+      .attr('y2', this.height)
       .attr('stroke', '#1a1a1a')
       .attr('stroke-width', 3);
 
     // Add separator text
     g.append('text')
-      .attr('x', -10)
-      .attr('y', 15)
-      .attr('text-anchor', 'end')
+      .attr('x', 0)
+      .attr('y', -20)
+      .attr('text-anchor', 'middle')
       .style('font-family', "'Space Mono', monospace")
       .style('font-size', '14px')
       .style('font-weight', '700')
       .style('fill', '#1a1a1a')
       .text('TIMELINE');
 
+    // Label for movies (right side)
     g.append('text')
-      .attr('x', -10)
-      .attr('y', this.tracks.movies.y + this.tracks.movies.height / 2)
-      .attr('text-anchor', 'end')
+      .attr('x', this.tracks.movies.x)
+      .attr('y', -20)
+      .attr('text-anchor', 'middle')
       .style('font-family', "'Space Mono', monospace")
       .style('font-size', '14px')
       .style('font-weight', '700')
       .style('fill', '#1a1a1a')
       .text('MOVIES');
 
-    // Add visual separator line between movies and timeline
-    g.append('line')
-      .attr('x1', 0)
-      .attr('x2', this.width)
-      .attr('y1', -50)
-      .attr('y2', -50)
-      .attr('stroke', '#e5e7eb')
-      .attr('stroke-width', 2)
-      .attr('stroke-dasharray', '5,5');
+    // Label for events (left side) - positioned at average x of event tracks
+    const avgEventX = (this.tracks.technology.x + this.tracks.political.x + 
+                       this.tracks.social.x + this.tracks.economic.x) / 4;
+    g.append('text')
+      .attr('x', avgEventX)
+      .attr('y', -20)
+      .attr('text-anchor', 'middle')
+      .style('font-family', "'Space Mono', monospace")
+      .style('font-size', '14px')
+      .style('font-weight', '700')
+      .style('fill', '#1a1a1a')
+      .text('EVENTS');
   }
 
   /**
    * Draw track backgrounds and labels
    */
   drawTracks(g) {
-    Object.entries(this.tracks).forEach(([key, track]) => {
-      // Background
+    // Draw vertical tracks for event categories (left side)
+    const eventTracks = ['technology', 'political', 'social', 'economic'];
+    const labelY = 20; // Y position for all category labels at the top
+
+    eventTracks.forEach(key => {
+      const track = this.tracks[key];
+      // Background rectangle (vertical strip on left)
       g.append('rect')
         .attr('class', `track-bg track-${key}`)
-        .attr('x', 0)
-        .attr('y', track.y - 10)
-        .attr('width', this.width)
-        .attr('height', track.height)
-        .attr('fill', key === 'movies' ? '#f8f9fa' : '#ffffff')
+        .attr('x', track.x - track.width / 2)
+        .attr('y', 0)
+        .attr('width', track.width)
+        .attr('height', this.height)
+        .attr('fill', '#ffffff')
         .attr('stroke', '#e5e7eb')
-        .attr('stroke-width', 1);
+        .attr('stroke-width', 1)
+        .attr('opacity', 0.3);
 
-      // Label (skip for movies track, it has a separate MOVIES label)
-      if (key !== 'movies') {
-        g.append('text')
-          .attr('x', -10)
-          .attr('y', track.y + track.height / 2)
-          .attr('text-anchor', 'end')
-          .attr('dominant-baseline', 'middle')
-          .style('font-family', "'Space Mono', monospace")
-          .style('font-size', '12px')
-          .style('font-weight', '700')
-          .style('fill', '#1a1a1a')
-          .text(track.label);
-      }
+      // Category label (positioned at top, centered on track)
+      g.append('text')
+        .attr('x', track.x)
+        .attr('y', labelY)
+        .attr('text-anchor', 'middle')
+        .style('font-family', "'Space Mono', monospace")
+        .style('font-size', '12px')
+        .style('font-weight', '700')
+        .style('fill', '#1a1a1a')
+        .text(track.label);
     });
+
+    // Draw movies track background (right side)
+    const moviesTrack = this.tracks.movies;
+    g.append('rect')
+      .attr('class', 'track-bg track-movies')
+      .attr('x', moviesTrack.x - moviesTrack.width / 2)
+      .attr('y', 0)
+      .attr('width', moviesTrack.width)
+      .attr('height', this.height)
+      .attr('fill', '#f8f9fa')
+      .attr('stroke', '#e5e7eb')
+      .attr('stroke-width', 1)
+      .attr('opacity', 0.5);
   }
 
   /**
@@ -381,8 +403,8 @@ class Timeline {
       const track = this.tracks[event.category];
       if (!track) return;
 
-      const x = this.yearScale(event.year);
-      const y = track.y + track.height / 2;
+      const y = this.yearScale(event.year);
+      const x = track.x; // Position on left side
 
       // Event marker (circle) - larger and more visible
       const marker = g.append('circle')
@@ -397,32 +419,33 @@ class Timeline {
         .style('cursor', 'pointer')
         .style('transition', 'all 0.2s');
 
-      // Event line to axis - thicker
+      // Event line to axis (horizontal line to center)
       g.append('line')
         .attr('class', 'event-line')
         .attr('data-themes', event.themes.join(','))
-        .attr('x1', x)
+        .attr('x1', 0)
         .attr('x2', x)
-        .attr('y1', 0)
-        .attr('y2', y - 15)
+        .attr('y1', y)
+        .attr('y2', y)
         .attr('stroke', categoryColors[event.category])
         .attr('stroke-width', 2)
         .attr('stroke-dasharray', '3,3')
         .attr('opacity', 0.4);
 
-      // Event label text
+      // Event label text (positioned to the left of marker)
       const label = g.append('text')
         .attr('class', 'event-label')
         .attr('data-themes', event.themes.join(','))
-        .attr('x', x)
-        .attr('y', y + 28)
-        .attr('text-anchor', 'middle')
+        .attr('x', x - 15)
+        .attr('y', y)
+        .attr('text-anchor', 'end')
+        .attr('dominant-baseline', 'middle')
         .style('font-family', "'Space Mono', monospace")
-        .style('font-size', '13px')
+        .style('font-size', '11px')
         .style('font-weight', '700')
         .style('fill', categoryColors[event.category])
         .style('pointer-events', 'none')
-        .text(event.title.length > 20 ? event.title.substring(0, 20) + '...' : event.title);
+        .text(event.title.length > 25 ? event.title.substring(0, 25) + '...' : event.title);
 
       // Add background to label for readability
       const bbox = label.node().getBBox();
@@ -458,8 +481,8 @@ class Timeline {
    */
   drawMovies(g) {
     const track = this.tracks.movies;
-    const movieHeight = 80;
-    const movieWidth = 50;
+    const movieHeight = 40;
+    const movieWidth = 60;
     const movieSpacing = 5;
     const rowHeight = movieHeight + movieSpacing;
     const columnWidth = movieWidth + movieSpacing;
@@ -473,38 +496,20 @@ class Timeline {
       moviesByYear[movie.year].push(movie);
     });
 
-    // Calculate positions with vertical stacking per year
+    // Calculate positions with horizontal stacking per year (on right side)
     const moviePositions = [];
     Object.entries(moviesByYear).forEach(([year, moviesInYear]) => {
-      const baseX = this.yearScale(parseInt(year));
+      const baseY = this.yearScale(parseInt(year));
       const yearInt = parseInt(year);
 
-      // Special case for 2014: use 2 columns
-      if (yearInt === 2014) {
-        moviesInYear.forEach((movie, index) => {
-          const col = index % 2; // Alternate between column 0 and 1
-          const row = Math.floor(index / 2); // Row increases every 2 movies
-          const x = baseX + (col * columnWidth);
-          const y = track.y + 10 + (row * rowHeight);
-          moviePositions.push({ movie, x, y, row, col });
-        });
-      } else if (yearInt === 2015) {
-        // Special case for 2015: shift right to center between 2014 and 2016
-        moviesInYear.forEach((movie, index) => {
-          const x = baseX + (columnWidth * 0.5); // Offset by half a column width
-          const row = index;
-          const y = track.y + 10 + (row * rowHeight);
-          moviePositions.push({ movie, x, y, row });
-        });
-      } else {
-        // All other years: single vertical column
-        moviesInYear.forEach((movie, index) => {
-          const x = baseX;
-          const row = index;
-          const y = track.y + 10 + (row * rowHeight);
-          moviePositions.push({ movie, x, y, row });
-        });
-      }
+      // Stack movies horizontally to the right of the timeline axis
+      moviesInYear.forEach((movie, index) => {
+        const col = index % 3; // Up to 3 columns
+        const row = Math.floor(index / 3); // Row increases every 3 movies
+        const x = track.x - track.width / 2 + 10 + (col * columnWidth);
+        const y = baseY - movieHeight / 2 + (row * rowHeight);
+        moviePositions.push({ movie, x, y, row, col });
+      });
     });
 
     // Draw movies at calculated positions
@@ -514,7 +519,7 @@ class Timeline {
       const rect = g.append('rect')
         .attr('class', 'movie-rect')
         .attr('data-themes', movie.themes.join(','))
-        .attr('x', x - movieWidth / 2)
+        .attr('x', x)
         .attr('y', y)
         .attr('width', movieWidth)
         .attr('height', movieHeight)
@@ -529,12 +534,12 @@ class Timeline {
       g.append('text')
         .attr('class', 'movie-year')
         .attr('data-themes', movie.themes.join(','))
-        .attr('x', x)
+        .attr('x', x + movieWidth / 2)
         .attr('y', y + movieHeight / 2)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
         .style('font-family', "'Space Mono', monospace")
-        .style('font-size', '10px')
+        .style('font-size', '9px')
         .style('font-weight', '700')
         .style('fill', 'white')
         .style('pointer-events', 'none')
