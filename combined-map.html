@@ -293,6 +293,15 @@
             filter: drop-shadow(0 0 8px rgba(100, 200, 255, 0.8));
         }
 
+        path.connection.fantasy {
+            stroke: #d946ef;
+        }
+
+        path.connection.fantasy.highlighted {
+            stroke-width: 4;
+            filter: drop-shadow(0 0 8px rgba(217, 70, 239, 0.8));
+        }
+
         circle.city {
             fill: #1e3a8a;
             stroke: white;
@@ -482,12 +491,16 @@
 
             <!-- Solar System Map -->
             <div class="solar-system-section">
-                <h2>🌌 Solar System: Space Journeys</h2>
+                <h2>🌌 Solar System: Space & Fantasy Journeys</h2>
                 <div id="solar-system" class="map-canvas"></div>
                 <div class="legend">
                     <div class="legend-item">
                         <div class="legend-line" style="background: #64c8ff; opacity: 0.6;"></div>
-                        <span>Journey Path</span>
+                        <span>Space Journey</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: #d946ef; opacity: 0.6;"></div>
+                        <span>Fantasy Journey</span>
                     </div>
                     <div class="legend-item">
                         <svg width="14" height="14">
@@ -501,6 +514,12 @@
                         </svg>
                         <span>Planet</span>
                     </div>
+                    <div class="legend-item">
+                        <svg width="14" height="14">
+                            <circle cx="7" cy="7" r="4" fill="#d946ef" stroke="#e879f9" stroke-width="1"/>
+                        </svg>
+                        <span>Fantasy Realm</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -513,9 +532,10 @@
                 Connector lines link this detail view to the Earth planet in the solar system.
             </p>
             <p>
-                <strong>Solar System View:</strong> The main visualization shows space journey paths in science fiction.
-                Animated arcs connect Earth to various destinations including the Moon, Mars, Jupiter, Europa, and deep space.
-                Each connection represents a movie's depicted voyage through our solar system and beyond.
+                <strong>Solar System View:</strong> The main visualization shows journey paths in science fiction.
+                Blue arcs connect Earth to space destinations including the Moon, Mars, Jupiter, Europa, and deep space.
+                Purple/pink arcs connect Earth to fantasy realms like Dream Worlds, Virtual Reality, and Alternate Realities.
+                Each connection represents a movie's depicted journey through space or into imagined dimensions.
             </p>
             <p>
                 <strong>Interactive Filtering:</strong> Use the decade selector above to filter both visualizations simultaneously
@@ -571,7 +591,22 @@
             {"movie": "Star Trek: The Next Generation", "year": "1987", "rating": "8.7", "from": "Deep Space", "to": "Deep Space"},
             {"movie": "Star Trek: The Original Series", "year": "1966", "rating": "8.4", "from": "Earth", "to": "Deep Space"},
             {"movie": "Stargate Universe", "year": "2009", "rating": "7.7", "from": "Deep Space", "to": "Deep Space"},
-            {"movie": "The Orville", "year": "2017", "rating": "7.9", "from": "Deep Space", "to": "Deep Space"}
+            {"movie": "The Orville", "year": "2017", "rating": "7.9", "from": "Deep Space", "to": "Deep Space"},
+
+            // Fantasy location connections
+            {"movie": "Inception", "year": "2010", "rating": "8.8", "from": "Earth", "to": "Dream Worlds"},
+            {"movie": "Paprika", "year": "2006", "rating": "7.7", "from": "Earth", "to": "Dream Worlds"},
+            {"movie": "The Matrix", "year": "1999", "rating": "8.7", "from": "Earth", "to": "Virtual Reality"},
+            {"movie": "The Thirteenth Floor", "year": "1999", "rating": "7.0", "from": "Earth", "to": "Virtual Reality"},
+            {"movie": "Dark City", "year": "1998", "rating": "7.7", "from": "Earth", "to": "Alternate Reality"},
+            {"movie": "Metropolis", "year": "1927", "rating": "8.3", "from": "Earth", "to": "Alternate Reality"},
+            {"movie": "Brazil", "year": "1985", "rating": "8.0", "from": "Earth", "to": "Alternate Reality"},
+            {"movie": "Fringe", "year": "2008", "rating": "8.4", "from": "Earth", "to": "Alternate Reality"},
+
+            // Fictional planets
+            {"movie": "Dune", "year": "1984", "rating": "6.6", "from": "Earth", "to": "Arrakis"},
+            {"movie": "Dune", "year": "2000", "rating": "7.0", "from": "Earth", "to": "Arrakis"},
+            {"movie": "Children of Dune", "year": "2003", "rating": "7.7", "from": "Earth", "to": "Arrakis"}
         ];
 
         function getDecade(year) {
@@ -839,7 +874,13 @@
                 'Mars': { x: centerX - 110, y: centerY - 20, r: 6, color: '#cd5c5c', stroke: '#ff6b6b' },
                 'Jupiter': { x: centerX + 150, y: centerY - 50, r: 14, color: '#daa520', stroke: '#f4c542' },
                 'Europa': { x: centerX + 168, y: centerY - 36, r: 3, color: '#c9d4e0', stroke: '#dde8f0' },
-                'Deep Space': { x: width - 100, y: 70, r: 7, color: '#6a5acd', stroke: '#8a7ae0' }
+                'Deep Space': { x: width - 100, y: 70, r: 7, color: '#6a5acd', stroke: '#8a7ae0' },
+                // Fictional planets
+                'Arrakis': { x: width - 90, y: centerY + 100, r: 8, color: '#d946ef', stroke: '#e879f9' },
+                // Fantasy locations (positioned to avoid callout box)
+                'Dream Worlds': { x: width - 120, y: 150, r: 7, color: '#d946ef', stroke: '#e879f9' },
+                'Virtual Reality': { x: width - 110, y: height - 80, r: 7, color: '#a855f7', stroke: '#c084fc' },
+                'Alternate Reality': { x: centerX + 50, y: height - 70, r: 7, color: '#ec4899', stroke: '#f472b6' }
             };
 
             const connectionGroup = svg.append('g').attr('class', 'connections');
@@ -872,8 +913,13 @@
                 const dy = end[1] - start[1];
                 const dr = Math.sqrt(dx * dx + dy * dy) * 1.3;
 
+                // Determine if this is a fantasy or space connection
+                const fantasyLocations = ['Dream Worlds', 'Virtual Reality', 'Alternate Reality', 'Arrakis'];
+                const isFantasy = fantasyLocations.includes(conn.to);
+                const connectionClass = isFantasy ? 'connection fantasy' : 'connection space';
+
                 connectionGroup.append('path')
-                    .attr('class', 'connection space')
+                    .attr('class', connectionClass)
                     .attr('data-movie', conn.movie)
                     .attr('d', `M${start[0]},${start[1]}A${dr},${dr} 0 0,1 ${end[0]},${end[1]}`)
                     .style('animation-delay', `${(index * 0.05) % 3}s`)
@@ -950,6 +996,14 @@
                 } else if (name === 'Europa') {
                     labelX = body.x + 20; // Shift Europa label to the right
                     labelY = body.y - 8; // Position Europa label higher
+                } else if (name === 'Arrakis') {
+                    labelY = body.y + body.r + 18; // Below
+                } else if (name === 'Dream Worlds') {
+                    labelY = body.y + body.r + 18; // Below
+                } else if (name === 'Virtual Reality') {
+                    labelY = body.y - body.r - 6; // Above
+                } else if (name === 'Alternate Reality') {
+                    labelY = body.y + body.r + 18; // Below
                 }
 
                 celestialGroup.append('text')
