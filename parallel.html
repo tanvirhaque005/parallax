@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Parallel Coordinates — Setting vs Release Year</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #f9fafc;
+      --panel: #ffffff;
+      --ink: #111418;
+      --muted: #666d7a;
+      --accent: #2a9dff;
+      --accent2: #9d2aff;
+      --halo: rgba(0,0,0,0.06);
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+    header {
+      padding: 18px 20px 6px;
+    }
+    h1 {
+      margin: 0;
+      font-weight: 800;
+      font-size: clamp(18px, 2.6vw, 28px);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pill {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+    .wrap { padding: 10px 20px 24px; }
+    .card {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: var(--panel);
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      box-shadow:
+        0 1px 2px rgba(0,0,0,0.04),
+        0 8px 24px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+    .toolbar {
+      display: flex; gap: 10px; align-items: center; justify-content: space-between;
+      padding: 10px 14px; border-bottom: 1px solid #e2e8f0;
+    }
+    .badge {
+      font-size: 12px; color: var(--muted);
+      padding: 4px 8px; border: 1px solid #e2e8f0;
+      border-radius: 8px; background: #f5f7fb;
+    }
+    .legend {
+      display: flex; gap: 14px; align-items: center; color: var(--muted);
+      font-size: 12px; flex-wrap: wrap;
+    }
+    .swatch {
+      width: 28px; height: 10px; border-radius: 6px;
+      background: linear-gradient(90deg, #5ee6a8, #ffd166, #ff7a9a);
+      border: 1px solid #e1e4e8;
+    }
+    svg {
+      width: 100%; height: 560px; display: block; background: #ffffff;
+    }
+    .axis path, .axis line { stroke: #c8cdd3; }
+    .axis text { fill: var(--ink); font-size: 12px; font-weight: 600; }
+    .axis-title {
+      fill: var(--muted); font-size: 12px; font-weight: 700;
+      letter-spacing: .6px; text-transform: uppercase;
+    }
+    .link {
+      fill: none; stroke-linecap: round; opacity: 0.9;
+      transition: stroke-width 0.18s;
+    }
+    .link:hover { opacity: 1; filter: drop-shadow(0 0 8px rgba(0,0,0,0.15)); }
+    .halo { fill: none; stroke: var(--halo); stroke-width: 18px; opacity: 0.7; }
+    .grid line { stroke: #e7e8ec; stroke-dasharray: 2 4; }
+    .tooltip {
+      position: fixed; pointer-events: none; z-index: 10; background: white; color: var(--ink);
+      border: 1px solid #d1d5db; padding: 8px 10px; border-radius: 10px; font-size: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transform: translate(-50%, calc(-100% - 14px)); white-space: nowrap; display: none;
+    }
+    .tooltip .title { font-weight: 800; letter-spacing: 0.3px; margin-bottom: 4px; }
+    .tooltip .sub { color: var(--muted); }
+    .hint { color: var(--muted); font-size: 12px; padding: 8px 14px 14px; text-align: right; }
+    .kbd {
+      border: 1px solid #ccd2d8; background: white; border-bottom-width: 2px;
+      border-radius: 6px; padding: 2px 6px; margin: 0 2px; font-weight: 700; color: var(--ink);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>
+      Parallel Coordinates
+      <span class="pill">Setting → Release</span>
+    </h1>
+  </header>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="toolbar">
+        <div class="left">
+          <span class="badge">Horizontal Parallel Coordinates</span>
+          <span class="badge">Pan: drag • Zoom: wheel • Reset: <span class="kbd">R</span></span>
+        </div>
+        <div class="legend">
+          Year Difference
+          <span class="swatch" title="Short → Long"></span>
+        </div>
+      </div>
+
+      <svg id="parallel"></svg>
+
+      <div class="hint">Click a path to pin its tooltip.</div>
+    </div>
+  </div>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js"></script>
+  <script type="module" src="./parallel.js"></script>
+</body>
+</html>
