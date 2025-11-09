@@ -197,8 +197,16 @@
             cursor: pointer;
         }
 
+        circle.city.filming-location {
+            fill: #dc2626;
+        }
+
         circle.city:hover {
             fill: #0f172a;
+        }
+
+        circle.city.filming-location:hover {
+            fill: #991b1b;
         }
 
         .decade-selector {
@@ -280,9 +288,15 @@
             </div>
             <div class="legend-item">
                 <svg width="12" height="12">
+                    <circle cx="6" cy="6" r="3" fill="#dc2626" stroke="white" stroke-width="1"/>
+                </svg>
+                <span>Filming Location</span>
+            </div>
+            <div class="legend-item">
+                <svg width="12" height="12">
                     <circle cx="6" cy="6" r="3" fill="#1e3a8a" stroke="white" stroke-width="1"/>
                 </svg>
-                <span>Location</span>
+                <span>Depicted Location</span>
             </div>
         </div>
 
@@ -457,14 +471,26 @@
             // Clear existing cities
             cityGroup.selectAll('*').remove();
 
+            // Get current filtered connections to determine filming locations
+            const filteredConnections = selectedDecade === null
+                ? allConnections
+                : allConnections.filter(conn => getDecade(conn.year) === selectedDecade);
+
+            // Identify filming locations (cities that appear as "from" in connections)
+            const filmingLocations = new Set();
+            filteredConnections.forEach(conn => {
+                filmingLocations.add(conn.from);
+            });
+
             // Only draw cities that are in the usedCities set
             Object.entries(allCoordinates).forEach(([city, coords]) => {
                 if (!usedCities.has(city)) return;
 
                 const pos = projection([coords.lon, coords.lat]);
+                const isFilmingLocation = filmingLocations.has(city);
 
                 cityGroup.append('circle')
-                    .attr('class', 'city')
+                    .attr('class', isFilmingLocation ? 'city filming-location' : 'city')
                     .attr('cx', pos[0])
                     .attr('cy', pos[1])
                     .attr('r', 3)
@@ -545,7 +571,7 @@
                     .enter()
                     .append('path')
                     .attr('d', path)
-                    .attr('fill', '#f3f4f6')
+                    .attr('fill', '#d1d5db')
                     .attr('stroke', '#fff')
                     .attr('stroke-width', 0.5);
 
