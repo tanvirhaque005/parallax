@@ -22,8 +22,8 @@
 			<p class="subtitle">Hover to explore connections. Click a theme node or a chord to jump into the 3D shelf for a related movie.</p>
 
 			<div class="controls">
-				<select id="movieSelect"></select>
-				<button id="renderBtn" class="control-btn">Render Chord</button>
+				<!-- <select id="movieSelect"></select>
+				<button id="renderBtn" class="control-btn">Reset</button> -->
 				<a id="backToLib" class="back-button" href="index.html">Library</a>
 				<a id="toParallel" class="back-button" href="./parallel.html" style="margin-left:8px;">Parallel</a>
 			</div>
@@ -46,11 +46,11 @@
 					return;
 				}
 
-				const select = document.getElementById('movieSelect');
-				select.innerHTML = '';
-				cg.getMovieTitles().forEach(t => {
-					const o = document.createElement('option'); o.value = t; o.textContent = t; select.appendChild(o);
-				});
+				// const select = document.getElementById('movieSelect');
+				// select.innerHTML = '';
+				// cg.getMovieTitles().forEach(t => {
+				// 	const o = document.createElement('option'); o.value = t; o.textContent = t; select.appendChild(o);
+				// });
 
 				/* ---------- Scroll-driven movie timeline (visual effect) ---------- */
 				// Insert timeline UI after the chord container (so chord graph remains visible above)
@@ -567,26 +567,26 @@
 					}, 40);
 				});
 
-				// If a movie? param exists, pre-select and render
-				const params = new URLSearchParams(window.location.search);
-				const movieParam = params.get('movie');
-				if (movieParam) {
-					const found = Array.from(select.options).find(o => o.value === movieParam);
-					if (found) select.value = movieParam;
-				}
+				// // If a movie? param exists, pre-select and render
+				// const params = new URLSearchParams(window.location.search);
+				// const movieParam = params.get('movie');
+				// if (movieParam) {
+				// 	const found = Array.from(select.options).find(o => o.value === movieParam);
+				// 	if (found) select.value = movieParam;
+				// }
 
-				// Render first available movie as landing if none specified
-						if (select.options.length) {
-							if (select.value) {
-								document.getElementById('renderBtn').click();
-								setTimeout(attachClickHandlers, 40);
-							} else {
-								// default to first
-								select.selectedIndex = 0;
-								document.getElementById('renderBtn').click();
-								setTimeout(attachClickHandlers, 40);
-							}
-						}
+				// // Render first available movie as landing if none specified
+				// 		if (select.options.length) {
+				// 			if (select.value) {
+				// 				document.getElementById('renderBtn').click();
+				// 				setTimeout(attachClickHandlers, 40);
+				// 			} else {
+				// 				// default to first
+				// 				select.selectedIndex = 0;
+				// 				document.getElementById('renderBtn').click();
+				// 				setTimeout(attachClickHandlers, 40);
+				// 			}
+				// 		}
 			})();
 		</script>
 	</body>

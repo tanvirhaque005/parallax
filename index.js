@@ -454,7 +454,7 @@ function rebuildOverlayForIndex() {
 // });
 
   // Update chord graph button with actual movie title
-  tropeDiv.innerHTML = `<button class="btn" onclick="location.href='/infoPage.html?movie=${encodeURIComponent(meta.title)}'">
+  tropeDiv.innerHTML = `<button class="btn" onclick="location.href='/chordGraph.html?movie=${encodeURIComponent(meta.title)}'">
               🔗 Explore Theme Network
             </button>`;
 
