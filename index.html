@@ -7,22 +7,6 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <script>
-      // // Redirect to chordGraph landing page unless this page was opened from the chord graph
-      // (function(){
-      //   try {
-      //     const params = new URLSearchParams(window.location.search);
-      //     // Only redirect to chordGraph if we don't have a 'from' param AND we don't have a 'movie' param
-      //     // This lets links like index.html?movie=TITLE open the shelf without being redirected back to the graph.
-      //     if (!params.has('from') && !params.has('movie')) {
-      //       // replace to avoid polluting history
-      //       window.location.replace('chordGraph.html');
-      //     }
-      //   } catch (e) {
-      //     // ignore errors (e.g., file:// contexts)
-      //   }
-      // })();
-    </script>
     <div id="controls">
       <button id="scrollLeft" aria-label="Scroll left">⟵</button>
       <button id="scrollRight" aria-label="Scroll right">⟶</button>
@@ -109,7 +93,6 @@
              <div class="bottomBox">
             <div class="actions">
               <button class="btn back-btn" id="backToShelf">← Back to Library</button>
-              <a class="btn" id="toChordGraph" href="./chordGraph.html?from=index.html" style="margin-left:8px; text-decoration:none;">Chord Graph</a>
             </div>
             </div>
           </div>
