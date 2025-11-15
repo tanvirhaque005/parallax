@@ -1,192 +1,87 @@
-// import * as THREE from 'https://unpkg.com/three@0.164.0/build/three.module.js';
-
-// // Renderer
-// const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene") });
-// renderer.setSize(window.innerWidth, window.innerHeight);
-// renderer.setClearColor("#000");
-
-// // Scene & camera
-// const scene = new THREE.Scene();
-// const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-// camera.position.z = 2.5;
-// camera.lookAt(0, 0, 0);
-
-// // Sphere geometry
-// const widthSegments = 100, heightSegments = 50;
-// const sphereGeometry = new THREE.SphereGeometry(1, widthSegments, heightSegments);
-
-// // Plane geometry (same UVs, flattened)
-// const planeGeometry = sphereGeometry.clone();
-// for (let i = 0; i < planeGeometry.attributes.position.count; i++) {
-//   const v = new THREE.Vector3().fromBufferAttribute(planeGeometry.attributes.position, i);
-//   const lon = Math.atan2(v.z, v.x);
-//   const lat = Math.asin(v.y);
-//   const x = lon / Math.PI;      // -1 to 1
-//   const y = lat / (Math.PI / 2); // -1 to 1
-//   planeGeometry.attributes.position.setXYZ(i, x, y, 0);
-// }
-// planeGeometry.computeVertexNormals();
-
-// // Use flattened plane initially
-// const geometry = planeGeometry.clone();
-
-// // Texture
-// const texture = new THREE.TextureLoader().load(
-//   './map-image.jpg',
-//   () => console.log('✅ Texture loaded'),
-//   undefined,
-//   err => console.error('❌ Texture load error:', err)
-// );
-
-// // Material
-// const material = new THREE.MeshBasicMaterial({ map: texture });
-// const mesh = new THREE.Mesh(geometry, material);
-// scene.add(mesh);
-
-// // Scale the flat map so it fills the view (2:1 aspect)
-// mesh.scale.set(1.6, 0.8, 1); // adjust if your map looks stretched
-// mesh.position.z = 0; // ensure visible
-// mesh.rotation.y = Math.PI;   // face camera correctly
-
-// // Morph data
-// const spherePos = sphereGeometry.attributes.position;
-// const planePos = planeGeometry.attributes.position;
-// let morphProgress = 0;
-// let isMorphing = false;
-
-// // Animate
-// function animate() {
-//   requestAnimationFrame(animate);
-
-//   if (isMorphing && morphProgress < 1) {
-//     morphProgress += 0.01;
-
-//     for (let i = 0; i < geometry.attributes.position.count; i++) {
-//       const sx = spherePos.getX(i), sy = spherePos.getY(i), sz = spherePos.getZ(i);
-//       const px = planePos.getX(i), py = planePos.getY(i), pz = planePos.getZ(i);
-//       geometry.attributes.position.setXYZ(
-//         i,
-//         THREE.MathUtils.lerp(px, sx, morphProgress),
-//         THREE.MathUtils.lerp(py, sy, morphProgress),
-//         THREE.MathUtils.lerp(pz, sz, morphProgress)
-//       );
-//     }
-//     geometry.attributes.position.needsUpdate = true;
-
-//     // Zoom out slightly as it morphs
-//     camera.position.z = THREE.MathUtils.lerp(2.5, 3.2, morphProgress);
-
-//     // Un-scale the plane as it becomes a sphere
-//     mesh.scale.set(
-//       THREE.MathUtils.lerp(1.6, 1.0, morphProgress),
-//       THREE.MathUtils.lerp(0.8, 1.0, morphProgress),
-//       1
-//     );
-//   }
-
-//   renderer.render(scene, camera);
-// }
-// animate();
-
-// // Button
-// document.getElementById("warpBtn").onclick = () => {
-//   isMorphing = true;
-// };
-
-// // Handle resize
-// window.addEventListener('resize', () => {
-//   renderer.setSize(window.innerWidth, window.innerHeight);
-//   camera.aspect = window.innerWidth / window.innerHeight;
-//   camera.updateProjectionMatrix();
-// });
 import * as THREE from 'https://unpkg.com/three@0.164.0/build/three.module.js';
 
-// --- Renderer setup ---
+// ==========================================================
+// RENDERER + CAMERA
+// ==========================================================
 const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene") });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor("#000");
 
-// --- Scene & Camera ---
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 1.2; // Start closer for larger map view
+
+const camera = new THREE.PerspectiveCamera(
+  45,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
+camera.position.z = 1.2;
 camera.lookAt(0, 0, 0);
 
-// --- Geometries ---
+let zoomingIn = false;
+let zoomInProgress = 0;
+
+
+// ==========================================================
+// EARTH GEOMETRIES
+// ==========================================================
 const widthSegments = 100, heightSegments = 50;
-// Match plane aspect ratio to canvas (2048x1024 = 2:1)
-const imageAspect = 2.0; // 2:1 for equirectangular projection
-const planeGeometry = new THREE.PlaneGeometry(imageAspect, 1, widthSegments, heightSegments);
+const planeGeometry = new THREE.PlaneGeometry(2, 1, widthSegments, heightSegments);
 const sphereGeometry = new THREE.SphereGeometry(1, widthSegments, heightSegments);
 
-// --- D3 Map Rendering ---
 const mapCanvas = document.getElementById('mapCanvas');
 const mapContext = mapCanvas.getContext('2d');
+mapCanvas.width = 2048;
+mapCanvas.height = 1024;
 
-// Set canvas size for high quality
-const canvasWidth = 2048;
-const canvasHeight = 1024;
-mapCanvas.width = canvasWidth;
-mapCanvas.height = canvasHeight;
-
-// Create texture from canvas
 const texture = new THREE.CanvasTexture(mapCanvas);
-texture.needsUpdate = true;
-
 const material = new THREE.MeshBasicMaterial({ map: texture });
-const geometry = planeGeometry.clone(); // start flat
-const mesh = new THREE.Mesh(geometry, material);
-scene.add(mesh);
 
-// Function to render D3 map to canvas
+const geometry = planeGeometry.clone();
+const earthMesh = new THREE.Mesh(geometry, material);
+scene.add(earthMesh);
+
+// ==========================================================
+// D3 MAP
+// ==========================================================
 async function renderD3Map() {
-  try {
-    console.log('🌍 Loading world map data...');
-    const worldData = await d3.json('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson');
+  const world = await d3.json(
+    'https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson'
+  );
 
-    // Create D3 projection
-    const projection = d3.geoEquirectangular()
-      .scale(canvasWidth / (2 * Math.PI))
-      .translate([canvasWidth / 2, canvasHeight / 2]);
+  const proj = d3.geoEquirectangular()
+    .scale(mapCanvas.width / (2 * Math.PI))
+    .translate([mapCanvas.width / 2, mapCanvas.height / 2]);
 
-    const path = d3.geoPath(projection, mapContext);
+  const path = d3.geoPath(proj, mapContext);
 
-    // Clear canvas
-    mapContext.fillStyle = '#000000';
-    mapContext.fillRect(0, 0, canvasWidth, canvasHeight);
+  mapContext.fillStyle = "#000";
+  mapContext.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
 
-    // Draw countries
-    mapContext.strokeStyle = '#ffffff';
-    mapContext.lineWidth = 1;
-    mapContext.fillStyle = '#2c3e50'; // Dark blue-gray for land
+  mapContext.strokeStyle = "#ffffff";
+  mapContext.fillStyle = "#2c3e50";
 
-    worldData.features.forEach(feature => {
-      mapContext.beginPath();
-      path(feature);
-      mapContext.fill();
-      mapContext.stroke();
-    });
+  world.features.forEach(f => {
+    mapContext.beginPath();
+    path(f);
+    mapContext.fill();
+    mapContext.stroke();
+  });
 
-    // Update texture
-    texture.needsUpdate = true;
-    console.log('✅ World map rendered');
-
-  } catch (error) {
-    console.error('❌ Error loading world map:', error);
-  }
+  texture.needsUpdate = true;
 }
 
-// Render the D3 map
 renderD3Map();
 
-// --- Flight Paths ---
+// ==========================================================
+// FLIGHT PATHS
+// ==========================================================
 const flightPathGroup = new THREE.Group();
 scene.add(flightPathGroup);
 
-// Shader for animated gradient flow effect
 const flowVertexShader = `
   varying vec2 vUv;
-  void main() {
+  void main(){
     vUv = uv;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
@@ -198,354 +93,439 @@ const flowFragmentShader = `
   uniform float opacity;
   varying vec2 vUv;
 
-  void main() {
-    // Create moving dashes pattern
-    float dashPattern = fract((vUv.x * 8.0) - time * 0.5);
-
-    // Create dash effect: on for first 60%, off for last 40%
-    float dash = step(dashPattern, 0.6);
-
-    // Add soft edges to dashes for smoother appearance
-    float softDash = smoothstep(0.55, 0.65, dashPattern) + (1.0 - smoothstep(0.0, 0.1, dashPattern));
-    softDash = clamp(softDash, 0.0, 1.0);
-
-    // Combine: always show base line, brighten where dashes are
-    float brightness = 0.4 + softDash * 0.6;
-
-    gl_FragColor = vec4(color * brightness, opacity);
+  void main(){
+    float t = fract((vUv.x*8.0) - time*0.5);
+    float soft = smoothstep(0.55,0.65,t) + (1.0 - smoothstep(0.0,0.1,t));
+    gl_FragColor = vec4(color*(0.4 + soft*0.6), opacity);
   }
-  `;
+`;
 
-  let animationTime = 0;
-  
-// Convert lat/lon to x,y position on flat map
-function latLonToPlanePosition(lat, lon) {
-  // Map projection: equirectangular (plate carrée)
-  // Plane is 2:1 aspect ratio (standard equirectangular)
-  const imageAspect = 2.0;
+let animationTime = 0;
 
-  // Longitude -180° to 180° → x: -1 to 1
-  const x = lon / 180;
-
-  // Latitude -90° to 90° → y: -0.5 to 0.5
-  const y = (lat / 90) * 0.5;
-
-  return { x, y };
+function latLonToPlane(lat, lon) {
+  return { x: lon/180, y: (lat/90)*0.5 };
 }
 
-// Create arc curve between two points
-function createArcCurve(startPos, endPos, arcHeight = 0.1) {
-  const midX = (startPos.x + endPos.x) / 2;
-  const midY = (startPos.y + endPos.y) / 2;
-
-  // Control point for the arc (raised above the midpoint)
-  const controlPoint = new THREE.Vector3(midX, midY, arcHeight);
-
-  const curve = new THREE.QuadraticBezierCurve3(
-    new THREE.Vector3(startPos.x, startPos.y, 0),
-    controlPoint,
-    new THREE.Vector3(endPos.x, endPos.y, 0)
+function createArc(a,b,h){
+  const mid = { x:(a.x+b.x)/2, y:(a.y+b.y)/2 };
+  return new THREE.QuadraticBezierCurve3(
+    new THREE.Vector3(a.x,a.y,0),
+    new THREE.Vector3(mid.x,mid.y,h),
+    new THREE.Vector3(b.x,b.y,0)
   );
-
-  return curve;
 }
 
-// Load flight path data and create visualizations
-async function loadFlightPaths() {
-  try {
-    const response = await fetch('./movie-coordinates.json');
-    const data = await response.json();
+async function loadPaths(){
+  const res = await fetch('./movie-coordinates.json');
+  const data = await res.json();
 
-    const { coordinates, connections } = data;
+  const { coordinates, connections } = data;
+  const paths = connections.filter(c => c.type === "filming-to-depicted");
 
-    // Filter for filming-to-depicted connections only
-    const filmingConnections = connections.filter(conn =>
-      conn.type === 'filming-to-depicted'
-    );
+  paths.forEach((c,i)=>{
+    const A = coordinates[c.from];
+    const B = coordinates[c.to];
+    if(!A || !B) return;
 
-    console.log(`✅ Loaded ${filmingConnections.length} flight paths`);
+    const p1 = latLonToPlane(A.lat,A.lon);
+    const p2 = latLonToPlane(B.lat,B.lon);
 
-    // Create flight path lines
-    filmingConnections.forEach(conn => {
-      const fromCoord = coordinates[conn.from];
-      const toCoord = coordinates[conn.to];
+    const dist = Math.hypot(p2.x-p1.x, p2.y-p1.y);
+    const curve = createArc(p1,p2, dist*0.15);
 
-      if (!fromCoord || !toCoord) return;
+    const tube = new THREE.TubeGeometry(curve,50,0.0015,8,false);
 
-      const startPos = latLonToPlanePosition(fromCoord.lat, fromCoord.lon);
-      const endPos = latLonToPlanePosition(toCoord.lat, toCoord.lon);
-
-      // Calculate arc height based on distance
-      const distance = Math.sqrt(
-        Math.pow(endPos.x - startPos.x, 2) +
-        Math.pow(endPos.y - startPos.y, 2)
-      );
-      const arcHeight = distance * 0.15; // Arc height proportional to distance
-
-      const curve = createArcCurve(startPos, endPos, arcHeight);
-      const points = curve.getPoints(50);
-
-      // Create tube geometry for better shader support
-      const tubeGeometry = new THREE.TubeGeometry(curve, 50, 0.0015, 8, false);
-
-      // Create shader material with flow animation
-      const lineMaterial = new THREE.ShaderMaterial({
-        uniforms: {
-          time: { value: 0 },
-          color: { value: new THREE.Color(0x1e40af) },
-          opacity: { value: 0.7 }
-        },
-        vertexShader: flowVertexShader,
-        fragmentShader: flowFragmentShader,
-        transparent: true,
-        side: THREE.DoubleSide
-      });
-
-      const line = new THREE.Mesh(tubeGeometry, lineMaterial);
-
-      // Store connection data for click interaction
-      line.userData = {
-        movie: conn.movie,
-        year: conn.year,
-        from: conn.from,
-        to: conn.to
-      };
-
-      flightPathGroup.add(line);
+    const mat = new THREE.ShaderMaterial({
+      uniforms:{ time:{value:0}, color:{value:new THREE.Color(0x1e40af)}, opacity:{value:0.7} },
+      vertexShader:flowVertexShader,
+      fragmentShader:flowFragmentShader,
+      transparent:true
     });
 
-  } catch (error) {
-    console.error('❌ Error loading flight paths:', error);
-  }
+    const mesh = new THREE.Mesh(tube,mat);
+    mesh.userData = { movie:c.movie, year:c.year, from:c.from, to:c.to };
+    flightPathGroup.add(mesh);
+  });
 }
 
-// Load flight paths when script runs
-loadFlightPaths();
+loadPaths();
 
-// --- Morph Data ---
+// ==========================================================
+// CUSTOM PLANET POSITIONS
+// ==========================================================
+const customPositions = {
+  sun:      new THREE.Vector3(-10, 8, 0),
+  mercury:  new THREE.Vector3(2, 1, 0),
+  venus:    new THREE.Vector3(3, -1, 0),
+  earth:    new THREE.Vector3(-2, -1, 0),
+  mars:     new THREE.Vector3(-4, 1, 0),
+  jupiter:  new THREE.Vector3(6, 0, -7),
+  saturn:   new THREE.Vector3(8, 2, 0),
+  uranus:   new THREE.Vector3(-7, 2, -2),
+  neptune:  new THREE.Vector3(-9, -2, 1)
+};
+
+// ==========================================================
+// CREATE SOLAR SYSTEM OBJECTS
+// ==========================================================
+const planetGroup = new THREE.Group();
+scene.add(planetGroup);
+planetGroup.visible = false;
+
+const planetColors = {
+  sun: 0xffcc33,
+  mercury: 0xb1b1b1,
+  venus: 0xe6b800,
+  earth: 0x4ea5d5,
+  mars: 0xc1440e,
+  jupiter: 0xd9a066,
+  saturn: 0xdcc58a,
+  uranus: 0x7fdbff,
+  neptune: 0x4169e1
+};
+
+const radii = {
+  sun: 4.25,
+  mercury: 0.05,
+  venus: 0.1,
+  earth: 0.1,
+  mars: 0.18,
+  jupiter: 1.5,
+  saturn: 1.73,
+  uranus: 0.11,
+  neptune: 0.1
+};
+
+Object.keys(planetColors).forEach((name)=>{
+  const radius = radii[name];
+  const geo = new THREE.SphereGeometry(radius,32,32);
+  const mat = new THREE.MeshBasicMaterial({ color: planetColors[name] });
+  const p = new THREE.Mesh(geo,mat);
+
+  p.userData = { name };
+  p.position.set(0,0,-20); // start far away
+  planetGroup.add(p);
+});
+
+let planetZoomInProgress = false;
+
+// ==========================================================
+// EARTH MORPH
+// ==========================================================
 const spherePos = sphereGeometry.attributes.position;
 const planePos = planeGeometry.attributes.position;
+
 let morphProgress = 0;
 let targetMorphProgress = 0;
+let morphSpeed = 1;
 
-// --- Adjustable parameters ---
-let morphSpeed = 0.05;  // how fast the morph catches up to target
-let zoomMin = 1.2;      // closest zoom (map view - fills screen)
-let zoomMax = 15.0;     // farthest zoom (globe view)
-let scaleStart = 1.0;   // map scale
-let scaleEnd = 0.8;     // globe scale
+let zoomMin = 1.2;
+let zoomMax = 20.0;
 
-// --- Easing: ease-in-out cubic ---
-function easeInOutCubic(t) {
-  return t < 0.5
-    ? 4 * t * t * t     // accelerate first half
-    : 1 - Math.pow(-2 * t + 2, 3) / 2; // decelerate second half
+let scaleStart = 1.0;
+let scaleEnd = 0.4;
+
+let autoZoomingOut = false;
+
+// NEW: second-click collapse flag
+let secondZoomOut = false;
+
+function triggerFullZoomOut(){
+  targetMorphProgress = 1;
+  autoZoomingOut = true;
 }
 
-// --- Animation Loop ---
-function animate() {
+function ease(t){
+  return t<0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
+}
+
+// ==========================================================
+// MAIN ANIMATION LOOP
+// ==========================================================
+let collapseProgress = 0;
+let newShapes = [];
+let newShapesVisible = false;
+
+document.getElementById("zoomInBtn").addEventListener("click", () => {
+    zoomingIn = true;
+    zoomInProgress = 0;
+
+    // Reset collapse flag so things restore visibly
+    secondZoomOut = false;
+
+    // Immediately hide new shapes so they zoom back out
+    newShapesVisible = false;
+});
+
+
+function animate(){
   requestAnimationFrame(animate);
 
-  // Update animation time for flow effect
   animationTime += 0.01;
 
-  // Smoothly interpolate morphProgress toward target
+  // ZOOM OUT
+  if(autoZoomingOut){
+    camera.position.z += 0.18;
+    if(camera.position.z >= zoomMax){
+      camera.position.z = zoomMax;
+      autoZoomingOut = false;
+    }
+    updateMorphFromZoom();
+  }
+
+  // MORPH EARTH
   morphProgress += (targetMorphProgress - morphProgress) * morphSpeed;
+  const eased = ease(Math.min(1, morphProgress));
 
-  // Apply easing for smooth visual transition
-  const eased = easeInOutCubic(Math.max(0, Math.min(1, morphProgress)));
-
-  // --- Vertex morphing (flat ↔ sphere) ---
-  for (let i = 0; i < geometry.attributes.position.count; i++) {
-    const sx = spherePos.getX(i);
-    const sy = spherePos.getY(i);
-    const sz = spherePos.getZ(i);
-    const px = planePos.getX(i);
-    const py = planePos.getY(i);
-    const pz = planePos.getZ(i);
-
+  for(let i=0;i<geometry.attributes.position.count;i++){
     geometry.attributes.position.setXYZ(
       i,
-      THREE.MathUtils.lerp(px, sx, eased),
-      THREE.MathUtils.lerp(py, sy, eased),
-      THREE.MathUtils.lerp(pz, sz, eased)
+      THREE.MathUtils.lerp(planePos.getX(i), spherePos.getX(i), eased),
+      THREE.MathUtils.lerp(planePos.getY(i), spherePos.getY(i), eased),
+      THREE.MathUtils.lerp(planePos.getZ(i), spherePos.getZ(i), eased)
     );
   }
 
   geometry.attributes.position.needsUpdate = true;
 
-  // 🌍 Globe shrinks slightly as it morphs
-  const scaleVal = THREE.MathUtils.lerp(scaleStart, scaleEnd, eased);
-  mesh.scale.set(scaleVal, scaleVal, scaleVal);
+  earthMesh.scale.set(
+    THREE.MathUtils.lerp(scaleStart, scaleEnd, eased),
+    THREE.MathUtils.lerp(scaleStart, scaleEnd, eased),
+    THREE.MathUtils.lerp(scaleStart, scaleEnd, eased)
+  );
 
-  // 🛫 Update flight paths animation and fade out as warping begins
-  const flightPathOpacity = THREE.MathUtils.clamp(1 - (morphProgress * 5), 0, 1);
-  flightPathGroup.children.forEach(line => {
-    if (line.material && line.material.uniforms) {
-      // Update time uniform for flow animation
-      line.material.uniforms.time.value = animationTime;
-
-      // Check if this line is selected (highlighted)
-      const isSelected = selectedLine === line;
-      line.material.uniforms.opacity.value = flightPathOpacity * (isSelected ? 0.95 : 0.7);
-    }
+  // Fade-out flight paths
+  const fade = Math.max(0, 1 - morphProgress*5);
+  flightPathGroup.children.forEach(line=>{
+    line.material.uniforms.time.value = animationTime;
+    line.material.uniforms.opacity.value = fade;
   });
 
-  // Hide tooltip if zooming out (morphProgress > 0)
-  if (morphProgress > 0.01) {
-    hideTooltip();
-    // Reset selected line
-    if (selectedLine) {
-      selectedLine.material.uniforms.color.value.setHex(0x1e40af);
-      selectedLine.material.uniforms.opacity.value = 0.7;
-      selectedLine = null;
-    }
+  // SHOW SOLAR SYSTEM
+  if(
+    !planetGroup.visible &&
+    morphProgress > 0.98 &&
+    camera.position.z >= zoomMax - 0.1
+  ){
+    planetGroup.visible = true;
+    planetZoomInProgress = true;
   }
+
+  // PLANETS ZOOM TO CUSTOM POSITIONS
+  if(planetZoomInProgress && !secondZoomOut){
+    planetGroup.children.forEach((planet)=>{
+      const name = planet.userData.name;
+      planet.position.lerp(customPositions[name], 0.06);
+    });
+  }
+
+  // ==========================================================
+  // SECOND CLICK → COLLAPSE EVERYTHING TO (0,0,0)
+  // ==========================================================
+  // ==========================================================
+// SECOND CLICK → COLLAPSE EVERYTHING
+// ==========================================================
+if (secondZoomOut) {
+
+    // Accelerate collapse (0 → 1)
+    collapseProgress += 0.002;
+    if (collapseProgress > 1) collapseProgress = 1;
+
+    const accel = collapseProgress * collapseProgress * collapseProgress;
+    const collapseSpeed = 0.001 + accel * 0.02;
+
+    const farAway = new THREE.Vector3(0, 0, -100000);
+
+    // Earth collapses
+    earthMesh.position.lerp(farAway, collapseSpeed);
+    earthMesh.scale.lerp(new THREE.Vector3(0,0,0), collapseSpeed);
+
+    // Planets collapse
+    planetGroup.children.forEach(p => {
+      p.position.lerp(farAway, collapseSpeed);
+      p.scale.lerp(new THREE.Vector3(0,0,0), collapseSpeed);
+    });
+
+    // Flight paths collapse
+    flightPathGroup.children.forEach(f => {
+      f.position.lerp(farAway, collapseSpeed);
+      f.scale.lerp(new THREE.Vector3(0,0,0), collapseSpeed);
+    });
+
+
+    // SPAWN IN NEW SHAPES
+   if (!newShapesVisible) {
+    console.log("CREATE NEW SHAPES");
+    console.log(camera.position);
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(20, 20, 20);
+    scene.add(light);
+
+    const ambient = new THREE.AmbientLight(0xffffff, 0.3);
+    scene.add(ambient);
+
+    // Cube
+    const cube = new THREE.Mesh(
+        new THREE.BoxGeometry(2,2,2),
+        new THREE.MeshStandardMaterial({ color: 0xff4444 })
+    );
+    cube.position.set(0,0,6000);              // start far behind camera
+    cube.target = new THREE.Vector3(0,0,0);    // zoom toward center
+    scene.add(cube);
+
+    // Sphere
+    const sph = new THREE.Mesh(
+        new THREE.SphereGeometry(1.2,32,32),
+        new THREE.MeshStandardMaterial({ color: 0x44ff44 })
+    );
+    sph.position.set(4,2,5000);
+    sph.target = new THREE.Vector3(2,1,0);
+    scene.add(sph);
+
+    // Cone
+    const cone = new THREE.Mesh(
+        new THREE.ConeGeometry(1.2,2.5,32),
+        new THREE.MeshStandardMaterial({ color: 0x4488ff })
+    );
+    cone.position.set(-4,-2,5000);
+    cone.target = new THREE.Vector3(-2,-1,0);
+    scene.add(cone);
+
+    newShapes.push(cube, sph, cone);
+    newShapesVisible = true;
+}
+
+}
+
+// ==========================================================
+// NEW SHAPES → SPIN + ZOOM IN
+// ==========================================================
+if (newShapesVisible) {
+    newShapes.forEach(obj => {
+        obj.rotation.x += 0.01;
+        obj.rotation.y += 0.01;
+
+        // zoom toward target
+        obj.position.lerp(obj.target, 0.03);
+    });
+}
+
+// ==========================================================
+// ZOOM IN ANIMATION (reverse all effects)
+// ==========================================================
+if (zoomingIn) {
+
+    zoomInProgress += 0.02;
+    if (zoomInProgress > 1) zoomInProgress = 1;
+
+    const t = zoomInProgress;
+
+    // CAMERA RETURNS
+    camera.position.z = THREE.MathUtils.lerp(camera.position.z, 1.2, 0.1);
+
+    // EARTH RETURNS TO CENTER + FULL SIZE
+    earthMesh.position.lerp(new THREE.Vector3(0,0,0), 0.1);
+    earthMesh.scale.lerp(new THREE.Vector3(1,1,1), 0.1);
+
+    // EARTH MORPH (sphere → plane)
+    targetMorphProgress = 0;
+
+    // HIDE SOLAR SYSTEM
+    planetGroup.visible = false;
+
+    planetGroup.children.forEach(p => {
+        p.position.lerp(new THREE.Vector3(0,0,-20), 0.1);
+        p.scale.lerp(new THREE.Vector3(1,1,1), 0.1);
+    });
+
+    // REMOVE NEW SHAPES (zoom them out & shrink them)
+    newShapes.forEach(obj => {
+        obj.position.lerp(new THREE.Vector3(0,0,-5000), 0.15);
+        obj.scale.lerp(new THREE.Vector3(0,0,0), 0.15);
+    });
+
+    // CLEAN UP when zoom-in completes
+    if (t >= 1) {
+        zoomingIn = false;
+
+        // Remove new shapes from scene entirely
+        newShapes.forEach(obj => scene.remove(obj));
+        newShapes = [];
+    }
+}
+
+
 
   renderer.render(scene, camera);
 }
+
 animate();
 
-// --- Zoom-based morphing ---
-// Map camera zoom to morph progress: closer = map (0), farther = globe (1)
-function updateMorphFromZoom() {
-  const zoomDistance = camera.position.z;
-  // Clamp between min and max, then normalize to 0-1
-  const normalizedZoom = (zoomDistance - zoomMin) / (zoomMax - zoomMin);
-  targetMorphProgress = Math.max(0, Math.min(1, normalizedZoom));
+function updateMorphFromZoom(){
+  const n = (camera.position.z - zoomMin)/(zoomMax - zoomMin);
+  targetMorphProgress = Math.max(0, Math.min(1, n));
 }
 
-// Mouse wheel zoom control
-window.addEventListener('wheel', (event) => {
-  event.preventDefault();
-
-  // Adjust zoom based on wheel delta
-  const zoomSpeed = 0.1;
-  camera.position.z += event.deltaY * zoomSpeed * 0.01;
-
-  // Clamp camera position
-  camera.position.z = Math.max(zoomMin, Math.min(zoomMax, camera.position.z));
-
-  // Update morph target based on new zoom
-  updateMorphFromZoom();
-}, { passive: false });
-
-// Touch pinch/expand gesture support
-let lastTouchDistance = null;
-
-function getTouchDistance(touch1, touch2) {
-  const dx = touch2.clientX - touch1.clientX;
-  const dy = touch2.clientY - touch1.clientY;
-  return Math.sqrt(dx * dx + dy * dy);
-}
-
-window.addEventListener('touchstart', (event) => {
-  if (event.touches.length === 2) {
-    lastTouchDistance = getTouchDistance(event.touches[0], event.touches[1]);
-  }
-}, { passive: true });
-
-window.addEventListener('touchmove', (event) => {
-  if (event.touches.length === 2) {
-    event.preventDefault();
-
-    const currentDistance = getTouchDistance(event.touches[0], event.touches[1]);
-
-    if (lastTouchDistance !== null) {
-      // Calculate distance change
-      const distanceChange = currentDistance - lastTouchDistance;
-
-      // Pinch in (fingers closer) = zoom out (globe)
-      // Expand (fingers apart) = zoom in (map)
-      const touchZoomSpeed = 0.85; // Higher sensitivity for faster zoom response
-      camera.position.z -= distanceChange * touchZoomSpeed;
-
-      // Clamp camera position
-      camera.position.z = Math.max(zoomMin, Math.min(zoomMax, camera.position.z));
-
-      // Update morph target based on new zoom
-      updateMorphFromZoom();
-    }
-
-    lastTouchDistance = currentDistance;
-  }
-}, { passive: false });
-
-window.addEventListener('touchend', (event) => {
-  if (event.touches.length < 2) {
-    lastTouchDistance = null;
-  }
-}, { passive: true });
-
-// --- Tooltip functions ---
-function showTooltip(x, y, data) {
-  const tooltip = document.getElementById('flightPathTooltip');
-  tooltip.innerHTML = `
-    <strong>${data.movie}</strong> ${data.year ? `(${data.year})` : ''}<br/>
-    <span style="color: #f87171;">Filmed:</span> ${data.from}<br/>
-    <span style="color: #60a5fa;">Depicted:</span> ${data.to}
-  `;
-  tooltip.style.left = (x + 15) + 'px';
-  tooltip.style.top = (y - 28) + 'px';
-  tooltip.style.opacity = '1';
-  tooltip.style.pointerEvents = 'none';
-}
-
-function hideTooltip() {
-  const tooltip = document.getElementById('flightPathTooltip');
-  tooltip.style.opacity = '0';
-}
-
-// --- Raycaster for click interaction ---
+// ==========================================================
+// TOOLTIP
+// ==========================================================
+const tooltip = document.getElementById('flightPathTooltip');
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 let selectedLine = null;
 
-// Click handler for flight paths
-window.addEventListener('click', (event) => {
-  // Calculate mouse position in normalized device coordinates (-1 to +1)
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+window.addEventListener('click', evt=>{
+  mouse.x = (evt.clientX/window.innerWidth)*2 - 1;
+  mouse.y = -(evt.clientY/window.innerHeight)*2 + 1;
 
-  // Update raycaster
-  raycaster.setFromCamera(mouse, camera);
+  raycaster.setFromCamera(mouse,camera);
+  const hits = raycaster.intersectObjects(flightPathGroup.children,false);
 
-  // Check for intersections with flight paths
-  const intersects = raycaster.intersectObjects(flightPathGroup.children, false);
+  if(hits.length>0){
+    const obj = hits[0].object;
 
-  if (intersects.length > 0) {
-    const clickedLine = intersects[0].object;
-    const data = clickedLine.userData;
-
-    // Reset previous selection
-    if (selectedLine && selectedLine !== clickedLine) {
-      selectedLine.material.uniforms.color.value.setHex(0x1e40af); // Reset to darker blue
-      selectedLine.material.uniforms.opacity.value = 0.7;
-    }
-
-    // Highlight current selection with lighter blue
-    clickedLine.material.uniforms.color.value.setHex(0x60a5fa); // Lighter blue
-    clickedLine.material.uniforms.opacity.value = 0.9;
-    selectedLine = clickedLine;
-
-    // Show tooltip
-    showTooltip(event.clientX, event.clientY, data);
-  } else {
-    // Reset all lines if clicking elsewhere
-    if (selectedLine) {
+    if(selectedLine && selectedLine !== obj)
       selectedLine.material.uniforms.color.value.setHex(0x1e40af);
-      selectedLine.material.uniforms.opacity.value = 0.7;
+
+    obj.material.uniforms.color.value.setHex(0x60a5fa);
+    selectedLine = obj;
+
+    const d = obj.userData;
+    tooltip.innerHTML = `<strong>${d.movie}</strong> (${d.year})<br>Filmed: ${d.from}<br>Depicted: ${d.to}`;
+    tooltip.style.left = (evt.clientX + 12) + "px";
+    tooltip.style.top = (evt.clientY - 20) + "px";
+    tooltip.style.opacity = 1;
+
+  } else {
+    if(selectedLine){
+      selectedLine.material.uniforms.color.value.setHex(0x1e40af);
       selectedLine = null;
     }
-
-    // Hide tooltip if clicking elsewhere
-    hideTooltip();
+    tooltip.style.opacity = 0;
   }
 });
 
-// --- Resize handler ---
-window.addEventListener('resize', () => {
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeight;
+// ==========================================================
+// BUTTON HANDLER — first click morphs, second click collapses
+// ==========================================================
+document.getElementById("zoomOutBtn").addEventListener("click", () => {
+  // First click → normal behavior
+  if (!planetGroup.visible && !secondZoomOut) {
+    triggerFullZoomOut();
+    return;
+  }
+
+  // Second click → collapse universe
+  if (!secondZoomOut) {
+    secondZoomOut = true;
+  }
+});
+
+// ==========================================================
+// RESIZE
+// ==========================================================
+window.addEventListener('resize',()=>{
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  camera.aspect = window.innerWidth/window.innerHeight;
   camera.updateProjectionMatrix();
 });

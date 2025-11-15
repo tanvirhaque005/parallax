@@ -14,44 +14,56 @@
       top: 20px;
       left: 20px;
       z-index: 10;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255,255,255,0.9);
       padding: 12px 18px;
       border-radius: 8px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 14px;
       color: #333;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    #zoomOutBtn {
+      position: absolute;
+      top: 80px;
+      left: 20px;
+      z-index: 10;
+      background: rgba(255,255,255,0.9);
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
     }
     #flightPathTooltip {
       position: absolute;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0,0,0,0.9);
       color: white;
       padding: 12px 16px;
       border-radius: 6px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       font-size: 12px;
-      pointer-events: none;
-      z-index: 1000;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       opacity: 0;
+      pointer-events: none;
       transition: opacity 0.2s;
-      line-height: 1.5;
-      max-width: 300px;
+      z-index: 1000;
+      max-width: 280px;
     }
   </style>
 </head>
+
 <body>
-  <div id="instructions">
-    🖱️ Scroll or pinch to zoom: Map ↔ Globe 🌍
-  </div>
+  <div id="instructions">Click paths for info • Press button to morph</div>
+  <button id="zoomOutBtn">Zoom Out 🌍</button>
+  <button id="zoomInBtn">Zoom In</button>
+
   <div id="flightPathTooltip"></div>
-  <canvas id="mapCanvas" style="display: none;"></canvas>
+
+  <canvas id="mapCanvas" style="display:none;"></canvas>
   <canvas id="scene"></canvas>
 
-  <!-- D3.js for map rendering -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://d3js.org/d3-geo-projection.v4.min.js"></script>
-
-  <!-- IMPORTANT: Load as module -->
   <script type="module" src="morph.js"></script>
 </body>
 </html>
