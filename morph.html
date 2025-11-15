@@ -20,20 +20,7 @@
       font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 14px;
       color: #333;
-    }
-    #zoomOutBtn {
-      position: absolute;
-      top: 80px;
-      left: 20px;
-      z-index: 10;
-      background: rgba(255,255,255,0.9);
-      padding: 12px 18px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
     #flightPathTooltip {
       position: absolute;
@@ -49,21 +36,97 @@
       z-index: 1000;
       max-width: 280px;
     }
+    .planet-label {
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      text-shadow: 0 0 4px rgba(0,0,0,0.8);
+      pointer-events: none;
+      user-select: none;
+      text-transform: capitalize;
+    }
+    #timelineBar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, #0f172a, #1e3a8a);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 100;
+    }
+    #timelineLabel {
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    #decadeValue {
+      font-size: 20px;
+      font-weight: 700;
+      min-width: 80px;
+      text-align: center;
+    }
+    #timelineTrack {
+      width: 400px;
+      height: 8px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      position: relative;
+      cursor: pointer;
+    }
+    #timelineHandle {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: grab;
+      left: 0%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    #timelineHandle:active {
+      cursor: grabbing;
+    }
   </style>
 </head>
 
 <body>
-  <div id="instructions">Click paths for info • Press button to morph</div>
-  <button id="zoomOutBtn">Zoom Out 🌍</button>
-  <button id="zoomInBtn">Zoom In</button>
+  <div id="instructions">🖱️ Scroll or pinch to zoom: Map ↔ Globe 🌍</div>
 
   <div id="flightPathTooltip"></div>
+
+  <div id="timelineBar">
+    <div id="timelineLabel">Decade Filter</div>
+    <div id="decadeValue">All</div>
+    <div id="timelineTrack">
+      <div id="timelineHandle"></div>
+    </div>
+  </div>
 
   <canvas id="mapCanvas" style="display:none;"></canvas>
   <canvas id="scene"></canvas>
 
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://d3js.org/d3-geo-projection.v4.min.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.164.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.164.0/examples/jsm/"
+      }
+    }
+  </script>
   <script type="module" src="morph.js"></script>
 </body>
 </html>
