@@ -110,9 +110,7 @@ const yBot = height - 30;
 // ---------------------------------------------------------
 const diffExtent = d3.extent(data, d => d.yearDiff);
 
-const color = d3.scaleSequential()
-  .domain(diffExtent)
-  .interpolator(d3.interpolateRgbBasis(["#5ee6a8", "#ffd166", "#ff7a9a"]));
+const color = () => "#ffffff";  // pure white lines
 
 const widthScale = d3.scaleSqrt()
   .domain(diffExtent)

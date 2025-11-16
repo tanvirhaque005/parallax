@@ -6,7 +6,7 @@ import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer
 // ==========================================================
 const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene") });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor("#000");
+renderer.setClearColor("#0a1628"); // Deep navy background
 
 // CSS2D Renderer for labels
 const labelRenderer = new CSS2DRenderer();
@@ -332,8 +332,8 @@ Object.keys(planetColors).forEach((name)=>{
   labelDiv.textContent = name.charAt(0).toUpperCase() + name.slice(1);
   const label = new CSS2DObject(labelDiv);
   label.position.set(0, radius + 0.3, 0); // Position above planet
+  label.visible = false; // Hidden initially
   p.add(label);
-
   planetGroup.add(p);
 });
 
@@ -350,8 +350,65 @@ earthMesh.add(earthLabel);
 // MOONS
 // ==========================================================
 const moonsGroup = new THREE.Group();
-scene.add(moonsGroup);
 moonsGroup.visible = false;
+scene.add(moonsGroup);
+
+// ==========================================================
+// STARFIELD BACKGROUND
+// ==========================================================
+const starGroup = new THREE.Group();
+starGroup.visible = false;
+scene.add(starGroup);
+
+// Create stars
+const starGeometry = new THREE.BufferGeometry();
+const starCount = 2000;
+const starPositions = new Float32Array(starCount * 3);
+const starColors = new Float32Array(starCount * 3);
+
+for (let i = 0; i < starCount; i++) {
+  // Random positions in a large sphere around the scene
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.acos(Math.random() * 2 - 1);
+  const radius = 50 + Math.random() * 50;
+
+  starPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+  starPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+  starPositions[i * 3 + 2] = radius * Math.cos(phi);
+
+  // Vary star colors from white to slight blue/yellow tints
+  const colorVariation = Math.random();
+  if (colorVariation > 0.8) {
+    // Blue-ish stars
+    starColors[i * 3] = 0.8;
+    starColors[i * 3 + 1] = 0.9;
+    starColors[i * 3 + 2] = 1.0;
+  } else if (colorVariation > 0.6) {
+    // Yellow-ish stars
+    starColors[i * 3] = 1.0;
+    starColors[i * 3 + 1] = 1.0;
+    starColors[i * 3 + 2] = 0.8;
+  } else {
+    // White stars
+    starColors[i * 3] = 1.0;
+    starColors[i * 3 + 1] = 1.0;
+    starColors[i * 3 + 2] = 1.0;
+  }
+}
+
+starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+
+const starMaterial = new THREE.PointsMaterial({
+  size: 0.15,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.8,
+  sizeAttenuation: true
+});
+
+const stars = new THREE.Points(starGeometry, starMaterial);
+starGroup.add(stars);
 
 // Earth's Moon
 const moonGeometry = new THREE.SphereGeometry(0.02, 16, 16);
@@ -365,6 +422,7 @@ earthMoonLabel.textContent = 'Moon';
 earthMoonLabel.style.fontSize = '11px';
 const earthMoonLabelObj = new CSS2DObject(earthMoonLabel);
 earthMoonLabelObj.position.set(0, 0.08, 0);
+earthMoonLabelObj.visible = false; // Hidden initially
 earthMoon.add(earthMoonLabelObj);
 
 moonsGroup.add(earthMoon);
@@ -390,6 +448,7 @@ jupiterMoonNames.forEach((name, i) => {
   jMoonLabel.style.fontSize = '10px';
   const jMoonLabelObj = new CSS2DObject(jMoonLabel);
   jMoonLabelObj.position.set(0, 0.06, 0);
+  jMoonLabelObj.visible = false; // Hidden initially
   jMoon.add(jMoonLabelObj);
 
   moonsGroup.add(jMoon);
@@ -615,6 +674,7 @@ function animate(){
     planetGroup.visible = true;
     moonsGroup.visible = true;
     solarFlightPathsGroup.visible = true;
+    starGroup.visible = true;
     planetZoomInProgress = true;
 
     // Show all planet and moon labels
@@ -675,6 +735,7 @@ function animate(){
     planetGroup.visible = false;
     moonsGroup.visible = false;
     solarFlightPathsGroup.visible = false;
+    starGroup.visible = false;
     planetZoomInProgress = false;
 
     // Hide all labels

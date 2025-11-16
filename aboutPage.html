@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library of Futures - About</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #b0b0b0;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            padding: 60px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 40px;
+            right: 60px;
+            color: #666;
+            font-size: 14px;
+            text-decoration: none;
+            letter-spacing: 2px;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #999;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .logo-square {
+            width: 50px;
+            height: 50px;
+            background-color: #d0d0d0;
+        }
+
+        .logo-text {
+            font-size: 42px;
+            font-weight: bold;
+            color: #d0d0d0;
+            letter-spacing: 3px;
+        }
+
+        .tagline {
+            color: #b0b0b0;
+            font-size: 13px;
+            margin-bottom: 80px;
+            max-width: 900px;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: #d0d0d0;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            letter-spacing: 3px;
+        }
+
+        .content-section {
+            margin-bottom: 60px;
+            max-width: 900px;
+        }
+
+        .content-section p {
+            margin-bottom: 25px;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        ul {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        ul li {
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        ul li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #b0b0b0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 35px;
+            border: 2px solid #666;
+            color: #b0b0b0;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            margin-top: 40px;
+            position: absolute;
+            right: 60px;
+            top: 280px;
+        }
+
+        .cta-button:hover {
+            border-color: #999;
+            color: #d0d0d0;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .credits {
+            margin-top: 80px;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        .credits p {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="landingPage.html" class="close-btn">CLOSE</a>
+
+    <div class="logo">
+        <div class="logo-square"></div>
+        <div class="logo-text">ABOUT</div>
+    </div>
+
+    <div class="tagline">
+        THE LIBRARY OF FUTURES IS A DATA-DRIVEN EXPLORATION OF HOW SCIENCE FICTION IMAGINES THE FUTURE—AND WHAT THOSE STORIES REVEAL ABOUT US.
+    </div>
+
+    <a href="bookshelf.html" class="cta-button">START EXPLORING →</a>
+
+    <div class="content-section">
+        <h2>GOALS</h2>
+        <p>This visualization examines 100 years of sci-fi cinema through four lenses: narrative motifs, cultural anxieties, imaginative distance, and world-building ambition. By combining film metadata, historical timelines, and geographical mapping, we explore how our visions of the future evolve across decades.</p>
+        
+        <p>Our goal is to help users understand:</p>
+        <ul>
+            <li>What sci-fi chooses to worry about</li>
+            <li>When imagination expands or contracts</li>
+            <li>How cultural moments shape the futures we depict</li>
+            <li>Why certain tropes keep reappearing</li>
+        </ul>
+
+        <p>This project was created at Harvard as part of a larger investigation into innovation, storytelling, and collective imagination. It merges data visualization, narrative design, and cinematic analysis into a single interactive experience.</p>
+    </div>
+
+    <div class="credits">
+        <h2>CREDITS</h2>
+        <p>Created by: Michael, Audrey, Tanvir, Sydney</p>
+        <p>Course: CS171O Data Visualization with Professor Hans</p>
+        <p>Data Sources: Film metadata databases, scholarly archives, and structured research collected across the project.</p>
+    </div>
+</body>
+</html>

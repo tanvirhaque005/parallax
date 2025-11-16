@@ -2,106 +2,294 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Parallel Coordinates — Setting vs Release Year</title>
+  <title>Prediction Timeline</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="menu-component.css">
   <style>
     :root {
-      --bg: #f7f9fc;
-      --ink: #111418;
-      --muted: #6a7380;
+      --bg: #0e0e0f;
+      --panel-bg: #ffffff;
+      --ink: #eeeeee;
+      --muted: #bcbcbc;
+      --line: #ffffff;
+      --line-faint: rgba(255,255,255,0.25);
     }
 
     html, body {
       margin: 0;
       height: 100%;
-      font-family: Inter, system-ui, sans-serif;
       background: var(--bg);
       color: var(--ink);
+      font-family: 'Courier New', monospace;
       overflow: hidden;
     }
 
-    /* --- Stage-Like Layout --- */
+    /* Page Header */
+    .page-header {
+			position: fixed;
+			top: 40px;
+			left: 40px;
+			z-index: 50;
+		}
+			
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #cccccc;
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 1px;
+      transition: color 0.3s;
+      text-transform: uppercase;
+    }
+			
+    .back-link:hover {
+      color: #ffffff;
+    }
+    
+    .back-arrow {
+      font-size: 20px;
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+      position: fixed;
+      top: 50%;
+      right: 40px;
+      z-index: 50;
+    }
+			
+    .nav-btn {
+      background-color: #2a2a2a;
+      border: 1px solid white;
+      color: #cccccc;
+      padding: 14px 28px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      text-transform: uppercase;
+    }
+    
+    .nav-btn:hover {
+      background-color: #3a3a3a;
+      border-color: #666666;
+      color: #ffffff;
+    }
+    /* Main layout */
     .stage {
       width: 100%;
       height: 100vh;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding-top: 24px;
+      flex-direction: row;
     }
 
-    h1 {
-      margin: 0 0 10px;
-      font-size: clamp(26px, 4vw, 42px);
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-
-    svg {
-      width: 95%;
-      height: 75vh;
-      background: #ffffff;
+    /* Left Card (like screenshot) */
+    .left-card {
+      width: 320px;
+      height: 360px;
+      background: var(--panel-bg);
+      color: #111;
       border-radius: 14px;
-      box-shadow:
-        0 4px 14px rgba(0,0,0,0.06),
-        0 18px 40px rgba(0,0,0,0.10);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: absolute;
+      left: 40px;
+      top: 180px;
+      z-index: 30;
     }
-
-    .axis path,
-    .axis line {
-      stroke: #c8cdd3;
-    }
-
-    .axis text {
-      fill: var(--ink);
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .axis-title {
-      fill: var(--muted);
-      font-size: 12px;
+    .left-card h2 {
+      margin: 0;
+      font-size: 20px;
       font-weight: 700;
-      letter-spacing: .6px;
-      text-transform: uppercase;
+      color: #111;
+    }
+    .left-card .meta {
+      font-size: 12px;
+      color: #444;
+    }
+    .left-card .desc {
+      font-size: 13px;
+      line-height: 1.45;
+      color: #222;
+    }
+    .left-card .img-boxes {
+      margin-top: auto;
+      display: flex;
+      gap: 14px;
+    }
+    .left-card .img-boxes div {
+      width: 100px;
+      height: 100px;
+      background: #e6e6e6;
+      border-radius: 6px;
     }
 
-    /* Tooltip unchanged */
+    /* Decade Labels */
+    .decade-label {
+      position: absolute;
+      top: 130px;
+      font-size: 32px;
+      color: white;
+      font-weight: 400;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    #lab-1990 { left: 40px; }
+    #lab-2000 { left: 350px; }
+    #lab-2010 { left: 720px; }
+    #lab-2020 { left: 1090px; }
+
+    /* SVG */
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .axis text { fill: white; opacity: 0.35; font-size: 12px; }
+    .axis line { stroke: rgba(255,255,255,0.25); }
+    .axis-title { fill: white; opacity: 0.6; font-size: 13px; }
+
+    /* Grid lines */
+    .grid line {
+      stroke: rgba(255,255,255,0.12);
+      stroke-width: 1;
+    }
+
+    /* Links */
+    .link {
+      stroke: white;
+      stroke-opacity: 0.9;
+    }
+
+    /* Halo */
+    .halo {
+      stroke: white;
+      stroke-opacity: 0.1;
+      stroke-width: 10;
+    }
+
+    /* Tooltip (kept but dark theme) */
     .tooltip {
       position: fixed;
       pointer-events: none;
-      z-index: 10;
-      background: white;
-      color: var(--ink);
-      border: 1px solid #d1d5db;
+      z-index: 100;
+      background: #1c1c1c;
+      color: white;
+      border: 1px solid #555;
       padding: 8px 10px;
-      border-radius: 10px;
+      border-radius: 8px;
       font-size: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
       transform: translate(-50%, calc(-100% - 14px));
       white-space: nowrap;
       display: none;
     }
-    .tooltip .title { font-weight: 800; margin-bottom: 4px; }
-    .tooltip .sub { color: var(--muted); }
+    .tooltip .title { font-weight: 700; margin-bottom: 4px; }
+    .tooltip .sub { color: #ccc; }
   </style>
 </head>
 
 <body>
+  <!-- Menu Button -->
+  <div class="top-nav">
+    <button class="menu-button" id="menuButton">MENU</button>
+  </div>
+
+  <!-- Menu Overlay -->
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <!-- Menu Sidebar -->
+  <div class="menu-sidebar" id="menuSidebar">
+    <div class="menu-header">
+      <button class="menu-close" id="menuClose">MENU</button>
+    </div>
+    <ul class="menu-items">
+      <li><a href="aboutPage.html">0. ABOUT</a></li>
+      <li><a href="index.html">1. Library</a></li>
+      <li><a href="chordGraph.html">2. Technological Network</a></li>
+      <li><a href="parallel.html">3. Prediction Timeline</a></li>
+      <li><a href="morph.html">4. World Building</a></li>
+      <li><a href="#">5. Reflection</a></li>
+    </ul>
+  </div>
+  <!-- Return -->
+  <div class="page-header">
+    <a href="chordGraph.html" class="back-link">
+      <span class="back-arrow">←</span>
+      <span>Return to Network</span>
+    </a>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="nav-buttons">
+    <a href="morph.html" class="nav-btn" id="nextBtn">Next →</a>
+  </div>
+
+  <!-- Left Card -->
+  <div class="left-card">
+    <h2>50 Year Depiction</h2>
+    <div class="meta">Released 2002</div>
+    <div class="meta">Released 2054</div>
+    <div class="desc">
+      In the 1990s they were experiencing or recovering from the war and other
+      global disasters. Most of the films made in this decade tend to be more
+      optimistic of the future.
+    </div>
+    <div class="img-boxes">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+  <!-- Decade Labels -->
+  <div id="lab-1990" class="decade-label">1990s</div>
+  <div id="lab-2000" class="decade-label">2000</div>
+  <div id="lab-2010" class="decade-label">2010</div>
+  <div id="lab-2020" class="decade-label">2020</div>
 
   <div class="stage">
-    <h1>Parallel Coordinates</h1>
     <svg id="parallel"></svg>
   </div>
 
   <div class="tooltip" id="tooltip"></div>
 
   <script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js"></script>
-  <script type="module" src="./parallel.js"></script>
+  <script type="module" src="parallel.js"></script>
+  <script>
+        // Menu functionality
+        const menuButton = document.getElementById('menuButton');
+    const menuClose = document.getElementById('menuClose');
+    const menuSidebar = document.getElementById('menuSidebar');
+    const menuOverlay = document.getElementById('menuOverlay');
 
+    function openMenu() {
+      menuSidebar.classList.add('active');
+      menuOverlay.classList.add('active');
+    }
+
+    function closeMenu() {
+      menuSidebar.classList.remove('active');
+      menuOverlay.classList.remove('active');
+    }
+
+    menuButton.addEventListener('click', openMenu);
+    menuClose.addEventListener('click', closeMenu);
+    menuOverlay.addEventListener('click', closeMenu);
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && menuSidebar.classList.contains('active')) {
+        closeMenu();
+      }
+    });
+  </script>
 </body>
 </html>

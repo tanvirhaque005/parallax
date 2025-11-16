@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Library of Futures</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #b0b0b0;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 100px;
+        }
+
+        .about-link {
+            color: #b0b0b0;
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 2px;
+            transition: color 0.3s;
+        }
+
+        .about-link:hover {
+            color: #d0d0d0;
+        }
+
+        .menu-button {
+            background-color: #d0d0d0;
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-button:hover {
+            background-color: #ffffff;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-bottom: 100px;
+        }
+
+        .main-title {
+            font-size: 72px;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 8px;
+            margin-bottom: 40px;
+            line-height: 1.2;
+        }
+
+        .tagline {
+            font-size: 14px;
+            color: #b0b0b0;
+            letter-spacing: 1.5px;
+            max-width: 1000px;
+            margin-bottom: 60px;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 35px;
+            border: 2px solid #666;
+            color: #b0b0b0;
+            background-color: transparent;
+            text-decoration: none;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            border-color: #999;
+            color: #d0d0d0;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Footer */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-size: 13px;
+            color: #888;
+            letter-spacing: 0.5px;
+        }
+
+        .credits-left,
+        .credits-right {
+            flex: 1;
+        }
+
+        .credits-right {
+            text-align: right;
+        }
+
+        /* Menu Sidebar */
+        .menu-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background-color: #7a7a7a;
+            transition: right 0.4s ease;
+            padding: 40px 60px;
+            z-index: 1000;
+        }
+
+        .menu-sidebar.active {
+            right: 0;
+        }
+
+        .menu-header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 60px;
+        }
+
+        .menu-close {
+            background-color: #d0d0d0;
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-close:hover {
+            background-color: #ffffff;
+        }
+
+        .menu-items {
+            list-style: none;
+            padding: 0;
+            margin-top: 40px;
+        }
+
+        .menu-items li {
+            margin-bottom: 35px;
+            text-align: right;
+        }
+
+        .menu-items a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            display: block;
+        }
+
+        .menu-items a:hover {
+            color: #1a1a1a;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            z-index: 999;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Menu Sidebar -->
+    <div class="menu-sidebar" id="menuSidebar">
+        <div class="menu-header">
+            <button class="menu-close" id="menuClose">MENU</button>
+        </div>
+        <ul class="menu-items">
+            <li><a href="aboutPage.html">0. ABOUT</a></li>
+            <li><a href="bookshelf.html">1. Library</a></li>
+            <li><a href="chordGraph.html">2. Technological Network</a></li>
+            <li><a href="parallel.html">3. Prediction Timeline</a></li>
+            <li><a href="morph.html">4. World Building</a></li>
+            <li><a href="#">5. Reflection</a></li>
+        </ul>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <a href="aboutPage.html" class="about-link">
+            <span>ABOUT</span>
+        </a>
+        <button class="menu-button" id="menuButton">MENU</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="main-title">THE LIBRARY OF FUTURES</h1>
+        <p class="tagline">
+            A DATA-DRIVEN EXPLORATION OF HOW SCIENCE FICTION IMAGINES THE FUTURE—AND WHAT THOSE STORIES REVEAL ABOUT US.
+        </p>
+        <a href="bookshelf.html" class="cta-button">START EXPLORING →</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="credits-left">
+            Created by: Michael, Audrey, Tanvir, Sydney
+        </div>
+        <div class="credits-right">
+            Course: CS171O Data Visualization with Professor Hans
+        </div>
+    </div>
+
+    <script>
+        const menuButton = document.getElementById('menuButton');
+        const menuClose = document.getElementById('menuClose');
+        const menuSidebar = document.getElementById('menuSidebar');
+        const overlay = document.getElementById('overlay');
+
+        // Open menu
+        menuButton.addEventListener('click', function() {
+            menuSidebar.classList.add('active');
+            overlay.classList.add('active');
+        });
+
+        // Close menu
+        menuClose.addEventListener('click', function() {
+            menuSidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // Close menu when clicking overlay
+        overlay.addEventListener('click', function() {
+            menuSidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!-- ============================================
+     STANDALONE MENU COMPONENT - HTML SNIPPET
+     Copy this entire section into your HTML file
+     ============================================ -->
+
+<!-- STEP 1: Add this in your <head> section -->
+<link rel="stylesheet" href="menu-component.css">
+
+<!-- STEP 2: Add this HTML anywhere in your <body> (preferably at the top) -->
+
+<!-- Menu Button (top right corner) -->
+<div class="top-nav">
+  <button class="menu-button" id="menuButton">MENU</button>
+</div>
+
+<!-- Dark Overlay (appears when menu is open) -->
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<!-- Menu Sidebar (slides in from right) -->
+<div class="menu-sidebar" id="menuSidebar">
+  <div class="menu-header">
+    <button class="menu-close" id="menuClose">MENU</button>
+  </div>
+  <ul class="menu-items">
+    <li><a href="aboutPage.html">0. ABOUT</a></li>
+    <li><a href="bookshelf.html">1. Library</a></li>
+    <li><a href="chordGraph.html">2. Technological Network</a></li>
+    <li><a href="parallel.html">3. Prediction Timeline</a></li>
+    <li><a href="morph.html">4. World Building</a></li>
+    <li><a href="#reflection">5. Reflection</a></li>
+  </ul>
+</div>
+
+<!-- STEP 3: Add this JavaScript before your closing </body> tag -->
+<script>
+  // Get menu elements
+  const menuButton = document.getElementById('menuButton');
+  const menuClose = document.getElementById('menuClose');
+  const menuSidebar = document.getElementById('menuSidebar');
+  const menuOverlay = document.getElementById('menuOverlay');
+
+  // Open menu function
+  function openMenu() {
+    menuSidebar.classList.add('active');
+    menuOverlay.classList.add('active');
+  }
+
+  // Close menu function
+  function closeMenu() {
+    menuSidebar.classList.remove('active');
+    menuOverlay.classList.remove('active');
+  }
+
+  // Event listeners
+  menuButton.addEventListener('click', openMenu);
+  menuClose.addEventListener('click', closeMenu);
+  menuOverlay.addEventListener('click', closeMenu);
+
+  // Optional: Close menu when pressing Escape key
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' && menuSidebar.classList.contains('active')) {
+      closeMenu();
+    }
+  });
+</script>

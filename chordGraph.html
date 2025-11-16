@@ -2,593 +2,541 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>Chord Graph — Sci‑Fi Themes</title>
+		<title>Technological Network — Library of Futures</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="stylesheet" href="./styles.css" />
+		<link rel="stylesheet" href="menu-component.css">
 		<script src="https://d3js.org/d3.v7.min.js"></script>
 		<style>
-			body{margin:0;font-family: 'Space Mono', monospace;background:#f5f7fa}
-			.container{max-width:1200px;margin:28px auto;padding:18px;background:#fff;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.06)}
-			h1{margin:0 0 6px 0}
-			#chordContainer{width:100%;min-height:620px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:8px;border:1px solid #eef4ff;padding:12px}
-			.controls{display:flex;gap:12px;align-items:center;margin:12px 0}
-			.control-btn{padding:8px 12px;background:#1e3a8a;color:#fff;border-radius:6px;border:none;cursor:pointer}
-			.back-button{padding:8px 12px;background:#374151;color:#fff;border-radius:6px;text-decoration:none}
+			body {
+				margin: 0;
+				font-family: 'Courier New', monospace;
+				background: #1a1a1a;
+				color: #cccccc;
+				overflow: hidden;
+			}
+			
+			/* Page Header */
+			.page-header {
+				position: fixed;
+				top: 40px;
+				left: 40px;
+				z-index: 50;
+			}
+			
+			.back-link {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				color: #cccccc;
+				text-decoration: none;
+				font-size: 13px;
+				letter-spacing: 1px;
+				transition: color 0.3s;
+				text-transform: uppercase;
+			}
+			
+			.back-link:hover {
+				color: #ffffff;
+			}
+			
+			.back-arrow {
+				font-size: 20px;
+			}
+			
+			/* Sidebar */
+			.sidebar {
+				position: fixed;
+				left: 40px;
+				top: 120px;
+				width: 320px;
+				z-index: 50;
+			}
+			
+			.sidebar-label {
+				font-size: 11px;
+				color: #888888;
+				margin: 0 0 16px 0;
+				letter-spacing: 2px;
+				text-transform: uppercase;
+			}
+			
+			.decade-title {
+				font-size: 56px;
+				font-weight: bold;
+				margin: 0 0 24px 0;
+				color: #ffffff;
+				letter-spacing: 2px;
+				transition: opacity 0.2s ease;
+			}
+
+			.sidebar-text {
+				font-size: 15px;
+				line-height: 1.8;
+				color: #aaaaaa;
+				margin-bottom: 40px;
+				max-width: 280px;
+				transition: opacity 0.2s ease;
+			}
+			
+			/* Timeline Bar */
+			.timeline-bar {
+				display: flex;
+				align-items: flex-end;
+				gap: 3px;
+				height: 60px;
+				margin-top: 40px;
+			}
+			
+			.timeline-decade {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				flex: 1;
+			}
+			
+			.timeline-bar-fill {
+				width: 100%;
+				background: #333333;
+				transition: all 0.3s;
+			}
+			
+			.timeline-bar-fill.active {
+				background: #ffffff;
+			}
+			
+			.timeline-label {
+				font-size: 9px;
+				color: #666666;
+				margin-top: 8px;
+				letter-spacing: 1px;
+			}
+			
+			/* Navigation Buttons */
+			.nav-buttons {
+				position: fixed;
+				top: 50%;
+				right: 40px;
+				z-index: 50;
+			}
+			
+			.nav-btn {
+				background-color: #2a2a2a;
+				border: 1px solid white;
+				color: #cccccc;
+				padding: 14px 28px;
+				font-family: 'Courier New', monospace;
+				font-size: 12px;
+				letter-spacing: 1.5px;
+				cursor: pointer;
+				transition: all 0.3s;
+				text-decoration: none;
+				display: inline-block;
+				text-transform: uppercase;
+			}
+			
+			.nav-btn:hover {
+				background-color: #3a3a3a;
+				border-color: #666666;
+				color: #ffffff;
+			}
+			
+			/* Main Container */
+			#chordContainer {
+				width: 100vw;
+				height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: #1a1a1a;
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+			}
+			
+			.loading {
+				color: #666666;
+				font-size: 14px;
+				letter-spacing: 2px;
+			}
+			
+			/* Chord Graph Overrides */
+			#chordContainer .link {
+				stroke: #444444 !important;
+				opacity: 0.4 !important;
+			}
+			
+			#chordContainer .link:hover {
+				stroke: #60a5fa !important;
+				opacity: 0.8 !important;
+			}
+			
+			#chordContainer .node circle {
+				fill: #2a2a2a !important;
+				stroke: #555555 !important;
+				stroke-width: 2 !important;
+			}
+			
+			#chordContainer .node circle:hover {
+				fill: #3a3a3a !important;
+				stroke: #60a5fa !important;
+				stroke-width: 3 !important;
+			}
+			
+			#chordContainer .node-text {
+				fill: #cccccc !important;
+				font-size: 12px !important;
+			}
+			
+			#chordContainer .node-label-bg {
+				fill: #1a1a1a !important;
+				opacity: 0.9 !important;
+				stroke: #333333 !important;
+				stroke-width: 1px !important;
+			}
+			
+			.chord-tooltip {
+				background: rgba(26, 26, 26, 0.98) !important;
+				border: 1px solid #444444 !important;
+				color: #cccccc !important;
+			}
+
+			/* Timeline Filter */
+			.timeline-container {
+				margin-top: 40px;
+			}
+
+			.timeline-header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin-bottom: 16px;
+			}
+
+			.timeline-filter-label {
+				font-size: 11px;
+				color: #888888;
+				letter-spacing: 1.5px;
+				text-transform: uppercase;
+			}
+
+			.decade-value {
+				font-size: 16px;
+				font-weight: bold;
+				color: #ffffff;
+				letter-spacing: 1px;
+			}
+
+			.timeline-track {
+				position: relative;
+				width: 100%;
+				height: 6px;
+				background: #333333;
+				border-radius: 3px;
+				cursor: pointer;
+			}
+
+			.timeline-handle {
+				position: absolute;
+				left: 0;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				width: 18px;
+				height: 18px;
+				background: #ffffff;
+				border: 2px solid #444444;
+				border-radius: 50%;
+				cursor: grab;
+				transition: all 0.2s;
+			}
+
+			.timeline-handle:hover {
+				width: 22px;
+				height: 22px;
+				border-color: #60a5fa;
+			}
+
+			.timeline-handle:active {
+				cursor: grabbing;
+				background: #60a5fa;
+			}
 		</style>
 	</head>
 	<body>
-		<div class="container">
-			<h1>Chord Graph — Technological Motifs</h1>
-			<p class="subtitle">Hover to explore connections. Click a theme node or a chord to jump into the 3D shelf for a related movie.</p>
+		<!-- Menu Button -->
+		<div class="top-nav">
+			<button class="menu-button" id="menuButton">MENU</button>
+		</div>
 
-			<div class="controls">
-				<!-- <select id="movieSelect"></select>
-				<button id="renderBtn" class="control-btn">Reset</button> -->
-				<a id="backToLib" class="back-button" href="index.html">Library</a>
-				<a id="toParallel" class="back-button" href="./parallel.html" style="margin-left:8px;">Parallel</a>
-			</div>
+		<!-- Menu Overlay -->
+		<div class="menu-overlay" id="menuOverlay"></div>
 
-			<div id="chordContainer">
-				<div class="loading">Loading…</div>
+		<!-- Menu Sidebar -->
+		<div class="menu-sidebar" id="menuSidebar">
+			<div class="menu-header">
+				<button class="menu-close" id="menuClose">MENU</button>
 			</div>
+			<ul class="menu-items">
+				<li><a href="aboutPage.html">0. ABOUT</a></li>
+				<li><a href="index.html">1. Library</a></li>
+				<li><a href="chordGraph.html">2. Technological Network</a></li>
+				<li><a href="parallel.html">3. Prediction Timeline</a></li>
+				<li><a href="morph.html">4. World Building</a></li>
+				<li><a href="#">5. Reflection</a></li>
+			</ul>
+		</div>
+
+		<!-- Page Header -->
+		<div class="page-header">
+			<a href="bookshelf.html" class="back-link">
+				<span class="back-arrow">←</span>
+				<span>Return to Shelf</span>
+			</a>
+		</div>
+
+		<!-- Sidebar Content -->
+		<div class="sidebar">
+			<div class="sidebar-label">Motifs</div>
+			<h1 class="decade-title" id="decadeTitle">All Decades</h1>
+			<p class="sidebar-text" id="sidebarText">
+				Drag the timeline below to filter movies by decade and see how technological themes evolve across eras.
+			</p>
+			
+			<!-- Timeline Filter -->
+			<div class="timeline-container">
+				<div class="timeline-header">
+					<span class="timeline-filter-label">Filter by Decade:</span>
+					<span class="decade-value" id="decadeValue">All</span>
+				</div>
+				<div class="timeline-track" id="timelineTrack">
+					<div class="timeline-handle" id="timelineHandle"></div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Navigation Buttons -->
+		<div class="nav-buttons">
+			<a href="parallel.html" class="nav-btn" id="nextBtn">Next →</a>
+		</div>
+
+		<!-- Main Visualization -->
+		<div id="chordContainer">
+			<div class="loading">Loading visualization...</div>
 		</div>
 
 		<script src="./chordGraph.js"></script>
 		<script>
-			// IMPORTANT: Do not modify chordGraph.js. This file only uses the class it provides
-			(async function(){
+			// Menu functionality
+			const menuButton = document.getElementById('menuButton');
+			const menuClose = document.getElementById('menuClose');
+			const menuSidebar = document.getElementById('menuSidebar');
+			const menuOverlay = document.getElementById('menuOverlay');
+
+			function openMenu() {
+				menuSidebar.classList.add('active');
+				menuOverlay.classList.add('active');
+			}
+
+			function closeMenu() {
+				menuSidebar.classList.remove('active');
+				menuOverlay.classList.remove('active');
+			}
+
+			menuButton.addEventListener('click', openMenu);
+			menuClose.addEventListener('click', closeMenu);
+			menuOverlay.addEventListener('click', closeMenu);
+
+			document.addEventListener('keydown', function(event) {
+				if (event.key === 'Escape' && menuSidebar.classList.contains('active')) {
+					closeMenu();
+				}
+			});
+
+			// Chord Graph initialization
+			(async function() {
 				const containerId = 'chordContainer';
 				const cg = new ChordGraph(containerId);
+
 				try {
 					await cg.loadData('./merged_movies_data.csv');
 				} catch (err) {
-					document.getElementById(containerId).innerHTML = '<div style="padding:20px;color:#b91c1c">Failed to load data: '+(err.message||err)+'</div>';
+					document.getElementById(containerId).innerHTML =
+						'<div style="padding:20px;color:#888888">Failed to load data: ' +
+						(err.message || err) + '</div>';
 					return;
 				}
 
-				// const select = document.getElementById('movieSelect');
-				// select.innerHTML = '';
-				// cg.getMovieTitles().forEach(t => {
-				// 	const o = document.createElement('option'); o.value = t; o.textContent = t; select.appendChild(o);
-				// });
+				// Get movie from URL parameter or use default
+				const params = new URLSearchParams(window.location.search);
+				const movieParam = params.get('movie');
+				const movieTitles = cg.getMovieTitles();
+				const movieToRender = movieParam || movieTitles[0];
 
-				/* ---------- Scroll-driven movie timeline (visual effect) ---------- */
-				// Insert timeline UI after the chord container (so chord graph remains visible above)
-				const timelineWrapper = document.createElement('div');
-				timelineWrapper.id = 'timelineWrapper';
-				const containerEl = document.querySelector('.container');
-				const chordEl = document.getElementById('chordContainer');
-				if (chordEl && chordEl.nextSibling) containerEl.insertBefore(timelineWrapper, chordEl.nextSibling);
-				else containerEl.appendChild(timelineWrapper);
+				if (movieToRender) {
+					try {
+						cg.render(movieToRender, {
+							width: Math.min(1400, window.innerWidth - 100),
+							height: Math.min(1000, window.innerHeight - 100)
+						});
 
-				timelineWrapper.innerHTML = `
-					<div id="timelineViz">
-						<svg id="timelineSvg" preserveAspectRatio="xMidYMid meet"></svg>
-					</div>
-					<div id="timelineScroller"></div>
-					<div id="yearBar"><div id="yearValue">--</div><div id="yearTrack"><div id="yearHandle"></div></div></div>
-				`;
-
-				// Styles for timeline UI
-				const style = document.createElement('style');
-				style.textContent = `
-				#timelineWrapper{position:relative;display:block;margin-bottom:18px}
-				#timelineViz{position:sticky;top:24px;height:70vh;background:linear-gradient(180deg,#ffffff,#f8fbff);border-radius:12px;padding:12px;box-shadow:0 12px 30px rgba(16,24,40,0.06);overflow:hidden}
-				#timelineSvg{width:100%;height:100%}
-				#timelineScroller{height:2200px}
-				#yearBar{position:fixed;right:18px;top:50%;transform:translateY(-50%);width:88px;background:linear-gradient(180deg,#0f172a,#1e3a8a);color:white;padding:12px;border-radius:12px;box-shadow:0 12px 30px rgba(16,24,40,0.2);font-family:'Space Mono',monospace}
-				#yearValue{font-size:28px;font-weight:700;text-align:center;margin-bottom:8px}
-				#yearTrack{height:300px;width:8px;background:rgba(255,255,255,0.08);margin:0 auto;border-radius:8px;position:relative}
-				#yearHandle{position:absolute;left:50%;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:#fff;margin-top:-9px;top:0}
-				.movie-dot{stroke:#ffffff;stroke-width:1.5px;opacity:0;}
-				.movie-dot-label{font-size:11px;fill:#0f172a;pointer-events:none}
-				#dotTooltip{position:fixed;pointer-events:none;padding:8px 10px;background:rgba(10,20,40,0.95);color:white;border-radius:8px;font-size:12px;box-shadow:0 6px 20px rgba(0,0,0,0.4);z-index:2000;opacity:0;transform:translate(-50%,-120%);white-space:nowrap}
-				`;
-
-				document.head.appendChild(style);
-
-				// Timeline will show popular themes per 5-year window (1950-2020)
-				function parseYearField(y){
-					if (!y && y !== 0) return 0;
-					const s = String(y);
-					const m = s.match(/(\d{4})/);
-					if (m) return +m[1];
-					return 0;
+						// Center the visualization
+						setTimeout(() => {
+							try {
+								const svgEl = d3.select('#' + containerId + ' svg');
+								svgEl.attr('preserveAspectRatio', 'xMidYMid meet')
+									.style('display', 'block')
+									.style('margin', '0 auto');
+							} catch(e) {}
+						}, 100);
+					} catch(e) {
+						console.error('Render error:', e);
+					}
 				}
 
-				const allMovies = cg.movies.map(m => ({
-					title: m.title,
-					year: parseYearField(m.year),
-					themes: Array.isArray(m.themes) ? m.themes : (m.themes || '').split(',').map(t=>t.trim()).filter(Boolean),
-					rating: +m.rating || 0
-				})).filter(m => m.year > 0);
-
+				// Timeline functionality
 				const minYear = 1950;
 				const maxYear = 2020;
-				const yearStep = 5;
-				let currentYear = minYear; // will be center/start of window
-
-				const svg = d3.select('#timelineSvg');
-				const vizNode = document.getElementById('timelineViz');
-
-				function renderTimeline() {
-					const w = vizNode.clientWidth;
-					const h = vizNode.clientHeight;
-
-					svg.attr('viewBox', `0 0 ${w} ${h}`);
-
-					// Ensure themeDots group exists
-					if (svg.select('g.themeDots').empty()) svg.append('g').attr('class','themeDots');
+				const yearStep = 10; // Decade steps
+				const decades = [];
+				for (let y = minYear; y <= maxYear; y += yearStep) {
+					decades.push(y);
 				}
 
-
-
-				function getTopThemesForWindow(startYear){
-					const endYear = startYear + yearStep - 1; // inclusive 5-year window
-					const freq = {};
-					allMovies.forEach(m => {
-						if (m.year >= startYear && m.year <= endYear) {
-							(m.themes || []).forEach(t => { if (!t) return; freq[t] = (freq[t]||0) + 1; });
-						}
-					});
-					const themes = Object.keys(freq).map(t => ({ theme: t, count: freq[t] }));
-					themes.sort((a,b)=>b.count - a.count);
-					return themes.slice(0, 18);
-				}
-
-				function updateThemeDots(year){
-					currentYear = Math.max(minYear, Math.min(maxYear, year));
-					const themes = getTopThemesForWindow(currentYear);
-					console.log('updateThemeDots', currentYear, 'themes:', themes.length);
-					// compute movies in this window for debug
-					const moviesInWindow = allMovies.filter(m => m.year >= currentYear && m.year <= (currentYear + yearStep - 1)).length;
-					const w = vizNode.clientWidth; const h = vizNode.clientHeight;
-					const g = svg.select('g.themeDots');
-					const x = d3.scaleLinear().domain([0, Math.max(1, themes.length-1)]).range([60, w-60]);
-					const yCenter = h/2;
-
-					const nodes = g.selectAll('g.theme').data(themes, d=>d.theme);
-					const nodesEnter = nodes.enter().append('g').attr('class','theme').attr('transform',(d,i)=>`translate(${x(i)},${yCenter + (i%2? -18: 18)})`);
-					nodesEnter.append('circle').attr('r',8).attr('class','movie-dot').attr('fill', d => d3.interpolateTurbo(Math.min(1, d.count/5 || 0.5))).style('opacity',0);
-					nodesEnter.append('text').attr('class','movie-dot-label').attr('dy',-16).attr('text-anchor','middle').text(d=>d.theme.length>18?d.theme.slice(0,16)+'…':d.theme).style('opacity',0);
-
-					nodes.select('circle').transition().duration(350).style('opacity',1).attr('r', d=>8 + Math.min(8, d.count*2));
-					nodes.select('text').transition().duration(350).style('opacity',1);
-
-					nodes.exit().transition().duration(250).style('opacity',0).remove();
-
-					// update year bar
-					document.getElementById('yearValue').textContent = currentYear;
-					const trackHeight = document.getElementById('yearTrack').clientHeight;
-					const progress = (currentYear - minYear) / (maxYear - minYear);
-					document.getElementById('yearHandle').style.top = Math.round(progress * trackHeight) + 'px';
-
-					// update chord links and node visibility to reflect this window
-					try {
-						updateLinksForWindow(currentYear);
-						updateChordVisibility(currentYear);
-					} catch(e) { console.warn('update chord window error', e); }
-				}
-
-				// Deterministic pseudo-random generator for per-year selection
-				function mulberry32(a) {
-					return function() {
-						a |= 0; a = a + 0x6D2B79F5 | 0;
-						var t = Math.imul(a ^ a >>> 15, 1 | a);
-						t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-						return ((t ^ t >>> 14) >>> 0) / 4294967296;
+				// Decade descriptions
+				const decadeContent = {
+					null: {
+						title: 'All Decades',
+						text: 'Drag the timeline below to filter movies by decade and see how technological themes evolve across eras.'
+					},
+					1950: {
+						title: '1950s',
+						text: 'The dawn of the atomic age. Cold War anxieties manifest in tales of alien invasions and nuclear mutations. Science fiction emerges as a serious literary genre.'
+					},
+					1960: {
+						title: '1960s',
+						text: 'Space race optimism meets counterculture rebellion. From lunar landings to dystopian warnings, the decade explores both the promise and peril of progress.'
+					},
+					1970: {
+						title: '1970s',
+						text: 'Post-apocalyptic visions and ecological collapse. Growing environmental consciousness and economic uncertainty reshape sci-fi into darker, more cynical narratives.'
+					},
+					1980: {
+						title: '1980s',
+						text: 'Cyberpunk emerges as computers enter homes. Corporate dystopias, virtual realities, and the merger of human and machine define a new technological anxiety.'
+					},
+					1990: {
+						title: '1990s',
+						text: 'The internet revolution begins. Virtual worlds, digital consciousness, and questioning reality itself become central themes as the millennium approaches.'
+					},
+					2000: {
+						title: '2000s',
+						text: 'Post-9/11 surveillance states and the war on terror. Superhero narratives dominate as society grapples with security, privacy, and global connectivity.'
+					},
+					2010: {
+						title: '2010s',
+						text: 'AI awakening and climate crisis. Automation anxiety, social media dystopias, and existential questions about humanity\'s future in an age of machine intelligence.'
+					},
+					2020: {
+						title: '2020s',
+						text: 'Pandemic futures and multiverse theory. Reality becomes increasingly fluid as science fiction and present-day concerns blur into one another.'
 					}
-				}
+				};
 
-				// Show/hide a (random) subset of chord nodes based on the 5-year window
-				function updateChordVisibility(year){
-					// seed based on year to keep selection stable while year is same
-					const seed = year || minYear;
-					const rand = mulberry32(seed);
-					const showFraction = 0.45; // desired fraction to show
-					const nodes = d3.selectAll('#'+containerId+' .node').nodes();
-					if (!nodes || nodes.length === 0) return;
-					// compute scores and pick top N to ensure at least one node is visible
-					const scores = nodes.map((n, i) => ({ idx: i, score: rand() }));
-					const toShowCount = Math.max(1, Math.round(nodes.length * showFraction));
-					scores.sort((a,b) => b.score - a.score);
-					const showIdx = new Set(scores.slice(0, toShowCount).map(s=>s.idx));
-					nodes.forEach((n, i) => {
-						const g = d3.select(n);
-						const circle = g.select('circle');
-						const label = g.select('.label-group');
-						if (showIdx.has(i)) {
-							const s = scores.find(x=>x.idx===i).score;
-							circle.transition().duration(300).style('opacity',1).attr('r', 20 + (s*8));
-							label.transition().duration(300).style('opacity',1);
+				function updateDecadeDisplay(decade, skipAnimation = false) {
+					const decadeValue = document.getElementById('decadeValue');
+					const decadeTitle = document.getElementById('decadeTitle');
+					const sidebarText = document.getElementById('sidebarText');
+
+					const content = decadeContent[decade];
+
+					if (!decade) {
+						decadeValue.textContent = 'All';
+					} else {
+						decadeValue.textContent = `${decade}s`;
+					}
+
+					if (content) {
+						if (skipAnimation) {
+							// No animation for initial load
+							decadeTitle.textContent = content.title;
+							sidebarText.textContent = content.text;
 						} else {
-							circle.transition().duration(300).style('opacity',0.12).attr('r', 8);
-							label.transition().duration(300).style('opacity',0.12);
+							// Fade out
+							decadeTitle.style.opacity = '0';
+							sidebarText.style.opacity = '0';
+
+							// Update content and fade back in
+							setTimeout(() => {
+								decadeTitle.textContent = content.title;
+								sidebarText.textContent = content.text;
+								decadeTitle.style.opacity = '1';
+								sidebarText.style.opacity = '1';
+							}, 100);
 						}
-
-						// link updates are handled by the top-level updateLinksForWindow(year)
-
-					});
-				}
-
-					// Compute co-occurrence / movie lists limited to a specific 5-year window
-					function computeWindowCooccurrence(startYear){
-						const endYear = startYear + yearStep - 1;
-						const co = {};
-						const themeMovies = {};
-						allMovies.forEach(m => {
-							if (m.year >= startYear && m.year <= endYear) {
-								const t = (m.themes || []).filter(Boolean);
-								for (let i=0;i<t.length;i++){
-									for (let j=i+1;j<t.length;j++){
-										const a = t[i], b = t[j];
-										co[a] = co[a] || {};
-										co[b] = co[b] || {};
-										co[a][b] = (co[a][b]||0) + 1;
-										co[b][a] = (co[b][a]||0) + 1;
-
-										themeMovies[a] = themeMovies[a] || {};
-										themeMovies[b] = themeMovies[b] || {};
-										themeMovies[a][b] = themeMovies[a][b] || [];
-										themeMovies[b][a] = themeMovies[b][a] || [];
-										const movieLabel = `${m.title} (${m.year})`;
-										themeMovies[a][b].push(movieLabel);
-										themeMovies[b][a].push(movieLabel);
-									}
-								}
-							}
-						});
-						return { cooccurrence: co, themeMovies };
 					}
-
-					// Update existing chord link visual attributes based on windowed cooccurrence
-					function updateLinksForWindow(year){
-						const windowCo = computeWindowCooccurrence(year).cooccurrence || {};
-						// compute max weight to normalize stroke widths
-						let maxW = 0;
-						Object.keys(windowCo).forEach(a => {
-							Object.keys(windowCo[a]||{}).forEach(b => { maxW = Math.max(maxW, windowCo[a][b] || 0); });
-						});
-
-						// update links
-						const links = d3.selectAll('#'+containerId+' .link');
-						links.each(function(d){
-							try {
-								const a = d.sourceTheme || (d.source && d.source.label) || d.source;
-								const b = d.targetTheme || (d.target && d.target.label) || d.target;
-								const weight = (windowCo[a] && windowCo[a][b]) ? windowCo[a][b] : 0;
-								const opacity = weight > 0 ? 0.95 : 0.08;
-								const strokeW = weight > 0 ? Math.max(1, Math.sqrt(weight) * 1.6) : 1;
-								d3.select(this).transition().duration(300).attr('stroke-width', strokeW).style('opacity', opacity).attr('stroke', weight>0 ? '#93c5fd' : '#e0e0e0');
-							} catch (err) { /* ignore */ }
-						});
-
-						// update nodes: highlight nodes that have any connection in this window
-						const nodes = d3.selectAll('#'+containerId+' .node');
-						nodes.each(function(d,i){
-							try {
-								const theme = d && d.label ? d.label : (d.id || d);
-								let has = false;
-								if (windowCo[theme]) {
-									for (const k in windowCo[theme]) { if ((windowCo[theme][k]||0) > 0) { has = true; break; } }
-								}
-
-								// Fit the rendered chord graph to the available container (scale + translate)
-								function fitGraphToView() {
-									try {
-										const svgSel = d3.select('#' + containerId + ' svg');
-										const gSel = svgSel.select('g');
-										const svgNode = svgSel.node();
-										const gNode = gSel.node();
-										if (!svgNode || !gNode) return;
-										const bbox = gNode.getBBox();
-										const containerRect = document.getElementById(containerId).getBoundingClientRect();
-										const cw = Math.max(100, containerRect.width);
-										const ch = Math.max(100, containerRect.height);
-										const margin = 40;
-										const scaleX = (cw - margin * 2) / (bbox.width || cw);
-										const scaleY = (ch - margin * 2) / (bbox.height || ch);
-										let scale = Math.min(scaleX, scaleY);
-										if (!isFinite(scale) || scale <= 0) scale = 1;
-										// clamp to reasonable zoom extents (match chordGraph's zoom scaleExtent)
-										scale = Math.max(0.5, Math.min(3, scale));
-
-										const tx = (cw / 2) - scale * (bbox.x + bbox.width / 2);
-										const ty = (ch / 2) - scale * (bbox.y + bbox.height / 2);
-										const transform = d3.zoomIdentity.translate(tx, ty).scale(scale);
-
-										// Prefer using the chord graph's zoom behavior so interactions remain consistent
-										if (cg && cg.svg && cg.zoom) {
-											cg.svg.transition().duration(700).call(cg.zoom.transform, transform);
-										} else {
-											// Fallback: set transform directly
-											gSel.attr('transform', `translate(${tx},${ty}) scale(${scale})`);
-										}
-									} catch (e) { console.warn('fitGraphToView error', e); }
-								}
-								const g = d3.select(this);
-								const circle = g.select('circle');
-								if (has) {
-									circle.transition().duration(300).attr('r',24).attr('stroke','#93c5fd').attr('stroke-width',5).style('opacity',1);
-								} else {
-									circle.transition().duration(300).attr('r',20).attr('stroke','#60a5fa').attr('stroke-width',4).style('opacity',0.9);
-								}
-							} catch(e){}
-						});
-					}
-
-					// Ensure the chord graph is rendered first (so it stays visible and interactive)
-				(function ensureChordRendered(){
-					try {
-						// if a movie param exists, use it; otherwise default to first
-						const params = new URLSearchParams(window.location.search);
-						const movieParam = params.get('movie');
-						let titleToRender = null;
-						if (movieParam) titleToRender = movieParam;
-						else if (select.options && select.options.length) titleToRender = select.options[0].value;
-						if (titleToRender) {
-								cg.render(titleToRender, { width: Math.min(1200, window.innerWidth - 80), height: 900 });
-								// Ensure the svg centers and resets zoom so the full graph is visible
-								setTimeout(() => {
-									try {
-										const svgEl = d3.select('#' + containerId + ' svg');
-										svgEl.attr('preserveAspectRatio', 'xMidYMid meet').style('display','block').style('margin','0 auto');
-										// fit the graph to view so the full visualization is visible
-										fitGraphToView();
-									} catch(e){}
-									setTimeout(attachClickHandlers, 80);
-								}, 40);
-						}
-					} catch (e) { console.warn('render chord error', e); }
-				})();
-
-				renderTimeline();
-
-				// Scroll handler: compute currentYear based on scroller progress and reveal dots within windowYears
-				const scroller = document.getElementById('timelineScroller');
-				const yearValue = document.getElementById('yearValue');
-				const yearHandle = document.getElementById('yearHandle');
-
-				const windowYears = 12; // band of years visible
-
-				function updateFromScroll(){
-					// Use document scroll position to compute a robust 0..1 progress
-					const docHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
-					const available = Math.max(1, docHeight - window.innerHeight);
-					const progress = Math.min(Math.max(window.scrollY / available, 0), 1);
-					// map progress to nearest 5-year step
-					const totalSteps = Math.floor((maxYear - minYear) / yearStep);
-					const stepIndex = Math.round(progress * totalSteps);
-					const targetYear = minYear + stepIndex * yearStep;
-					// update theme dots for this window
-					updateThemeDots(targetYear);
 				}
 
-				// Attach scroll listener
-				// Throttled scroll listener + interval fallback to ensure updates fire across browsers
-				let lastScrollCall = 0;
-				window.addEventListener('scroll', function(){
-					const now = performance.now();
-					if (now - lastScrollCall > 80) { lastScrollCall = now; updateFromScroll(); }
-				}, {passive:true});
-				// fallback poll in case some browsers don't emit scroll reliably for our layout
-				let lastScrollY = window.scrollY;
-				setInterval(() => {
-					if (window.scrollY !== lastScrollY) { lastScrollY = window.scrollY; updateFromScroll(); }
-				}, 250);
+				// Initialize with "All" decade display (no animation on first load)
+				updateDecadeDisplay(null, true);
 
-				// Allow wheel-over to scrub the timeline when hovering the timeline area or chord container
-				// Wheel over timeline/chord will step the 5-year window smoothly
-				let lastWheel = 0;
-				function wheelScrubHandler(e) {
-					if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
-					e.preventDefault();
-					const now = performance.now();
-					// throttle to one change per 120ms
-					if (now - lastWheel < 120) return;
-					lastWheel = now;
-					const dir = e.deltaY > 0 ? 1 : -1;
-					const newYear = Math.max(minYear, Math.min(maxYear, currentYear + dir * yearStep));
-					// animate handle and update dots
-					updateThemeDots(newYear);
-					// also update page scroll to reflect new progress so dragging handle remains consistent
-					const totalSteps = Math.floor((maxYear - minYear) / yearStep);
-					const stepIndex = (newYear - minYear) / yearStep;
-					const scrollerRect = scroller.getBoundingClientRect();
-					const targetProgress = stepIndex / totalSteps;
-					const desiredRectTop = window.innerHeight - targetProgress * (scrollerRect.height + window.innerHeight);
-					const scrollerTopAbs = window.scrollY + scrollerRect.top;
-					const desiredScrollY = scrollerTopAbs - desiredRectTop;
-					window.scrollTo({ top: Math.max(0, desiredScrollY), behavior: 'smooth' });
-				}
-
-				const timelineVizEl = document.getElementById('timelineViz');
-				const chordContainerEl = document.getElementById('chordContainer');
-				[timelineVizEl, chordContainerEl].forEach(el => {
-					if (!el) return;
-					el.addEventListener('wheel', wheelScrubHandler, { passive: false });
-				});
-				// Initialize
-				updateFromScroll();
-
-				// Keep graph centered on window resize
-				window.addEventListener('resize', () => {
-					try {
-						const svgEl = d3.select('#' + containerId + ' svg');
-						svgEl.attr('preserveAspectRatio', 'xMidYMid meet').style('display','block').style('margin','0 auto');
-						fitGraphToView();
-					} catch(e){}
-				});
-
-				// Create tooltip element for dots
-				const dotTooltip = document.createElement('div');
-				dotTooltip.id = 'dotTooltip';
-				document.body.appendChild(dotTooltip);
-
-				function showDotTooltip(text, x, y) {
-					dotTooltip.textContent = text;
-					dotTooltip.style.left = (x) + 'px';
-					dotTooltip.style.top = (y - 12) + 'px';
-					dotTooltip.style.opacity = '1';
-				}
-
-				function moveDotTooltip(x, y) {
-					dotTooltip.style.left = (x) + 'px';
-					dotTooltip.style.top = (y - 12) + 'px';
-				}
-
-				function hideDotTooltip() {
-					dotTooltip.style.opacity = '0';
-				}
-
-				// Make year handle draggable to scrub timeline
-				(function enableYearDrag(){
+				// Make timeline handle draggable (horizontal)
+				(function enableTimelineDrag() {
 					let dragging = false;
-					const track = document.getElementById('yearTrack');
-					const handle = yearHandle;
+					const track = document.getElementById('timelineTrack');
+					const handle = document.getElementById('timelineHandle');
+
+					// Click on track to jump
+					track.addEventListener('click', (e) => {
+						if (e.target === handle) return;
+						const rect = track.getBoundingClientRect();
+						const x = e.clientX - rect.left;
+						updateTimelineFromX(x, rect.width);
+					});
 
 					handle.addEventListener('pointerdown', (e) => {
 						dragging = true;
 						handle.setPointerCapture(e.pointerId);
+						e.preventDefault();
 					});
 
-					window.addEventListener('pointerup', (e) => {
+					window.addEventListener('pointerup', () => {
 						dragging = false;
 					});
 
 					window.addEventListener('pointermove', (e) => {
 						if (!dragging) return;
 						const rect = track.getBoundingClientRect();
-						let y = e.clientY - rect.top;
-						if (y < 0) y = 0; if (y > rect.height) y = rect.height;
-						const progress = y / rect.height;
-						handle.style.top = Math.round(progress * rect.height) + 'px';
-						// compute desired scroll to match updateFromScroll's progress mapping
-						const scrollerRect = scroller.getBoundingClientRect();
-						const scrollerTopAbs = window.scrollY + scrollerRect.top;
-						const desiredRectTop = window.innerHeight - progress * (scrollerRect.height + window.innerHeight);
-						const desiredScrollY = scrollerTopAbs - desiredRectTop;
-						window.scrollTo({ top: Math.max(0, desiredScrollY), behavior: 'auto' });
-						updateFromScroll();
+						let x = e.clientX - rect.left;
+						updateTimelineFromX(x, rect.width);
 					});
-				})();
 
+					function updateTimelineFromX(x, width) {
+						if (x < 0) x = 0;
+						if (x > width) x = width;
+						const progress = x / width;
 
-				// Try to read shelf movie titles from index.js so clicks map to the exact shelf titles
-				let shelfTitles = [];
-				(async function loadShelfTitles(){
-					try {
-						const txt = await fetch('./index.js').then(r => r.text());
-						// crude regex to extract title: 'Title' occurrences inside booksMeta
-						const re = /title:\s*'([^']+)'/g;
-						let m;
-						while ((m = re.exec(txt)) !== null) {
-							shelfTitles.push(m[1]);
+						// Map progress to decades (0 = "All", then 1950s, 1960s, etc.)
+						const totalSteps = decades.length + 1; // +1 for "All"
+						const stepIndex = Math.round(progress * (totalSteps - 1));
+
+						let currentDecade;
+						if (stepIndex === 0) {
+							currentDecade = null; // "All"
+						} else {
+							currentDecade = decades[stepIndex - 1];
 						}
-					} catch (e) {
-						// ignore if we can't load index.js
+
+						// Update handle position
+						const handleProgress = stepIndex / (totalSteps - 1);
+						handle.style.left = (handleProgress * 100) + '%';
+
+						// Update display and filter
+						updateDecadeDisplay(currentDecade);
+						cg.setDecade(currentDecade);
 					}
 				})();
-
-				function normalize(s){
-					return (s||'').toString().toLowerCase().replace(/[^a-z0-9]+/g,'');
-				}
-
-				function findShelfMatch(title){
-					if (!title) return null;
-					const n = normalize(title.replace(/\s*\(\d{4}\)$/, ''));
-					// exact match first
-					for (const t of shelfTitles) if (normalize(t) === n) return t;
-					// substring match
-					for (const t of shelfTitles) if (normalize(t).includes(n) || n.includes(normalize(t))) return t;
-					// try removing punctuation/year from title and match
-					return null;
-				}
-
-				// Helper to attach click handlers to nodes and links after render
-						function attachClickHandlers() {
-										// Reconfigure D3 zoom so wheel only zooms when Ctrl/Cmd is held (prevents scroll hijack)
-										try {
-											// Remove any existing zoom handlers first
-											d3.select('#' + containerId + ' svg').on('.zoom', null);
-
-											// Attach a filtered zoom: wheel requires ctrl/meta, drag (mousedown) allowed for panning
-											const myZoom = d3.zoom()
-												.scaleExtent([0.5, 3])
-												.filter(function(event) {
-													// Allow wheel zoom only when Ctrl (or Meta on Mac) is pressed
-													if (event.type === 'wheel') {
-														return event.ctrlKey || event.metaKey;
-													}
-													// Allow other events (mousedown, touchstart, dblclick) as usual
-													return !event.button || event.type === 'mousedown' || event.type === 'touchstart' || event.type === 'dblclick';
-												})
-												.on('zoom', function(event) {
-													// Apply transform to the group inside the svg (chordGraph.js creates a single <g>)
-													d3.select('#' + containerId + ' svg').select('g').attr('transform', event.transform);
-												});
-
-											d3.select('#' + containerId + ' svg').call(myZoom);
-										} catch (e) {
-											// ignore if no svg yet
-										}
-
-							// Nodes: theme nodes created by chordGraph.render have class 'node' and bound data with .label
-							d3.selectAll('#'+containerId+' .node')
-								.style('cursor', 'pointer')
-								.on('click', function(event, d) {
-									// Navigate to the bookshelf (no specific book) so user sees the shelf itself
-									window.location.href = './index.html?from=chordGraph.html';
-								});
-
-							// Links: chords (paths) have class 'link' and bound data with .movies array
-							d3.selectAll('#'+containerId+' .link')
-								.style('cursor','pointer')
-								.on('click', function(event, d) {
-									// Open the bookshelf (no specific book) when clicking a chord
-									window.location.href = './index.html?from=chordGraph.html';
-								});
-						}
-
-				// Render button handler
-				document.getElementById('renderBtn').addEventListener('click', () => {
-					const title = select.value;
-					if (!title) return;
-					// Render using chordGraph.js (unchanged)
-					cg.render(title, { width: Math.min(1200, window.innerWidth - 80), height: 900 });
-					// center & reset zoom after render so the full graph is visible without manual zooming
-					setTimeout(() => {
-						try {
-							const svgEl = d3.select('#' + containerId + ' svg');
-							svgEl.attr('preserveAspectRatio', 'xMidYMid meet').style('display','block').style('margin','0 auto');
-							fitGraphToView();
-						} catch(e){}
-						setTimeout(attachClickHandlers, 40);
-					}, 40);
-				});
-
-				// // If a movie? param exists, pre-select and render
-				// const params = new URLSearchParams(window.location.search);
-				// const movieParam = params.get('movie');
-				// if (movieParam) {
-				// 	const found = Array.from(select.options).find(o => o.value === movieParam);
-				// 	if (found) select.value = movieParam;
-				// }
-
-				// // Render first available movie as landing if none specified
-				// 		if (select.options.length) {
-				// 			if (select.value) {
-				// 				document.getElementById('renderBtn').click();
-				// 				setTimeout(attachClickHandlers, 40);
-				// 			} else {
-				// 				// default to first
-				// 				select.selectedIndex = 0;
-				// 				document.getElementById('renderBtn').click();
-				// 				setTimeout(attachClickHandlers, 40);
-				// 			}
-				// 		}
 			})();
 		</script>
 	</body>
 </html>
-

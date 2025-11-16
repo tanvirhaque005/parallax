@@ -5,8 +5,31 @@
     <title>3D Bookshelf (Full-Screen Details)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="menu-component.css">
   </head>
   <body>
+
+    <!-- Menu Button (top right corner) -->
+    <button class="menu-button" id="menuButton">MENU</button>
+
+    <!-- Dark Overlay (appears when menu is open) -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Menu Sidebar (slides in from right) -->
+    <div class="menu-sidebar" id="menuSidebar">
+      <div class="menu-header">
+        <button class="menu-close" id="menuClose">MENU</button>
+      </div>
+      <ul class="menu-items">
+        <li><a href="aboutPage.html">0. ABOUT</a></li>
+        <li><a href="bookshelf.html">1. Library</a></li>
+        <li><a href="chordGraph.html">2. Technological Network</a></li>
+        <li><a href="parallel.html">3. Prediction Timeline</a></li>
+        <li><a href="morph.html">4. World Building</a></li>
+        <li><a href="#">5. Reflection</a></li>
+      </ul>
+    </div>
+
     <div id="controls">
       <button id="scrollLeft" aria-label="Scroll left">⟵</button>
       <button id="scrollRight" aria-label="Scroll right">⟶</button>
@@ -98,7 +121,39 @@
           </div>
       </div>
     </div>
+    
 
-    <script type="module" src="./index.js"></script>
+    <script type="module" src="./bookshelf.js"></script>
+    <script>
+      // Get menu elements
+      const menuButton = document.getElementById('menuButton');
+      const menuClose = document.getElementById('menuClose');
+      const menuSidebar = document.getElementById('menuSidebar');
+      const menuOverlay = document.getElementById('menuOverlay');
+
+      // Open menu function
+      function openMenu() {
+        menuSidebar.classList.add('active');
+        menuOverlay.classList.add('active');
+      }
+
+      // Close menu function
+      function closeMenu() {
+        menuSidebar.classList.remove('active');
+        menuOverlay.classList.remove('active');
+      }
+
+      // Event listeners
+      menuButton.addEventListener('click', openMenu);
+      menuClose.addEventListener('click', closeMenu);
+      menuOverlay.addEventListener('click', closeMenu);
+
+      // Optional: Close menu when pressing Escape key
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && menuSidebar.classList.contains('active')) {
+          closeMenu();
+        }
+      });
+    </script>
   </body>
 </html>
