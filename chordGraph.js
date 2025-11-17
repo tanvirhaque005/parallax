@@ -27,6 +27,60 @@ class ChordGraph {
   }
 
   /**
+   * Show the movie popup with a list of movies for the current window.
+   * movies: array of strings
+   * startYear: number or null
+   */
+  showMoviePopup(movies, startYear) {
+    try {
+      if (!this.moviePopup) return;
+      const title = startYear ? `${movies.length} Movie${movies.length!==1?'s':''} (${startYear}-${startYear+4})` : `${movies.length} Movie${movies.length!==1?'s':''}`;
+      const html = `
+        <div style="font-weight:700; margin-bottom:8px; color:#0f172a">${title}</div>
+        <div style="font-size:12px; color:#0f172a; line-height:1.5;">
+          ${movies.map(m => `<div style=\"padding:4px 0; border-bottom:1px solid #f1f5f9;\">${m}</div>`).join('')}
+        </div>
+      `;
+
+      this.moviePopup.html(html)
+        .style('opacity', 1)
+        .style('pointer-events', 'auto');
+
+      // Position the popup at the top-right of the SVG/visualization area with a margin
+      try {
+        const containerRect = this.container.node().getBoundingClientRect();
+        const svgRect = this.svg && this.svg.node() ? this.svg.node().getBoundingClientRect() : containerRect;
+        const popupRect = this.moviePopup.node().getBoundingClientRect();
+        // Place further to the top-right (closer to the page's right edge) so long lists don't overlap the graph
+        const marginRight = 32; // distance from the right edge
+        const marginTop = 12; // distance from top of svg
+        // compute left relative to container (container left -> 0)
+        let left = Math.round(containerRect.width - popupRect.width - marginRight);
+        let top = Math.round((svgRect.top - containerRect.top) + marginTop);
+        // clamp so popup stays within container
+        if (left < 8) left = 8;
+        if (top < 8) top = 8;
+        this.moviePopup.style('left', `${left}px`).style('top', `${top}px`);
+      } catch(e) {
+        // fallback to previous approximate position
+        const containerRect = this.container.node().getBoundingClientRect();
+        const left = Math.round(containerRect.width - 320 - 32);
+        const top = Math.round(24);
+        this.moviePopup.style('left', `${left}px`).style('top', `${top}px`);
+      }
+    } catch (e) {
+      // silent
+    }
+  }
+
+  hideMoviePopup() {
+    try {
+      if (!this.moviePopup) return;
+      this.moviePopup.style('opacity', 0).style('pointer-events', 'none');
+    } catch(e){}
+  }
+
+  /**
    * Load and parse the CSV data
    */
   async loadData(csvPath) {
@@ -127,6 +181,13 @@ class ChordGraph {
     // Add zoom behavior
     this.zoom = d3.zoom()
       .scaleExtent([0.5, 3])
+      // Prevent the built-in zoom handler from reacting to wheel events so we can
+      // control wheel behavior separately (mouse wheel will be used for year scrub).
+      .filter(function(event) {
+        if (!event) return true;
+        if (event.type === 'wheel') return false;
+        return true;
+      })
       .on('zoom', (event) => {
         this.g.attr('transform', event.transform);
       });
@@ -161,6 +222,26 @@ class ChordGraph {
       .style('left', '50%')
       .style('transform', 'translateX(-50%)')
       .style('bottom', '20px');
+
+      // Create a white movie popup (matches the attached mockup) — hidden by default
+      this.moviePopup = this.container
+        .append('div')
+        .attr('class', 'movie-popup')
+        .style('position', 'absolute')
+        .style('min-width', '200px')
+        .style('max-width', '320px')
+        .style('background', '#ffffff')
+        .style('color', '#0f172a')
+        .style('border-radius', '10px')
+        .style('padding', '12px 14px')
+        .style('box-shadow', '0 12px 30px rgba(16,24,40,0.12)')
+        .style('opacity', 0)
+        .style('pointer-events', 'none')
+        .style('z-index', 1200)
+        .style('font-family', "'Space Mono', 'Courier New', monospace")
+        .style('font-size', '12px')
+        .style('max-height', '320px')
+        .style('overflow', 'auto');
   }
 
   /**
@@ -252,7 +333,7 @@ class ChordGraph {
         enter => enter.append('path')
           .attr('class', 'link')
           .attr('d', linkPath)
-          .attr('stroke', '#444444')
+          .attr('stroke', '#3b82f6')
           .attr('stroke-width', d => Math.max(1, Math.sqrt(d.value) * 1.5))
           .attr('fill', 'none')
           .attr('opacity', 0)
@@ -308,14 +389,14 @@ class ChordGraph {
       .on('mouseout', function(event, d) {
         // Reset chord color
         d3.select(this)
-          .attr('stroke', '#444444')
+          .attr('stroke', '#3b82f6')
           .attr('opacity', 0.4)
           .attr('stroke-width', d => Math.max(1, Math.sqrt(d.value) * 1.5));
 
         // Reset node colors
         d3.selectAll('.node')
           .select('circle')
-          .attr('stroke', '#555555')
+          .attr('stroke', '#3b82f6')
           .attr('stroke-width', 2)
           .attr('r', 20);
 
@@ -336,7 +417,7 @@ class ChordGraph {
           nodeEnter.append('circle')
             .attr('r', 20)
             .attr('fill', '#2a2a2a')
-            .attr('stroke', '#555555')
+            .attr('stroke', '#3b82f6')
             .attr('stroke-width', 2)
             .style('cursor', 'pointer');
 
@@ -395,13 +476,13 @@ class ChordGraph {
         .transition()
         .duration(200)
         .attr('r', 25)
-        .attr('stroke', '#60a5fa')
+  .attr('stroke', '#60a5fa')
         .attr('stroke-width', 4);
 
       // Highlight connected chords
       d3.selectAll('.link')
         .filter((l) => l.source === d.index || l.target === d.index)
-        .attr('stroke', '#60a5fa')
+  .attr('stroke', '#60a5fa')
         .attr('opacity', 1)
         .raise();
 
@@ -422,12 +503,12 @@ class ChordGraph {
         .transition()
         .duration(200)
         .attr('r', 20)
-        .attr('stroke', '#555555')
+  .attr('stroke', '#3b82f6')
         .attr('stroke-width', 2);
 
       // Reset chord colors
       d3.selectAll('.link')
-        .attr('stroke', '#444444')
+  .attr('stroke', '#3b82f6')
         .attr('opacity', 0.4);
 
       tooltip.style('opacity', 0);
@@ -464,6 +545,121 @@ class ChordGraph {
   }
 
   /**
+   * Set the current decade (e.g., 1960) to highlight links/nodes that co-occurred in that decade.
+   * Passing null resets visuals to the full-movie view.
+   */
+  setDecade(decade) {
+    // helper to parse a 4-digit year from various movie.year formats
+    function parseYearField(y){
+      if (!y && y !== 0) return 0;
+      const s = String(y);
+      const m = s.match(/(\d{4})/);
+      if (m) return +m[1];
+      return 0;
+    }
+
+    // If null, reset to default visuals based on overall cooccurrence
+    if (!decade) {
+      // reset links
+      d3.selectAll('.link').each(function(d){
+        try {
+          d3.select(this)
+            .transition().duration(300)
+            .attr('stroke', '#e0f2fe')
+            .attr('stroke-width', d => Math.max(1, Math.sqrt(d.value) * 1.5))
+            .style('opacity', 0.6);
+        } catch(e){}
+      });
+      // reset nodes
+      d3.selectAll('.node').each(function(d){
+        try {
+          d3.select(this).select('circle')
+            .transition().duration(300)
+            .attr('r', 20)
+            .attr('stroke', '#60a5fa')
+            .attr('stroke-width', 4)
+            .style('opacity', 0.95);
+        } catch(e){}
+      });
+      // hide popup when showing 'All'
+      try { this.hideMoviePopup(); } catch(e){}
+      return;
+    }
+
+  const startYear = +decade;
+  // Use a 5-year window (start..start+4) so setDecade updates match the timeline's 5-year steps
+  const endYear = startYear + 4;
+
+    // compute cooccurrence limited to the decade
+    const windowCo = {};
+    this.movies.forEach(m => {
+      const y = parseYearField(m.year);
+      if (!y) return;
+      if (y < startYear || y > endYear) return;
+      const t = (m.themes || []).filter(Boolean);
+      for (let i=0;i<t.length;i++){
+        for (let j=i+1;j<t.length;j++){
+          const a = t[i], b = t[j];
+          windowCo[a] = windowCo[a] || {};
+          windowCo[b] = windowCo[b] || {};
+          windowCo[a][b] = (windowCo[a][b]||0) + 1;
+          windowCo[b][a] = (windowCo[b][a]||0) + 1;
+        }
+      }
+    });
+
+    // compute max weight
+    let maxW = 0;
+    Object.keys(windowCo).forEach(a => {
+      Object.keys(windowCo[a]||{}).forEach(b => { maxW = Math.max(maxW, windowCo[a][b] || 0); });
+    });
+
+    // update links
+    d3.selectAll('.link').each(function(d){
+      try {
+        const a = d.sourceTheme || (d.source && d.source.label) || d.source;
+        const b = d.targetTheme || (d.target && d.target.label) || d.target;
+        const weight = (windowCo[a] && windowCo[a][b]) ? windowCo[a][b] : 0;
+        const opacity = weight > 0 ? 0.95 : 0.08;
+        const strokeW = weight > 0 ? Math.max(1, Math.sqrt(weight) * 1.6) : 1;
+  d3.select(this).transition().duration(300).attr('stroke-width', strokeW).style('opacity', opacity).attr('stroke', weight>0 ? '#93c5fd' : '#e0f2fe');
+      } catch(e){}
+    });
+
+    // update nodes
+    d3.selectAll('.node').each(function(d){
+      try {
+        const theme = d && d.label ? d.label : (d.id || d);
+        let has = false;
+        if (windowCo[theme]) {
+          for (const k in windowCo[theme]) { if ((windowCo[theme][k]||0) > 0) { has = true; break; } }
+        }
+        const g = d3.select(this);
+        const circle = g.select('circle');
+        if (has) {
+          circle.transition().duration(300).attr('r',24).attr('stroke','#93c5fd').attr('stroke-width',5).style('opacity',1);
+        } else {
+          circle.transition().duration(300).attr('r',20).attr('stroke','#60a5fa').attr('stroke-width',4).style('opacity',0.9);
+        }
+      } catch(e){}
+    });
+
+    // gather movies for this 5-year window and show popup
+    try {
+      const moviesInWindow = [];
+      this.movies.forEach(m => {
+        const y = parseYearField(m.year);
+        if (!y) return;
+        if (y >= startYear && y <= endYear) moviesInWindow.push(m.title + (m.year ? ` (${m.year})` : ''));
+      });
+      // sort alphabetically
+      moviesInWindow.sort((a,b)=> a.localeCompare(b));
+      if (moviesInWindow.length > 0) this.showMoviePopup(moviesInWindow, startYear);
+      else this.hideMoviePopup();
+    } catch(e){}
+  }
+
+  /**
    * Get movie titles for search/autocomplete
    */
   getMovieTitles() {
@@ -478,18 +674,6 @@ class ChordGraph {
     return movie ? movie.themes : [];
   }
 
-  /**
-   * Set decade filter and re-render
-   */
-  setDecade(decade) {
-    this.currentDecade = decade;
-    if (this.currentMovie) {
-      this.render(this.currentMovie.title, {
-        width: Math.min(1400, window.innerWidth - 100),
-        height: Math.min(1000, window.innerHeight - 100)
-      });
-    }
-  }
 }
 
 // Export for use in other files

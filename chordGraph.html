@@ -161,27 +161,31 @@
 				letter-spacing: 2px;
 			}
 			
-			/* Chord Graph Overrides */
+			/* Chord Graph Overrides - allow JS to animate colors dynamically while scrolling */
 			#chordContainer .link {
-				stroke: #444444 !important;
-				opacity: 0.4 !important;
+				/* default faint link color; JS will override stroke/stroke-width/opacity during setDecade */
+				stroke: #3b82f6;
+				opacity: 0.4;
+				transition: stroke 180ms ease, opacity 180ms ease, stroke-width 180ms ease;
 			}
-			
+
 			#chordContainer .link:hover {
-				stroke: #60a5fa !important;
-				opacity: 0.8 !important;
+				stroke: #60a5fa;
+				opacity: 0.9;
 			}
-			
+
 			#chordContainer .node circle {
-				fill: #2a2a2a !important;
-				stroke: #555555 !important;
-				stroke-width: 2 !important;
+				fill: #2a2a2a; /* keep dark fill */
+				/* node outline default (blue) - JS will animate stroke / radius */
+				stroke: #3b82f6;
+				stroke-width: 2;
+				transition: stroke 180ms ease, r 180ms ease, stroke-width 180ms ease;
 			}
-			
+
 			#chordContainer .node circle:hover {
-				fill: #3a3a3a !important;
-				stroke: #60a5fa !important;
-				stroke-width: 3 !important;
+				fill: #3a3a3a;
+				stroke: #60a5fa;
+				stroke-width: 3;
 			}
 			
 			#chordContainer .node-text {
@@ -306,7 +310,7 @@
 			<!-- Timeline Filter -->
 			<div class="timeline-container">
 				<div class="timeline-header">
-					<span class="timeline-filter-label">Filter by Decade:</span>
+					<span class="timeline-filter-label">Filter by Year Window:</span>
 					<span class="decade-value" id="decadeValue">All</span>
 				</div>
 				<div class="timeline-track" id="timelineTrack">
@@ -387,6 +391,9 @@
 								svgEl.attr('preserveAspectRatio', 'xMidYMid meet')
 									.style('display', 'block')
 									.style('margin', '0 auto');
+
+								// initialize decade visuals (show All)
+								if (cg && typeof cg.setDecade === 'function') cg.setDecade(null);
 							} catch(e) {}
 						}, 100);
 					} catch(e) {
@@ -394,13 +401,13 @@
 					}
 				}
 
-				// Timeline functionality
+				// Timeline functionality (5-year windows)
 				const minYear = 1950;
 				const maxYear = 2020;
-				const yearStep = 10; // Decade steps
-				const decades = [];
+				const yearStep = 5; // 5-year windows
+				const years = [];
 				for (let y = minYear; y <= maxYear; y += yearStep) {
-					decades.push(y);
+					years.push(y);
 				}
 
 				// Decade descriptions
@@ -443,30 +450,29 @@
 					}
 				};
 
-				function updateDecadeDisplay(decade, skipAnimation = false) {
+				function updateDecadeDisplay(startYear, skipAnimation = false) {
 					const decadeValue = document.getElementById('decadeValue');
 					const decadeTitle = document.getElementById('decadeTitle');
 					const sidebarText = document.getElementById('sidebarText');
 
-					const content = decadeContent[decade];
-
-					if (!decade) {
+					let content = null;
+					if (!startYear) {
 						decadeValue.textContent = 'All';
+						content = decadeContent[null];
 					} else {
-						decadeValue.textContent = `${decade}s`;
+						decadeValue.textContent = `${startYear}-${startYear + yearStep - 1}`;
+						// try to reuse the nearest decade description (e.g., 1960s) if available
+						const decadeKey = Math.floor(startYear / 10) * 10;
+						content = decadeContent[decadeKey] || decadeContent[null];
 					}
 
 					if (content) {
 						if (skipAnimation) {
-							// No animation for initial load
 							decadeTitle.textContent = content.title;
 							sidebarText.textContent = content.text;
 						} else {
-							// Fade out
 							decadeTitle.style.opacity = '0';
 							sidebarText.style.opacity = '0';
-
-							// Update content and fade back in
 							setTimeout(() => {
 								decadeTitle.textContent = content.title;
 								sidebarText.textContent = content.text;
@@ -485,6 +491,18 @@
 					let dragging = false;
 					const track = document.getElementById('timelineTrack');
 					const handle = document.getElementById('timelineHandle');
+
+					// Track the last pointer type (mouse / touch / pen). We only enable wheel-based
+					// year-scrub when the pointer is a mouse (so trackpad gestures keep default behavior).
+					let lastPointerType = null;
+					// Throttle wheel stepping to avoid overly sensitive wheels. We'll allow one step
+					// per `wheelStepCooldownMs` and require a minimum delta magnitude.
+					let lastWheelStep = 0;
+					const wheelStepCooldownMs = 140; // milliseconds between allowed wheel steps
+					const wheelDeltaThreshold = 6; // minimum delta to count as a step
+					const chordEl = document.getElementById('chordContainer');
+					track.addEventListener('pointerover', (e) => { lastPointerType = e.pointerType; });
+					if (chordEl) chordEl.addEventListener('pointerover', (e) => { lastPointerType = e.pointerType; });
 
 					// Click on track to jump
 					track.addEventListener('click', (e) => {
@@ -511,20 +529,53 @@
 						updateTimelineFromX(x, rect.width);
 					});
 
+					// Allow wheel to scrub left/right over the timeline track or the main viz in discrete steps
+					function wheelScrub(e){
+						// Only intercept wheel gestures when the pointer was last a mouse.
+						// This avoids hijacking trackpad gestures (two-finger scroll) which users expect to scroll the page.
+						if (lastPointerType !== 'mouse') return; // let default browser handling occur for non-mouse pointers
+						const now = performance.now();
+						// compute a sensible delta magnitude (prefer horizontal if present)
+						const rawDelta = Math.abs(e.deltaX) > 0 ? e.deltaX : e.deltaY;
+						const mag = Math.abs(rawDelta || 0);
+						// ignore very small deltas
+						if (mag < wheelDeltaThreshold) return;
+						// throttle rapid-fire wheel events
+						if (now - lastWheelStep < wheelStepCooldownMs) return;
+						lastWheelStep = now;
+
+						// For mouse wheel we always use it to cycle through the year windows (no zoom)
+						e.preventDefault();
+						const rect = track.getBoundingClientRect();
+						const totalSteps = years.length + 1; // +1 for All
+						let currentPercent = 0;
+						if (handle.style.left && handle.style.left.indexOf('%')>-1) currentPercent = parseFloat(handle.style.left)/100;
+						else currentPercent = (handle.offsetLeft || 0) / rect.width;
+						let currentIndex = Math.round(currentPercent * (totalSteps - 1));
+						// Decide direction: positive delta -> move right/forward
+						const dir = (rawDelta || 0) > 0 ? 1 : -1;
+						let newIndex = Math.max(0, Math.min(totalSteps - 1, currentIndex + dir));
+						const newX = (newIndex / (totalSteps - 1)) * rect.width;
+						updateTimelineFromX(newX, rect.width);
+					}
+
+					track.addEventListener('wheel', wheelScrub, {passive:false});
+					if (chordEl) chordEl.addEventListener('wheel', wheelScrub, {passive:false});
+
 					function updateTimelineFromX(x, width) {
 						if (x < 0) x = 0;
 						if (x > width) x = width;
 						const progress = x / width;
 
-						// Map progress to decades (0 = "All", then 1950s, 1960s, etc.)
-						const totalSteps = decades.length + 1; // +1 for "All"
+						// Map progress to 5-year windows (0 = "All", then 1950, 1955, ...)
+						const totalSteps = years.length + 1; // +1 for "All"
 						const stepIndex = Math.round(progress * (totalSteps - 1));
 
-						let currentDecade;
+						let currentStartYear;
 						if (stepIndex === 0) {
-							currentDecade = null; // "All"
+							currentStartYear = null; // "All"
 						} else {
-							currentDecade = decades[stepIndex - 1];
+							currentStartYear = years[stepIndex - 1];
 						}
 
 						// Update handle position
@@ -532,8 +583,8 @@
 						handle.style.left = (handleProgress * 100) + '%';
 
 						// Update display and filter
-						updateDecadeDisplay(currentDecade);
-						cg.setDecade(currentDecade);
+						updateDecadeDisplay(currentStartYear);
+						cg.setDecade(currentStartYear);
 					}
 				})();
 			})();
