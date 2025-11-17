@@ -498,8 +498,8 @@
 					// Throttle wheel stepping to avoid overly sensitive wheels. We'll allow one step
 					// per `wheelStepCooldownMs` and require a minimum delta magnitude.
 					let lastWheelStep = 0;
-					const wheelStepCooldownMs = 140; // milliseconds between allowed wheel steps
-					const wheelDeltaThreshold = 6; // minimum delta to count as a step
+					const wheelStepCooldownMs = 120; // milliseconds between allowed wheel steps (smoother, less sensitive)
+					const wheelDeltaThreshold = 5; // minimum delta to count as a step (smoother, less sensitive)
 					const chordEl = document.getElementById('chordContainer');
 					track.addEventListener('pointerover', (e) => { lastPointerType = e.pointerType; });
 					if (chordEl) chordEl.addEventListener('pointerover', (e) => { lastPointerType = e.pointerType; });

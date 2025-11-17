@@ -470,48 +470,62 @@ class ChordGraph {
           )
       );
 
-    // Node hover interactions
-    node.on('mouseover', function(event, d) {
-      d3.select(this).select('circle')
+    // Node hover interactions — show movie popup for movies in this theme and window
+    node.on('mouseover', (event, d) => {
+      d3.select(event.currentTarget).select('circle')
         .transition()
         .duration(200)
         .attr('r', 25)
-  .attr('stroke', '#60a5fa')
+        .attr('stroke', '#60a5fa')
         .attr('stroke-width', 4);
 
       // Highlight connected chords
       d3.selectAll('.link')
         .filter((l) => l.source === d.index || l.target === d.index)
-  .attr('stroke', '#60a5fa')
+        .attr('stroke', '#60a5fa')
         .attr('opacity', 1)
         .raise();
 
-      // Count connections
-      const connections = links.filter(l =>
-        l.source === d.index || l.target === d.index
-      ).length;
-
-      tooltip
-        .html(`
-          <strong style="color: #60a5fa;">${d.label}</strong><br/>
-          ${connections} connection${connections !== 1 ? 's' : ''} to other themes
-        `)
-        .style('opacity', 1);
+      // Find movies in the current window that have this theme
+      const theme = d.label;
+      let startYear = null;
+      if (this.currentDecade) startYear = +this.currentDecade;
+      let endYear = startYear ? startYear + 4 : null;
+      // helper to parse a 4-digit year from various movie.year formats
+      function parseYearField(y){
+        if (!y && y !== 0) return 0;
+        const s = String(y);
+        const m = s.match(/(\d{4})/);
+        if (m) return +m[1];
+        return 0;
+      }
+      const moviesForTheme = this.movies.filter(m => {
+        if (!m.themes.includes(theme)) return false;
+        if (startYear !== null) {
+          const y = parseYearField(m.year);
+          if (!y || y < startYear || y > endYear) return false;
+        }
+        return true;
+      }).map(m => m.title + (m.year ? ` (${m.year})` : ''));
+      // sort alphabetically
+      moviesForTheme.sort((a,b)=> a.localeCompare(b));
+      if (moviesForTheme.length > 0) this.showMoviePopup(moviesForTheme, startYear);
+      else this.hideMoviePopup();
     })
-    .on('mouseout', function(event, d) {
-      d3.select(this).select('circle')
+    .on('mouseout', (event, d) => {
+      d3.select(event.currentTarget).select('circle')
         .transition()
         .duration(200)
         .attr('r', 20)
-  .attr('stroke', '#3b82f6')
+        .attr('stroke', '#3b82f6')
         .attr('stroke-width', 2);
 
       // Reset chord colors
       d3.selectAll('.link')
-  .attr('stroke', '#3b82f6')
+        .attr('stroke', '#3b82f6')
         .attr('opacity', 0.4);
 
-      tooltip.style('opacity', 0);
+      this.hideMoviePopup();
     });
 
     // Return stats for display
@@ -644,19 +658,8 @@ class ChordGraph {
       } catch(e){}
     });
 
-    // gather movies for this 5-year window and show popup
-    try {
-      const moviesInWindow = [];
-      this.movies.forEach(m => {
-        const y = parseYearField(m.year);
-        if (!y) return;
-        if (y >= startYear && y <= endYear) moviesInWindow.push(m.title + (m.year ? ` (${m.year})` : ''));
-      });
-      // sort alphabetically
-      moviesInWindow.sort((a,b)=> a.localeCompare(b));
-      if (moviesInWindow.length > 0) this.showMoviePopup(moviesInWindow, startYear);
-      else this.hideMoviePopup();
-    } catch(e){}
+    // Remove automatic popup on scroll — only show on node hover now
+    try { this.hideMoviePopup(); } catch(e){}
   }
 
   /**
