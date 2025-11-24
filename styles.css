@@ -1,7 +1,7 @@
 html, body {
   margin: 0;
   height: 100%;
-  background: #101010;
+  background: #1D1D1D;
   overflow: hidden;
   color: #e5e7eb;
   font-family: 'Courier New', monospace;
@@ -627,7 +627,7 @@ body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circl
   height: 60px;
   display: flex;
   gap: 8px;
-  z-index: 999999;        /* ← VERY IMPORTANT */
+  z-index: 2;        /* ← VERY IMPORTANT */
   pointer-events: auto;   /* ← ensure clicks reach the bars */
 }
 
