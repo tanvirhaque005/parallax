@@ -626,7 +626,7 @@ body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circl
   left: 24px;
   height: 60px;
   display: flex;
-  gap: 8px;
+  gap: 2px;
   z-index: 2;        /* ← VERY IMPORTANT */
   pointer-events: auto;   /* ← ensure clicks reach the bars */
 }
@@ -652,7 +652,7 @@ body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circl
 
 
 .book-bar {
-  width: 10px;
+  width: 4px;
   height: 28px;
   background: rgba(255, 255, 255, 0.45);
   border-radius: 2px;

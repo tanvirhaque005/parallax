@@ -3,21 +3,25 @@ import * as THREE from 'https://unpkg.com/three@0.164.0/build/three.module.js';
 /* -----------------------------------------------------------
    BOOK METADATA (now sorted by RELEASE YEAR)
 ----------------------------------------------------------- */
-let booksMeta = [
-  { id: 6, title: 'Metropolis', director: 'Fritz Lang', year: 1927, depicted: 2026, rating: 8.3, tropes: ['Robots', 'Dystopia'], location: 'Berlin, Germany', blurb: 'In a futuristic city sharply divided between the working class and the city planners, the son of the city\'s mastermind falls in love with a working-class prophet.' },
+// let booksMeta = [
+//   { id: 6, title: 'Metropolis', director: 'Fritz Lang', year: 1927, depicted: 2026, rating: 8.3, tropes: ['Robots', 'Dystopia'], location: 'Berlin, Germany', blurb: 'In a futuristic city sharply divided between the working class and the city planners, the son of the city\'s mastermind falls in love with a working-class prophet.' },
 
-  { id: 1, title: '2001 A Space Odyssey', director: 'Stanley Kubrick', year: 1968, depicted: 2001, rating: 8.3, tropes: ['AI', 'Space'], location: 'Los Angeles, CA, USA', blurb: 'After discovering a mysterious artifact buried beneath the Lunar surface, humanity sets off on a quest to Saturn with the sentient computer HAL to uncover its origins.' },
+//   { id: 1, title: '2001 A Space Odyssey', director: 'Stanley Kubrick', year: 1968, depicted: 2001, rating: 8.3, tropes: ['AI', 'Space'], location: 'Los Angeles, CA, USA', blurb: 'After discovering a mysterious artifact buried beneath the Lunar surface, humanity sets off on a quest to Saturn with the sentient computer HAL to uncover its origins.' },
 
-  { id: 2, title: 'Blade Runner', director: 'Ridley Scott', year: 1982, depicted: 2019, rating: 8.1, tropes: ['Dystopia', 'AI'], location: 'Los Angeles, CA, USA', blurb: 'A blade runner must pursue and terminate four replicants who stole a ship and returned to Earth to find their creator.' },
+//   { id: 2, title: 'Blade Runner', director: 'Ridley Scott', year: 1982, depicted: 2019, rating: 8.1, tropes: ['Dystopia', 'AI'], location: 'Los Angeles, CA, USA', blurb: 'A blade runner must pursue and terminate four replicants who stole a ship and returned to Earth to find their creator.' },
 
-  { id: 5, title: 'Total Recall', director: 'Paul Verhoeven', year: 1990, depicted: 2084, rating: 7.5, tropes: ['Memory', 'Mars'], location: 'Los Angeles, CA, USA', blurb: 'A man goes to have virtual vacation memories of Mars implanted in his mind, but an unexpected series of events forces him to question reality.' },
+//   { id: 5, title: 'Total Recall', director: 'Paul Verhoeven', year: 1990, depicted: 2084, rating: 7.5, tropes: ['Memory', 'Mars'], location: 'Los Angeles, CA, USA', blurb: 'A man goes to have virtual vacation memories of Mars implanted in his mind, but an unexpected series of events forces him to question reality.' },
 
-  { id: 4, title: 'Gattaca', director: 'Andrew Niccol', year: 1997, depicted: 2150, rating: 7.8, tropes: ['Genetic Engineering', 'Dystopia'], location: 'Los Angeles, CA, USA', blurb: 'A genetically inferior man assumes the identity of a superior one in order to pursue his lifelong dream of space travel.' },
+//   { id: 4, title: 'Gattaca', director: 'Andrew Niccol', year: 1997, depicted: 2150, rating: 7.8, tropes: ['Genetic Engineering', 'Dystopia'], location: 'Los Angeles, CA, USA', blurb: 'A genetically inferior man assumes the identity of a superior one in order to pursue his lifelong dream of space travel.' },
 
-  { id: 7, title: 'The Matrix', director: 'The Wachowskis', year: 1999, depicted: 2199, rating: 8.7, tropes: ['Virtual Reality', 'Free Will'], location: 'Sydney, Australia', blurb: 'Neo discovers that his reality is a simulation created by an evil cyber-intelligence.' },
+//   { id: 7, title: 'The Matrix', director: 'The Wachowskis', year: 1999, depicted: 2199, rating: 8.7, tropes: ['Virtual Reality', 'Free Will'], location: 'Sydney, Australia', blurb: 'Neo discovers that his reality is a simulation created by an evil cyber-intelligence.' },
 
-  { id: 3, title: 'Minority Report', director: 'Steven Spielberg', year: 2002, depicted: 2054, rating: 7.6, tropes: ['Dystopia', 'Surveillance'], location: 'Los Angeles, CA, USA', blurb: 'In a future where a special police unit can arrest people before they commit crimes, an officer is accused of a future murder.' },
-];
+//   { id: 3, title: 'Minority Report', director: 'Steven Spielberg', year: 2002, depicted: 2054, rating: 7.6, tropes: ['Dystopia', 'Surveillance'], location: 'Los Angeles, CA, USA', blurb: 'In a future where a special police unit can arrest people before they commit crimes, an officer is accused of a future murder.' },
+  
+// ];
+
+import booksMeta from "./movies_data_for_shelf.js"; // note this is sorted (id is sorted based on release yr)
+console.log(booksMeta)
 
 /* -----------------------------------------------------------
    GLOBAL DOM REFERENCES
@@ -124,7 +128,7 @@ const spacing = BOOK_W;
 const startX = -((booksMeta.length - 1) * spacing) / 2;
 
 const books = booksMeta.map((meta, i) =>
-  createBook(startX + i * spacing, palette[i], meta)
+  createBook(startX + i * spacing, palette[i % 7], meta)
 );
 
 /* -----------------------------------------------------------
@@ -193,8 +197,8 @@ scene.add(shelfGroup);
 let shelfOffset = 0;
 let targetShelfOffset = 0;
 
-const MAX_SCROLL_LEFT = 5;
-const MAX_SCROLL_RIGHT = -5;
+const MAX_SCROLL_LEFT = 95;
+const MAX_SCROLL_RIGHT = -95;
 
 const scrollLeftBtn = document.getElementById('scrollLeft');
 const scrollRightBtn = document.getElementById('scrollRight');
@@ -345,7 +349,7 @@ function rebuildOverlayForIndex() {
   titleEl.textContent = meta.title;
   blurbEl.textContent = meta.blurb;
   directorEl.textContent = meta.director;
-  releasedEl.textContent = `${meta.year}, ${meta.location}`;
+  releasedEl.textContent = `${meta.year}`;
   depictedEl.textContent = `${meta.depicted}, Washington DC, USA`;
 
   const tags = meta.tropes || [];
@@ -353,7 +357,7 @@ function rebuildOverlayForIndex() {
 
   motifsContainer.innerHTML = tags.map(t => `
     <div class="motif-circle" data-motif="${t}"
-         onclick="location.href='/chordGraph.html?movie=${encodeURIComponent(meta.title)}'">
+         onclick="location.href='/chordGraph.html'">
       ${t}
     </div>
   `).join('');
@@ -724,33 +728,35 @@ function updateBarForCenteredBook() {
 }
 
 /* -----------------------------------------------------------
-   SINUSOIDAL WAVE EFFECT
+   FULL-WIDTH SINUSOIDAL WAVE EFFECT
 ----------------------------------------------------------- */
 
-const BASE_HEIGHT = 28;
-const MAX_HEIGHT = 50;
-const MIN_HEIGHT = 10;
-const WAVE_WIDTH = 5;
+const BASE_HEIGHT = 12;       // height at edges
+const PEAK_HEIGHT = 70;       // tallest at hovered bar
 
 function applyWaveEffect(centerIndex) {
   const bars = document.querySelectorAll(".book-bar");
   const total = bars.length;
 
   for (let i = 0; i < total; i++) {
+
+    // absolute distance from hovered bar
     const dist = Math.abs(i - centerIndex);
 
-    if (dist > WAVE_WIDTH) {
-      bars[i].style.height = MIN_HEIGHT + "px";
-      continue;
-    }
+    // normalize into [0, 1]
+    const t = dist / (total - 1);
 
-    const t = dist / WAVE_WIDTH;
-    const wave = Math.cos(t * Math.PI) * 0.5 + 0.5;
+    // FULL-WIDTH cosine wave (peak in middle, edges low)
+    // t = 0 → peak = 1
+    // t = 1 → edge = 0
+    const wave = Math.cos(1.5 * t * Math.PI) * 0.75  / (1+t**2) + 0.5;
 
-    const height = MIN_HEIGHT + wave * (MAX_HEIGHT - MIN_HEIGHT);
-    bars[i].style.height = height + "px";
+    const height = BASE_HEIGHT + wave * (PEAK_HEIGHT - BASE_HEIGHT);
+
+    bars[i].style.height = `${height}px`;
   }
 }
+
 
 function resetWave() {
   document.querySelectorAll(".book-bar").forEach(bar => {
