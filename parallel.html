@@ -5,7 +5,7 @@
   <title>Prediction Timeline</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="menu-component.css">
+  <link rel="stylesheet" href="navigation-menu.css">
 
   <style>
     :root {
@@ -128,27 +128,8 @@
 </head>
 
 <body>
-
-  <!-- MENU BUTTON -->
-  <div class="top-nav">
-    <button class="menu-button" id="menuButton">MENU</button>
-  </div>
-
-  <div class="menu-overlay" id="menuOverlay"></div>
-
-  <div class="menu-sidebar" id="menuSidebar">
-    <div class="menu-header">
-      <button class="menu-close" id="menuClose">MENU</button>
-    </div>
-    <ul class="menu-items">
-      <li><a href="aboutPage.html">0. ABOUT</a></li>
-      <li><a href="index.html">1. Library</a></li>
-      <li><a href="chordGraph.html">2. Technological Network</a></li>
-      <li><a href="parallel.html">3. Prediction Timeline</a></li>
-      <li><a href="morph.html">4. World Building</a></li>
-      <li><a href="#">5. Reflection</a></li>
-    </ul>
-  </div>
+  <!-- Navigation Menu -->
+  <div class="navigation-menu" id="navigationMenu"></div>
 
   <!-- RETURN -->
   <div class="page-header">
@@ -227,17 +208,7 @@
 
   <script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js"></script>
   <script type="module" src="parallel.js"></script>
-
-  <script>
-    /* MENU */
-    const btn = document.getElementById('menuButton');
-    const closeBtn = document.getElementById('menuClose');
-    const side = document.getElementById('menuSidebar');
-    const overlay = document.getElementById('menuOverlay');
-
-    btn.onclick = () => { side.classList.add('active'); overlay.classList.add('active'); };
-    closeBtn.onclick = overlay.onclick = () => { side.classList.remove('active'); overlay.classList.remove('active'); };
-  </script>
+  <script src="navigation-menu.js"></script>
 
 </body>
 </html>

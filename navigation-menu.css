@@ -1,0 +1,392 @@
+/* ============================================
+   NAVIGATION MENU COMPONENT
+   Top-right menu with auto-collapse and hover expand
+   ============================================ */
+
+.navigation-menu {
+  position: fixed;
+  top: 40px;
+  right: 40px;
+  z-index: 10000;
+  font-family: 'Courier New', monospace;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  opacity: 0;
+  animation: menuFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Progress line (vertical bar) */
+.nav-progress-line {
+  width: 2px;
+  height: 0;
+  background: linear-gradient(to bottom, 
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.3) 100%);
+  position: relative;
+  transition: height 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s ease,
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  animation: lineGrow 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards,
+             lineSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  will-change: height, transform, opacity;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+@keyframes lineGrow {
+  from {
+    height: 0;
+  }
+  to {
+    height: 200px;
+  }
+}
+
+@keyframes lineSlideIn {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes lineSlideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(20px);
+    opacity: 0.7;
+  }
+}
+
+/* Blue dot indicator */
+.nav-progress-dot {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  width: 12px;
+  height: 12px;
+  background-color: #4a9eff;
+  border-radius: 0;
+  transition: top 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+              transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease;
+  opacity: 1;
+  box-shadow: 0 0 0 0 rgba(74, 158, 255, 0.4);
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(74, 158, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 8px 4px rgba(74, 158, 255, 0.3);
+  }
+}
+
+.nav-progress-dot.animate-in {
+  animation: dotAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+             dotPulse 2s ease-in-out 0.6s infinite;
+}
+
+@keyframes dotAppear {
+  from {
+    transform: translateX(-50%) scale(0) rotate(0deg);
+  }
+  to {
+    transform: translateX(-50%) scale(1) rotate(180deg);
+  }
+}
+
+/* Menu items container */
+.nav-menu-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 1;
+  transform: translateX(0);
+  width: auto;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+/* Collapsed state - hide menu items */
+.navigation-menu.collapsed .nav-menu-items {
+  opacity: 0;
+  transform: translateX(20px) scale(0.95);
+  pointer-events: none;
+  width: 0;
+  overflow: hidden;
+}
+
+.navigation-menu.collapsed .nav-progress-line {
+  height: 200px;
+  background: linear-gradient(to bottom, 
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.5) 100%);
+  transform: translateX(20px);
+  opacity: 0.7;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Default expanded state - line slides left when menu is expanded */
+.navigation-menu:not(.collapsed) .nav-progress-line {
+  transform: translateX(-15px);
+  opacity: 1;
+}
+
+.navigation-menu.collapsed .nav-progress-dot {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+/* Collapsed state - hide all menu items */
+.navigation-menu.collapsed .nav-menu-item {
+  opacity: 0;
+  transform: translateX(40px) scale(0.9);
+  pointer-events: none;
+}
+
+/* Menu item */
+.nav-menu-item {
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  transform: translateX(30px);
+  animation: itemSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@keyframes itemSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Stagger animation for each menu item */
+.nav-menu-item:nth-child(1) { animation-delay: 0.4s; }
+.nav-menu-item:nth-child(2) { animation-delay: 0.5s; }
+.nav-menu-item:nth-child(3) { animation-delay: 0.6s; }
+.nav-menu-item:nth-child(4) { animation-delay: 0.7s; }
+.nav-menu-item:nth-child(5) { animation-delay: 0.8s; }
+.nav-menu-item:nth-child(6) { animation-delay: 0.9s; }
+
+.nav-menu-item.collapsing {
+  animation: itemSlideOut 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes itemSlideOut {
+  to {
+    opacity: 0;
+    transform: translateX(20px) scale(0.95);
+  }
+}
+
+.nav-menu-item.expanding {
+  animation: itemSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.nav-menu-item a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 1px;
+  display: block;
+  padding: 4px 0;
+  transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              text-shadow 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+}
+
+.nav-menu-item a::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%) scaleX(0);
+  width: 4px;
+  height: 2px;
+  background-color: #4a9eff;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: left;
+}
+
+.nav-menu-item a:hover {
+  color: #4a9eff;
+  transform: translateX(-5px);
+  text-shadow: 0 0 8px rgba(74, 158, 255, 0.5);
+}
+
+.nav-menu-item a:hover::before {
+  transform: translateY(-50%) scaleX(1);
+}
+
+/* Active/current page */
+.nav-menu-item.active a {
+  color: #4a9eff;
+  text-shadow: 0 0 12px rgba(74, 158, 255, 0.6);
+  font-weight: bold;
+}
+
+.nav-menu-item.active a::before {
+  transform: translateY(-50%) scaleX(1);
+  width: 6px;
+  height: 3px;
+  box-shadow: 0 0 6px rgba(74, 158, 255, 0.8);
+}
+
+/* Hover state - expand menu with staggered slide-out */
+.navigation-menu:hover .nav-menu-items {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+  width: auto;
+  overflow: visible;
+}
+
+/* Slide left the progress line on hover - override collapsed state */
+.navigation-menu:hover .nav-progress-line {
+  transform: translateX(-15px) !important;
+  opacity: 1 !important;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s ease;
+}
+
+/* Staggered slide-out animation for each item on hover */
+.navigation-menu:hover .nav-menu-item {
+  animation: itemSlideOutHover 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  pointer-events: auto;
+}
+
+.navigation-menu:hover .nav-menu-item:nth-child(1) {
+  animation-delay: 0.05s !important;
+}
+
+.navigation-menu:hover .nav-menu-item:nth-child(2) {
+  animation-delay: 0.1s !important;
+}
+
+.navigation-menu:hover .nav-menu-item:nth-child(3) {
+  animation-delay: 0.15s !important;
+}
+
+.navigation-menu:hover .nav-menu-item:nth-child(4) {
+  animation-delay: 0.2s !important;
+}
+
+.navigation-menu:hover .nav-menu-item:nth-child(5) {
+  animation-delay: 0.25s !important;
+}
+
+.navigation-menu:hover .nav-menu-item:nth-child(6) {
+  animation-delay: 0.3s !important;
+}
+
+@keyframes itemSlideOutHover {
+  from {
+    opacity: 0;
+    transform: translateX(40px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes itemSlideInCollapse {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(40px) scale(0.9);
+  }
+}
+
+.navigation-menu:hover .nav-menu-item.collapsing {
+  animation: itemSlideOutHover 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.navigation-menu:hover .nav-progress-dot {
+  opacity: 1;
+  transform: translateX(-50%) scale(1.1);
+  box-shadow: 0 0 12px 6px rgba(74, 158, 255, 0.4);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease;
+}
+
+.navigation-menu:hover .nav-progress-line {
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+  transition: box-shadow 0.3s ease;
+}
+
+/* When menu is not collapsed, ensure items are visible */
+.navigation-menu:not(.collapsed) .nav-menu-item {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.navigation-menu:not(.collapsed) .nav-menu-item.collapsing {
+  animation: none;
+}
+
+/* Smooth transitions for all states */
+.navigation-menu {
+  transition: all 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navigation-menu {
+    top: 20px;
+    right: 20px;
+  }
+  
+  .nav-progress-line {
+    height: 180px;
+  }
+  
+  .nav-menu-item a {
+    font-size: 12px;
+  }
+}
+
