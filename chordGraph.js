@@ -528,6 +528,44 @@ class ChordGraph {
       this.hideMoviePopup();
     });
 
+    // Add glow effect and navigation for motif bubbles
+    const motifBubbles = document.querySelectorAll('.motif-bubble');
+    motifBubbles.forEach(bubble => {
+        bubble.addEventListener('click', () => {
+            bubble.classList.add('glow');
+            setTimeout(() => {
+                bubble.classList.remove('glow');
+            }, 2000);
+
+            // Redirect to chord graph
+            window.location.href = 'chordGraph.html';
+        });
+    });
+
+    // CSS for glow effect
+    const style = document.createElement('style');
+    style.textContent = `
+        .motif-bubble {
+            background-color: #444;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .motif-bubble:hover {
+            background-color: #666;
+        }
+
+        .motif-bubble.glow {
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+    `;
+    document.head.appendChild(style);
+
     // Return stats for display
     return {
       themeCount: nodes.length,

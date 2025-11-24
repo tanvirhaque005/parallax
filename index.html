@@ -5,31 +5,24 @@
     <title>3D Bookshelf (Full-Screen Details)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="./styles.css" />
-    <link rel="stylesheet" href="menu-component.css">
   </head>
   <body>
-
-    <!-- Menu Button (top right corner) -->
-    <button class="menu-button" id="menuButton">MENU</button>
-
-    <!-- Dark Overlay (appears when menu is open) -->
-    <div class="menu-overlay" id="menuOverlay"></div>
-
-    <!-- Menu Sidebar (slides in from right) -->
-    <div class="menu-sidebar" id="menuSidebar">
-      <div class="menu-header">
-        <button class="menu-close" id="menuClose">MENU</button>
-      </div>
-      <ul class="menu-items">
-        <li><a href="aboutPage.html">0. ABOUT</a></li>
-        <li><a href="bookshelf.html">1. Library</a></li>
-        <li><a href="chordGraph.html">2. Technological Network</a></li>
-        <li><a href="parallel.html">3. Prediction Timeline</a></li>
-        <li><a href="morph.html">4. World Building</a></li>
-        <li><a href="#">5. Reflection</a></li>
-      </ul>
-    </div>
-
+    <script>
+      // // Redirect to chordGraph landing page unless this page was opened from the chord graph
+      // (function(){
+      //   try {
+      //     const params = new URLSearchParams(window.location.search);
+      //     // Only redirect to chordGraph if we don't have a 'from' param AND we don't have a 'movie' param
+      //     // This lets links like bookshelf.html?movie=TITLE open the shelf without being redirected back to the graph.
+      //     if (!params.has('from') && !params.has('movie')) {
+      //       // replace to avoid polluting history
+      //       window.location.replace('chordGraph.html');
+      //     }
+      //   } catch (e) {
+      //     // ignore errors (e.g., file:// contexts)
+      //   }
+      // })();
+    </script>
     <div id="controls">
       <button id="scrollLeft" aria-label="Scroll left">⟵</button>
       <button id="scrollRight" aria-label="Scroll right">⟶</button>
@@ -108,9 +101,7 @@
               <h2 class="motifs-title">Technological Motifs</h2>
               <p class="motifs-desc">Click on any motif to explore how it connects to other films across decades.</p>
               <div class="motifs-container" id="motifsContainer">
-        <button class="motif-bubble" id="geneticBubble">Genetic Engineering</button>
-        <button class="motif-bubble" id="dystopiaBubble">Dystopia</button>
-        <!-- Motif circles will be inserted here -->
+                <!-- Motif circles will be inserted here -->
               </div>
             </div>
 
@@ -118,85 +109,13 @@
              <div class="bottomBox">
             <div class="actions">
               <button class="btn back-btn" id="backToShelf">← Back to Library</button>
+              <a class="btn" id="toChordGraph" href="./chordGraph.html?from=bookshelf.html" style="margin-left:8px; text-decoration:none;">Chord Graph</a>
             </div>
             </div>
           </div>
       </div>
     </div>
-    
 
-    <script type="module" src="./bookshelf.js"></script>
-    <script>
-      // Get menu elements
-      const menuButton = document.getElementById('menuButton');
-      const menuClose = document.getElementById('menuClose');
-      const menuSidebar = document.getElementById('menuSidebar');
-      const menuOverlay = document.getElementById('menuOverlay');
-
-      // Open menu function
-      function openMenu() {
-        menuSidebar.classList.add('active');
-        menuOverlay.classList.add('active');
-      }
-
-      // Close menu function
-      function closeMenu() {
-        menuSidebar.classList.remove('active');
-        menuOverlay.classList.remove('active');
-      }
-
-      // Event listeners
-      menuButton.addEventListener('click', openMenu);
-      menuClose.addEventListener('click', closeMenu);
-      menuOverlay.addEventListener('click', closeMenu);
-
-      // Optional: Close menu when pressing Escape key
-      document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && menuSidebar.classList.contains('active')) {
-          closeMenu();
-        }
-      });
-
-      // Add glow effect and navigation for motif bubbles in bookshelf
-      function setupMotifBubble(id) {
-        const bubble = document.getElementById(id);
-        if (bubble) {
-          bubble.onclick = function(e) {
-            e.stopPropagation();
-            bubble.classList.add('glow');
-            setTimeout(() => {
-              bubble.classList.remove('glow');
-              window.location.href = 'chordGraph.html';
-            }, 600);
-          };
-        }
-      }
-      setupMotifBubble('geneticBubble');
-      setupMotifBubble('dystopiaBubble');
-
-      // CSS for glow effect
-      const style = document.createElement('style');
-      style.textContent = `
-        .motif-bubble {
-          background-color: #444;
-          color: #fff;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 20px;
-          cursor: pointer;
-          margin: 5px;
-          font-size: 15px;
-          box-shadow: 0 0 0 rgba(255,255,255,0);
-          transition: background-color 0.3s, box-shadow 0.3s;
-        }
-        .motif-bubble:hover {
-          background-color: #666;
-        }
-        .motif-bubble.glow {
-          box-shadow: 0 0 25px 8px rgba(255,255,255,0.8);
-        }
-      `;
-      document.head.appendChild(style);
-    </script>
+    <script type="module" src="./index.js"></script>
   </body>
 </html>

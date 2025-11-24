@@ -559,8 +559,8 @@ class Timeline {
         this.hideTooltip();
         rect.attr('stroke-width', 2);
       }).on('click', () => {
-        // Navigate to index.html with movie parameter
-        window.location.href = `/index.html?movie=${encodeURIComponent(movie.title)}`;
+        // Navigate to bookshelf.html with movie parameter
+        window.location.href = `/bookshelf.html?movie=${encodeURIComponent(movie.title)}`;
       });
     });
   }

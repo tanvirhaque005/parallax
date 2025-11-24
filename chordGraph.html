@@ -265,6 +265,37 @@
 				cursor: grabbing;
 				background: #60a5fa;
 			}
+
+			/* Motif Bubbles */
+			.motif-bubbles {
+				position: fixed;
+				bottom: 40px;
+				left: 40px;
+				z-index: 50;
+				display: flex;
+				gap: 12px;
+			}
+			
+			.motif-bubble {
+				background-color: #2a2a2a;
+				color: #cccccc;
+				border: 1px solid #444444;
+				padding: 10px 20px;
+				font-family: 'Courier New', monospace;
+				font-size: 12px;
+				letter-spacing: 1.5px;
+				cursor: pointer;
+				transition: all 0.3s;
+				text-decoration: none;
+				text-transform: uppercase;
+				border-radius: 4px;
+			}
+			
+			.motif-bubble:hover {
+				background-color: #3a3a3a;
+				border-color: #666666;
+				color: #ffffff;
+			}
 		</style>
 	</head>
 	<body>
@@ -283,7 +314,7 @@
 			</div>
 			<ul class="menu-items">
 				<li><a href="aboutPage.html">0. ABOUT</a></li>
-				<li><a href="index.html">1. Library</a></li>
+				<li><a href="bookshelf.html">1. Library</a></li>
 				<li><a href="chordGraph.html">2. Technological Network</a></li>
 				<li><a href="parallel.html">3. Prediction Timeline</a></li>
 				<li><a href="morph.html">4. World Building</a></li>
@@ -327,6 +358,11 @@
 		<!-- Main Visualization -->
 		<div id="chordContainer">
 			<div class="loading">Loading visualization...</div>
+		</div>
+
+		<!-- Motif Bubbles -->
+		<div class="motif-bubbles">
+			<!-- Removed motif bubbles from chord graph -->
 		</div>
 
 		<script src="./chordGraph.js"></script>

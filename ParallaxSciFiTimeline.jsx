@@ -262,7 +262,7 @@ pnpm create vite@latest chrono-archive --template react
 cd chrono-archive
 pnpm i framer-motion tailwindcss postcss autoprefixer
 npx tailwindcss init -p
-# tailwind.config.js -> content: ['./index.html','./src/**/*.{js,jsx}']
+# tailwind.config.js -> content: ['./bookshelf.html','./src/**/*.{js,jsx}']
 # src/index.css -> @tailwind base; @tailwind components; @tailwind utilities;
 \`\`\`
 
