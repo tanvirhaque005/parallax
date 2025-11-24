@@ -160,7 +160,7 @@ booksMeta.forEach((book, i) => {
   c.height = 64;
   const ctx = c.getContext('2d');
 
-  ctx.font = '300 32px Arial';
+  ctx.font = '300 32px Courier New';
   ctx.fillStyle = 'white';
   ctx.textAlign = 'center';
   ctx.fillText(book.year.toString(), c.width / 2, c.height);
@@ -260,13 +260,13 @@ const motifsContainer = document.getElementById('motifsContainer');
 let targetTiltX = 0;
 let targetTiltY = 0;
 
-window.addEventListener('mousemove', (e) => {
+window.addEventListener("mousemove", (e) => {
   if (!bookinfo.classList.contains('open')) {
     setMouseFromEvent(e);
     raycaster.setFromCamera(mouse, camera);
     const hits = raycaster.intersectObjects(books.map(b => b.mesh));
 
-    baseCanvas.style.cursor = hits.length ? 'pointer' : 'default';
+    // remove default cursor logic (you already did this)
 
     books.forEach(b => {
       b.targetRotY = Math.PI / 2;
@@ -275,10 +275,17 @@ window.addEventListener('mousemove', (e) => {
     if (hits.length) {
       const hovered = books.find(b => b.mesh === hits[0].object);
       hovered.targetRotY = Math.PI / 4;
+
+      // ✨ enlarge cursor
+      cursor.classList.add("hover");
+    } else {
+      // ✨ shrink cursor when not over a book
+      cursor.classList.remove("hover");
     }
 
     return;
   }
+
 
   const x = (e.clientX / window.innerWidth) * 2 - 1;
   const y = (e.clientY / window.innerHeight) * 2 - 1;
@@ -287,6 +294,7 @@ window.addEventListener('mousemove', (e) => {
 }, { passive: true });
 
 function openOverlayForIndex(i) {
+  updateActiveBookBar(i);
   setActiveBookByIndex(i);
   rebuildOverlayForIndex();
 
@@ -412,6 +420,9 @@ function animate() {
   shelfOffset += (targetShelfOffset - shelfOffset) * 0.1;
   shelfGroup.position.x = shelfOffset;
 
+  updateBarForCenteredBook();
+
+
   const t = performance.now() * 0.0015;
   shelfGroup.position.y = Math.sin(t) * 0.03 + 0.7;
 
@@ -454,3 +465,296 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 });
+
+
+/* --------------------------------------
+    Custom Cursor Circle
+-------------------------------------- */
+const cursor = document.getElementById("cursorCircle");
+
+// Update cursor position
+window.addEventListener("mousemove", (e) => {
+  cursor.style.top = `${e.clientY}px`;
+  cursor.style.left = `${e.clientX}px`;
+});
+
+// Let certain elements "enlarge" the cursor
+function enableCursorHover(selector) {
+  document.querySelectorAll(selector).forEach(el => {
+    el.addEventListener("mouseenter", () => cursor.classList.add("hover"));
+    el.addEventListener("mouseleave", () => cursor.classList.remove("hover"));
+  });
+}
+
+
+// Elements that should cause the cursor circle to expand
+enableCursorHover("canvas");             // hovering the 3D shelf
+enableCursorHover(".tag-pill");          // tropes/tags
+enableCursorHover(".motif-circle");      // motif bubbles
+enableCursorHover(".btn");               // overlay buttons
+enableCursorHover("#scrollLeft, #scrollRight");  // arrows
+enableCursorHover(".menu-button, .menu-close");  // menu
+enableCursorHover("#activeBookCanvas"); // overlay 3D book
+enableCursorHover(".menu-button");
+enableCursorHover(".menu-close");
+enableCursorHover("#motifsContainer");
+enableCursorHover(".motif-circle");
+
+
+
+/* ------------------------------------------------------------------
+   EDGE SCROLL CURSOR (Arrow cursor that triggers scrolling)
+------------------------------------------------------------------ */
+
+const EDGE_ZONE = 400;  // px from left/right side of screen
+
+window.addEventListener("mousemove", (e) => {
+
+  const overlayOpen = bookinfo.classList.contains("open");
+  const menuOpen = menuSidebar.classList.contains("active");
+  const x = e.clientX;
+  const w = window.innerWidth;
+
+  // Never show arrows when overlay OR menu is open
+  if (overlayOpen || menuOpen || hoveringBars) {
+    cursor.classList.remove("arrow-left", "arrow-right");
+    return;
+  }
+  
+  // If normal hover cursor is active → no arrows
+  if (cursor.classList.contains("hover")) {
+    cursor.classList.remove("arrow-left", "arrow-right");
+    return;
+  }
+
+  // ---- RIGHT EDGE ----
+  const canScrollRight = targetShelfOffset > MAX_SCROLL_RIGHT;
+  const nearRight = x > w - EDGE_ZONE;
+
+  if (nearRight && canScrollRight) {
+    cursor.classList.add("arrow-right");
+    cursor.classList.remove("arrow-left");
+    return;
+  }
+
+  // ---- LEFT EDGE ----
+  const canScrollLeft = targetShelfOffset < MAX_SCROLL_LEFT;
+  const nearLeft = x < EDGE_ZONE;
+
+  if (nearLeft && canScrollLeft) {
+    cursor.classList.add("arrow-left");
+    cursor.classList.remove("arrow-right");
+    return;
+  }
+
+  // Otherwise remove arrows
+  cursor.classList.remove("arrow-left", "arrow-right");
+});
+
+/* Click-to-scroll when in arrow mode */
+window.addEventListener("mousedown", (e) => {
+
+  // stop if overlay, menu, OR bars are hovered
+  if (bookinfo.classList.contains("open") ||
+      menuSidebar.classList.contains("active") ||
+      hoveringBars) return;
+
+  const isMenuButton =
+    e.target.classList.contains("menu-button") ||
+    e.target.classList.contains("menu-close");
+
+  if (isMenuButton) return;
+
+  if (cursor.classList.contains("arrow-right")) {
+    scrollRightBtn.click();
+  } else if (cursor.classList.contains("arrow-left")) {
+    scrollLeftBtn.click();
+  }
+});
+
+
+/* -----------------------------------------------------------
+   TOP-LEFT BOOK BARS (one per book)
+----------------------------------------------------------- */
+
+const bookBarsContainer = document.getElementById("bookBars");
+
+function buildBookBars() {
+  bookBarsContainer.innerHTML = "";
+  booksMeta.forEach((b, i) => {
+    const bar = document.createElement("div");
+    bar.classList.add("book-bar");
+    bar.dataset.index = i;
+    bookBarsContainer.appendChild(bar);
+  });
+}
+
+buildBookBars();
+
+/* -----------------------------------------------------------
+   Active bar highlight (centered book)
+----------------------------------------------------------- */
+function updateActiveBookBar(index) {
+  document.querySelectorAll(".book-bar").forEach((bar, i) => {
+    bar.classList.toggle("active", i === index);
+  });
+}
+
+/* -----------------------------------------------------------
+   Click → jump to book
+----------------------------------------------------------- */
+function jumpToBook(index) {
+  const bookX = startX + index * spacing;
+  
+  // Center book: shelf must move by -bookX
+  targetShelfOffset = -bookX;
+
+  updateScrollButtons();
+  updateActiveBookBar(index);
+}
+
+/* -----------------------------------------------------------
+   CLICK HANDLER (works reliably)
+----------------------------------------------------------- */
+document.querySelectorAll(".book-bar").forEach(bar => {
+  bar.addEventListener("click", (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const index = Number(bar.dataset.index);
+
+    // Scroll to that book
+    jumpToBook(index);
+
+    // Highlight the selected bar
+    updateActiveBookBar(index);
+
+    // ❌ DO NOT reset the wave here
+    // Wave should stay as long as the mouse is inside the container
+  });
+});
+
+
+/* -----------------------------------------------------------
+   CLICK-SAFE MOVEMENT SUPPRESSION
+   (prevents wave logic from interfering with clicks)
+----------------------------------------------------------- */
+let suppressWaveUntil = 0;
+window.addEventListener("mousedown", () => {
+  suppressWaveUntil = performance.now() + 120;
+});
+
+/* -----------------------------------------------------------
+   AREA-AWARE HOVER (sinusoidal wave)
+----------------------------------------------------------- */
+const barsContainer = document.getElementById("bookBars");
+let hoveredBarIndex = null;
+let lastMouseX = null;
+
+barsContainer.addEventListener("mousemove", (e) => {
+
+  // prevent wave logic briefly after clicking
+  if (performance.now() < suppressWaveUntil) return;
+
+  const bars = Array.from(document.querySelectorAll(".book-bar"));
+  const rect = barsContainer.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+
+  let closestIndex = 0;
+  let closestDist = Infinity;
+
+  bars.forEach((bar, i) => {
+    const barRect = bar.getBoundingClientRect();
+    const barCenter = barRect.left - rect.left + barRect.width / 2;
+    const dist = Math.abs(mouseX - barCenter);
+
+    if (dist < closestDist) {
+      closestDist = dist;
+      closestIndex = i;
+    }
+  });
+
+  hoveredBarIndex = closestIndex;
+
+  applyWaveEffect(closestIndex);
+
+  // highlight nearest bar
+  document.querySelectorAll(".book-bar").forEach((bar, i) => {
+    bar.classList.toggle("hovered", i === hoveredBarIndex);
+  });
+});
+
+/* -----------------------------------------------------------
+   ENTER / LEAVE (disable arrow cursor + reset wave)
+----------------------------------------------------------- */
+
+let hoveringBars = false;
+
+barsContainer.addEventListener("mouseenter", () => {
+  hoveringBars = true;
+  cursor.classList.remove("arrow-left", "arrow-right");
+});
+
+barsContainer.addEventListener("mouseleave", () => {
+  hoveringBars = false;
+  hoveredBarIndex = null;
+  resetWave();
+
+  document.querySelectorAll(".book-bar").forEach(bar =>
+    bar.classList.remove("hovered")
+  );
+});
+
+/* -----------------------------------------------------------
+   UPDATE BAR FOR CENTERED BOOK (during scroll)
+----------------------------------------------------------- */
+function updateBarForCenteredBook() {
+  let closestIndex = 0;
+  let closestDist = Infinity;
+
+  books.forEach((b, i) => {
+    const dist = Math.abs(b.mesh.position.x + shelfOffset);
+    if (dist < closestDist) {
+      closestDist = dist;
+      closestIndex = i;
+    }
+  });
+
+  updateActiveBookBar(closestIndex);
+}
+
+/* -----------------------------------------------------------
+   SINUSOIDAL WAVE EFFECT
+----------------------------------------------------------- */
+
+const BASE_HEIGHT = 28;
+const MAX_HEIGHT = 50;
+const MIN_HEIGHT = 10;
+const WAVE_WIDTH = 5;
+
+function applyWaveEffect(centerIndex) {
+  const bars = document.querySelectorAll(".book-bar");
+  const total = bars.length;
+
+  for (let i = 0; i < total; i++) {
+    const dist = Math.abs(i - centerIndex);
+
+    if (dist > WAVE_WIDTH) {
+      bars[i].style.height = MIN_HEIGHT + "px";
+      continue;
+    }
+
+    const t = dist / WAVE_WIDTH;
+    const wave = Math.cos(t * Math.PI) * 0.5 + 0.5;
+
+    const height = MIN_HEIGHT + wave * (MAX_HEIGHT - MIN_HEIGHT);
+    bars[i].style.height = height + "px";
+  }
+}
+
+function resetWave() {
+  document.querySelectorAll(".book-bar").forEach(bar => {
+    bar.style.height = BASE_HEIGHT + "px";
+    bar.classList.remove("hovered");
+  });
+}

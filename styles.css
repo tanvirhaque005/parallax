@@ -78,18 +78,21 @@ html, body {
   height: 100%;
   pointer-events: none;
   z-index: 2;
+  display: none;
 }
 
 #scrollLeft {
   position: fixed;
   left: 2rem;
   top: 50%;
+  display: none;
 }
 
 #scrollRight {
   position: fixed;
   right: 2rem;
   top: 50%;
+  display: none;
 }
 
 #controls button {
@@ -527,7 +530,7 @@ html, body {
   justify-content: center;
 
   gap: 18px;
-  z-index: 50;       /* stays above canvas */
+  z-index: 0;       /* stays above canvas */
   pointer-events: none; /* makes sure it doesn't block clicks */
 }
 
@@ -546,3 +549,124 @@ html, body {
   text-transform: uppercase;
   white-space: nowrap;
 }
+
+/* Base custom cursor */
+/* Base custom cursor */
+#cursorCircle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28); /* slightly less transparent */
+  pointer-events: none !important;
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.25s cubic-bezier(0.25, 0.1, 0.25, 1),
+    height 0.25s cubic-bezier(0.25, 0.1, 0.25, 1),
+    background 0.25s ease,
+    opacity 0.25s ease,
+    transform 0.15s ease;
+  z-index: 9999;
+}
+
+/* Enlarged + more visible while hovering interactive elements */
+#cursorCircle.hover {
+  width: 45px;
+  height: 45px;
+  opacity: 0.5;
+  background: white
+}
+
+
+
+body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circle {
+  cursor: none !important;
+}
+
+/* Arrow mode – right */
+#cursorCircle.arrow-right {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+#cursorCircle.arrow-right::after {
+  content: '→';
+  position: absolute;
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.85);
+  left: 50%;
+  top: 50%;
+  transform: translate(-40%, -50%); /* slight nudge left */
+}
+
+/* Arrow mode – left */
+#cursorCircle.arrow-left {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+#cursorCircle.arrow-left::after {
+  content: '←';
+  position: absolute;
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.85);
+  left: 50%;
+  top: 50%;
+  transform: translate(-60%, -50%);  /* slight nudge right */
+}
+
+/* Top-left horizontal bars — thicker + lower on the page */
+#bookBars {
+  position: fixed;
+  top: 24px; 
+  left: 24px;
+  height: 60px;
+  display: flex;
+  gap: 8px;
+  z-index: 999999;        /* ← VERY IMPORTANT */
+  pointer-events: auto;   /* ← ensure clicks reach the bars */
+}
+
+#bookBars:hover {
+  cursor: none;
+}
+
+.book-bar.hovered {
+  background: rgba(255,255,255,1);
+  opacity: 1;
+}
+
+
+#bookBars::before {
+  content: "";
+  position: absolute;
+  inset: -20px 0;
+  pointer-events: none;   /* ← FIX */
+}
+
+
+
+
+.book-bar {
+  width: 10px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 2px;
+  pointer-events: auto;
+  transition:
+    height 0.35s ease,
+    transform 0.35s ease,
+    opacity 0.25s ease,
+    background 0.25s ease;
+}
+
+.book-bar.active {
+  background: rgba(255, 255, 255, 1);
+  /* transform: scale(1.15); */
+}
+
+
