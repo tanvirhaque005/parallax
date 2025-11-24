@@ -6,20 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="menu-component.css">
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap" rel="stylesheet">
+
   </head>
+
   <body>
 
-    <!-- Menu Button (top right corner) -->
+    <!-- Menu Button -->
     <button class="menu-button" id="menuButton">MENU</button>
 
-    <!-- Dark Overlay (appears when menu is open) -->
     <div class="menu-overlay" id="menuOverlay"></div>
 
-    <!-- Menu Sidebar (slides in from right) -->
     <div class="menu-sidebar" id="menuSidebar">
       <div class="menu-header">
         <button class="menu-close" id="menuClose">MENU</button>
       </div>
+
       <ul class="menu-items">
         <li><a href="aboutPage.html">0. ABOUT</a></li>
         <li><a href="bookshelf.html">1. Library</a></li>
@@ -35,125 +37,107 @@
       <button id="scrollRight" aria-label="Scroll right">⟶</button>
     </div>
 
-    <!-- Base shelf canvas (all covers) -->
+    <!-- Base shelf canvas -->
     <canvas id="bookCanvas" aria-label="Interactive 3D bookshelf"></canvas>
-    <div id="header">
+
+    <!-- <div id="header">
       <h1>Library of Futures</h1>
-      <p>An archive of sci-fi films arranged by how far they imagined the future. Click on a movie (rectangle in this demo) to explore.</p>
-    </div>
+      <p>An archive of sci-fi films arranged by how far they imagined the future. Click on a movie to explore.</p>
+    </div> -->
+
+    <!-- Overlay canvas -->
     <canvas id="activeBookCanvas" aria-hidden="true"></canvas>
-    
 
-    <!-- card overlay -->
+    <!-- Card overlay -->
     <div id="bookinfo" aria-hidden="true">
-      <div class="card" role="dialog" aria-modal="true" aria-labelledby="bookTitle">
+      <div class="card" role="dialog" aria-modal="true">
+
         <div class="breadcrumb">Library > Film</div>
-        <button id="closeInfo" class="btn close" aria-label="Close details">✕</button>
-        <button id="cardPrev" class="btn cardNav" aria-label="Previous book">L</button>
-        <button id="cardNext" class="btn cardNav" aria-label="Next book">R</button>
-        <!-- <h6>BTW guys I made the cover on the right because the math to get the tilt ok on the left was really annoying</h6>
-        <h1 class="title" id="bookTitle">Title</h1>
-        <div class="meta" id="bookMeta">Author · Year</div>
-        <p class="blurb" id="bookBlurb">Blurb</p>
+        <button id="closeInfo" class="btn close">✕</button>
 
+        <button id="cardPrev" class="btn cardNav">L</button>
+        <button id="cardNext" class="btn cardNav">R</button>
 
-        <div class="row" id="pillContainer"></div>
-
-        <div class="long">
-          <h2>More Information</h2>
-          <p>
-            This area will eventually contain a lot of information. 
-          </p>
-          <button class="btn" id="exploreThemesBtn" onclick="location.href='/infoPage.html?movie=2001%3A%20A%20Space%20Odyssey'">View Theme Analysis (Placeholder: 2001)</button>
-          <div id="tropeDiv"></div>
-        </div>
-
-        <div class="actions">
-          <button class="btn" id="backToShelf">← Back to shelf</button>
-        </div> -->
         <div class="film-details">
-            <!-- Film Header -->
-            <div class="film-header">
-              <div class="title-row">
-                <h1 class="title" id="bookTitle">Title</h1>
-                <div class="rating-badge" id="ratingBadge">7.6/10</div>
-              </div>
+          <div class="film-header">
 
-              <div id="tropeDiv" class="chord-button-container"></div>
+            <div class="title-row">
+              <h1 class="title" id="bookTitle">Title</h1>
+              <div class="rating-badge" id="ratingBadge">7.6/10</div>
+            </div>
 
-              <div class="tags-row" id="pillContainer"></div>
+            <div class="tags-row" id="pillContainer"></div>
 
-              <p class="plot" id="bookBlurb">Blurb</p>
+            <p class="plot" id="bookBlurb">Blurb</p>
 
-              <div class="film-info-grid">
-                <div class="info-item">
-                  <div class="info-label">Director</div>
-                  <div class="info-value" id="director">Director Name</div>
-                </div>
-                <div class="info-item">
-                  <div class="info-label">Released</div>
-                  <div class="info-value" id="released">Year, Location</div>
-                </div>
-                
-              </div>
+            <div class="film-info-grid">
               <div class="info-item">
-                  <div class="info-label">Depicted</div>
-                  <div class="info-value" id="depicted">Year, Location</div>
-                </div>
-            </div>
+                <div class="info-label">Director</div>
+                <div class="info-value" id="director">Director</div>
+              </div>
 
-            <!-- Technological Motifs -->
-            <div class="motifs-section">
-              <div class="row" id="pillContainer"></div>
-              <h2 class="motifs-title">Technological Motifs</h2>
-              <p class="motifs-desc">Click on any motif to explore how it connects to other films across decades.</p>
-              <div class="motifs-container" id="motifsContainer">
-                <!-- Motif circles will be inserted here -->
+              <div class="info-item">
+                <div class="info-label">Released</div>
+                <div class="info-value" id="released">Year, Location</div>
               </div>
             </div>
 
-            <!-- Navigation -->
-             <div class="bottomBox">
+            <div class="info-item">
+              <div class="info-label">Depicted</div>
+              <div class="info-value" id="depicted">Year, Location</div>
+            </div>
+          </div>
+
+          <div class="motifs-section">
+            <h2 class="motifs-title">Technological Motifs</h2>
+            <p class="motifs-desc">Click a motif to explore its connection to other films.</p>
+            <div class="motifs-container" id="motifsContainer"></div>
+          </div>
+
+          <div class="bottomBox">
             <div class="actions">
               <button class="btn back-btn" id="backToShelf">← Back to Library</button>
             </div>
-            </div>
           </div>
+
+        </div>
       </div>
     </div>
-    
 
     <script type="module" src="./bookshelf.js"></script>
+
     <script>
-      // Get menu elements
       const menuButton = document.getElementById('menuButton');
       const menuClose = document.getElementById('menuClose');
       const menuSidebar = document.getElementById('menuSidebar');
       const menuOverlay = document.getElementById('menuOverlay');
 
-      // Open menu function
       function openMenu() {
         menuSidebar.classList.add('active');
         menuOverlay.classList.add('active');
       }
-
-      // Close menu function
       function closeMenu() {
         menuSidebar.classList.remove('active');
         menuOverlay.classList.remove('active');
       }
 
-      // Event listeners
       menuButton.addEventListener('click', openMenu);
       menuClose.addEventListener('click', closeMenu);
       menuOverlay.addEventListener('click', closeMenu);
 
-      // Optional: Close menu when pressing Escape key
-      document.addEventListener('keydown', function(event) {
+      document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && menuSidebar.classList.contains('active')) {
           closeMenu();
         }
       });
     </script>
+
+    <!-- FOOTER LOGO -->
+    <div id="footerLogo">
+      <div class="footer-icon"></div>
+      <span class="footer-text">LIBRARY OF FUTURES</span>
+    </div>
+
+
   </body>
 </html>

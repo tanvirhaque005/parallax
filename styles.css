@@ -1,7 +1,7 @@
 html, body {
   margin: 0;
   height: 100%;
-  background: #1a1a1a;
+  background: #101010;
   overflow: hidden;
   color: #e5e7eb;
   font-family: 'Courier New', monospace;
@@ -514,4 +514,35 @@ html, body {
 
 .chord-button-container .btn:active {
   transform: translateY(0px);
+}
+
+/* --- FOOTER FIXED AT BOTTOM --- */
+#footerLogo {
+  position: fixed;
+  bottom: 50px;      /* distance from bottom edge */
+  left: 2%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 18px;
+  z-index: 50;       /* stays above canvas */
+  pointer-events: none; /* makes sure it doesn't block clicks */
+}
+
+.footer-icon {
+  width: 6vw;
+  height: 6vw;
+  background: #e5e5e5;
+  border-radius: 2px;
+}
+
+.footer-text {
+  font-family: "Zen Dots", sans-serif;
+  font-size: 5vw;
+  color: #f1f1f1;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
