@@ -1,27 +1,22 @@
 /* ============================================================
-   PARALLEL COORDINATE TIMELINE (5-year release window)
-   - windowStart based SOLELY on RELEASE YEARS
-   - drag-to-pan timeline
-   - scroll-to-shift window
-   - bottom axis 5-year highlight
-   - top-right window label
+   PARALLEL TIMELINE — DRAGGING CHANGES WINDOW, SCROLLING PANS
 ============================================================ */
 
 import rawData from "./settingdataraw.js";
 
 /* ----------------------------
-    CONFIG CONSTANTS
+    CONSTANTS
 -----------------------------*/
 const WINDOW_SIZE_YEARS = 5;
 const WINDOW_STEP_YEARS = 5;
-const INITIAL_VIEW_YEARS = 30;  // number of years visible initially
+const INITIAL_VIEW_YEARS = 30;
 
+/* ----------------------------
+    PREP DATA & BOUNDS
+-----------------------------*/
 let ABS_MIN_YEAR = Infinity;
 let ABS_MAX_YEAR = -Infinity;
 
-/* ----------------------------
-    PREP DATA
------------------------------*/
 const data = rawData.map(d => {
   const start = +d.start;
   const end   = +d.end;
@@ -31,7 +26,6 @@ const data = rawData.map(d => {
 
   return {
     ...d,
-    id: d.id ?? `${d.label}-${start}-${end}`,
     startYear: start,
     endYear: end,
     startDate: new Date(start,0,1),
@@ -40,17 +34,16 @@ const data = rawData.map(d => {
   };
 });
 
-/* Slight padding so panning feels nicer */
 ABS_MIN_YEAR -= 2;
 ABS_MAX_YEAR += 2;
 
-/* ----------------------------
-    RELEASE-YEAR WINDOW START (FIXED)
------------------------------*/
+/* RELEASE-YEAR RANGE */
 const minRelease = d3.min(data, d => d.endYear);
 const maxRelease = d3.max(data, d => d.endYear);
 
-/* Start at earliest 5-year block */
+/* ----------------------------
+    RELEASE-WINDOW START
+-----------------------------*/
 let windowStart =
   Math.floor(minRelease / WINDOW_SIZE_YEARS) * WINDOW_SIZE_YEARS;
 
@@ -71,18 +64,17 @@ const yTop = 40;
 const yBot = H - 40;
 
 /* ----------------------------
-    INITIAL X-SCALE DOMAIN 
-    >>> MUST begin at windowStart
+    X-SCALE — INITIAL VIEW
 -----------------------------*/
 const x = d3.scaleTime()
   .domain([
-    new Date(windowStart, 0, 1),
-    new Date(windowStart + INITIAL_VIEW_YEARS, 0, 1)
+    new Date(windowStart,0,1),
+    new Date(windowStart + INITIAL_VIEW_YEARS,0,1)
   ])
   .range([0, W]);
 
 /* ----------------------------
-    AXES + GRID
+    AXES, GRID, LAYERS
 -----------------------------*/
 const topAxisG = g.append("g")
   .attr("class","axis")
@@ -106,6 +98,13 @@ g.append("text")
 
 const gridG = g.append("g").attr("class","grid");
 
+const linkLayer = g.append("g");
+let links = linkLayer.selectAll("path.link");
+let halos = linkLayer.selectAll("path.halo");
+
+/* ----------------------------
+    RENDER HELPERS
+-----------------------------*/
 function renderAxes() {
   topAxisG.call(
     d3.axisTop(x)
@@ -120,10 +119,11 @@ function renderAxes() {
 }
 
 function renderGrid() {
-  const years = x.ticks(d3.timeYear.every(1));
-  const lines = gridG.selectAll("line").data(years, d => d);
+  const yrs = x.ticks(d3.timeYear.every(1));
+  const lines = gridG.selectAll("line").data(yrs, d => d);
 
-  lines.enter().append("line")
+  lines.enter()
+    .append("line")
     .merge(lines)
     .attr("x1", d => x(d))
     .attr("x2", d => x(d))
@@ -133,9 +133,6 @@ function renderGrid() {
   lines.exit().remove();
 }
 
-/* ----------------------------
-    FILTER BY 5-YEAR RELEASE WINDOW
------------------------------*/
 function getFilteredData() {
   return data.filter(d =>
     d.endYear >= windowStart &&
@@ -143,26 +140,21 @@ function getFilteredData() {
   );
 }
 
-/* ----------------------------
-    LINKS & HALOS
------------------------------*/
-const linkLayer = g.append("g");
-let links  = linkLayer.selectAll("path.link");
-let halos  = linkLayer.selectAll("path.halo");
-
 function drawLines(filtered) {
-  // HALOS
+  /** Halos */
   halos = halos.data(filtered, d => d.id);
   halos.exit().remove();
+
   halos = halos.enter()
     .append("path")
-    .attr("class","halo")
+    .attr("class", "halo")
     .merge(halos)
     .attr("d", d => `M${x(d.startDate)},${yTop} L${x(d.endDate)},${yBot}`);
 
-  // LINKS
+  /** Lines */
   links = links.data(filtered, d => d.id);
   links.exit().remove();
+
   const enter = links.enter().append("path")
     .attr("class","link")
     .attr("stroke-width", d => 1.5 + Math.sqrt(Math.abs(d.diff)));
@@ -182,40 +174,40 @@ function showTip(html, x0, y0) {
   tip.style.left = x0+"px";
   tip.style.top  = y0+"px";
 }
-
 function hideTip() { tip.style.display = "none"; }
 
 linkLayer.on("mousemove", function(event) {
-  const tgt = d3.select(event.target).datum();
-  if (!tgt) return;
+  const d = d3.select(event.target).datum();
+  if (!d) return;
+
   const [mx, my] = d3.pointer(event, document.body);
 
   showTip(`
-    <div class="title">${tgt.label}</div>
-    <div class="sub">Setting: ${tgt.startYear}</div>
-    <div class="sub">Release: ${tgt.endYear}</div>
-    <div class="sub">Δ: ${tgt.diff}</div>
+    <div class="title">${d.label}</div>
+    <div class="sub">Setting: ${d.startYear}</div>
+    <div class="sub">Release: ${d.endYear}</div>
+    <div class="sub">Δ: ${d.diff}</div>
   `, mx, my);
 });
-
 linkLayer.on("mouseout", hideTip);
 
 /* ----------------------------
-    TIMELINE EVENTS
+    EVENTS
 -----------------------------*/
 const timelineEvents = [
-  { year: 2001, label:"Dot-Com Bust", desc:"Tech bubble deflates" },
-  { year: 2008, label:"Financial Crisis", desc:"Global credit crunch" },
-  { year: 2015, label:"Streaming Boom", desc:"OTT platforms surge" },
-  { year: 2020, label:"COVID-19", desc:"Theatrical shutdowns" }
+  { year: 2001, label:"Dot-Com Bust" },
+  { year: 2008, label:"Financial Crisis" },
+  { year: 2015, label:"Streaming Boom" },
+  { year: 2020, label:"COVID-19" }
 ];
+
 timelineEvents.forEach(e => e.date = new Date(e.year,0,1));
 
 const eventsLayer = g.append("g");
 let events = eventsLayer.selectAll("g.event");
 
 function drawEvents() {
-  events = events.data(timelineEvents, d=>d.year);
+  events = events.data(timelineEvents, d => d.year);
   events.exit().remove();
 
   const enter = events.enter()
@@ -225,29 +217,28 @@ function drawEvents() {
   enter.append("line").attr("class","evline");
   enter.append("text")
     .attr("class","evyear")
-    .attr("text-anchor","middle")
     .attr("font-size",11)
     .attr("font-weight",700)
-    .attr("fill","#aaa");
+    .attr("fill","#aaa")
+    .attr("text-anchor","middle");
 
   events = enter.merge(events);
 
   events.attr("transform", d => `translate(${x(d.date)},0)`);
 
-  events.select(".evline")
+  events.select("line.evline")
     .attr("y1", yTop)
     .attr("y2", yBot)
     .attr("stroke","#6b7280")
-    .attr("stroke-opacity",0.25)
-    .attr("stroke-width",2);
+    .attr("stroke-opacity",0.25);
 
-  events.select(".evyear")
+  events.select("text.evyear")
     .attr("y", yTop+20)
     .text(d => d.year);
 }
 
 /* ----------------------------
-    HIGHLIGHT AXIS TICKS FOR WINDOW
+    AXIS WINDOW HIGHLIGHT
 -----------------------------*/
 function highlightWindowOnAxis() {
   const start = windowStart;
@@ -256,29 +247,21 @@ function highlightWindowOnAxis() {
   botAxisG.selectAll("text")
     .style("fill", d => {
       const y = d.getFullYear();
-      return (y >= start && y <= end) ? "#ffffff" : "rgba(255,255,255,0.35)";
-    })
-    .style("opacity", d => {
-      const y = d.getFullYear();
-      return (y >= start && y <= end) ? 1 : 0.25;
+      return (y >= start && y <= end) ? "#fff" : "rgba(255,255,255,0.35)";
     })
     .style("font-weight", d => {
       const y = d.getFullYear();
       return (y >= start && y <= end) ? 700 : 400;
-    });
-
-  botAxisG.selectAll("line")
-    .style("stroke", d => {
-      const y = d.getFullYear();
-      return (y >= start && y <= end) ? "#ffffff" : "rgba(255,255,255,0.25)";
-    })
-    .style("stroke-width", d => {
-      const y = d.getFullYear();
-      return (y >= start && y <= end) ? 2 : 1;
     })
     .style("opacity", d => {
       const y = d.getFullYear();
-      return (y >= start && y <= end) ? 0.9 : 0.25;
+      return (y >= start && y <= end) ? 1 : 0.25;
+    });
+
+  botAxisG.selectAll("line")
+    .style("stroke-width", d => {
+      const y = d.getFullYear();
+      return (y >= start && y <= end) ? 2 : 1;
     });
 }
 
@@ -286,81 +269,87 @@ function highlightWindowOnAxis() {
     WINDOW LABEL
 -----------------------------*/
 function updateWindowLabel() {
-  const end = windowStart + WINDOW_SIZE_YEARS - 1;
+  const wEnd = windowStart + WINDOW_SIZE_YEARS - 1;
   document.getElementById("window-label").textContent =
-    `Window: ${windowStart}–${end}`;
+    `Window: ${windowStart}–${wEnd}`;
 }
 
 /* ----------------------------
-    DRAG-TO-PAN DOMAIN
+    SCRUBBER DRAG LOGIC
 -----------------------------*/
-let dragActive = false;
-let dragStartX = 0;
-let dragStartDomainYears = null;
+const track = document.getElementById("window-track");
+const thumb = document.getElementById("window-thumb");
 
-svg.on("mousedown", (e) => {
-  dragActive = true;
-  dragStartX = e.clientX;
-  dragStartDomainYears = x.domain().map(d => d.getFullYear());
+let scrubActive = false;
+let scrubStartX = 0;
+let thumbStartLeft = 0;
+
+thumb.addEventListener("mousedown", (e) => {
+  scrubActive = true;
+  scrubStartX = e.clientX;
+  thumbStartLeft = parseInt(thumb.style.left, 10);
+  thumb.style.cursor = "grabbing";
+  e.preventDefault();
 });
 
-svg.on("mousemove", (e) => {
-  if (!dragActive) return;
+window.addEventListener("mousemove", (e) => {
+  if (!scrubActive) return;
 
-  const dx = e.clientX - dragStartX;
-  const domainSpan = dragStartDomainYears[1] - dragStartDomainYears[0];
-  const yearsMoved = (dx / W) * domainSpan;
+  const dx = e.clientX - scrubStartX;
+  let newLeft = thumbStartLeft + dx;
 
-  let newMin = dragStartDomainYears[0] - yearsMoved;
-  let newMax = dragStartDomainYears[1] - yearsMoved;
+  const minLeft = 0;
+  const maxLeft = track.offsetWidth - thumb.offsetWidth;
 
-  // clamp to absolute min/max dataset
+  newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
+  thumb.style.left = newLeft + "px";
+
+  const pct = newLeft / maxLeft;
+  const totalRange = maxRelease - minRelease - WINDOW_SIZE_YEARS + 1;
+  let newStart = minRelease + Math.round(pct * totalRange);
+
+  newStart = Math.floor(newStart / WINDOW_SIZE_YEARS) * WINDOW_SIZE_YEARS;
+  newStart = Math.max(minRelease, Math.min(newStart, maxRelease - WINDOW_SIZE_YEARS + 1));
+
+  windowStart = newStart;
+  update();
+});
+
+window.addEventListener("mouseup", () => {
+  scrubActive = false;
+  thumb.style.cursor = "grab";
+});
+
+/* ----------------------------
+    SCROLL TO PAN VIEW
+-----------------------------*/
+svg.on("wheel", (e) => {
+  e.preventDefault();
+
+  const delta = e.deltaY;
+  const d0 = x.domain().map(d => d.getFullYear());
+  const span = d0[1] - d0[0];
+
+  const yearsMoved = (delta / 250) * span;
+
+  let newMin = d0[0] + yearsMoved;
+  let newMax = d0[1] + yearsMoved;
+
   if (newMin < ABS_MIN_YEAR) {
     newMin = ABS_MIN_YEAR;
-    newMax = newMin + domainSpan;
+    newMax = ABS_MIN_YEAR + span;
   }
   if (newMax > ABS_MAX_YEAR) {
     newMax = ABS_MAX_YEAR;
-    newMin = newMax - domainSpan;
+    newMin = ABS_MAX_YEAR - span;
   }
 
   x.domain([new Date(newMin,0,1), new Date(newMax,0,1)]);
   update();
 });
 
-svg.on("mouseup", () => dragActive = false);
-svg.on("mouseleave", () => dragActive = false);
-
 /* ----------------------------
-    SCROLL-TO-MOVE WINDOW
------------------------------*/
-let scrollAccumulator = 0;
-const SCROLL_THRESHOLD = 90;
-
-svg.on("wheel", (e) => {
-  e.preventDefault();
-  scrollAccumulator += e.deltaY;
-
-  if (scrollAccumulator > SCROLL_THRESHOLD) {
-    windowStart = Math.min(
-      windowStart + WINDOW_STEP_YEARS,
-      maxRelease - WINDOW_SIZE_YEARS + 1
-    );
-    scrollAccumulator = 0;
-    update();
-  }
-  else if (scrollAccumulator < -SCROLL_THRESHOLD) {
-    windowStart = Math.max(
-      windowStart - WINDOW_STEP_YEARS,
-      minRelease
-    );
-    scrollAccumulator = 0;
-    update();
-  }
-});
-
-/* ----------------------------
-    FULL UPDATE PIPELINE
+    UPDATE PIPELINE
 -----------------------------*/
 function update() {
   renderAxes();

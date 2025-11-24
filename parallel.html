@@ -6,14 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="menu-component.css">
+
   <style>
     :root {
       --bg: #0e0e0f;
       --panel-bg: #ffffff;
       --ink: #eeeeee;
-      --muted: #bcbcbc;
-      --line: #ffffff;
-      --line-faint: rgba(255,255,255,0.25);
     }
 
     html, body {
@@ -42,12 +40,9 @@
       transition: color 0.3s;
       text-transform: uppercase;
     }
-    .back-link:hover {
-      color: #ffffff;
-    }
+    .back-link:hover { color: #ffffff; }
     .back-arrow { font-size: 20px; }
 
-    /* Navigation */
     .nav-buttons {
       position: fixed;
       top: 50%;
@@ -63,25 +58,22 @@
       font-size: 12px;
       letter-spacing: 1.5px;
       cursor: pointer;
-      transition: all 0.3s;
       text-decoration: none;
-      display: inline-block;
       text-transform: uppercase;
+      transition: 0.3s;
     }
     .nav-btn:hover {
       background-color: #3a3a3a;
-      border-color: #666666;
-      color: #ffffff;
+      color: white;
+      border-color: #666;
     }
 
     .stage {
       width: 100%;
       height: 100vh;
       display: flex;
-      flex-direction: row;
     }
 
-    /* Left Card */
     .left-card {
       width: 320px;
       height: 360px;
@@ -97,60 +89,53 @@
       top: 180px;
       z-index: 30;
     }
-
-    .left-card h2 { margin: 0; font-size: 20px; font-weight: 700; color: #111; }
+    .left-card h2 { margin: 0; font-size: 20px; font-weight: 700; }
     .left-card .meta { font-size: 12px; color: #444; }
     .left-card .desc { font-size: 13px; line-height: 1.45; color: #222; }
-    .left-card .img-boxes { margin-top: auto; display: flex; gap: 14px; }
+    .left-card .img-boxes {
+      margin-top: auto; display: flex; gap: 14px;
+    }
     .left-card .img-boxes div {
       width: 100px; height: 100px;
       background: #e6e6e6; border-radius: 6px;
     }
 
-    .decade-label {
-      position: absolute;
-      top: 130px;
-      font-size: 32px;
-      color: white;
-      font-weight: 400;
-      opacity: 0.9;
-      pointer-events: none;
-    }
-
+    /* Axes and Lines */
     svg { width: 100%; height: 100%; }
-
     .axis text { fill: white; opacity: 0.35; font-size: 12px; }
     .axis line { stroke: rgba(255,255,255,0.25); }
     .axis-title { fill: white; opacity: 0.6; font-size: 13px; }
 
-    .grid line { stroke: rgba(255,255,255,0.12); stroke-width: 1; }
+    .grid line { stroke: rgba(255,255,255,0.12); }
 
     .link { stroke: white; stroke-opacity: 0.9; }
     .halo { stroke: white; stroke-opacity: 0.1; stroke-width: 10; }
 
     .tooltip {
-      position: fixed; pointer-events: none; z-index: 100;
-      background: #1c1c1c; color: white; border: 1px solid #555;
-      padding: 8px 10px; border-radius: 8px; font-size: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      position: fixed;
+      pointer-events: none;
+      z-index: 100;
+      background: #1c1c1c;
+      color: white;
+      border: 1px solid #555;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      display: none;
       transform: translate(-50%, calc(-100% - 14px));
-      white-space: nowrap; display: none;
     }
-    .tooltip .title { font-weight: 700; margin-bottom: 4px; }
-    .tooltip .sub { color: #ccc; }
   </style>
 </head>
 
 <body>
-  <!-- Menu Button -->
+
+  <!-- MENU BUTTON -->
   <div class="top-nav">
     <button class="menu-button" id="menuButton">MENU</button>
   </div>
 
-  <!-- Menu Overlay -->
   <div class="menu-overlay" id="menuOverlay"></div>
 
-  <!-- Menu Sidebar -->
   <div class="menu-sidebar" id="menuSidebar">
     <div class="menu-header">
       <button class="menu-close" id="menuClose">MENU</button>
@@ -161,11 +146,11 @@
       <li><a href="chordGraph.html">2. Technological Network</a></li>
       <li><a href="parallel.html">3. Prediction Timeline</a></li>
       <li><a href="morph.html">4. World Building</a></li>
-      <li><a href="reflectionPage.html">5. Reflection</a></li>
+      <li><a href="#">5. Reflection</a></li>
     </ul>
   </div>
 
-  <!-- Header -->
+  <!-- RETURN -->
   <div class="page-header">
     <a href="chordGraph.html" class="back-link">
       <span class="back-arrow">←</span>
@@ -173,27 +158,12 @@
     </a>
   </div>
 
-  <div id="window-label" 
-     style="
-        position: fixed;
-        top: 160px;        /* just above your left-card start at ~180px */
-        right: 40px;
-        font-family: 'Courier New', monospace;
-        color: #ffffff;
-        font-size: 15px;
-        letter-spacing: 1px;
-        opacity: 0.85;
-        z-index: 200;
-     ">
-</div>
-
-
-  <!-- Navigation -->
+  <!-- NEXT -->
   <div class="nav-buttons">
     <a href="morph.html" class="nav-btn">Next →</a>
   </div>
 
-  <!-- Left Card -->
+  <!-- LEFT CARD -->
   <div class="left-card">
     <h2>50 Year Depiction</h2>
     <div class="meta">Released 2002</div>
@@ -207,11 +177,51 @@
     </div>
   </div>
 
+  <!-- WINDOW LABEL -->
+  <div id="window-label"
+       style="
+         position: fixed;
+         top: 80px;
+         right: 40px;
+         font-family: 'Courier New', monospace;
+         color: #ffffff;
+         font-size: 15px;
+         opacity: 0.85;
+         z-index: 200;
+       ">
+  </div>
+
+  <!-- SCRUBBER -->
+  <div id="window-track"
+       style="
+         position: fixed;
+         top: 110px;
+         right: 40px;
+         width: 260px;
+         height: 24px;
+         background: #8f8f8f;
+         border-radius: 12px;
+         z-index: 300;
+       ">
+    <div id="window-thumb"
+         style="
+           position: absolute;
+           left: 0px;
+           top: -8px;
+           width: 28px;
+           height: 40px;
+           background: white;
+           border-radius: 6px;
+           cursor: grab;
+           box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+         ">
+    </div>
+  </div>
+
+  <!-- SVG STAGE -->
   <div class="stage">
     <svg id="parallel"></svg>
   </div>
-  
-
 
   <div class="tooltip" id="tooltip"></div>
 
@@ -219,11 +229,12 @@
   <script type="module" src="parallel.js"></script>
 
   <script>
-    /* Menu code unchanged */
+    /* MENU */
     const btn = document.getElementById('menuButton');
     const closeBtn = document.getElementById('menuClose');
     const side = document.getElementById('menuSidebar');
     const overlay = document.getElementById('menuOverlay');
+
     btn.onclick = () => { side.classList.add('active'); overlay.classList.add('active'); };
     closeBtn.onclick = overlay.onclick = () => { side.classList.remove('active'); overlay.classList.remove('active'); };
   </script>
