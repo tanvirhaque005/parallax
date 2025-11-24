@@ -495,11 +495,13 @@
 					// Track the last pointer type (mouse / touch / pen). We only enable wheel-based
 					// year-scrub when the pointer is a mouse (so trackpad gestures keep default behavior).
 					let lastPointerType = null;
-					// Throttle wheel stepping to avoid overly sensitive wheels. We'll allow one step
-					// per `wheelStepCooldownMs` and require a minimum delta magnitude.
+					// We'll debounce wheel input so a single swipe triggers only one step.
 					let lastWheelStep = 0;
-					const wheelStepCooldownMs = 120; // milliseconds between allowed wheel steps (smoother, less sensitive)
-					const wheelDeltaThreshold = 5; // minimum delta to count as a step (smoother, less sensitive)
+					// Wheel scrub settings (debounced accumulation to avoid accidental repeats)
+					const wheelDeltaThreshold = 260; // further increased magnitude required before stepping (less sensitive)
+					let accumulatedWheelDelta = 0; // accumulate signed deltas
+					let wheelDebounceTimer = null;
+					const wheelDebounceMs = 160; // debounce window in ms
 					const chordEl = document.getElementById('chordContainer');
 					track.addEventListener('pointerover', (e) => { lastPointerType = e.pointerType; });
 					if (chordEl) chordEl.addEventListener('pointerover', (e) => { lastPointerType = e.pointerType; });
@@ -530,34 +532,39 @@
 					});
 
 					// Allow wheel to scrub left/right over the timeline track or the main viz in discrete steps
-					function wheelScrub(e){
-						// Only intercept wheel gestures when the pointer was last a mouse.
-						// This avoids hijacking trackpad gestures (two-finger scroll) which users expect to scroll the page.
-						if (lastPointerType !== 'mouse') return; // let default browser handling occur for non-mouse pointers
-						const now = performance.now();
-						// compute a sensible delta magnitude (prefer horizontal if present)
-						const rawDelta = Math.abs(e.deltaX) > 0 ? e.deltaX : e.deltaY;
-						const mag = Math.abs(rawDelta || 0);
-						// ignore very small deltas
-						if (mag < wheelDeltaThreshold) return;
-						// throttle rapid-fire wheel events
-						if (now - lastWheelStep < wheelStepCooldownMs) return;
-						lastWheelStep = now;
+																									function wheelScrub(e){
+																											// Only intercept wheel gestures when the pointer was last a mouse.
+																											// If we haven't detected a pointer type yet (null), allow handling so wheel still works.
+																											if (lastPointerType !== null && lastPointerType !== 'mouse') return; // let default browser handling occur for non-mouse pointers
 
-						// For mouse wheel we always use it to cycle through the year windows (no zoom)
-						e.preventDefault();
-						const rect = track.getBoundingClientRect();
-						const totalSteps = years.length + 1; // +1 for All
-						let currentPercent = 0;
-						if (handle.style.left && handle.style.left.indexOf('%')>-1) currentPercent = parseFloat(handle.style.left)/100;
-						else currentPercent = (handle.offsetLeft || 0) / rect.width;
-						let currentIndex = Math.round(currentPercent * (totalSteps - 1));
-						// Decide direction: positive delta -> move right/forward
-						const dir = (rawDelta || 0) > 0 ? 1 : -1;
-						let newIndex = Math.max(0, Math.min(totalSteps - 1, currentIndex + dir));
-						const newX = (newIndex / (totalSteps - 1)) * rect.width;
-						updateTimelineFromX(newX, rect.width);
-					}
+																											// choose horizontal delta if present, otherwise vertical; keep sign
+																											const rawDelta = (Math.abs(e.deltaX) > 0 ? e.deltaX : e.deltaY) || 0;
+																											accumulatedWheelDelta += rawDelta; // signed accumulation
+
+																											// prevent page scroll while interacting
+																											e.preventDefault();
+
+																											// Immediate trigger: as soon as accumulated magnitude crosses threshold, step once.
+																											const now = performance.now();
+																											const magAccum = Math.abs(accumulatedWheelDelta);
+																											const cooldownMs = 800; // longer cooldown to avoid multiple steps from same gesture
+																											if (magAccum >= wheelDeltaThreshold && (now - lastWheelStep) > cooldownMs) {
+																												const dir = accumulatedWheelDelta > 0 ? 1 : -1;
+																												accumulatedWheelDelta = 0;
+																												lastWheelStep = now;
+
+																												// apply one discrete step based on direction
+																												const rect = track.getBoundingClientRect();
+																												const totalSteps = years.length + 1; // +1 for All
+																												let currentPercent = 0;
+																												if (handle.style.left && handle.style.left.indexOf('%')>-1) currentPercent = parseFloat(handle.style.left)/100;
+																												else currentPercent = (handle.offsetLeft || 0) / rect.width;
+																												let currentIndex = Math.round(currentPercent * (totalSteps - 1));
+																												let newIndex = Math.max(0, Math.min(totalSteps - 1, currentIndex + dir));
+																												const newX = (newIndex / (totalSteps - 1)) * rect.width;
+																												updateTimelineFromX(newX, rect.width);
+																											}
+																									}
 
 					track.addEventListener('wheel', wheelScrub, {passive:false});
 					if (chordEl) chordEl.addEventListener('wheel', wheelScrub, {passive:false});
