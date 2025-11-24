@@ -584,7 +584,7 @@ const planePos = planeGeometry.attributes.position;
 
 let morphProgress = 0;
 let targetMorphProgress = 0;
-let morphSpeed = 1;
+let morphSpeed = 0.15;
 
 let zoomMin = 1.2;
 let zoomMax = 20.0;
@@ -622,7 +622,7 @@ function animate(){
 
   // ZOOM OUT
   if(autoZoomingOut){
-    camera.position.z += 0.18;
+    camera.position.z += 0.4;
     if(camera.position.z >= zoomMax){
       camera.position.z = zoomMax;
       autoZoomingOut = false;
@@ -694,19 +694,19 @@ function animate(){
   // PLANETS ZOOM TO CUSTOM POSITIONS
   if(planetZoomInProgress && !secondZoomOut){
     // Move Earth mesh to its solar system position
-    earthMesh.position.lerp(customPositions.earth, 0.06);
+    earthMesh.position.lerp(customPositions.earth, 0.12);
 
     // Scale Earth to match other planets (0.08 radius)
     const targetEarthScale = 0.08;
     earthMesh.scale.lerp(
       new THREE.Vector3(targetEarthScale, targetEarthScale, targetEarthScale),
-      0.06
+      0.12
     );
 
     // Move other planets
     planetGroup.children.forEach((planet)=>{
       const name = planet.userData.name;
-      planet.position.lerp(customPositions[name], 0.06);
+      planet.position.lerp(customPositions[name], 0.12);
     });
 
     // Position moons relative to their parent planets
@@ -723,7 +723,7 @@ function animate(){
 
       if (parentPos) {
         const targetPos = parentPos.clone().add(moon.userData.offset);
-        moon.position.lerp(targetPos, 0.06);
+        moon.position.lerp(targetPos, 0.12);
       }
     });
   }
@@ -767,7 +767,7 @@ function animate(){
     const returnProgress = 1 - ((camera.position.z - zoomMin) / (zoomMax - zoomMin));
 
     // Return Earth to center
-    earthMesh.position.lerp(new THREE.Vector3(0, 0, 0), returnProgress * 0.15);
+    earthMesh.position.lerp(new THREE.Vector3(0, 0, 0), returnProgress * 0.3);
 
     // Return Earth to normal scale (globe size matching scaleEnd at first, then growing)
     // When at max zoom, Earth should be at scaleEnd (0.4)
@@ -775,8 +775,14 @@ function animate(){
     const currentTargetScale = THREE.MathUtils.lerp(scaleEnd, scaleStart, returnProgress);
     earthMesh.scale.lerp(
       new THREE.Vector3(currentTargetScale, currentTargetScale, currentTargetScale),
-      0.15
+      0.3
     );
+  }
+
+  // Snap Earth to exact center when fully zoomed in
+  if(!planetGroup.visible && camera.position.z <= zoomMin + 0.1){
+    earthMesh.position.set(0, 0, 0);
+    earthMesh.scale.set(scaleStart, scaleStart, scaleStart);
   }
 
   // ==========================================================
@@ -954,7 +960,7 @@ window.addEventListener('click', evt=>{
 window.addEventListener('wheel', (event) => {
   event.preventDefault();
 
-  const zoomSpeed = 0.1;
+  const zoomSpeed = 2.0;
   camera.position.z += event.deltaY * zoomSpeed * 0.01;
 
   // Clamp camera position
@@ -990,7 +996,7 @@ window.addEventListener('touchmove', (event) => {
 
       // Pinch in (fingers closer) = zoom out (globe)
       // Expand (fingers apart) = zoom in (map)
-      const touchZoomSpeed = 0.85;
+      const touchZoomSpeed = 1.5;
       camera.position.z -= distanceChange * touchZoomSpeed;
 
       // Clamp camera position

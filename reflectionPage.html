@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library of Futures - Reflection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #b0b0b0;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            padding: 60px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 40px;
+            right: 60px;
+            color: #666;
+            font-size: 14px;
+            text-decoration: none;
+            letter-spacing: 2px;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #999;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .logo-square {
+            width: 50px;
+            height: 50px;
+            background-color: #d0d0d0;
+        }
+
+        .logo-text {
+            font-size: 42px;
+            font-weight: bold;
+            color: #d0d0d0;
+            letter-spacing: 3px;
+        }
+
+        .tagline {
+            color: #b0b0b0;
+            font-size: 13px;
+            margin-bottom: 80px;
+            max-width: 900px;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: #d0d0d0;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            letter-spacing: 3px;
+        }
+
+        .content-section {
+            margin-bottom: 60px;
+            max-width: 900px;
+        }
+
+        .content-section p {
+            margin-bottom: 25px;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        ul {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        ul li {
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        ul li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #b0b0b0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 35px;
+            border: 2px solid #666;
+            color: #b0b0b0;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            margin-top: 40px;
+            position: absolute;
+            right: 60px;
+            top: 280px;
+        }
+
+        .cta-button:hover {
+            border-color: #999;
+            color: #d0d0d0;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .insight {
+            margin-top: 40px;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        .insight p {
+            margin-bottom: 10px;
+        }
+
+        .subsection {
+            margin-top: 30px;
+        }
+
+        .subsection h3 {
+            color: #999;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <a href="landingPage.html" class="close-btn">CLOSE</a>
+
+    <div class="logo">
+        <div class="logo-square"></div>
+        <div class="logo-text">REFLECTION</div>
+    </div>
+
+    <div class="tagline">
+        KEY INSIGHTS AND TAKEAWAYS FROM ANALYZING A CENTURY OF SCIENCE FICTION CINEMA.
+    </div>
+
+    <a href="bookshelf.html" class="cta-button">EXPLORE DATA →</a>
+
+    <div class="content-section">
+        <h2>TEMPORAL PATTERNS</h2>
+        <p>Our analysis of release years versus setting years reveals how sci-fi's imaginative distance has evolved over time. Films from the mid-20th century often set their stories centuries ahead, while contemporary sci-fi tends to explore near-futures—perhaps reflecting both technological acceleration and increased anxiety about imminent change.</p>
+
+        <div class="subsection">
+            <h3>Key Observations:</h3>
+            <ul>
+                <li>The "imaginative gap" between present and future has narrowed significantly since the 1960s</li>
+                <li>Certain decades show clustering around specific future eras (2010s films frequently set in 2040-2060)</li>
+                <li>Historical events create visible inflection points in how far ahead filmmakers project</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>GEOGRAPHICAL IMAGINATION</h2>
+        <p>The spatial distribution of filming locations versus depicted settings illuminates cultural hierarchies in sci-fi production. While production concentrates in major film centers, the futures we imagine span the globe—and beyond.</p>
+
+        <div class="subsection">
+            <h3>Key Observations:</h3>
+            <ul>
+                <li>Western production dominance persists, but depicted futures show increasing geographical diversity</li>
+                <li>Space and extraterrestrial settings surge during periods of actual space exploration milestones</li>
+                <li>The gap between where films are made and where they're set reveals aspirational futures</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>NARRATIVE CONNECTIONS</h2>
+        <p>The chord diagram reveals how films connect across time through shared themes, production relationships, and narrative echoes. These connections form distinct clusters that illuminate evolving genre conventions.</p>
+
+        <div class="subsection">
+            <h3>Key Observations:</h3>
+            <ul>
+                <li>Franchise networks create dense interconnections within specific decades</li>
+                <li>Thematic clusters emerge around dystopia, space exploration, and AI anxiety</li>
+                <li>Cross-decade influences show how classic films continue to shape contemporary sci-fi</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>CULTURAL REFLECTIONS</h2>
+        <p>Science fiction doesn't predict the future—it reflects the present. Our visualizations show how historical events, technological breakthroughs, and cultural anxieties shape the futures we imagine on screen.</p>
+
+        <div class="subsection">
+            <h3>Key Observations:</h3>
+            <ul>
+                <li>Cold War era films project conflicts centuries ahead; post-9/11 films explore imminent threats</li>
+                <li>Economic crises correlate with dystopian future settings and societal collapse narratives</li>
+                <li>Technological breakthroughs inspire optimistic space operas, while uncertainty breeds cyberpunk</li>
+                <li>The futures we imagine reveal more about our present fears than our actual trajectory</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="insight">
+        <h2>FINAL THOUGHTS</h2>
+        <p>This visualization demonstrates that science fiction cinema functions as a cultural mirror, refracting contemporary anxieties and aspirations through imagined futures. The patterns we've uncovered suggest that our collective imagination is both constrained by and reactive to historical context.</p>
+
+        <p>By mapping these films across time, space, and narrative connections, we can see how each generation grapples with its unique challenges by projecting them forward—creating futures that serve as thought experiments for the present.</p>
+
+        <p>The Library of Futures invites you to explore these patterns yourself, discovering how the stories we tell about tomorrow reveal who we are today.</p>
+    </div>
+</body>
+</html>
