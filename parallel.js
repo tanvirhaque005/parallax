@@ -64,8 +64,8 @@ const H = rect.height - margin.top  - margin.bottom;
 const g = svg.append("g")
   .attr("transform", `translate(${margin.left},${margin.top})`);
 
-const yTop = 40;
-const yBot = H - 40;
+const yTop = 100;         
+const yBot = H - 80;    
 
 /* ----------------------------
     X-SCALE — INITIAL VIEW
@@ -250,7 +250,7 @@ function highlightWindowOnAxis() {
   botAxisG.selectAll("text")
     .style("fill", d => {
       const y = d.getFullYear();
-      return (y >= start && y <= end) ? "#fff" : "rgba(255,255,255,0.35)";
+      return (y >= start && y <= end) ? "#fff" : "rgb(255, 255, 255)";
     })
     .style("font-weight", d => {
       const y = d.getFullYear();
@@ -258,7 +258,7 @@ function highlightWindowOnAxis() {
     })
     .style("opacity", d => {
       const y = d.getFullYear();
-      return (y >= start && y <= end) ? 1 : 0.25;
+      return (y >= start && y <= end) ? 1 : 0.55;
     });
 
   botAxisG.selectAll("line")
@@ -296,7 +296,7 @@ svg.on("wheel", (e) => {
 
   const BASE_SCROLL = 0.0010;
   const UP_MULTIPLIER = 3;
-  const DOWN_MULTIPLIER = 0.5;
+  const DOWN_MULTIPLIER = 0.01;
 
   let delta = e.deltaY;
 
@@ -317,7 +317,7 @@ function smoothScrollStep() {
 
   /* Smoothly approach target velocity
      This is what creates ease-in / ease-out scrolling */
-  const APPROACH_RATE = 0.12;   // smoother easing (instead of 0.5)
+  const APPROACH_RATE = scrollVelocity > 0 ? 0.12 : 0.5;   // smoother easing (instead of 0.5)
   const TARGET_DAMP   = 0.965;  // slower fade-out (instead of 0.90)
   
   scrollVelocity += (targetVelocity - scrollVelocity) * APPROACH_RATE;

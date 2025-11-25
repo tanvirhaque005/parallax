@@ -102,7 +102,16 @@
 
     /* Axes and Lines */
     svg { width: 100%; height: 100%; }
-    .axis text { fill: white; opacity: 0.35; font-size: 12px; }
+    .axis text {
+      fill: rgba(255,255,255,0.95);
+      opacity: 1;                   /* ← fully visible */
+      font-size: 13px;              /* ← slightly bigger */
+      letter-spacing: 0.5px;        /* ← sharper monospace look */
+      paint-order: stroke;
+      stroke: rgba(0,0,0,0.45);     /* ← outline for dark background */
+    }
+
+
     .axis line { stroke: rgba(255,255,255,0.25); }
     .axis-title { fill: white; opacity: 0.6; font-size: 13px; }
 
