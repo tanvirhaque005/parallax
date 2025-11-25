@@ -14,7 +14,7 @@
     'parallel.html': 3,
     'morph.html': 4,
     'reflectionPage.html': 5,
-    'landingPage.html': 0 // Landing page can link to about
+    'landingPage.html': 0
   };
 
   // Menu items configuration
@@ -36,28 +36,14 @@
     const currentPage = window.location.pathname.split('/').pop() || 'landingPage.html';
     const currentIndex = pageMap[currentPage] !== undefined ? pageMap[currentPage] : -1;
 
-    // Create progress line
+    // Create white progress line
     const progressLine = document.createElement('div');
     progressLine.className = 'nav-progress-line';
     
-    // Create blue dot
+    // Create blue square indicator
     const progressDot = document.createElement('div');
     progressDot.className = 'nav-progress-dot';
-    
-    // Position dot based on current page
-    if (currentIndex >= 0 && menuItems.length > 0) {
-      const totalItems = menuItems.length;
-      const position = (currentIndex / (totalItems - 1)) * 100;
-      progressDot.style.top = `${position}%`;
-    } else {
-      progressDot.style.top = '0%';
-    }
-    
-    // Animate dot appearance
-    setTimeout(() => {
-      progressDot.classList.add('animate-in');
-    }, 100);
-    
+    progressDot.dataset.currentIndex = currentIndex;
     progressLine.appendChild(progressDot);
     
     // Create menu items
@@ -83,92 +69,214 @@
     menuContainer.appendChild(progressLine);
     menuContainer.appendChild(menuItemsList);
     
+    // Set initial state - menu should be visible on page load
+    menuContainer.classList.remove('collapsed');
+    const items = menuContainer.querySelectorAll('.nav-menu-item');
+    const menuItemsEl = menuContainer.querySelector('.nav-menu-items');
+    
+    // Set initial visible state without animation to prevent flicker
+    if (menuItemsEl) {
+      menuItemsEl.style.opacity = '1';
+      menuItemsEl.style.transform = 'translateX(0)';
+      menuItemsEl.style.width = 'auto';
+      menuItemsEl.style.overflow = 'visible';
+    }
+    
+    // Set items to visible state immediately
+    items.forEach((item) => {
+      item.style.opacity = '1';
+      item.style.transform = 'translateX(0)';
+      item.style.transition = 'none'; // No transition on initial load
+    });
+    
+    // Set line to visible state
+    if (progressLine) {
+      progressLine.style.transform = 'translateX(0)';
+      progressLine.style.opacity = '1';
+      progressLine.style.transition = 'none'; // No transition on initial load
+    }
+    
+    // Re-enable transitions after a brief delay
+    setTimeout(() => {
+      items.forEach((item) => {
+        item.style.transition = '';
+      });
+      if (progressLine) {
+        progressLine.style.transition = '';
+      }
+    }, 100);
+    
+    // Update line height and dot position to match menu items after layout
+    function updateLineHeightAndDot() {
+      if (menuItemsList && progressLine && progressDot) {
+        requestAnimationFrame(() => {
+          const itemsHeight = menuItemsList.offsetHeight;
+          if (itemsHeight > 0) {
+            progressLine.style.height = `${itemsHeight}px`;
+          }
+          
+          // Position blue dot based on active menu item's blue bar position
+          const currentIdx = parseInt(progressDot.dataset.currentIndex) || 0;
+          const items = menuItemsList.querySelectorAll('.nav-menu-item');
+          
+          if (items.length > 0 && currentIdx >= 0 && currentIdx < items.length) {
+            const activeItem = items[currentIdx];
+            const activeLink = activeItem.querySelector('a');
+            
+            // Get the position of the blue bar (::before element)
+            // The blue bar is at left: 0, so we need the center Y of the link element
+            const activeLinkRect = activeLink.getBoundingClientRect();
+            const progressLineRect = progressLine.getBoundingClientRect();
+            
+            // Calculate position relative to the progress line
+            // The blue bar is centered vertically on the link, so use link center
+            const linkCenterY = activeLinkRect.top + activeLinkRect.height / 2;
+            const lineTop = progressLineRect.top;
+            const lineHeight = progressLineRect.height || itemsHeight;
+            
+            // Position dot to align with the center of the active menu item's link
+            // Move it slightly higher by subtracting a small offset (about 3-4px)
+            const offsetPixels = 4;
+            const adjustedY = linkCenterY - offsetPixels;
+            const relativePosition = ((adjustedY - lineTop) / lineHeight) * 100;
+            const clampedPosition = Math.max(0, Math.min(100, relativePosition));
+            progressDot.style.top = `${clampedPosition}%`;
+          } else if (items.length > 0) {
+            // Fallback: use percentage calculation with slight upward offset
+            const totalItems = items.length;
+            if (totalItems > 1) {
+              const basePosition = (currentIdx / (totalItems - 1)) * 100;
+              // Move up by about 2-3% to make it slightly higher
+              const adjustedPosition = Math.max(0, basePosition - 2.5);
+              progressDot.style.top = `${adjustedPosition}%`;
+            } else {
+              progressDot.style.top = '47.5%'; // Slightly higher than center
+            }
+          }
+        });
+      }
+    }
+    
+    // Update line height and dot position after items are rendered
+    setTimeout(updateLineHeightAndDot, 300);
+    setTimeout(updateLineHeightAndDot, 600);
+    window.addEventListener('resize', updateLineHeightAndDot);
+    
+    // Store update function for use when menu expands
+    menuContainer.updateLineHeightAndDot = updateLineHeightAndDot;
+    
     // Auto-collapse after 5 seconds
     let collapseTimer;
     let isHovering = false;
+    let isAnimating = false;
     
     function expandMenu() {
+      if (isAnimating) return;
+      isAnimating = true;
+      menuContainer.classList.add('animating');
       menuContainer.classList.remove('collapsed');
+      
       const items = menuContainer.querySelectorAll('.nav-menu-item');
-      const menuItems = menuContainer.querySelector('.nav-menu-items');
-      const progressLine = menuContainer.querySelector('.nav-progress-line');
+      const menuItemsEl = menuContainer.querySelector('.nav-menu-items');
+      const progressLineEl = menuContainer.querySelector('.nav-progress-line');
+      
+      // Animate progress line sliding left at the same pace as menu items
+      if (progressLineEl) {
+        // Start line animation at the same time as first item (50ms delay)
+        setTimeout(() => {
+          progressLineEl.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+          void progressLineEl.offsetHeight;
+          progressLineEl.style.transform = 'translateX(0)';
+          progressLineEl.style.opacity = '1';
+        }, 50);
+      }
       
       // Ensure menu items container is visible
-      if (menuItems) {
-        menuItems.style.width = 'auto';
-        menuItems.style.overflow = 'visible';
-        menuItems.style.opacity = '1';
-        menuItems.style.transform = 'translateX(0) scale(1)';
+      if (menuItemsEl) {
+        menuItemsEl.style.width = 'auto';
+        menuItemsEl.style.overflow = 'visible';
+        menuItemsEl.style.transition = 'opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        void menuItemsEl.offsetHeight;
+        menuItemsEl.style.opacity = '1';
+        menuItemsEl.style.transform = 'translateX(0)';
       }
       
-      // Animate progress line sliding left when expanding
-      if (progressLine) {
-        progressLine.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
-        // Force reflow
-        void progressLine.offsetHeight;
-        progressLine.style.transform = 'translateX(-15px)';
-        progressLine.style.opacity = '1';
-      }
-      
-      // Reset all items to collapsed state first
-      items.forEach((item) => {
-        item.classList.remove('collapsing', 'expanding');
-        item.style.opacity = '0';
-        item.style.transform = 'translateX(40px) scale(0.9)';
-        item.style.animation = 'none';
-        item.style.animationDelay = '';
-      });
-      
-      // Force a reflow to ensure the reset takes effect
-      void menuContainer.offsetHeight;
-      
-      // Then animate them sliding out one by one with stagger (start after line starts)
+      // Animate items sliding out one by one with smooth stagger
       items.forEach((item, index) => {
+        item.style.transition = 'opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(20px)';
+        
         setTimeout(() => {
-          item.style.animation = `itemSlideOutHover 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards`;
-          item.style.animationDelay = `${index * 0.05}s`;
-        }, 100 + index * 50);
+          void item.offsetHeight;
+          item.style.opacity = '1';
+          item.style.transform = 'translateX(0)';
+        }, 50 + index * 40);
       });
+      
+      // Remove animating class after animation completes and update dot position
+      setTimeout(() => {
+        menuContainer.classList.remove('animating');
+        isAnimating = false;
+        // Update dot position after menu expands to ensure alignment
+        if (menuContainer.updateLineHeightAndDot) {
+          menuContainer.updateLineHeightAndDot();
+        }
+      }, 50 + items.length * 40 + 400);
     }
     
     function collapseMenu() {
-      const items = menuContainer.querySelectorAll('.nav-menu-item');
-      const menuItems = menuContainer.querySelector('.nav-menu-items');
-      const progressLine = menuContainer.querySelector('.nav-progress-line');
+      if (isAnimating) return;
+      isAnimating = true;
+      menuContainer.classList.add('animating');
       
-      // Animate items sliding back in reverse order (last item first)
+      const items = menuContainer.querySelectorAll('.nav-menu-item');
+      const menuItemsEl = menuContainer.querySelector('.nav-menu-items');
+      const progressLineEl = menuContainer.querySelector('.nav-progress-line');
+      
+      // Animate items sliding back in reverse order (last item first) with same smooth timing as expand
       items.forEach((item, index) => {
         const reverseIndex = items.length - 1 - index;
+        item.style.transition = 'opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        
         setTimeout(() => {
-          item.style.animation = `itemSlideInCollapse 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards`;
-        }, reverseIndex * 30);
+          void item.offsetHeight;
+          item.style.opacity = '0';
+          item.style.transform = 'translateX(20px)';
+        }, 50 + reverseIndex * 40); // Same timing as expand but in reverse
       });
       
-      // Animate progress line sliding out after items start collapsing
-      if (progressLine) {
+      // Animate progress line sliding right with same smooth glide as expand
+      if (progressLineEl) {
+        // Start line animation at the same time as the first item to collapse (last item)
+        // This creates the same smooth glide effect as expand
         setTimeout(() => {
-          progressLine.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
-          // Force reflow
-          void progressLine.offsetHeight;
-          progressLine.style.transform = 'translateX(20px)';
-          progressLine.style.opacity = '0.7';
-        }, items.length * 30);
+          progressLineEl.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+          void progressLineEl.offsetHeight;
+          progressLineEl.style.transform = 'translateX(20px)';
+          progressLineEl.style.opacity = '0.8';
+        }, 50); // Start at same time as first collapsing item
       }
       
       setTimeout(() => {
         if (!isHovering) {
           menuContainer.classList.add('collapsed');
-          if (menuItems) {
-            menuItems.style.width = '0';
-            menuItems.style.overflow = 'hidden';
+          if (menuItemsEl) {
+            menuItemsEl.style.width = '0';
+            menuItemsEl.style.overflow = 'hidden';
           }
         }
-      }, items.length * 30 + 500);
+        menuContainer.classList.remove('animating');
+        isAnimating = false;
+      }, 50 + items.length * 40 + 400);
     }
     
     function scheduleCollapse() {
       clearTimeout(collapseTimer);
-      expandMenu();
+      // Don't call expandMenu if menu is already visible and not collapsed
+      if (menuContainer.classList.contains('collapsed')) {
+        expandMenu();
+      }
       
       collapseTimer = setTimeout(() => {
         // Only collapse if not hovering
@@ -178,9 +286,10 @@
       }, 5000);
     }
     
-    // Initial collapse schedule - menu shows on page load
-    menuContainer.classList.remove('collapsed');
-    scheduleCollapse();
+    // Initial collapse schedule - menu shows on page load, start timer after a delay
+    setTimeout(() => {
+      scheduleCollapse();
+    }, 100);
     
     // Reset timer on mouse enter
     menuContainer.addEventListener('mouseenter', () => {
@@ -188,7 +297,7 @@
       clearTimeout(collapseTimer);
       
       // Only trigger expand animation if menu is collapsed
-      if (menuContainer.classList.contains('collapsed')) {
+      if (menuContainer.classList.contains('collapsed') && !isAnimating) {
         expandMenu();
       }
     });
@@ -217,4 +326,3 @@
     initNavigationMenu();
   }
 })();
-
