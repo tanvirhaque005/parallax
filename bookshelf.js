@@ -515,11 +515,13 @@ const EDGE_ZONE = 400;  // px from left/right side of screen
 window.addEventListener("mousemove", (e) => {
 
   const overlayOpen = bookinfo.classList.contains("open");
+  const navigationMenu = document.getElementById('navigationMenu');
+  const menuOpen = navigationMenu && !navigationMenu.classList.contains('collapsed');
   const x = e.clientX;
   const w = window.innerWidth;
 
-  // Never show arrows when overlay is open or hovering bars
-  if (overlayOpen || hoveringBars) {
+  // Never show arrows when overlay OR menu is open
+  if (overlayOpen || menuOpen || hoveringBars) {
     cursor.classList.remove("arrow-left", "arrow-right");
     return;
   }
@@ -528,17 +530,6 @@ window.addEventListener("mousemove", (e) => {
   if (cursor.classList.contains("hover")) {
     cursor.classList.remove("arrow-left", "arrow-right");
     return;
-  }
-  
-  // Don't show arrows if mouse is over navigation menu area (top right)
-  const navigationMenu = document.getElementById('navigationMenu');
-  if (navigationMenu) {
-    const menuRect = navigationMenu.getBoundingClientRect();
-    if (e.clientX >= menuRect.left && e.clientX <= menuRect.right &&
-        e.clientY >= menuRect.top && e.clientY <= menuRect.bottom) {
-      cursor.classList.remove("arrow-left", "arrow-right");
-      return;
-    }
   }
 
   // ---- RIGHT EDGE ----
@@ -568,12 +559,15 @@ window.addEventListener("mousemove", (e) => {
 /* Click-to-scroll when in arrow mode */
 window.addEventListener("mousedown", (e) => {
 
-  // stop if overlay OR bars are hovered
+  // stop if overlay, menu, OR bars are hovered
+  const navigationMenu = document.getElementById('navigationMenu');
+  const menuOpen = navigationMenu && !navigationMenu.classList.contains('collapsed');
+  
   if (bookinfo.classList.contains("open") ||
+      menuOpen ||
       hoveringBars) return;
 
   // Don't scroll if clicking on navigation menu
-  const navigationMenu = document.getElementById('navigationMenu');
   if (navigationMenu && navigationMenu.contains(e.target)) return;
 
   if (cursor.classList.contains("arrow-right")) {
@@ -664,7 +658,6 @@ let lastMouseX = null;
 
 barsContainer.addEventListener("mousemove", (e) => {
 
-  // prevent wave logic briefly after clicking
   if (performance.now() < suppressWaveUntil) return;
 
   const bars = Array.from(document.querySelectorAll(".book-bar"));
@@ -674,7 +667,6 @@ barsContainer.addEventListener("mousemove", (e) => {
   let closestIndex = 0;
   let closestDist = Infinity;
 
-  // Find nearest bar center — ALWAYS succeeds, even in empty spaces
   bars.forEach((bar, i) => {
     const barRect = bar.getBoundingClientRect();
     const barCenter = barRect.left - rect.left + barRect.width / 2;
@@ -686,24 +678,25 @@ barsContainer.addEventListener("mousemove", (e) => {
     }
   });
 
-  // ALWAYS treat the nearest bar as hovered (even between bars)
   hoveredBarIndex = closestIndex;
-
   applyWaveEffect(closestIndex);
 
   // highlight nearest bar
-  bars.forEach((bar, i) => {
-    bar.classList.toggle("hovered", i === hoveredBarIndex);
-  });
-});
-barsContainer.addEventListener("click", (e) => {
-  if (hoveredBarIndex == null) return;
+  bars.forEach((bar, i) =>
+    bar.classList.toggle("hovered", i === hoveredBarIndex)
+  );
 
-  // Jump to nearest bar — even if mouse is not on a bar element
-  jumpToBook(hoveredBarIndex);
-  updateActiveBookBar(hoveredBarIndex);
-});
+  // NEW — position labels on the two highlighted bars
+  const hoverLabel = document.getElementById("hoverBarDate");
+  const activeLabel = document.getElementById("activeBarDate");
 
+  positionLabelOverBar(hoverLabel, bars[closestIndex], booksMeta[closestIndex].year);
+
+  const activeIndex = bars.findIndex(b => b.classList.contains("active"));
+  if (activeIndex !== -1) {
+    positionLabelOverBar(activeLabel, bars[activeIndex], booksMeta[activeIndex].year);
+  }
+});
 
 /* -----------------------------------------------------------
    ENTER / LEAVE (disable arrow cursor + reset wave)
@@ -724,7 +717,12 @@ barsContainer.addEventListener("mouseleave", () => {
   document.querySelectorAll(".book-bar").forEach(bar =>
     bar.classList.remove("hovered")
   );
+
+  document.getElementById("hoverBarDate").style.opacity = 0;
+  document.getElementById("activeBarDate").style.opacity = 0;
 });
+
+
 
 /* -----------------------------------------------------------
    UPDATE BAR FOR CENTERED BOOK (during scroll)
@@ -780,4 +778,37 @@ function resetWave() {
     bar.style.height = BASE_HEIGHT + "px";
     bar.classList.remove("hovered");
   });
+}
+
+const barDateDisplay = document.getElementById("barDateDisplay");
+
+function showBarDates(hoverIndex) {
+  const activeIndex = [...document.querySelectorAll(".book-bar")]
+    .findIndex(bar => bar.classList.contains("active"));
+
+  const hoverYear  = booksMeta[hoverIndex]?.year;
+  const activeYear = booksMeta[activeIndex]?.year;
+
+  if (hoverYear === undefined || activeYear === undefined) return;
+
+  barDateDisplay.textContent = `Selected: ${activeYear}    Hovering: ${hoverYear}`;
+  barDateDisplay.style.opacity = 1;
+}
+
+function hideBarDates() {
+  barDateDisplay.style.opacity = 0;
+}
+
+function positionLabelOverBar(labelEl, barEl, text) {
+  if (!barEl) {
+    labelEl.style.opacity = 0;
+    return;
+  }
+
+  const rect = barEl.getBoundingClientRect();
+
+  labelEl.textContent = text;
+  labelEl.style.left = rect.left + rect.width / 2 + "px";
+  labelEl.style.top  = rect.top - 12 + "px";
+  labelEl.style.opacity = 0.9;
 }

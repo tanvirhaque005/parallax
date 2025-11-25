@@ -622,10 +622,11 @@ body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circl
 /* Top-left horizontal bars — thicker + lower on the page */
 #bookBars {
   position: fixed;
-  top: 24px; 
+  top: 48px; 
   left: 24px;
   height: 60px;
   display: flex;
+  align-items: flex-end;
   gap: 2px;
   z-index: 2;        /* ← VERY IMPORTANT */
   pointer-events: auto;   /* ← ensure clicks reach the bars */
@@ -670,3 +671,29 @@ body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circl
 }
 
 
+#barDateDisplay {
+  position: fixed;
+  top: 90px;            /* adjust as you want */
+  left: 24px;
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  opacity: 0.85;
+  letter-spacing: 1px;
+  z-index: 999999;      /* always visible */
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.barDateLabel {
+  position: fixed;
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -8px); /* centered above bar */
+  z-index: 999999;
+  transition: opacity 0.15s ease, top 0.1s ease, left 0.1s ease;
+}
