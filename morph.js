@@ -897,6 +897,24 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 let selectedLine = null;
 
+window.addEventListener("mousemove", (evt) => {
+  mouse.x = (evt.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(evt.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+
+  const mapHits = raycaster.intersectObjects(flightPathGroup.children, false);
+  const solarHits = raycaster.intersectObjects(solarFlightPathsGroup.children, false);
+
+  const hovering = mapHits.length > 0 || solarHits.length > 0;
+
+  if (hovering) {
+    cursor.classList.add("hover");
+  } else {
+    cursor.classList.remove("hover");
+  }
+});
+
 window.addEventListener('click', evt=>{
   mouse.x = (evt.clientX/window.innerWidth)*2 - 1;
   mouse.y = -(evt.clientY/window.innerHeight)*2 + 1;
