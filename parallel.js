@@ -91,13 +91,13 @@ const botAxisG = g.append("g")
 g.append("text")
  .attr("class","axis-title")
  .attr("x",0)
- .attr("y",yTop-20)
+ .attr("y",yTop-40)
  .text("Setting Year");
 
 g.append("text")
  .attr("class","axis-title")
  .attr("x",0)
- .attr("y",yBot+35)
+ .attr("y",yBot+45)
  .text("Release Year");
 
 const gridG = g.append("g").attr("class","grid");
@@ -198,10 +198,10 @@ linkLayer.on("mouseout", hideTip);
     EVENTS
 -----------------------------*/
 const timelineEvents = [
-  { year: 2001, label:"Dot-Com Bust" },
-  { year: 2008, label:"Financial Crisis" },
-  { year: 2015, label:"Streaming Boom" },
-  { year: 2020, label:"COVID-19" }
+  // { year: 2001, label:"Dot-Com Bust" },
+  // { year: 2008, label:"Financial Crisis" },
+  // { year: 2015, label:"Streaming Boom" },
+  // { year: 2020, label:"COVID-19" }
 ];
 
 timelineEvents.forEach(e => e.date = new Date(e.year,0,1));
@@ -387,6 +387,54 @@ function scrollToYear(year) {
  .range([0, W]);
 }
 
+// Map each 5-year window to the content you want in the left card
+// Content for each 5-year window — now matching new card layout
+const leftCardContent = {
+  1952: {
+    title: "1952",
+    tag: "CONSERVATIVE FUTURES",
+    desc: "Early filmmakers imagined futures only a few years ahead—reflecting caution, reconstruction, and postwar unease.",
+    images: ["img/1950_a.png", "img/1950_b.png"]
+  },
+
+  1957: {
+    title: "1975–1980s",
+    tag: "TECHNO-OPTIMISM",
+    desc: "The late Cold War era introduced stronger confidence in computing and megastructures.",
+    images: ["img/1975_a.png", "img/1975_b.png"]
+  },
+
+  // add more windows…
+};
+
+
+function updateLeftCard() {
+  const entry = leftCardContent[windowStart];
+  if (!entry) return;  // nothing for this window
+
+  const card = document.querySelector(".left-card");
+
+  // Update title (e.g. "1950–1970s")
+  card.querySelector("h2").textContent = entry.title;
+
+  // Update capsule tag
+  const tagEl = card.querySelector(".tag");
+  if (tagEl) tagEl.textContent = entry.tag;
+
+  // Update description
+  card.querySelector(".desc").textContent = entry.desc;
+
+  // Update images (if provided)
+  const imgBoxes = card.querySelector(".img-boxes").children;
+  if (entry.images && entry.images.length >= 2) {
+    imgBoxes[0].style.backgroundImage = `url(${entry.images[0]})`;
+    imgBoxes[1].style.backgroundImage = `url(${entry.images[1]})`;
+  } else {
+    imgBoxes[0].style.backgroundImage = "";
+    imgBoxes[1].style.backgroundImage = "";
+  }
+}
+
 
 function update() {
   renderAxes();
@@ -396,6 +444,7 @@ function update() {
   highlightWindowOnAxis();
   updateWindowLabel();
   updateBarForCenteredBook();
+  updateLeftCard();
 }
 
 /* ----------------------------
@@ -616,7 +665,7 @@ function applyWaveEffect(centerIndex) {
     // FULL-WIDTH cosine wave (peak in middle, edges low)
     // t = 0 → peak = 1
     // t = 1 → edge = 0
-    const wave = Math.cos(1.5 * t * Math.PI) * 0.75  / (1+t**2) + 0.5;
+    const wave = Math.cos(1.5 * t * Math.PI) * 0.35  / (1+t**2) + 0.2;
 
     const height = BASE_HEIGHT + wave * (PEAK_HEIGHT - BASE_HEIGHT);
 
