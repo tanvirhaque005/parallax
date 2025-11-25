@@ -619,7 +619,7 @@ body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circl
   transform: translate(-60%, -50%);  /* slight nudge right */
 }
 
-/* Top-left horizontal bars — thicker + lower on the page */
+ /* Top-left horizontal bars — thicker + lower on the page */
 #bookBars {
   position: fixed;
   top: 48px; 

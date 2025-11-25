@@ -185,6 +185,84 @@
   background: #eaeaea;
 }
 
+/* Top-left horizontal bars — thicker + lower on the page */
+#bookBars {
+  position: fixed;
+  bottom: 48px; 
+  left: 24px;
+  height: 60px;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  z-index: 2;        /* ← VERY IMPORTANT */
+  pointer-events: auto;   /* ← ensure clicks reach the bars */
+}
+
+#bookBars:hover {
+  cursor: none;
+}
+
+.book-bar.hovered {
+  background: rgba(255,255,255,1);
+  opacity: 1;
+}
+
+
+#bookBars::before {
+  content: "";
+  position: absolute;
+  inset: -20px 0;
+  pointer-events: none;   /* ← FIX */
+}
+
+
+
+
+.book-bar {
+  width: 4px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 2px;
+  pointer-events: auto;
+  transition:
+    height 0.35s ease,
+    transform 0.35s ease,
+    opacity 0.25s ease,
+    background 0.25s ease;
+}
+
+.book-bar.active {
+  background: rgba(255, 255, 255, 1);
+  /* transform: scale(1.15); */
+}
+
+
+#barDateDisplay {
+  position: fixed;
+  top: 90px;            /* adjust as you want */
+  left: 24px;
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  opacity: 0.85;
+  letter-spacing: 1px;
+  z-index: 999999;      /* always visible */
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.barDateLabel {
+  position: fixed;
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -8px); /* centered above bar */
+  z-index: 999999;
+  transition: opacity 0.15s ease, top 0.1s ease, left 0.1s ease;
+}
 
   </style>
 </head>
@@ -216,8 +294,15 @@
     </div>
   </div>
 
+  <div id="bookBars"></div>
+  <!-- <div id="barDateDisplay"></div> -->
+  <div id="hoverBarDate" class="barDateLabel"></div>
+  <div id="activeBarDate" class="barDateLabel"></div>
+
+
   <canvas id="mapCanvas" style="display:none;"></canvas>
   <canvas id="scene"></canvas>
+
 
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://d3js.org/d3-geo-projection.v4.min.js"></script>

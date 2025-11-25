@@ -163,11 +163,25 @@ loadPaths();
 // ==========================================================
 const minYear = 1950;
 const maxYear = 2020;
-const yearStep = 10; // Decade steps
+
+const WINDOW_STEP = 5;
+
+const booksMeta = [];
+for (let y = minYear; y <= maxYear; y += WINDOW_STEP) {
+  booksMeta.push({
+    year: y,          // start year of window
+    start: y,
+    end: y + 4        // end of 5-year window
+  });
+}
+
+
+// const yearStep = 10; // Decade steps
+const yearStep = WINDOW_STEP; // now 5
 let currentDecade = null; // null means "All"
 
 const decades = [];
-for (let y = minYear; y <= maxYear; y += yearStep) {
+for (let y = minYear; y <= maxYear; y += WINDOW_STEP) {
   decades.push(y);
 }
 
@@ -179,7 +193,7 @@ function updateFlightPathVisibility() {
       path.visible = true;
     } else {
       const year = path.userData.year;
-      if (year >= currentDecade && year < currentDecade + yearStep) {
+      if (year >= currentDecade && year < currentDecade + WINDOW_STEP) {
         path.visible = true;
       } else {
         path.visible = false;
@@ -194,7 +208,7 @@ function updateFlightPathVisibility() {
       path.visible = true;
     } else {
       const year = path.userData.year;
-      if (year >= currentDecade && year < currentDecade + yearStep) {
+      if (year >= currentDecade && year < currentDecade + WINDOW_STEP) {
         path.visible = true;
       } else {
         path.visible = false;
@@ -208,7 +222,9 @@ function updateDecadeDisplay(decade) {
   if (!decade) {
     decadeValue.textContent = 'All';
   } else {
-    decadeValue.textContent = `${decade}s`;
+    // decadeValue.textContent = `${decade}s`;
+    decadeValue.textContent = `${decade}–${decade + WINDOW_STEP - 1}`;
+
   }
 }
 
@@ -1043,3 +1059,242 @@ window.addEventListener('resize',()=>{
   camera.aspect = window.innerWidth/window.innerHeight;
   camera.updateProjectionMatrix();
 });
+
+
+
+/* -----------------------------------------------------------
+   TOP-LEFT BOOK BARS (one per book)
+----------------------------------------------------------- */
+
+const bookBarsContainer = document.getElementById("bookBars");
+
+function buildBookBars() {
+  bookBarsContainer.innerHTML = "";
+  booksMeta.forEach((b, i) => {
+    const bar = document.createElement("div");
+    bar.classList.add("book-bar");
+    bar.dataset.index = i;
+    bookBarsContainer.appendChild(bar);
+  });
+}
+
+buildBookBars();
+
+/* -----------------------------------------------------------
+   Active bar highlight (centered book)
+----------------------------------------------------------- */
+function updateActiveBookBar(index) {
+  document.querySelectorAll(".book-bar").forEach((bar, i) => {
+    bar.classList.toggle("active", i === index);
+  });
+}
+
+/* -----------------------------------------------------------
+   Click → jump to book
+----------------------------------------------------------- */
+function jumpToBook(index) {
+  const bookX = startX + index * spacing;
+  
+  // Center book: shelf must move by -bookX
+  targetShelfOffset = -bookX;
+
+  updateScrollButtons();
+  updateActiveBookBar(index);
+}
+
+/* -----------------------------------------------------------
+   CLICK HANDLER (works reliably)
+----------------------------------------------------------- */
+document.querySelectorAll(".book-bar").forEach(bar => {
+  bar.addEventListener("click", (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const index = Number(bar.dataset.index);
+    const startYear = booksMeta[index].start;
+
+    // Update global filter
+    currentDecade = startYear;   // but now means 5-year start
+    updateDecadeDisplay(startYear);
+    updateFlightPathVisibility();
+
+    updateActiveBookBar(index);
+  });
+});
+
+
+
+/* -----------------------------------------------------------
+   CLICK-SAFE MOVEMENT SUPPRESSION
+   (prevents wave logic from interfering with clicks)
+----------------------------------------------------------- */
+let suppressWaveUntil = 0;
+window.addEventListener("mousedown", () => {
+  suppressWaveUntil = performance.now() + 120;
+});
+
+/* -----------------------------------------------------------
+   AREA-AWARE HOVER (sinusoidal wave)
+----------------------------------------------------------- */
+const barsContainer = document.getElementById("bookBars");
+let hoveredBarIndex = null;
+let lastMouseX = null;
+
+barsContainer.addEventListener("mousemove", (e) => {
+
+  if (performance.now() < suppressWaveUntil) return;
+
+  const bars = Array.from(document.querySelectorAll(".book-bar"));
+  const rect = barsContainer.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+
+  let closestIndex = 0;
+  let closestDist = Infinity;
+
+  bars.forEach((bar, i) => {
+    const barRect = bar.getBoundingClientRect();
+    const barCenter = barRect.left - rect.left + barRect.width / 2;
+    const dist = Math.abs(mouseX - barCenter);
+
+    if (dist < closestDist) {
+      closestDist = dist;
+      closestIndex = i;
+    }
+  });
+
+  hoveredBarIndex = closestIndex;
+  applyWaveEffect(closestIndex);
+
+  // highlight nearest bar
+  bars.forEach((bar, i) =>
+    bar.classList.toggle("hovered", i === hoveredBarIndex)
+  );
+
+  // NEW — position labels on the two highlighted bars
+  const hoverLabel = document.getElementById("hoverBarDate");
+  const activeLabel = document.getElementById("activeBarDate");
+
+  const meta = booksMeta[closestIndex];
+  positionLabelOverBar(hoverLabel, bars[closestIndex], `${meta.start}–${meta.end}`);
+  
+  const activeIndex = bars.findIndex(b => b.classList.contains("active"));
+  if (activeIndex !== -1) {
+    const metaActive = booksMeta[activeIndex];
+    positionLabelOverBar(activeLabel, bars[activeIndex], `${metaActive.start}–${metaActive.end}`);
+  }
+});
+
+/* -----------------------------------------------------------
+   ENTER / LEAVE (disable arrow cursor + reset wave)
+----------------------------------------------------------- */
+
+let hoveringBars = false;
+
+barsContainer.addEventListener("mouseenter", () => {
+  hoveringBars = true;
+  cursor.classList.remove("arrow-left", "arrow-right");
+});
+
+barsContainer.addEventListener("mouseleave", () => {
+  hoveringBars = false;
+  hoveredBarIndex = null;
+  resetWave();
+
+  document.querySelectorAll(".book-bar").forEach(bar =>
+    bar.classList.remove("hovered")
+  );
+
+  document.getElementById("hoverBarDate").style.opacity = 0;
+  document.getElementById("activeBarDate").style.opacity = 0;
+});
+
+
+
+/* -----------------------------------------------------------
+   UPDATE BAR FOR CENTERED BOOK (during scroll)
+----------------------------------------------------------- */
+function updateBarForCenteredBook() {
+  let closestIndex = 0;
+  let closestDist = Infinity;
+
+  books.forEach((b, i) => {
+    const dist = Math.abs(b.mesh.position.x + shelfOffset);
+    if (dist < closestDist) {
+      closestDist = dist;
+      closestIndex = i;
+    }
+  });
+
+  updateActiveBookBar(closestIndex);
+}
+
+/* -----------------------------------------------------------
+   FULL-WIDTH SINUSOIDAL WAVE EFFECT
+----------------------------------------------------------- */
+
+const BASE_HEIGHT = 12;       // height at edges
+const PEAK_HEIGHT = 70;       // tallest at hovered bar
+
+function applyWaveEffect(centerIndex) {
+  const bars = document.querySelectorAll(".book-bar");
+  const total = bars.length;
+
+  for (let i = 0; i < total; i++) {
+
+    // absolute distance from hovered bar
+    const dist = Math.abs(i - centerIndex);
+
+    // normalize into [0, 1]
+    const t = dist / (total - 1);
+
+    // FULL-WIDTH cosine wave (peak in middle, edges low)
+    // t = 0 → peak = 1
+    // t = 1 → edge = 0
+    const wave = Math.cos(1.5 * t * Math.PI) * 0.75  / (1+t**2) + 0.5;
+
+    const height = BASE_HEIGHT + wave * (PEAK_HEIGHT - BASE_HEIGHT);
+
+    bars[i].style.height = `${height}px`;
+  }
+}
+
+
+function resetWave() {
+  document.querySelectorAll(".book-bar").forEach(bar => {
+    bar.style.height = BASE_HEIGHT + "px";
+    bar.classList.remove("hovered");
+  });
+}
+
+const barDateDisplay = document.getElementById("barDateDisplay");
+
+function showBarDates(hoverIndex) {
+  const activeIndex = [...document.querySelectorAll(".book-bar")]
+    .findIndex(bar => bar.classList.contains("active"));
+
+  const hoverYear  = booksMeta[hoverIndex]?.year;
+  const activeYear = booksMeta[activeIndex]?.year;
+
+  if (hoverYear === undefined || activeYear === undefined) return;
+
+  barDateDisplay.textContent = `Selected: ${activeYear}    Hovering: ${hoverYear}`;
+  barDateDisplay.style.opacity = 1;
+}
+
+function hideBarDates() {
+  barDateDisplay.style.opacity = 0;
+}
+
+function positionLabelOverBar(labelEl, barEl, text) {
+  if (!barEl) {
+    labelEl.style.opacity = 0;
+    return;
+  }
+
+  const rect = barEl.getBoundingClientRect();
+
+  labelEl.textContent = text;
+  labelEl.style.left = rect.left + rect.width / 2 + "px";
+  labelEl.style.top  = rect.top - 12 + "px";
+  labelEl.style.opacity = 0.9;
+}
