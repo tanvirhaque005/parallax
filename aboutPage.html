@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library of Futures - About</title>
+    <link rel="stylesheet" href="navigation-menu.css">
     <style>
         * {
             margin: 0;
@@ -28,6 +29,7 @@
             text-decoration: none;
             letter-spacing: 2px;
             transition: color 0.3s;
+            display: none; /* Hide close button - navigation menu handles navigation */
         }
 
         .close-btn:hover {
@@ -134,6 +136,9 @@
     </style>
 </head>
 <body>
+    <!-- Navigation Menu -->
+    <div class="navigation-menu" id="navigationMenu"></div>
+    
     <a href="landingPage.html" class="close-btn">CLOSE</a>
 
     <div class="logo">
@@ -168,5 +173,7 @@
         <p>Course: CS171O Data Visualization with Professor Hans</p>
         <p>Data Sources: Film metadata databases, scholarly archives, and structured research collected across the project.</p>
     </div>
+    
+    <script src="navigation-menu.js"></script>
 </body>
 </html>

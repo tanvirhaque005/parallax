@@ -515,7 +515,8 @@ const EDGE_ZONE = 400;  // px from left/right side of screen
 window.addEventListener("mousemove", (e) => {
 
   const overlayOpen = bookinfo.classList.contains("open");
-  const menuOpen = menuSidebar.classList.contains("active");
+  const navigationMenu = document.getElementById('navigationMenu');
+  const menuOpen = navigationMenu && !navigationMenu.classList.contains('collapsed');
   const x = e.clientX;
   const w = window.innerWidth;
 
@@ -559,15 +560,15 @@ window.addEventListener("mousemove", (e) => {
 window.addEventListener("mousedown", (e) => {
 
   // stop if overlay, menu, OR bars are hovered
+  const navigationMenu = document.getElementById('navigationMenu');
+  const menuOpen = navigationMenu && !navigationMenu.classList.contains('collapsed');
+  
   if (bookinfo.classList.contains("open") ||
-      menuSidebar.classList.contains("active") ||
+      menuOpen ||
       hoveringBars) return;
 
-  const isMenuButton =
-    e.target.classList.contains("menu-button") ||
-    e.target.classList.contains("menu-close");
-
-  if (isMenuButton) return;
+  // Don't scroll if clicking on navigation menu
+  if (navigationMenu && navigationMenu.contains(e.target)) return;
 
   if (cursor.classList.contains("arrow-right")) {
     scrollRightBtn.click();
