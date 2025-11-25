@@ -674,6 +674,7 @@ barsContainer.addEventListener("mousemove", (e) => {
   let closestIndex = 0;
   let closestDist = Infinity;
 
+  // Find nearest bar center — ALWAYS succeeds, even in empty spaces
   bars.forEach((bar, i) => {
     const barRect = bar.getBoundingClientRect();
     const barCenter = barRect.left - rect.left + barRect.width / 2;
@@ -685,15 +686,24 @@ barsContainer.addEventListener("mousemove", (e) => {
     }
   });
 
+  // ALWAYS treat the nearest bar as hovered (even between bars)
   hoveredBarIndex = closestIndex;
 
   applyWaveEffect(closestIndex);
 
   // highlight nearest bar
-  document.querySelectorAll(".book-bar").forEach((bar, i) => {
+  bars.forEach((bar, i) => {
     bar.classList.toggle("hovered", i === hoveredBarIndex);
   });
 });
+barsContainer.addEventListener("click", (e) => {
+  if (hoveredBarIndex == null) return;
+
+  // Jump to nearest bar — even if mouse is not on a bar element
+  jumpToBook(hoveredBarIndex);
+  updateActiveBookBar(hoveredBarIndex);
+});
+
 
 /* -----------------------------------------------------------
    ENTER / LEAVE (disable arrow cursor + reset wave)
