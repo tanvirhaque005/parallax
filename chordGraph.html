@@ -199,6 +199,12 @@
 				stroke: #333333 !important;
 				stroke-width: 1px !important;
 			}
+
+			/* remove default cursor on chord graph nodes */
+#chordContainer svg circle {
+    cursor: none !important;
+}
+
 			
 			.chord-tooltip {
 				background: rgba(26, 26, 26, 0.98) !important;
@@ -339,6 +345,8 @@
 							width: Math.min(1400, window.innerWidth - 100),
 							height: Math.min(1000, window.innerHeight - 100)
 						});
+
+						
 
 						// Center the visualization
 						setTimeout(() => {
@@ -552,5 +560,9 @@
 				})();
 			})();
 		</script>
+		    <div id="cursorCircle"></div>
+			<link rel="stylesheet" href="cursor.css">
+			<script src="cursor.js" defer></script>
+		
 	</body>
 </html>
