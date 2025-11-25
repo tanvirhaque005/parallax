@@ -515,13 +515,11 @@ const EDGE_ZONE = 400;  // px from left/right side of screen
 window.addEventListener("mousemove", (e) => {
 
   const overlayOpen = bookinfo.classList.contains("open");
-  const navigationMenu = document.getElementById('navigationMenu');
-  const menuOpen = navigationMenu && !navigationMenu.classList.contains('collapsed');
   const x = e.clientX;
   const w = window.innerWidth;
 
-  // Never show arrows when overlay OR menu is open
-  if (overlayOpen || menuOpen || hoveringBars) {
+  // Never show arrows when overlay is open or hovering bars
+  if (overlayOpen || hoveringBars) {
     cursor.classList.remove("arrow-left", "arrow-right");
     return;
   }
@@ -530,6 +528,17 @@ window.addEventListener("mousemove", (e) => {
   if (cursor.classList.contains("hover")) {
     cursor.classList.remove("arrow-left", "arrow-right");
     return;
+  }
+  
+  // Don't show arrows if mouse is over navigation menu area (top right)
+  const navigationMenu = document.getElementById('navigationMenu');
+  if (navigationMenu) {
+    const menuRect = navigationMenu.getBoundingClientRect();
+    if (e.clientX >= menuRect.left && e.clientX <= menuRect.right &&
+        e.clientY >= menuRect.top && e.clientY <= menuRect.bottom) {
+      cursor.classList.remove("arrow-left", "arrow-right");
+      return;
+    }
   }
 
   // ---- RIGHT EDGE ----
@@ -559,15 +568,12 @@ window.addEventListener("mousemove", (e) => {
 /* Click-to-scroll when in arrow mode */
 window.addEventListener("mousedown", (e) => {
 
-  // stop if overlay, menu, OR bars are hovered
-  const navigationMenu = document.getElementById('navigationMenu');
-  const menuOpen = navigationMenu && !navigationMenu.classList.contains('collapsed');
-  
+  // stop if overlay OR bars are hovered
   if (bookinfo.classList.contains("open") ||
-      menuOpen ||
       hoveringBars) return;
 
   // Don't scroll if clicking on navigation menu
+  const navigationMenu = document.getElementById('navigationMenu');
   if (navigationMenu && navigationMenu.contains(e.target)) return;
 
   if (cursor.classList.contains("arrow-right")) {
