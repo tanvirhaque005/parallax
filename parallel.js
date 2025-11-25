@@ -161,7 +161,6 @@ function drawLines(filtered) {
 
   const enter = links.enter().append("path")
     .attr("class","link")
-    .attr("stroke-width", d => 1.5 + Math.sqrt(Math.abs(d.diff)));
 
   links = enter.merge(links)
     .attr("d", d => `M${x(d.startDate)},${yTop} L${x(d.endDate)},${yBot}`);
@@ -278,79 +277,103 @@ function updateWindowLabel() {
     `Window: ${windowStart}–${wEnd}`;
 }
 
-// /* ----------------------------
-//     SCRUBBER DRAG LOGIC
-// -----------------------------*/
-// const track = document.getElementById("window-track");
-// const thumb = document.getElementById("window-thumb");
 
-// let scrubActive = false;
-// let scrubStartX = 0;
-// let thumbStartLeft = 0;
+/* -------------------------------------------------------
+   ASYMMETRIC SCROLL SENSITIVITY
+   Up = stronger, Down = weaker
+-------------------------------------------------------- */
+/* -------------------------------------------
+   SUPER-SMOOTH MOMENTUM SCROLLING
+   Uses easing toward target velocity
+------------------------------------------- */
 
-// thumb.addEventListener("mousedown", (e) => {
-//   scrubActive = true;
-//   scrubStartX = e.clientX;
-//   thumbStartLeft = parseInt(thumb.style.left, 10);
-//   thumb.style.cursor = "grabbing";
-//   e.preventDefault();
-// });
+let scrollVelocity = 0;
+let targetVelocity = 0;
+let isScrolling = false;
 
-// window.addEventListener("mousemove", (e) => {
-//   if (!scrubActive) return;
-
-//   const dx = e.clientX - scrubStartX;
-//   let newLeft = thumbStartLeft + dx;
-
-//   const minLeft = 0;
-//   const maxLeft = track.offsetWidth - thumb.offsetWidth;
-
-//   newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
-//   thumb.style.left = newLeft + "px";
-
-//   const pct = newLeft / maxLeft;
-//   const totalRange = maxRelease - minRelease - WINDOW_SIZE_YEARS + 1;
-//   let newStart = minRelease + Math.round(pct * totalRange);
-
-//   newStart = Math.floor(newStart / WINDOW_SIZE_YEARS) * WINDOW_SIZE_YEARS;
-//   newStart = Math.max(minRelease, Math.min(newStart, maxRelease - WINDOW_SIZE_YEARS + 1));
-
-//   windowStart = newStart;
-//   update();
-// });
-
-// window.addEventListener("mouseup", () => {
-//   scrubActive = false;
-//   thumb.style.cursor = "grab";
-// });
-
-/* ----------------------------
-    SCROLL TO PAN VIEW
------------------------------*/
 svg.on("wheel", (e) => {
   e.preventDefault();
 
-  const delta = e.deltaY;
-  const d0 = x.domain().map(d => d.getFullYear());
-  const span = d0[1] - d0[0];
+  const BASE_SCROLL = 0.0010;
+  const UP_MULTIPLIER = 3;
+  const DOWN_MULTIPLIER = 0.5;
 
-  const yearsMoved = (delta / 250) * span;
+  let delta = e.deltaY;
 
-  let newMin = d0[0] + yearsMoved;
-  let newMax = d0[1] + yearsMoved;
+  // UP vs DOWN sensitivity
+  delta = delta < 0 ? delta * DOWN_MULTIPLIER : delta * UP_MULTIPLIER;
 
+  // Target velocity changes immediately
+  targetVelocity += delta * BASE_SCROLL;
+
+  // Start animation loop if needed
+  if (!isScrolling) {
+    isScrolling = true;
+    requestAnimationFrame(smoothScrollStep);
+  }
+});
+
+function smoothScrollStep() {
+
+  /* Smoothly approach target velocity
+     This is what creates ease-in / ease-out scrolling */
+  const APPROACH_RATE = 0.12;   // smoother easing (instead of 0.5)
+  const TARGET_DAMP   = 0.965;  // slower fade-out (instead of 0.90)
+  
+  scrollVelocity += (targetVelocity - scrollVelocity) * APPROACH_RATE;
+
+  // direction-sensitive damping
+  if (scrollVelocity > 0) {
+      targetVelocity *= 0.9;   
+  } else {
+      targetVelocity *= 0;
+  }
+       
+  /* Natural damping: slowly reduce target velocity */
+  // const TARGET_DAMP = 0.9;
+  // targetVelocity *= TARGET_DAMP;
+
+  /* Stop when velocities get tiny */
+  if (Math.abs(scrollVelocity) < 0.000001 && Math.abs(targetVelocity) < 0.000001) {
+    scrollVelocity = 0;
+    targetVelocity = 0;
+    isScrolling = false;
+    return;
+  }
+
+  // --- MOVE DOMAIN BASED ON VELOCITY ---
+  const [d0, d1] = x.domain();
+  const minYear = d0.getFullYear();
+  const maxYear = d1.getFullYear();
+  const span = maxYear - minYear;
+
+  let movement = scrollVelocity * span;
+
+  let newMin = minYear + movement;
+  let newMax = maxYear + movement;
+
+  // Clamp to bounds
   if (newMin < ABS_MIN_YEAR) {
     newMin = ABS_MIN_YEAR;
     newMax = ABS_MIN_YEAR + span;
+    scrollVelocity = 0;
+    targetVelocity = 0;
   }
   if (newMax > ABS_MAX_YEAR) {
     newMax = ABS_MAX_YEAR;
     newMin = ABS_MAX_YEAR - span;
+    scrollVelocity = 0;
+    targetVelocity = 0;
   }
 
+  // Apply domain
   x.domain([new Date(newMin,0,1), new Date(newMax,0,1)]);
-  update();
-});
+
+  update(); // <— redraw everything
+
+  requestAnimationFrame(smoothScrollStep);
+}
+
 
 /* ----------------------------
     UPDATE PIPELINE
