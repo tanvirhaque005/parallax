@@ -1,10 +1,10 @@
 html, body {
   margin: 0;
   height: 100%;
-  background: #1D1D1D;
+  background: #000000;
   overflow: hidden;
   color: #e5e7eb;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', monospace;
 }
 
 .breadcrumb {
@@ -35,7 +35,7 @@ html, body {
   font-size: 2rem;
   margin: 0 0 8px 0;
   pointer-events: auto;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', monospace;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -106,7 +106,7 @@ html, body {
   cursor: pointer;
   transition: all 0.2s ease;
   backdrop-filter: blur(4px);
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', monospace;
 }
 
 #controls button:hover {
@@ -154,8 +154,7 @@ html, body {
   font-size: clamp(1.6rem, 3vw, 2rem);
   font-weight: 700;
   margin: 0 0 6px;
-  color: #cccccc;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', monospace;
   letter-spacing: 2px;
 }
 
@@ -186,7 +185,7 @@ html, body {
   padding: 6px 12px;
   font-size: 0.85rem;
   opacity: 0.9;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.621);
   color: #cccccc;
 }
 
@@ -198,7 +197,7 @@ html, body {
   margin: 14px 0 8px;
   font-size: 1.25rem;
   color: #cccccc;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', sans-serif;
   letter-spacing: 1px;
 }
 
@@ -222,7 +221,7 @@ html, body {
   border-radius: 6px;
   cursor: pointer;
   transition: transform .15s ease, background .2s ease;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', monospace;
   letter-spacing: 1px;
 }
 
@@ -321,12 +320,16 @@ html, body {
   justify-content: center;
   color: #888888;
   font-size: 18px;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', monospace;
 }
 
 .film-details {
   order: 2;
-  padding-top: 20px;
+  padding-top: 80px;
+  padding-left: 30%;
+  white-space: normal; 
+  max-width: 60vw;
+
 }
 
 .title-row {
@@ -338,10 +341,9 @@ html, body {
 
 .title {
   font-size: 2.5rem;
-  font-weight: 700;
+  font-weight: 300;
   margin: 0;
-  color: #cccccc;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', monospace;
   letter-spacing: 2px;
 }
 
@@ -364,15 +366,13 @@ html, body {
 
 .tag-pill {
   padding: 4px 12px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(217, 217, 217, 0.227);
+  border: 1px solid rgba(255, 255, 255, 0.293);
   border-radius: 9999px;
-  color: #aaaaaa;
   font-size: 13px;
 }
 
 .plot {
-  color: #aaaaaa;
   font-size: 16px;
   line-height: 1.6;
   margin-bottom: 24px;
@@ -383,7 +383,7 @@ html, body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  margin-bottom: 48px;
+  margin-bottom: 8px;
 }
 
 .info-item {
@@ -393,7 +393,6 @@ html, body {
 
 .info-label {
   font-size: 13px;
-  color: #888888;
   margin-bottom: 4px;
   font-weight: 500;
   letter-spacing: 1px;
@@ -402,7 +401,6 @@ html, body {
 
 .info-value {
   font-size: 16px;
-  color: #cccccc;
 }
 
 .motifs-section {
@@ -412,15 +410,13 @@ html, body {
 .motifs-title {
   font-size: 20px;
   font-weight: 700;
-  color: #cccccc;
   margin: 0 0 8px 0;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', monospace;
   letter-spacing: 1px;
 }
 
 .motifs-desc {
   font-size: 14px;
-  color: #888888;
   margin-bottom: 24px;
   width: 50vw;
 }
@@ -479,7 +475,7 @@ html, body {
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 8px;
   color: #cccccc;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', monospace;
 }
 
 .back-btn:hover {
@@ -504,7 +500,7 @@ html, body {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease;
   cursor: pointer;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', monospace;
   letter-spacing: 1px;
 }
 
@@ -559,7 +555,7 @@ html, body {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: rgba(95, 95, 95, 0.28);
+  background: rgba(255, 255, 255, 0.28);
   pointer-events: none !important;
   transform: translate(-50%, -50%);
   transition:
@@ -676,7 +672,7 @@ body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circl
   top: 90px;            /* adjust as you want */
   left: 24px;
   color: #ffffff;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', monospace;
   font-size: 14px;
   opacity: 0.85;
   letter-spacing: 1px;
@@ -688,7 +684,7 @@ body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circl
 .barDateLabel {
   position: fixed;
   color: #ffffff;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', monospace;
   font-size: 12px;
   letter-spacing: 1px;
   pointer-events: none;

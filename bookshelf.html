@@ -5,6 +5,7 @@
     <title>3D Bookshelf (Full-Screen Details)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="./styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="navigation-menu.css">
     <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="introMessage.css">
@@ -44,7 +45,7 @@
     <link rel="stylesheet" href="arrowButton.css">
     <script src="arrowButton.js"></script>
     <div data-arrow-button 
-    text="text2" 
+    text="Explore Tropes" 
     href="chordGraph.html"
     delay="3">
     </div>
@@ -53,7 +54,7 @@
     <div id="bookinfo" aria-hidden="true">
       <div class="card" role="dialog" aria-modal="true">
 
-        <div class="breadcrumb">Library > Film</div>
+        <!-- <div class="breadcrumb">Library > Film</div> -->
         <!-- ONLY SEE WHEN IN OVERLAY -->
         <div id="introMessageOverlay" data-text="Click on a theme to reveal how this story fits into the broader network of recurring sci-fi ideas."></div>
         <script src="introMessage.js" defer></script>
@@ -68,29 +69,24 @@
 
             <div class="title-row">
               <h1 class="title" id="bookTitle">Title</h1>
-              <div class="rating-badge" id="ratingBadge">7.6/10</div>
             </div>
 
             <div class="tags-row" id="pillContainer"></div>
 
-            <p class="plot" id="bookBlurb">Blurb</p>
+            
 
             <div class="film-info-grid">
               <div class="info-item">
                 <div class="info-label">Director</div>
                 <div class="info-value" id="director">Director</div>
               </div>
-
-              <div class="info-item">
-                <div class="info-label">Released</div>
-                <div class="info-value" id="released">Year, Location</div>
-              </div>
             </div>
+            <p class="plot" id="bookBlurb">Blurb</p>
 
-            <div class="info-item">
+            <!-- <div class="info-item">
               <div class="info-label">Depicted</div>
               <div class="info-value" id="depicted">Year, Location</div>
-            </div>
+            </div> -->
           </div>
 
           <div class="motifs-section">

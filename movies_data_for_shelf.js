@@ -453,7 +453,7 @@ export default [
     ],
     "location": null,
     "blurb": "A Duke's son leads desert warriors against the galactic emperor and his father's evil nemesis when they assassinate his father and free their desert world from the emperor's rule."
-  , "color": "#F55433" 
+  , "color": "#FFFFFF" 
 ,"coverfile": "amogus.jpg"
 },
   {
@@ -1038,7 +1038,7 @@ export default [
     ],
     "location": null,
     "blurb": "A three-part miniseries on politics, betrayal, lust, greed and the coming of a Messiah. Based on Frank Herbert's classic science fiction novel."
-  , "color": "#F55433" 
+  , "color": "#FFFFFF" 
 ,"coverfile": "amogus.jpg"
 },
   {
@@ -1059,7 +1059,7 @@ export default [
     ],
     "location": null,
     "blurb": "A self-indulgent and vain publishing magnate finds his privileged life upended after a vehicular accident with a resentful lover."
-  , "color": "#F55433" 
+  , "color": "#000000" 
 ,"coverfile": "amogus.jpg"
 },
   {

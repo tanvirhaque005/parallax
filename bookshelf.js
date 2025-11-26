@@ -81,30 +81,6 @@ const geometry = new THREE.BoxGeometry(BOOK_W, BOOK_H, BOOK_D);
 /* Palette reordered to match release-year order */
 
 const textureLoader = new THREE.TextureLoader();
-function makeSpineTexture(title, color = "#ffffff") {
-  const canvas = document.createElement("canvas");
-  canvas.width = 256;
-  canvas.height = 1024;   // tall so text can be vertical
-
-  const ctx = canvas.getContext("2d");
-  ctx.fillStyle = "transparent";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.fillStyle = color;
-  ctx.font = "bold 72px Courier New";
-  ctx.textAlign = "center";
-
-  // Rotate the text for a vertical spine
-  ctx.save();
-  ctx.translate(canvas.width / 2, canvas.height / 2);
-  ctx.rotate(-Math.PI / 2); // 90° rotated
-  ctx.fillText(title, 0, 0);
-  ctx.restore();
-
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.minFilter = THREE.LinearFilter;
-  return texture;
-}
 
 function makeMaterials(spineColorHex, coverFile) {
 
@@ -226,6 +202,19 @@ scene.add(shelfGroup);
 /* -----------------------------------------------------------
    SCROLLING
 ----------------------------------------------------------- */
+
+let lastOverlayScrollTime = 0;
+const OVERLAY_SCROLL_COOLDOWN = 300;  // ms
+
+let lastShelfScrollTime = 0;
+const SHELF_SCROLL_COOLDOWN = 80;     // ms (tweak this)
+
+let scrollVelocity = 0;
+let lastWheelTime = 0;
+const FRICTION = 0.92;       // how fast momentum decays (0.90–0.96 recommended)
+const WHEEL_PUSH = 0.0004;   // how strongly scroll pushes the shelf
+
+
 let shelfOffset = 0;
 let targetShelfOffset = 0;
 
@@ -254,18 +243,51 @@ scrollRightBtn.addEventListener('click', () => {
   }
 });
 
-window.addEventListener('wheel', (e) => {
-  if (document.getElementById('bookinfo').classList.contains('open')) return;
+window.addEventListener("wheel", (e) => {
+  // disable shelf scrolling when overlay is open
+  if (bookinfo.classList.contains("open")) return;
 
-  if (e.deltaY > 0 && targetShelfOffset < MAX_SCROLL_LEFT) {
-    targetShelfOffset += 0.8;
-  } else if (e.deltaY < 0 && targetShelfOffset > MAX_SCROLL_RIGHT) {
-    targetShelfOffset -= 0.8;
-  }
+  // push the scroll velocity
+  scrollVelocity += e.deltaY * WHEEL_PUSH;
+
+  // also move the target immediately (for responsiveness)
+  targetShelfOffset += e.deltaY * 0.01;
+
+  // clamp within bounds
+  targetShelfOffset = Math.min(MAX_SCROLL_LEFT, Math.max(MAX_SCROLL_RIGHT, targetShelfOffset));
 
   updateScrollButtons();
+
+  lastWheelTime = performance.now();
+
   e.preventDefault();
 }, { passive: false });
+
+
+window.addEventListener("wheel", (e) => {
+  // Only apply when overlay is open
+  if (!bookinfo.classList.contains("open")) return;
+
+  const now = performance.now();
+  if (now - lastOverlayScrollTime < OVERLAY_SCROLL_COOLDOWN) {
+    e.preventDefault();
+    return;
+  }
+  lastOverlayScrollTime = now;
+
+  if (e.deltaY > 0) {
+    // scroll down → NEXT movie
+    openOverlayForIndex(currentIndex + 1);
+  } else if (e.deltaY < 0) {
+    // scroll up → PREVIOUS movie
+    openOverlayForIndex(currentIndex - 1);
+  }
+
+  e.preventDefault();
+}, { passive: false });
+
+
+
 
 /* -----------------------------------------------------------
    RAYCASTING
@@ -288,8 +310,8 @@ const backToShelf = document.getElementById('backToShelf');
 const titleEl = document.getElementById('bookTitle');
 const blurbEl = document.getElementById('bookBlurb');
 const directorEl = document.getElementById('director');
-const releasedEl = document.getElementById('released');
-const depictedEl = document.getElementById('depicted');
+// const releasedEl = document.getElementById('released');
+// const depictedEl = document.getElementById('depicted');
 const pillContainer = document.getElementById('pillContainer');
 const motifsContainer = document.getElementById('motifsContainer');
 
@@ -403,7 +425,7 @@ function setActiveBookByIndex(i) {
   activeBook.mesh.visible = false;
 }
 
-function mutedColor(hex, factor = 0.45) {
+function mutedColor(hex, factor = 0.25) {
   const c = new THREE.Color(hex);
   c.multiplyScalar(factor); // darken
   console.log(c.getHexString())
@@ -422,13 +444,14 @@ function rebuildOverlayForIndex() {
   overlayBg.style.backgroundColor = mutedColor(meta.color);
   
 
-  titleEl.textContent = meta.title;
+  titleEl.textContent = `${meta.title} (${meta.year})`;
   blurbEl.textContent = meta.blurb;
   directorEl.textContent = meta.director;
-  releasedEl.textContent = `${meta.year}`;
-  depictedEl.textContent = `${meta.depicted}, Washington DC, USA`;
+  // releasedEl.textContent = `${meta.year}`;
+  // depictedEl.textContent = `${meta.depicted}, Washington DC, USA`;
 
-  const tags = meta.tropes || [];
+  const NUM_MOTIFS = 4;  // Change if u want
+  const tags = meta.tropes.slice(0,NUM_MOTIFS) || [];
   pillContainer.innerHTML = tags.map(t => `<span class="tag-pill">${t}</span>`).join('');
 
   motifsContainer.innerHTML = tags.map(t => `
@@ -441,8 +464,8 @@ function rebuildOverlayForIndex() {
   if (overlayBook) overlayScene.remove(overlayBook);
   const coverFile = `/movie-covers/${meta.coverfile}`;
   overlayBook = new THREE.Mesh(geometry, makeMaterials(meta.color, coverFile));
-  overlayBook.rotation.set(0, 0.9, 0);
-  overlayBook.position.set(1.6, 0.6, 0.4);
+  overlayBook.rotation.set(0, 0.9, 0.1);
+  overlayBook.position.set(-4.1, 0.6, 0.4);
   overlayScene.add(overlayBook);
 }
 
@@ -498,6 +521,26 @@ function animate() {
   requestAnimationFrame(animate);
 
   shelfOffset += (targetShelfOffset - shelfOffset) * 0.1;
+  // --- MOMENTUM SCROLLING ---
+if (!bookinfo.classList.contains("open")) {
+  
+  // apply momentum to target offset
+  targetShelfOffset += scrollVelocity;
+
+  // friction reduces velocity each frame
+  scrollVelocity *= FRICTION;
+
+  // clamp to bookshelf range
+  if (targetShelfOffset > MAX_SCROLL_LEFT) {
+    targetShelfOffset = MAX_SCROLL_LEFT;
+    scrollVelocity = 0;
+  }
+  if (targetShelfOffset < MAX_SCROLL_RIGHT) {
+    targetShelfOffset = MAX_SCROLL_RIGHT;
+    scrollVelocity = 0;
+  }
+}
+
   shelfGroup.position.x = shelfOffset;
 
   updateBarForCenteredBook();
@@ -608,11 +651,30 @@ window.addEventListener("mousemove", (e) => {
   const x = e.clientX;
   const w = window.innerWidth;
 
-  // Never show arrows when overlay OR menu is open
-  if (overlayOpen || menuOpen || hoveringBars) {
+  // 🔥 NEW — overlay mode: enable arrows for prev/next navigation
+if (overlayOpen) {
+  const x = e.clientX;
+  const w = window.innerWidth;
+
+  // Block arrows if inside a button or motif, etc
+  if (cursor.classList.contains("hover")) {
     cursor.classList.remove("arrow-left", "arrow-right");
     return;
   }
+
+  if (x < EDGE_ZONE) {
+    cursor.classList.add("arrow-left");
+    cursor.classList.remove("arrow-right");
+  } else if (x > w - EDGE_ZONE) {
+    cursor.classList.add("arrow-right");
+    cursor.classList.remove("arrow-left");
+  } else {
+    cursor.classList.remove("arrow-left", "arrow-right");
+  }
+
+  return;
+}
+
   
   // If normal hover cursor is active → no arrows
   if (cursor.classList.contains("hover")) {
@@ -644,16 +706,23 @@ window.addEventListener("mousemove", (e) => {
   cursor.classList.remove("arrow-left", "arrow-right");
 });
 
-/* Click-to-scroll when in arrow mode */
 window.addEventListener("mousedown", (e) => {
 
-  // stop if overlay, menu, OR bars are hovered
   const navigationMenu = document.getElementById('navigationMenu');
   const menuOpen = navigationMenu && !navigationMenu.classList.contains('collapsed');
-  
-  if (bookinfo.classList.contains("open") ||
-      menuOpen ||
-      hoveringBars) return;
+
+  // 🔥 NEW — overlay click arrow
+  if (bookinfo.classList.contains("open")) {
+    if (cursor.classList.contains("arrow-right")) {
+      openOverlayForIndex(currentIndex + 1);
+    } else if (cursor.classList.contains("arrow-left")) {
+      openOverlayForIndex(currentIndex - 1);
+    }
+    return;  
+  }
+
+  // (existing non-overlay logic below)
+  if (menuOpen || hoveringBars) return;
 
   // Don't scroll if clicking on navigation menu
   if (navigationMenu && navigationMenu.contains(e.target)) return;
