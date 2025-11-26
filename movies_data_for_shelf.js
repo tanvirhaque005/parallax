@@ -17,7 +17,9 @@ export default [
     ],
     "location": null,
     "blurb": "Elliot, a brilliant but highly unstable young cyber-security engineer and vigilante hacker, becomes a key figure in a complex game of global dominance when he and his shadowy allies try to take down the corrupt corporation he works for."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 85,
     "title": "Rick and Morty",
@@ -37,7 +39,9 @@ export default [
     ],
     "location": null,
     "blurb": "An animated series that follows the exploits of a super scientist and his not-so-bright grandson."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 87,
     "title": "Star Trek: Discovery",
@@ -57,7 +61,9 @@ export default [
     ],
     "location": null,
     "blurb": "Ten years before Kirk, Spock and the Enterprise, the USS Discovery discovers new worlds and lifeforms as one Starfleet officer learns to understand all things alien."
-  },
+  , "color": "#24bd2b" 
+,"coverfile": "morb.jpg"
+},
   {
     "id": 34,
     "title": "Metropolis",
@@ -77,7 +83,9 @@ export default [
     ],
     "location": null,
     "blurb": "In a futuristic city sharply divided between the working class and the city planners, the son of the city's mastermind falls in love with a working class prophet who predicts the coming of a savior to mediate their differences."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 26,
     "title": "Godzilla",
@@ -95,7 +103,9 @@ export default [
     ],
     "location": null,
     "blurb": "American nuclear weapons testing results in the creation of a seemingly unstoppable, dinosaur-like beast."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 22,
     "title": "Forbidden Planet",
@@ -115,7 +125,9 @@ export default [
     ],
     "location": null,
     "blurb": "A starship crew goes to investigate the silence of a planet's colony only to find two survivors and a deadly secret that one of them has."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 98,
     "title": "Twilight Zone",
@@ -135,7 +147,9 @@ export default [
     ],
     "location": null,
     "blurb": "Rod Serling's seminal anthology series focused on ordinary folks who suddenly found themselves in extraordinary, usually supernatural, situations. The stories would typically end with an ironic twist that would see the guilty punished."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 33,
     "title": "La Jet\u00e9e",
@@ -154,7 +168,9 @@ export default [
     ],
     "location": null,
     "blurb": "Time travel, still images, a past, present and future and the aftermath of World War III. The tale of a man, a slave, sent back and forth, in and out of time, to find a solution to the world's fate. To replenish its decreasing stocks of food, medicine and energies, and in doing so, resulting in a perpetual memory of a lone female, life, death and past events that are recreated on an airports jet\u00e9e."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 74,
     "title": "Doctor Who",
@@ -174,7 +190,9 @@ export default [
     ],
     "location": null,
     "blurb": "The further adventures of the time traveling alien adventurer and his companions."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 90,
     "title": "Star Trek: The Original Series",
@@ -194,7 +212,9 @@ export default [
     ],
     "location": null,
     "blurb": "Captain James T. Kirk and the crew of the Starship Enterprise explore the Galaxy and defend the United Federation of Planets."
-  },
+  , "color": "#24bd2b" 
+,"coverfile": "morb.jpg"
+},
   {
     "id": 96,
     "title": "The Prisoner",
@@ -214,7 +234,9 @@ export default [
     ],
     "location": null,
     "blurb": "After resigning, a secret agent is abducted and taken to what looks like an idyllic village, but is really a bizarre prison. His warders demand information. He gives them nothing, but only tries to escape."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 0,
     "title": "2001: A Space Odyssey",
@@ -234,7 +256,9 @@ export default [
     ],
     "location": null,
     "blurb": "Humanity finds a mysterious, obviously artificial, object buried beneath the Lunar surface and, with the intelligent computer H.A.L. 9000, sets off on a quest."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 1,
     "title": "A Clockwork Orange",
@@ -254,7 +278,9 @@ export default [
     ],
     "location": null,
     "blurb": "In future Britain, charismatic delinquent Alex DeLarge is jailed and volunteers for an experimental aversion therapy developed by the government in an effort to solve society's crime problem\u2014but not all goes according to plan."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 47,
     "title": "Solaris",
@@ -274,7 +300,9 @@ export default [
     ],
     "location": null,
     "blurb": "A psychologist is sent to a station orbiting a distant planet in order to discover what has caused the crew to go insane."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 18,
     "title": "Eraserhead",
@@ -293,7 +321,9 @@ export default [
     ],
     "location": null,
     "blurb": "Henry Spencer tries to survive his industrial environment, his angry girlfriend, and the unbearable screams of his newly born mutant child."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 71,
     "title": "Blakes 7",
@@ -313,7 +343,9 @@ export default [
     ],
     "location": null,
     "blurb": "A group of convicts and outcasts fight a guerrilla war against the totalitarian Terran Federation from a highly advanced alien spaceship."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 50,
     "title": "Stalker",
@@ -332,7 +364,9 @@ export default [
     ],
     "location": null,
     "blurb": "Near a gray and unnamed city is the Zone, an alien place guarded by barbed wire and soldiers. Over his wife's objections, a man rises in the early morning and leaves her with their disabled daughter to meet two men. He's a Stalker, one of a handful who have the mental gifts (and who risk imprisonment) to lead people into the Zone to the Room, a place where one's secret hopes come true."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 80,
     "title": "Hitchhiker's Guide to the Galaxy",
@@ -352,7 +386,9 @@ export default [
     ],
     "location": null,
     "blurb": "An Earth man and his alien friend escape Earth's destruction and go on a truly strange adventure as space hitchhikers."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 5,
     "title": "Blade Runner",
@@ -372,7 +408,9 @@ export default [
     ],
     "location": null,
     "blurb": "A blade runner must pursue and try to terminate four replicants who stole a ship in space and have returned to Earth to find their creator."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 67,
     "title": "Star Trek II: The Wrath of Khan",
@@ -392,7 +430,9 @@ export default [
     ],
     "location": null,
     "blurb": "With the assistance of the Enterprise crew, Admiral Kirk must stop an old nemesis, Khan Noonien Singh, from using his son's life-generating device, the Genesis Device, as the ultimate weapon."
-  },
+  , "color": "#F55433" 
+,"coverfile": "morb.jpg"
+},
   {
     "id": 16,
     "title": "Dune",
@@ -413,7 +453,9 @@ export default [
     ],
     "location": null,
     "blurb": "A Duke's son leads desert warriors against the galactic emperor and his father's evil nemesis when they assassinate his father and free their desert world from the emperor's rule."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 7,
     "title": "Brazil",
@@ -433,7 +475,9 @@ export default [
     ],
     "location": null,
     "blurb": "A bureaucrat in a retro-future world tries to correct an administrative error and himself becomes an enemy of the state."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 89,
     "title": "Star Trek: The Next Generation",
@@ -453,7 +497,9 @@ export default [
     ],
     "location": null,
     "blurb": "Set decades after Captain James T. Kirk's 5-year mission, a new generation of Starfleet officers in a new Enterprise set off on their own mission to go where no one has gone before."
-  },
+  , "color": "#24bd2b" 
+,"coverfile": "morb.jpg"
+},
   {
     "id": 3,
     "title": "Akira",
@@ -473,7 +519,9 @@ export default [
     ],
     "location": null,
     "blurb": "A secret military project endangers Neo-Tokyo when it turns a biker gang member into a rampaging psionic psychopath that only two kids and a group of psionics can stop."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 84,
     "title": "Red Dwarf",
@@ -492,7 +540,9 @@ export default [
     ],
     "location": null,
     "blurb": "The adventures of the last human alive and his friends, stranded three million years into deep space on the mining ship Red Dwarf."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 86,
     "title": "Star Trek: Deep Space Nine",
@@ -511,7 +561,9 @@ export default [
     ],
     "location": null,
     "blurb": "Orbiting the liberated planet of Bajor, a Federation space station guards the opening of a stable wormhole to the far side of the galaxy."
-  },
+  , "color": "#F55433" 
+,"coverfile": "morb.jpg"
+},
   {
     "id": 97,
     "title": "The X-Files",
@@ -531,7 +583,9 @@ export default [
     ],
     "location": null,
     "blurb": "Two FBI agents, Fox Mulder the believer and Dana Scully the skeptic, investigate the strange and unexplained while hidden forces work to impede their efforts."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 68,
     "title": "Babylon 5",
@@ -551,7 +605,9 @@ export default [
     ],
     "location": null,
     "blurb": "A space station in neutral territory is the focus of a unique five year saga."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 25,
     "title": "Ghost in the Shell",
@@ -571,7 +627,9 @@ export default [
     ],
     "location": null,
     "blurb": "A female cyborg cop and her partner hunt a mysterious and powerful hacker called the Puppet Master."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 27,
     "title": "Hackers",
@@ -590,7 +648,9 @@ export default [
     ],
     "location": null,
     "blurb": "A young boy is arrested by the U.S. Secret Service for writing a computer virus and is banned from using a computer until his 18th birthday. Years later, he and his new-found friends discover a plot to unleash a dangerous computer virus, but they must use their computer skills to find the evidence while being pursued by the Secret Service and the evil computer genius behind the virus."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 44,
     "title": "Screamers",
@@ -609,7 +669,9 @@ export default [
     ],
     "location": null,
     "blurb": "A military commander stationed off planet during an interplanetary war travels through the devastated landscape to negotiate a peace treaty, but discovers that the primitive robots they built to kill enemy combatants have gained sentience."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 51,
     "title": "Strange Days",
@@ -628,7 +690,9 @@ export default [
     ],
     "location": null,
     "blurb": "A former cop turned street-hustler accidentally uncovers a conspiracy in Los Angeles in 1999."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 54,
     "title": "The City of Lost Children",
@@ -647,7 +711,9 @@ export default [
     ],
     "location": null,
     "blurb": "A scientist in a surrealist society kidnaps children to steal their dreams, hoping that they slow his aging process."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 82,
     "title": "Neon Genesis Evangelion",
@@ -667,7 +733,9 @@ export default [
     ],
     "location": null,
     "blurb": "15 years after the enormous catastrophe that killed half of the world population, another crisis has come\u2014the unidentified invaders called \"Angels\" begin to attack human-kind. Mankind's only hope lies with giant organic mecha and their teenage pilots."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 65,
     "title": "Twelve Monkeys",
@@ -687,7 +755,9 @@ export default [
     ],
     "location": null,
     "blurb": "In a future world devastated by disease, a convict is sent back in time to gather information about the man-made virus that wiped out most of the human population on the planet."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 13,
     "title": "Contact",
@@ -707,7 +777,9 @@ export default [
     ],
     "location": null,
     "blurb": "Dr. Ellie Arroway, after years of searching, finds conclusive radio proof of extraterrestrial intelligence, sending plans for a mysterious machine."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 24,
     "title": "Gattaca",
@@ -727,7 +799,9 @@ export default [
     ],
     "location": null,
     "blurb": "A genetically inferior man assumes the identity of a superior one in order to pursue his lifelong dream of space travel."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 39,
     "title": "Open Your Eyes",
@@ -746,7 +820,9 @@ export default [
     ],
     "location": null,
     "blurb": "A very handsome man finds the love of his life, but he suffers an accident and needs to have his face rebuilt by surgery after it is severely disfigured."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 55,
     "title": "The Fifth Element",
@@ -766,7 +842,9 @@ export default [
     ],
     "location": null,
     "blurb": "In the colorful future, a cab driver unwittingly becomes the central figure in the search for a legendary cosmic weapon to keep Evil and Mr Zorg at bay."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 92,
     "title": "Stargate SG1",
@@ -786,7 +864,9 @@ export default [
     ],
     "location": null,
     "blurb": "A secret military team, SG-1, is formed to explore the recently discovered Stargates."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 14,
     "title": "Dark City",
@@ -806,7 +886,9 @@ export default [
     ],
     "location": null,
     "blurb": "A man struggles with memories of his past, including a wife he cannot remember, in a nightmarish world with no sun."
-  },
+  , "color": "#F55433" 
+,"coverfile": "morb.jpg"
+},
   {
     "id": 21,
     "title": "eXistenZ",
@@ -826,7 +908,9 @@ export default [
     ],
     "location": null,
     "blurb": "A game designer on the run from assassins must play her latest virtual reality creation with a marketing trainee to determine if the game has been damaged."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 23,
     "title": "Galaxy Quest",
@@ -845,7 +929,9 @@ export default [
     ],
     "location": null,
     "blurb": "The alumni cast of a space opera television series have to play their roles as the real thing when an alien race needs their help."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 60,
     "title": "The Matrix",
@@ -865,7 +951,9 @@ export default [
     ],
     "location": null,
     "blurb": "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 62,
     "title": "The Thirteenth Floor",
@@ -884,7 +972,9 @@ export default [
     ],
     "location": null,
     "blurb": "Computer scientist Hannon Fuller has discovered something extremely important. He's about to tell the discovery to his colleague, Douglas Hall, but knowing someone is after him, the old man leaves a letter in the computer generated parallel world his company has created (which looks like the 30's with seemingly real people with real emotions). Fuller is murdered in our real world the same night, and his colleague is suspected. Douglas discovers a bloody shirt in his bathroom and he cannot recall what he was doing the night Fuller was murdered. He logs into the system in order to find the letter, but has to confront the unexpected. The truth is harsher than he could ever imagine..."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 77,
     "title": "Farscape",
@@ -904,7 +994,9 @@ export default [
     ],
     "location": null,
     "blurb": "Thrown into a distant part of the universe, an Earth astronaut finds himself part of a fugitive alien starship crew."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 41,
     "title": "Possible Worlds",
@@ -924,7 +1016,9 @@ export default [
     ],
     "location": null,
     "blurb": "A man lives in parallel worlds, falling in love with the same woman, while the police hunt down a serial killer who steals brains."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 75,
     "title": "Dune",
@@ -944,7 +1038,9 @@ export default [
     ],
     "location": null,
     "blurb": "A three-part miniseries on politics, betrayal, lust, greed and the coming of a Messiah. Based on Frank Herbert's classic science fiction novel."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 66,
     "title": "Vanilla Sky",
@@ -963,7 +1059,9 @@ export default [
     ],
     "location": null,
     "blurb": "A self-indulgent and vain publishing magnate finds his privileged life upended after a vehicular accident with a resentful lover."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 88,
     "title": "Star Trek: Enterprise",
@@ -982,7 +1080,9 @@ export default [
     ],
     "location": null,
     "blurb": "A century before Captain Kirk's five-year mission, Jonathan Archer captains Earth ship Enterprise NX-01 during the early years of Starfleet leading up to the formation of the Federation and the Earth-Romulan War."
-  },
+  , "color": "#24bd2b" 
+,"coverfile": "morb.jpg"
+},
   {
     "id": 35,
     "title": "Minority Report",
@@ -1002,7 +1102,9 @@ export default [
     ],
     "location": null,
     "blurb": "In a future where a special police unit is able to arrest murderers before they commit their crimes, an officer from that unit is himself accused of a future murder."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 48,
     "title": "Solaris",
@@ -1022,7 +1124,9 @@ export default [
     ],
     "location": null,
     "blurb": "A troubled psychologist is sent to investigate the crew of an isolated research station orbiting a bizarre planet."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 63,
     "title": "The Time Machine",
@@ -1041,7 +1145,9 @@ export default [
     ],
     "location": null,
     "blurb": "Hoping to alter the events of the past, a 19th century inventor instead travels 800,000 years into the future, where he finds humankind divided into two warring races."
-  },
+  , "color": "#24bd2b" 
+,"coverfile": "morb.jpg"
+},
   {
     "id": 78,
     "title": "Firefly",
@@ -1061,7 +1167,9 @@ export default [
     ],
     "location": null,
     "blurb": "Five hundred years in the future, a renegade crew aboard a small spacecraft tries to survive as they travel the unknown parts of the galaxy and evade warring factions as well as authority agents out to get them."
-  },
+  , "color": "#24bd2b" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 72,
     "title": "Children of Dune",
@@ -1081,7 +1189,9 @@ export default [
     ],
     "location": null,
     "blurb": "The twins of Paul \"Muad'dib\" Atreides become embroiled in the political landscape of Arrakis (\"Dune\") and the rest of the universe."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 30,
     "title": "I, Robot",
@@ -1101,7 +1211,9 @@ export default [
     ],
     "location": null,
     "blurb": "In 2035, a technophobic cop investigates a crime that may have been perpetrated by a robot, which leads to a larger threat to humanity."
-  },
+  , "color": "#24bd2b" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 43,
     "title": "Primer",
@@ -1120,7 +1232,9 @@ export default [
     ],
     "location": null,
     "blurb": "Four friends/fledgling entrepreneurs, knowing that there's something bigger and more innovative than the different error-checking devices they've built, wrestle over their new invention."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 69,
     "title": "Battlestar Galactica",
@@ -1140,7 +1254,9 @@ export default [
     ],
     "location": null,
     "blurb": "When an old enemy, the Cylons, resurfaces and obliterate the 12 colonies, the crew of the aged Galactica protects a small civilian fleet - the last of humanity - as they journey toward the fabled 13th colony of Earth."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 91,
     "title": "Stargate Atlantis",
@@ -1160,7 +1276,9 @@ export default [
     ],
     "location": null,
     "blurb": "An international team of scientists and military personnel discover a Stargate network in the Pegasus Galaxy and come face-to-face with a new, powerful enemy, The Wraith."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 45,
     "title": "Serenity (Firefly)",
@@ -1180,7 +1298,9 @@ export default [
     ],
     "location": null,
     "blurb": "The crew of the ship Serenity tries to evade an assassin sent to recapture one of their number who is telepathic."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 56,
     "title": "The Hitchhiker's Guide to the Galaxy",
@@ -1200,7 +1320,9 @@ export default [
     ],
     "location": null,
     "blurb": "Mere seconds before the Earth is to be demolished by an alien construction crew, journeyman Arthur Dent is swept off the planet by his friend Ford Prefect, a researcher penning a new edition of \"The Hitchhiker's Guide to the Galaxy.\""
-  },
+  , "color": "#24bd2b" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 57,
     "title": "The Island",
@@ -1220,7 +1342,9 @@ export default [
     ],
     "location": null,
     "blurb": "Lincoln Six-Echo is a resident of a seemingly Utopian but contained facility in the year 2019. Like all of the inhabitants of this carefully controlled environment, Lincoln hopes to be chosen to go to the \"The Island\" - reportedly the last uncontaminated spot on the planet. But Lincoln soon discovers that everything about his existence is a lie. He and all of the other inhabitants of the facility are actually human clones. Lincoln makes a daring escape with a beautiful fellow resident named Jordan Two-Delta. Relentlessly pursued by the forces of the sinister institute that once housed them, Lincoln and Jordan engage in a race for their lives to literally meet their makers."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 2,
     "title": "A Scanner Darkly",
@@ -1240,7 +1364,9 @@ export default [
     ],
     "location": null,
     "blurb": "An undercover cop in a not-too-distant future becomes involved with a dangerous new drug and begins to lose his own identity as a result."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 10,
     "title": "Children of Men",
@@ -1260,7 +1386,9 @@ export default [
     ],
     "location": null,
     "blurb": "In 2027, in a chaotic world in which women have become somehow infertile, a former activist agrees to help transport a miraculously pregnant woman to a sanctuary at sea."
-  },
+  , "color": "#24bd2b" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 40,
     "title": "Paprika",
@@ -1280,7 +1408,9 @@ export default [
     ],
     "location": null,
     "blurb": "When a machine that allows therapists to enter their patients' dreams is stolen, all hell breaks loose. Only a young female therapist can stop it: Paprika."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 76,
     "title": "Eureka",
@@ -1299,7 +1429,9 @@ export default [
     ],
     "location": null,
     "blurb": "A U.S. Marshall becomes the sheriff of a remote cozy little Northwestern town of Eureka where the best minds in the US have secretly been tucked away to build futuristic inventions for the government which often go disastrously wrong."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 52,
     "title": "Sunshine",
@@ -1318,7 +1450,9 @@ export default [
     ],
     "location": null,
     "blurb": "A team of international astronauts is sent on a dangerous mission to reignite the dying Sun with a nuclear fission bomb in 2057."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 58,
     "title": "The Man from Earth",
@@ -1337,7 +1471,9 @@ export default [
     ],
     "location": null,
     "blurb": "An impromptu goodbye party for Professor John Oldman becomes a mysterious interrogation after the retiring scholar reveals to his colleagues he never ages and has walked the earth for 14,000 years."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 79,
     "title": "Fringe",
@@ -1356,7 +1492,9 @@ export default [
     ],
     "location": null,
     "blurb": "A television drama centered around a female FBI agent who is forced to work with an institutionalized scientist in order to rationalize a brewing storm of unexplained phenomena."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 8,
     "title": "Cargo",
@@ -1375,7 +1513,9 @@ export default [
     ],
     "location": null,
     "blurb": "In 2270, Earth is completely depleted and no one lives there anymore. Those that have money move to Rhea; but most of the population lives in orbit in space stations. Dr. Laura Portmann decides to work in the cargo ship Kassandra in an eight year travel to Station 42 that is in orbit of RH278 to raise money to meet her sister Arianne in Rhea."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 15,
     "title": "District 9",
@@ -1395,7 +1535,9 @@ export default [
     ],
     "location": null,
     "blurb": "An extraterrestrial race forced to live in slum-like conditions on Earth suddenly finds a kindred spirit in a government agent who is exposed to their biotechnology."
-  },
+  , "color": "#24bd2b" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 36,
     "title": "Moon",
@@ -1415,7 +1557,9 @@ export default [
     ],
     "location": null,
     "blurb": "Astronaut Sam Bell has a quintessentially personal encounter toward the end of his three-year stint on the Moon, where he, working alongside his computer, GERTY, sends back to Earth parcels of a resource that has helped diminish our planet's power problems."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 37,
     "title": "Mr. Nobody",
@@ -1435,7 +1579,9 @@ export default [
     ],
     "location": null,
     "blurb": "A boy stands on a station platform as a train is about to leave. Should he go with his mother or stay with his father? Infinite possibilities arise from this decision. As long as he doesn't choose, anything is possible."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 93,
     "title": "Stargate Universe",
@@ -1455,7 +1601,9 @@ export default [
     ],
     "location": null,
     "blurb": "Trapped on an Ancient spaceship billions of light years from home, a group of soldiers and civilians struggle to survive and find their way back to Earth."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 31,
     "title": "Inception",
@@ -1475,7 +1623,9 @@ export default [
     ],
     "location": null,
     "blurb": "A thief who steals corporate secrets through use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 49,
     "title": "Source Code",
@@ -1494,7 +1644,9 @@ export default [
     ],
     "location": null,
     "blurb": "A soldier wakes up in someone else's body and discovers he's part of an experimental government program to find the bomber of a commuter train. A mission he has only 8 minutes to complete."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 70,
     "title": "Black Mirror",
@@ -1514,7 +1666,9 @@ export default [
     ],
     "location": null,
     "blurb": "A television anthology series that shows the dark side of life and technology."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 83,
     "title": "Person of Interest",
@@ -1534,7 +1688,9 @@ export default [
     ],
     "location": null,
     "blurb": "An ex-assassin and a wealthy programmer save lives via a surveillance AI that sends them the identities of civilians involved in impending crimes. However, the details of the crimes--including the civilians' roles--are left a mystery."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 11,
     "title": "Cloud Atlas",
@@ -1554,7 +1710,9 @@ export default [
     ],
     "location": null,
     "blurb": "An exploration of how the actions of individual lives impact one another in the past, present and future, as one soul is shaped from a killer into a hero, and an act of kindness ripples across centuries to inspire a revolution."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 73,
     "title": "Continuum",
@@ -1573,7 +1731,9 @@ export default [
     ],
     "location": null,
     "blurb": "A detective from the year 2077 finds herself trapped in present day Vancouver and searching for ruthless criminals from the future."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 12,
     "title": "Coherence",
@@ -1591,7 +1751,9 @@ export default [
     ],
     "location": null,
     "blurb": "Strange things begin to happen when a group of friends gather for a dinner party on an evening when a comet is passing overhead."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 19,
     "title": "Europa Report",
@@ -1611,7 +1773,9 @@ export default [
     ],
     "location": null,
     "blurb": "An international crew of astronauts undertakes a privately funded mission to search for life on Jupiter's fourth largest moon."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 38,
     "title": "Oblivion",
@@ -1631,7 +1795,9 @@ export default [
     ],
     "location": null,
     "blurb": "A veteran assigned to extract Earth's remaining resources begins to question what he knows about his mission and himself."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 46,
     "title": "Snowpiercer",
@@ -1651,7 +1817,9 @@ export default [
     ],
     "location": null,
     "blurb": "Set in a future where a failed climate-change experiment kills all life on the planet except for a lucky few who boarded the Snowpiercer, a train that travels around the globe, where a class system emerges."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 17,
     "title": "Edge of Tomorrow",
@@ -1671,7 +1839,9 @@ export default [
     ],
     "location": null,
     "blurb": "A military officer is brought into an alien war against an extraterrestrial enemy who can reset the day and know the future. When this officer is enabled with the same power, he teams up with a Special Forces warrior to try and end the war."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 28,
     "title": "Her",
@@ -1690,7 +1860,9 @@ export default [
     ],
     "location": null,
     "blurb": "A lonely writer develops an unlikely relationship with his newly purchased operating system that's designed to meet his every need."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 29,
     "title": "I Origins",
@@ -1709,7 +1881,9 @@ export default [
     ],
     "location": null,
     "blurb": "A molecular biologist and his laboratory partner uncover evidence that may fundamentally change society as we know it."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 32,
     "title": "Interstellar",
@@ -1729,7 +1903,9 @@ export default [
     ],
     "location": null,
     "blurb": "A team of explorers travel through a wormhole in an attempt to ensure humanity's survival."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 42,
     "title": "Predestination",
@@ -1748,7 +1924,9 @@ export default [
     ],
     "location": null,
     "blurb": "The life of a time-traveling Temporal Agent. On his final assignment, he must pursue the one criminal that has eluded him throughout time."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 61,
     "title": "The Signal",
@@ -1768,7 +1946,9 @@ export default [
     ],
     "location": null,
     "blurb": "On a road trip, Nic and two friends are drawn to an isolated area by a computer genius. When everything suddenly goes dark, Nic regains consciousness - only to find himself in a waking nightmare."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 64,
     "title": "Transcendence",
@@ -1787,7 +1967,9 @@ export default [
     ],
     "location": null,
     "blurb": "A scientist's drive for AI, takes on dangerous implications when his consciousness is uploaded into one such program."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 94,
     "title": "The 100",
@@ -1807,7 +1989,9 @@ export default [
     ],
     "location": null,
     "blurb": "Set ninety-seven years after a nuclear war has destroyed civilization, when a spaceship housing humanity's lone survivors sends one hundred juvenile delinquents back to Earth, in hopes of possibly re-populating the planet."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 9,
     "title": "Chappie",
@@ -1827,7 +2011,9 @@ export default [
     ],
     "location": null,
     "blurb": "In the near future, crime is patrolled by a mechanized police force. When one police droid, Chappie, is stolen and given new programming, he becomes the first robot with the ability to think and feel for himself."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 20,
     "title": "Ex Machina",
@@ -1847,7 +2033,9 @@ export default [
     ],
     "location": null,
     "blurb": "A young programmer is selected to participate in a breakthrough experiment in AI by evaluating the human qualities of a breathtaking female A.I."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 59,
     "title": "The Martian",
@@ -1866,7 +2054,9 @@ export default [
     ],
     "location": null,
     "blurb": "During a manned mission to Mars, Astronaut Mark Watney is presumed dead after a fierce storm and left behind by his crew. But Watney has survived and finds himself stranded and alone on the hostile planet. With only meager supplies, he must draw upon his ingenuity, wit and spirit to subsist and find a way to signal to Earth that he is alive."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 4,
     "title": "Arrival",
@@ -1886,7 +2076,9 @@ export default [
     ],
     "location": null,
     "blurb": "When 12 mysterious spacecraft appear around the world, linguistics professor Louise Banks is tasked with interpreting the language of the apparent alien visitors."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 6,
     "title": "Blade Runner 2049",
@@ -1906,7 +2098,9 @@ export default [
     ],
     "location": null,
     "blurb": "A young blade runner's discovery of a long-buried secret leads him to track down former blade runner Rick Deckard, who's been missing for thirty years."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 95,
     "title": "The Orville",
@@ -1926,7 +2120,9 @@ export default [
     ],
     "location": null,
     "blurb": "Follows the crew of the not-so-functional exploratory ship in the Earth's interstellar fleet, 400 years in the future."
-  },
+  , "color": "#F55433" 
+,"coverfile": "amogus.jpg"
+},
   {
     "id": 53,
     "title": "Tenet",

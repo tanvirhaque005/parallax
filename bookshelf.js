@@ -79,35 +79,58 @@ const BOOK_D = 0.4;   // <--- SLIMMER!
 const geometry = new THREE.BoxGeometry(BOOK_W, BOOK_H, BOOK_D);
 
 /* Palette reordered to match release-year order */
-const palette = [
-  { front: 0x22d3ee, back: 0x083344 }, // 1927 Metropolis
-  { front: 0x0ea5e9, back: 0x0f172a }, // 1968 2001
-  { front: 0xf59e0b, back: 0x78350f }, // 1982 BR
-  { front: 0xef4444, back: 0x7f1d1d }, // 1990 TR
-  { front: 0x8b5cf6, back: 0x3b0764 }, // 1997 Gattaca
-  { front: 0xf472b6, back: 0x831843 }, // 1999 Matrix
-  { front: 0x10b981, back: 0x064e3b }, // 2002 MR
-];
 
-function makeMaterials(cover, back) {
-  const spine = 0x1e293b;
-  const edge = 0x334155;
+const textureLoader = new THREE.TextureLoader();
+function makeSpineTexture(title, color = "#ffffff") {
+  const canvas = document.createElement("canvas");
+  canvas.width = 256;
+  canvas.height = 1024;   // tall so text can be vertical
+
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "transparent";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = color;
+  ctx.font = "bold 72px Courier New";
+  ctx.textAlign = "center";
+
+  // Rotate the text for a vertical spine
+  ctx.save();
+  ctx.translate(canvas.width / 2, canvas.height / 2);
+  ctx.rotate(-Math.PI / 2); // 90° rotated
+  ctx.fillText(title, 0, 0);
+  ctx.restore();
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.minFilter = THREE.LinearFilter;
+  return texture;
+}
+
+function makeMaterials(spineColorHex, coverFile) {
+
+  // allow both '#rrggbb' and numeric hex
+  const spineColor = new THREE.Color(spineColorHex);
+  const edgeColor  = spineColor.clone().multiplyScalar(0.6); // darker edge
+  const coverTexture = textureLoader.load(coverFile);
   return [
-    new THREE.MeshStandardMaterial({ color: spine }),
-    new THREE.MeshStandardMaterial({ color: spine }),
-    new THREE.MeshStandardMaterial({ color: edge }),
-    new THREE.MeshStandardMaterial({ color: edge }),
-    new THREE.MeshStandardMaterial({ color: cover }),
-    new THREE.MeshStandardMaterial({ color: back }),
+    new THREE.MeshStandardMaterial({ color: spineColor }), // right side
+    new THREE.MeshStandardMaterial({ color: spineColor }), // left side
+    new THREE.MeshStandardMaterial({ color: edgeColor }),  // top
+    new THREE.MeshStandardMaterial({ color: edgeColor }),  // bottom
+    new THREE.MeshStandardMaterial({ map: coverTexture }), // FRONT COVER
+    new THREE.MeshStandardMaterial({ map: coverTexture }),   // back (can change to texture too)
   ];
 }
 
-function createBook(x, colors, meta) {
-  const mesh = new THREE.Mesh(geometry, makeMaterials(colors.front, colors.back));
+
+function createBook(x, meta) {
+  const color = meta.color || "#ffffff";  // fallback just in case
+  const coverFile = `/movie-covers/${meta.coverfile}`;
+  const mesh = new THREE.Mesh(geometry, makeMaterials(color, coverFile));
   mesh.position.set(x, 0.2, 0);
   mesh.rotation.y = Math.PI / 2;
   mesh.userData.meta = meta;
-  mesh.userData.colors = colors;
+  mesh.userData.color = color;
 
   return {
     mesh,
@@ -116,10 +139,19 @@ function createBook(x, colors, meta) {
     targetPosZ: 0,
     targetRotZ: 0,
     targetRotX: 0,
-    tiltX: 0,
-    tiltY: 0,
+  
+    // NEW
+    hoverTiltX: 0,   // lean toward viewer
+    hoverTiltY: 0,   // yaw left/right
+    hoverWobble: 0,  // playful Z-wobble
+    hoverTiltZ: 0
+    
+
   };
+  
 }
+
+
 
 /* -----------------------------------------------------------
    POSITION BOOKS IN A CHRONOLOGICAL ROW
@@ -128,7 +160,7 @@ const spacing = BOOK_W;
 const startX = -((booksMeta.length - 1) * spacing) / 2;
 
 const books = booksMeta.map((meta, i) =>
-  createBook(startX + i * spacing, palette[i % 7], meta)
+  createBook(startX + i * spacing, meta)
 );
 
 /* -----------------------------------------------------------
@@ -270,21 +302,41 @@ window.addEventListener("mousemove", (e) => {
     raycaster.setFromCamera(mouse, camera);
     const hits = raycaster.intersectObjects(books.map(b => b.mesh));
 
-    // remove default cursor logic (you already did this)
-
+    // RESET ALL BOOKS FIRST
     books.forEach(b => {
       b.targetRotY = Math.PI / 2;
+      b.hoverTiltX = 0;
+      b.hoverTiltY = 0;
+      b.hoverWobble = 0;
+      b.targetPosZ = 0;
+      b.hoverTiltZ = 0;
     });
 
     if (hits.length) {
       const hovered = books.find(b => b.mesh === hits[0].object);
-      hovered.targetRotY = Math.PI / 4;
 
-      // ✨ enlarge cursor
+      hovered.hoverTiltY = -0.5;
+      hovered.hoverTiltX = -0;
+      hovered.hoverWobble = 0.08;
+      hovered.targetPosZ = 1.25;
+      hovered.hoverTiltZ = 0.1; 
+
+      hovered.targetRotY = Math.PI / 6.5;
+
       cursor.classList.add("hover");
     } else {
-      // ✨ shrink cursor when not over a book
       cursor.classList.remove("hover");
+
+      // EXTRA safety reset (still good to keep)
+      books.forEach(b => {
+        b.hoverTiltX = 0;
+        b.hoverTiltY = 0;
+        b.hoverWobble = 0;
+        b.targetPosZ = 0;
+        b.hoverTiltZ = 0;
+
+        b.mesh.layers.disable(BLOOM_SCENE);
+      });
     }
 
     return;
@@ -320,6 +372,7 @@ function closeOverlay() {
     activeBook.targetPosZ = 0;            // move back
     activeBook.tiltX = 0;
     activeBook.tiltY = 0;
+    activeBook.hoverTiltZ = 0;
     activeBook.mesh.visible = true;
   }
 }
@@ -341,10 +394,24 @@ function setActiveBookByIndex(i) {
   activeBook.mesh.visible = false;
 }
 
+function mutedColor(hex, factor = 0.45) {
+  const c = new THREE.Color(hex);
+  c.multiplyScalar(factor); // darken
+  console.log(c.getHexString())
+  return `#${c.getHexString()}`;
+}
+
+
 function rebuildOverlayForIndex() {
   const b = books[currentIndex];
   const meta = b.mesh.userData.meta;
   const colors = b.mesh.userData.colors;
+
+  // NEW — change overlay background color
+  const overlayBg = document.getElementById("bookinfo");
+  overlayBg.style.background = mutedColor(meta.color);
+  overlayBg.style.backgroundColor = mutedColor(meta.color);
+  
 
   titleEl.textContent = meta.title;
   blurbEl.textContent = meta.blurb;
@@ -363,8 +430,8 @@ function rebuildOverlayForIndex() {
   `).join('');
 
   if (overlayBook) overlayScene.remove(overlayBook);
-
-  overlayBook = new THREE.Mesh(geometry, makeMaterials(colors.front, colors.back));
+  const coverFile = `/movie-covers/${meta.coverfile}`;
+  overlayBook = new THREE.Mesh(geometry, makeMaterials(meta.color, coverFile));
   overlayBook.rotation.set(0, 0.9, 0);
   overlayBook.position.set(1.6, 0.6, 0.4);
   overlayScene.add(overlayBook);
@@ -431,15 +498,24 @@ function animate() {
   shelfGroup.position.y = Math.sin(t) * 0.03 + 0.7;
 
   books.forEach((b, idx) => {
-    b.mesh.rotation.y += (b.targetRotY - b.mesh.rotation.y) * 0.1;
-    b.mesh.position.z += (b.targetPosZ - b.mesh.position.z) * 0.1;
 
-    if (!b.isPresented && b.targetRotY === Math.PI / 2) {
-      b.mesh.rotation.z = Math.sin(t + idx) * 0.02;
-    } else {
-      b.mesh.rotation.z = 0;
-    }
-  });
+  // Smoothly interpolate Y (yaw)
+  b.mesh.rotation.y += (b.targetRotY + b.hoverTiltY - b.mesh.rotation.y) * 0.12;
+
+  // Smoothly interpolate X (tilt toward viewer)
+  b.mesh.rotation.x += (b.hoverTiltX - b.mesh.rotation.x) * 0.12;
+
+  // Subtle wobble on hover
+  const wobble = b.hoverWobble * 0.1*Math.sin(t * 2 + idx);
+  const targetZ = wobble + b.hoverTiltZ;
+
+  b.mesh.rotation.z += (targetZ - b.mesh.rotation.z) * 0.12;
+
+
+  // Smooth position forward/back
+  b.mesh.position.z += (b.targetPosZ - b.mesh.position.z) * 0.1;
+});
+
 
   renderer.render(scene, camera);
 
@@ -459,6 +535,7 @@ animate();
 window.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   const title = params.get('movie');
+
 
   if (title) {
     const movieIndex = booksMeta.findIndex(m => m.title === title);
