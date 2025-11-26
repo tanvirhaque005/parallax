@@ -39,9 +39,14 @@
       letter-spacing: 1px;
       transition: color 0.3s;
       text-transform: uppercase;
+      position: fixed;
+         bottom: 40px;
+         right: 40px;
+         z-index: 200;
     }
     .back-link:hover { color: #ffffff; }
-    .back-arrow { font-size: 20px; }
+    .back-arrow { font-size: 20px;
+      }
 
     .nav-buttons {
       position: fixed;
@@ -171,8 +176,8 @@
 
     .grid line { stroke: rgba(255,255,255,0.12); }
 
-    .link { stroke: white; stroke-opacity: 0.9; }
-    .halo { stroke: white; stroke-opacity: 0.1; stroke-width: 10; }
+    .link { stroke-opacity: 0.9; }
+    .halo { stroke-opacity: 0.1; stroke-width: 10; }
 
     .tooltip {
       position: fixed;
@@ -267,24 +272,17 @@
 }
 
   </style>
+  <link rel="stylesheet" href="introMessage.css">
 </head>
 
 <body>
+  <div id="introMessage" data-text="Now that you’ve seen how motifs evolve, let’s explore how far films leap into the future. Scroll to travel through time."></div>
+  <script src="introMessage.js" defer></script>
+  
+
+
   <!-- Navigation Menu -->
   <div class="navigation-menu" id="navigationMenu"></div>
-
-  <!-- RETURN -->
-  <div class="page-header">
-    <a href="chordGraph.html" class="back-link">
-      <span class="back-arrow">←</span>
-      <span>Return to Network</span>
-    </a>
-  </div>
-
-  <!-- NEXT -->
-  <!-- <div class="nav-buttons">
-    <a href="morph.html" class="nav-btn">Next →</a>
-  </div> -->
 
   <!-- LEFT CARD -->
   <div class="left-card">
@@ -307,42 +305,16 @@
   <div id="window-label"
        style="
          position: fixed;
-         top: 80px;
-         left: 40px;
+         bottom: 80px;
+         right: 40px;
          font-family: 'Courier New', monospace;
          color: #d12020;
          font-size: 15px;
          opacity: 0.85;
          z-index: 200;
+         display: none;
        ">
   </div>
-
-  <!-- SCRUBBER
-  <div id="window-track"
-       style="
-         position: fixed;
-         top: 110px;
-         right: 40px;
-         width: 260px;
-         height: 24px;
-         background: #8f8f8f;
-         border-radius: 12px;
-         z-index: 300;
-       ">
-    <div id="window-thumb"
-         style="
-           position: absolute;
-           left: 0px;
-           top: -8px;
-           width: 28px;
-           height: 40px;
-           background: white;
-           border-radius: 6px;
-           cursor: grab;
-           box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-         ">
-    </div>
-  </div> -->
 
   <div id="bookBars"></div>
   <!-- <div id="barDateDisplay"></div> -->
@@ -368,7 +340,13 @@
   href="morph.html"
   delay="3">
   </div>
-
+  <!-- RETURN -->
+  <div class="page-header">
+    <a href="chordGraph.html" class="back-link">
+      <span class="back-arrow">←</span>
+      <span>Return to Network</span>
+    </a>
+  </div>
 
   <div id="cursorCircle"></div>
   <link rel="stylesheet" href="cursor.css">

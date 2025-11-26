@@ -144,17 +144,50 @@ function getFilteredData() {
   );
 }
 
+function slopeColor(d) {
+  const x1 = x(d.startDate);
+  const x2 = x(d.endDate);
+
+  const dx = Math.abs(x2 - x1);
+  const dy = Math.abs(yBot - yTop);
+
+  // Horizontal-ness = bigger dx (more flat)
+  let flatness = dx / (dy + 0.0001);
+
+  // Nonlinear shaping to exaggerate differences
+  flatness = Math.pow(flatness, 0.65);   // 0.65 spreads values out
+
+  // Normalize into 0..1
+  const t = Math.min(1, flatness / 4.0);  // "4.0" controls the range where lines become fully blue
+
+  // Interpolate between white → blue (#46AACB)
+  const r = Math.round(255 * (1 - t) + 0x46 * t);
+  const g = Math.round(255 * (1 - t) + 0xAA * t);
+  const b = Math.round(255 * (1 - t) + 0xCB * t);
+
+  return `rgb(${r},${g},${b})`;
+}
+
+
+
 function drawLines(filtered) {
   /** Halos */
   halos = halos.data(filtered, d => d.id);
   halos.exit().remove();
 
+  // halos = halos.enter()
+  //   .append("path")
+  //   .attr("class", "halo")
+  //   .merge(halos)
+  //   .attr("d", d => `M${x(d.startDate)},${yTop} L${x(d.endDate)},${yBot}`);
   halos = halos.enter()
     .append("path")
     .attr("class", "halo")
     .merge(halos)
-    .attr("d", d => `M${x(d.startDate)},${yTop} L${x(d.endDate)},${yBot}`);
-
+    .attr("d", d => `M${x(d.startDate)},${yTop} L${x(d.endDate)},${yBot}`)
+    .attr("stroke", d => slopeColor(d))
+    .attr("stroke-opacity", 0.15);
+  
   /** Lines */
   links = links.data(filtered, d => d.id);
   links.exit().remove();
@@ -163,7 +196,11 @@ function drawLines(filtered) {
     .attr("class","link")
 
   links = enter.merge(links)
-    .attr("d", d => `M${x(d.startDate)},${yTop} L${x(d.endDate)},${yBot}`);
+    .attr("d", d => `M${x(d.startDate)},${yTop} L${x(d.endDate)},${yBot}`)
+    .attr("stroke", d => slopeColor(d))
+    .attr("stroke-opacity", 0.95);
+  
+  
 }
 
 /* ----------------------------
