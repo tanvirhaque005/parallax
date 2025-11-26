@@ -46,9 +46,10 @@
     }
   
     element.textContent = "";
+    element.classList.add('typing');
   
     let i = 0;
-    const SPEED = 22;
+    const SPEED = 80;
     const INITIAL_DELAY = 600;
   
     setTimeout(() => {
@@ -57,6 +58,10 @@
           element.textContent += fullText[i];
           i++;
           requestAnimationFrame(() => setTimeout(typeChar, SPEED));
+        } else {
+          setTimeout(() => {
+            element.classList.remove('typing');
+          }, 500);
         }
       }
       typeChar();

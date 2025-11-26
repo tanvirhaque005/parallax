@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library of Futures - About</title>
     <link rel="stylesheet" href="navigation-menu.css">
+    <link rel="stylesheet" href="introMessage.css">
     <style>
         * {
             margin: 0;
@@ -74,50 +75,9 @@
             letter-spacing: 1px;
         }
 
-        .header-icon {
-            width: 16px;
-            height: 16px;
-            background-color: #ffffff;
-            opacity: 0;
-            transform: scale(0);
-        }
-
-        .about-page.active .header-icon {
+        /* Use introMessage styles - add animation trigger for about page */
+        .about-page.active .intro-icon {
             animation: boxAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        @keyframes boxAppear {
-            0% {
-                opacity: 0;
-                transform: scale(0);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .header-title {
-            font-size: 11px;
-            color: #ffffff;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .header-title.typing::after {
-            content: '|';
-            display: inline-block;
-            margin-left: 2px;
-            animation: blinkCursor 1s infinite;
-        }
-
-        @keyframes blinkCursor {
-            0%, 50% {
-                opacity: 1;
-            }
-            51%, 100% {
-                opacity: 0;
-            }
         }
 
         /* Cover Page Styles */
@@ -329,7 +289,7 @@
             <div class="cover-gradient"></div>
             <div class="cover-content">
                 <div class="page-header">
-                    <div class="header-icon"></div>
+                    <div class="intro-icon"></div>
                 </div>
                 
                 <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding-left: 0;">
@@ -349,8 +309,8 @@
         <div class="page-slide about-page next" id="aboutPage">
             <div>
                 <div class="page-header">
-                    <div class="header-icon"></div>
-                    <span class="header-title">ABOUT</span>
+                    <div class="intro-icon"></div>
+                    <span class="intro-text" id="aboutPageTitle">ABOUT</span>
                 </div>
 
                 <h1 class="about-main-title">100 Years of Sci Fi Stories</h1>
@@ -423,8 +383,8 @@
                     }
                     // Trigger animations when about page becomes active
                     if (index === 1) {
-                        const headerIcon = page.querySelector('.header-icon');
-                        const headerTitle = page.querySelector('.header-title');
+                        const headerIcon = page.querySelector('.intro-icon');
+                        const headerTitle = page.querySelector('.intro-text');
                         if (headerIcon && headerTitle) {
                             // Reset and trigger box animation
                             headerIcon.style.animation = 'none';
