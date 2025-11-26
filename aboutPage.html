@@ -348,7 +348,7 @@
         const pages = document.querySelectorAll('.page-slide');
         const beginExplorationBtn = document.getElementById('beginExplorationBtn');
 
-        function typeText(element, text, speed = 100) {
+        function typeText(element, text, speed = 20) {
             const originalText = element.textContent || text;
             const textToType = text || originalText;
             element.textContent = '';

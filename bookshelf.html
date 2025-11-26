@@ -13,7 +13,8 @@
   <body>
     <!-- Navigation Menu -->
     <div class="navigation-menu" id="navigationMenu"></div>
-    <div id="introMessage" data-text="Scroll through a century of sci-fi films. Click on any movie cover to step inside its world (This is our data btw)."></div>
+    <!-- ONLY SEE WHEN NOT IN OVERLAY -->
+    <div id="introMessageDefault" data-text="Scroll through a century of sci-fi films. Click on any movie cover to step inside its world (This is our data btw)."></div>
     <script src="introMessage.js" defer></script>
   
     <div id="bookBars"></div>
@@ -53,6 +54,10 @@
       <div class="card" role="dialog" aria-modal="true">
 
         <div class="breadcrumb">Library > Film</div>
+        <!-- ONLY SEE WHEN IN OVERLAY -->
+        <div id="introMessageOverlay" data-text="Click on a theme to reveal how this story fits into the broader network of recurring sci-fi ideas."></div>
+        <script src="introMessage.js" defer></script>
+    
         <button id="closeInfo" class="btn close">✕</button>
 
         <button id="cardPrev" class="btn cardNav">L</button>

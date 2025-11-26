@@ -335,7 +335,7 @@ window.addEventListener("mousemove", (e) => {
         b.targetPosZ = 0;
         b.hoverTiltZ = 0;
 
-        b.mesh.layers.disable(BLOOM_SCENE);
+        // b.mesh.layers.disable(BLOOM_SCENE);
       });
     }
 
@@ -350,15 +350,23 @@ window.addEventListener("mousemove", (e) => {
 }, { passive: true });
 
 function openOverlayForIndex(i) {
+  
   updateActiveBookBar(i);
   setActiveBookByIndex(i);
   rebuildOverlayForIndex();
+
+  // Remove default introMessage if needed
+  hideDefaultIntro();
+  showOverlayIntro();
+
 
   overlayCanvas.style.display = 'block';
   bookinfo.classList.add('open');
 }
 
 function closeOverlay() {
+  // Remove overlay introMessage if needed
+  hideOverlayIntro();
   bookinfo.classList.remove('open');
   overlayCanvas.style.display = 'none';
 
@@ -375,6 +383,7 @@ function closeOverlay() {
     activeBook.hoverTiltZ = 0;
     activeBook.mesh.visible = true;
   }
+  showDefaultIntro();
 }
 
 
@@ -535,6 +544,8 @@ animate();
 window.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   const title = params.get('movie');
+
+  showDefaultIntro();
 
 
   if (title) {
