@@ -485,15 +485,15 @@ renderer.domElement.addEventListener('click', (e) => {
   openOverlayForIndex(idx);
 });
 
-document.getElementById('cardPrev').addEventListener('click', (e) => {
-  e.stopPropagation();
-  openOverlayForIndex(currentIndex - 1);
-});
+// document.getElementById('cardPrev').addEventListener('click', (e) => {
+//   e.stopPropagation();
+//   openOverlayForIndex(currentIndex - 1);
+// });
 
-document.getElementById('cardNext').addEventListener('click', (e) => {
-  e.stopPropagation();
-  openOverlayForIndex(currentIndex + 1);
-});
+// document.getElementById('cardNext').addEventListener('click', (e) => {
+//   e.stopPropagation();
+//   openOverlayForIndex(currentIndex + 1);
+// });
 
 closeInfo.addEventListener('click', closeOverlay);
 backToShelf.addEventListener('click', closeOverlay);
