@@ -13,180 +13,448 @@
         }
 
         body {
-            background-color: #1a1a1a;
-            color: #b0b0b0;
-            font-family: 'Courier New', monospace;
-            line-height: 1.6;
-            padding: 60px;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
         }
 
-        .close-btn {
+        /* Page Container */
+        .page-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Page Slide */
+        .page-slide {
             position: absolute;
-            top: 40px;
-            right: 60px;
-            color: #666;
-            font-size: 14px;
-            text-decoration: none;
-            letter-spacing: 2px;
-            transition: color 0.3s;
-            display: none; /* Hide close button - navigation menu handles navigation */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
         }
 
-        .close-btn:hover {
-            color: #999;
+        .page-slide.active {
+            transform: translateX(0);
         }
 
-        .logo {
+        .page-slide.next {
+            transform: translateX(100%);
+        }
+
+        .page-slide.prev {
+            transform: translateX(-100%);
+        }
+
+        /* Header */
+        .page-header {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 40px;
         }
 
-        .logo-square {
-            width: 50px;
-            height: 50px;
-            background-color: #d0d0d0;
+        /* Cover page header - top left, white box only */
+        .cover-page .page-header {
+            display: none;
         }
 
-        .logo-text {
-            font-size: 42px;
-            font-weight: bold;
-            color: #d0d0d0;
-            letter-spacing: 3px;
-        }
-
-        .tagline {
-            color: #b0b0b0;
-            font-size: 13px;
-            margin-bottom: 80px;
-            max-width: 900px;
+        .header-number {
+            font-size: 11px;
+            color: #888888;
             letter-spacing: 1px;
         }
 
-        h2 {
-            color: #d0d0d0;
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            letter-spacing: 3px;
+        .header-icon {
+            width: 16px;
+            height: 16px;
+            background-color: #ffffff;
+            opacity: 0;
+            transform: scale(0);
         }
 
-        .content-section {
-            margin-bottom: 60px;
-            max-width: 900px;
+        .about-page.active .header-icon {
+            animation: boxAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
-        .content-section p {
-            margin-bottom: 25px;
-            font-size: 14px;
-            letter-spacing: 0.5px;
+        @keyframes boxAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
-        ul {
-            list-style: none;
-            margin-bottom: 25px;
+        .header-title {
+            font-size: 11px;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        ul li {
-            margin-bottom: 8px;
-            padding-left: 15px;
-            position: relative;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-        }
-
-        ul li:before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #b0b0b0;
-        }
-
-        .cta-button {
+        .header-title.typing::after {
+            content: '|';
             display: inline-block;
-            padding: 15px 35px;
-            border: 2px solid #666;
-            color: #b0b0b0;
-            text-decoration: none;
-            font-size: 13px;
+            margin-left: 2px;
+            animation: blinkCursor 1s infinite;
+        }
+
+        @keyframes blinkCursor {
+            0%, 50% {
+                opacity: 1;
+            }
+            51%, 100% {
+                opacity: 0;
+            }
+        }
+
+        /* Cover Page Styles */
+        .cover-page {
+            justify-content: flex-start;
+            padding-top: 50vh;
+            position: relative;
+        }
+
+        /* Hide navigation menu on cover page */
+        .cover-page.active ~ * .navigation-menu {
+            display: none !important;
+        }
+
+        .cover-subtitle {
+            font-size: 12px;
+            color: #ffffff;
             letter-spacing: 2px;
-            transition: all 0.3s;
-            margin-top: 40px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+        }
+
+        .cover-main-title {
+            font-size: 72px;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+            line-height: 1.1;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+        }
+
+        .cover-description {
+            font-size: 16px;
+            color: #ffffff;
+            line-height: 1.6;
+            max-width: 500px;
+            opacity: 0.9;
+        }
+
+        /* Background Gradient Effect - bottom left with text */
+        .cover-gradient {
             position: absolute;
+            bottom: -350px;
+            left: -250px;
+            width: 1200px;
+            height: 1200px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 25%, rgba(255, 255, 255, 0.08) 45%, rgba(255, 255, 255, 0.03) 65%, transparent 85%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(0px);
+            box-shadow: 0 0 150px 80px rgba(255, 255, 255, 0.2),
+                        0 0 250px 120px rgba(255, 255, 255, 0.1),
+                        0 0 350px 160px rgba(255, 255, 255, 0.05);
+        }
+
+        .cover-description-text {
+            color: #ffffff;
+            font-size: 16px;
+            letter-spacing: 0.2px;
+            opacity: 0.95;
+            max-width: 500px;
+            line-height: 1.75;
+            font-weight: 400;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            margin-top: 20px;
+        }
+
+        .cover-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* About Page Styles */
+        .about-page {
+            justify-content: space-between;
+        }
+
+        .about-main-title {
+            font-size: 56px;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .about-intro {
+            font-size: 16px;
+            color: #ffffff;
+            line-height: 1.8;
+            max-width: 700px;
+            margin-bottom: 60px;
+            opacity: 0.9;
+        }
+
+        .explore-section {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .explore-line {
+            width: 2px;
+            background-color: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .explore-content {
+            flex: 1;
+        }
+
+        .explore-title {
+            font-size: 13px;
+            color: #ffffff;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .explore-list {
+            list-style: none;
+        }
+
+        .explore-list li {
+            font-size: 15px;
+            color: #ffffff;
+            line-height: 2;
+            margin-bottom: 12px;
+            opacity: 0.9;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            position: absolute;
+            bottom: 120px;
             right: 60px;
-            top: 280px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: opacity 0.3s ease;
+            z-index: 10;
         }
 
         .cta-button:hover {
-            border-color: #999;
-            color: #d0d0d0;
-            background-color: rgba(255, 255, 255, 0.05);
+            opacity: 0.7;
         }
 
-        .credits {
-            margin-top: 80px;
-            font-size: 13px;
+        .cta-arrow {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover .cta-arrow {
+            transform: translateX(3px);
+        }
+
+        .about-page .cta-button:hover {
+            transform: translateY(-50%);
+        }
+
+        .cta-arrow::after {
+            content: '→';
+            font-size: 24px;
+            color: #ffffff;
+        }
+
+        /* Second page button - middle right */
+        .about-page .cta-button {
+            bottom: auto;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Footer */
+        .page-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: auto;
+            font-size: 11px;
+            color: #888888;
             letter-spacing: 0.5px;
         }
 
-        .credits p {
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
     <!-- Navigation Menu -->
     <div class="navigation-menu" id="navigationMenu"></div>
-    
-    <a href="landingPage.html" class="close-btn">CLOSE</a>
 
-    <div class="logo">
-        <div class="logo-square"></div>
-        <div class="logo-text">ABOUT</div>
+    <div class="page-container">
+        <!-- Cover Page (Page 1) -->
+        <div class="page-slide cover-page active" id="coverPage">
+            <div class="cover-gradient"></div>
+            <div class="cover-content">
+                <div class="page-header">
+                    <div class="header-icon"></div>
+                </div>
+                
+                <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding-left: 0;">
+                    <div class="cover-subtitle">A CENTURY OF SCI-FI IMAGINATION</div>
+                    <h1 class="cover-main-title">Library of Futures</h1>
+                    <p class="cover-description-text">Discover how stories have predicted, warned, and dreamed about our futures time and worlds.</p>
+                </div>
+
+                <a href="#" class="cta-button" id="beginExplorationBtn">
+                    <span>BEGIN EXPLORATION</span>
+                    <div class="cta-arrow"></div>
+                </a>
+            </div>
+        </div>
+
+        <!-- About Page (Page 2) -->
+        <div class="page-slide about-page next" id="aboutPage">
+            <div>
+                <div class="page-header">
+                    <div class="header-icon"></div>
+                    <span class="header-title">ABOUT</span>
+                </div>
+
+                <h1 class="about-main-title">100 Years of Sci Fi Stories</h1>
+                
+                <p class="about-intro">This interactive journey blends data visualization, film history, and narrative design to reveal how our stories imagine the future. You'll move through films, tropes, timelines, and worlds—seeing how cultural moments shape the way we dream, fear, and build tomorrow.</p>
+
+                <div class="explore-section">
+                    <div class="explore-line"></div>
+                    <div class="explore-content">
+                        <div class="explore-title">What you're about to explore</div>
+                        <ul class="explore-list">
+                            <li>Patterns of sci-fi tropes across decades</li>
+                            <li>How far each film looked into the future</li>
+                            <li>The worlds we imagine vs. the worlds we film in</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-footer">
+                <div>Published 2025</div>
+                <div>Created by Michael, Audrey, Tanvir, Sydney</div>
+            </div>
+
+            <a href="bookshelf.html" class="cta-button">
+                <span>ENTER LIBRARY</span>
+                <div class="cta-arrow"></div>
+            </a>
+        </div>
     </div>
 
-    <div class="tagline">
-        THE LIBRARY OF FUTURES IS A DATA-DRIVEN EXPLORATION OF HOW SCIENCE FICTION IMAGINES THE FUTURE—AND WHAT THOSE STORIES REVEAL ABOUT US.
-    </div>
-
-    <!-- <a href="bookshelf.html" class="cta-button">START EXPLORING →</a> -->
-    <link rel="stylesheet" href="arrowButton.css">
-    <script src="arrowButton.js"></script>
-    <div data-arrow-button 
-    text="text" 
-    href="bookshelf.html"
-    delay="3">
-    </div>
-
-    <div class="content-section">
-        <h2>GOALS</h2>
-        <p>This visualization examines 100 years of sci-fi cinema through four lenses: narrative motifs, cultural anxieties, imaginative distance, and world-building ambition. By combining film metadata, historical timelines, and geographical mapping, we explore how our visions of the future evolve across decades.</p>
-        
-        <p>Our goal is to help users understand:</p>
-        <ul>
-            <li>What sci-fi chooses to worry about</li>
-            <li>When imagination expands or contracts</li>
-            <li>How cultural moments shape the futures we depict</li>
-            <li>Why certain tropes keep reappearing</li>
-        </ul>
-
-        <p>This project was created at Harvard as part of a larger investigation into innovation, storytelling, and collective imagination. It merges data visualization, narrative design, and cinematic analysis into a single interactive experience.</p>
-    </div>
-
-    <div class="credits">
-        <h2>CREDITS</h2>
-        <p>Created by: Michael, Audrey, Tanvir, Sydney</p>
-        <p>Course: CS171O Data Visualization with Professor Hans</p>
-        <p>Data Sources: Film metadata databases, scholarly archives, and structured research collected across the project.</p>
-    </div>
-    
     <script src="navigation-menu.js"></script>
-    <div id="cursorCircle"></div>
-    <link rel="stylesheet" href="cursor.css">
-    <script src="cursor.js" defer></script>
+    <script>
+        let currentPage = 0;
+        const pages = document.querySelectorAll('.page-slide');
+        const beginExplorationBtn = document.getElementById('beginExplorationBtn');
 
+        function typeText(element, text, speed = 100) {
+            const originalText = element.textContent || text;
+            const textToType = text || originalText;
+            element.textContent = '';
+            element.classList.add('typing');
+            let i = 0;
+            const typeInterval = setInterval(() => {
+                if (i < textToType.length) {
+                    element.textContent += textToType.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typeInterval);
+                    setTimeout(() => {
+                        element.classList.remove('typing');
+                    }, 500);
+                }
+            }, speed);
+        }
 
-  
+        function updatePages() {
+            const navMenu = document.getElementById('navigationMenu');
+            pages.forEach((page, index) => {
+                page.classList.remove('active', 'next', 'prev');
+                if (index === currentPage) {
+                    page.classList.add('active');
+                    // Show/hide navigation menu based on page
+                    if (index === 0) {
+                        // Hide menu on cover page
+                        if (navMenu) navMenu.style.display = 'none';
+                    } else {
+                        // Show menu on other pages
+                        if (navMenu) navMenu.style.display = '';
+                    }
+                    // Trigger animations when about page becomes active
+                    if (index === 1) {
+                        const headerIcon = page.querySelector('.header-icon');
+                        const headerTitle = page.querySelector('.header-title');
+                        if (headerIcon && headerTitle) {
+                            // Reset and trigger box animation
+                            headerIcon.style.animation = 'none';
+                            setTimeout(() => {
+                                headerIcon.style.animation = '';
+                            }, 10);
+                            // Trigger typing animation after box appears
+                            setTimeout(() => {
+                                typeText(headerTitle, 'ABOUT', 80);
+                            }, 600);
+                        }
+                    }
+                } else if (index > currentPage) {
+                    page.classList.add('next');
+                } else {
+                    page.classList.add('prev');
+                }
+            });
+        }
+
+        beginExplorationBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentPage < pages.length - 1) {
+                currentPage++;
+                updatePages();
+            }
+        });
+
+        // Initialize
+        updatePages();
+    </script>
 </body>
 </html>
