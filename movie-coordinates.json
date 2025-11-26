@@ -1,24 +1,199 @@
 {
   "coordinates": {
+    "Sun": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Sun (Solar System)"
+    },
+    "Mercury": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Mercury (Solar System)"
+    },
+    "Venus": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Venus (Solar System)"
+    },
+    "Earth": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Earth (Solar System)"
+    },
+    "Mars": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Mars (Solar System)"
+    },
+    "Jupiter": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Jupiter (Solar System)"
+    },
+    "Saturn": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Saturn (Solar System)"
+    },
+    "Uranus": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Uranus (Solar System)"
+    },
+    "Neptune": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Neptune (Solar System)"
+    },
+    "Moon": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Moon (Solar System)"
+    },
+    "Io": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Io (Solar System)"
+    },
+    "Europa": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Europa (Solar System)"
+    },
+    "Ganymede": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Ganymede (Solar System)"
+    },
+    "Callisto": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Callisto (Solar System)"
+    },
+    "Fictional Locations": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "USS Enterprise": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "USS Enterprise NX-01": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "USS Enterprise-D": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Battlestar Galactica": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Moya": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Destiny": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Regula I": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Atlantis": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Arrakis": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Altair IV": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Bajor": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Sirius 6B": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Metropolis": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Dark City": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "The Village": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Industrial city, USA": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Port city": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Machine City": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Dream World": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Dream world": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Dream Worlds": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Multiverse": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "Virtual 1937 Los Angeles": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
     "England": {
       "lat": 52.5310214,
       "lon": -1.2649062,
       "displayName": "England, United Kingdom"
-    },
-    "African Desert": {
-      "lat": 12.2213308,
-      "lon": 109.2437125,
-      "displayName": "Hoang mạc Châu Phi, Trần Phú, Phường Nha Trang, Tỉnh Khánh Hòa, 57131, Việt Nam"
-    },
-    "Illinois": {
-      "lat": 40.0796606,
-      "lon": -89.4337288,
-      "displayName": "Illinois, United States of America"
-    },
-    "Jupiter": {
-      "lat": 26.9342246,
-      "lon": -80.0942087,
-      "displayName": "Jupiter, Palm Beach County, Florida, 33458, United States of America"
     },
     "England, UK": {
       "lat": 52.5310214,
@@ -28,14 +203,14 @@
     "London, UK": {
       "lat": 51.5074456,
       "lon": -0.1277653,
-      "displayName": "London, Greater London, England, United Kingdom"
+      "displayName": "Greater London, England, United Kingdom"
     },
-    "Austin, USA": {
+    "Austin, Texas, USA": {
       "lat": 30.2711286,
       "lon": -97.7436995,
       "displayName": "Austin, Travis County, Texas, United States of America"
     },
-    "Orange County, USA": {
+    "Orange County, California, USA": {
       "lat": 33.750631,
       "lon": -117.8722311,
       "displayName": "Orange County, California, United States of America"
@@ -50,7 +225,7 @@
       "lon": 139.7638947,
       "displayName": "東京都, 日本"
     },
-    "Montreal, Canada": {
+    "Montreal, Quebec, Canada": {
       "lat": 45.5031824,
       "lon": -73.5698065,
       "displayName": "Montréal, Agglomération de Montréal, Montréal (région administrative), Québec, Canada"
@@ -60,12 +235,7 @@
       "lon": -109.638757,
       "displayName": "Montana, United States of America"
     },
-    "United States": {
-      "lat": 39.7837304,
-      "lon": -100.445882,
-      "displayName": "United States of America"
-    },
-    "Los Angeles, USA": {
+    "Los Angeles, California, USA": {
       "lat": 34.0536909,
       "lon": -118.242766,
       "displayName": "Los Angeles, Los Angeles County, California, United States of America"
@@ -75,57 +245,27 @@
       "lon": 19.1460941,
       "displayName": "Budapest, Közép-Magyarország, Magyarország"
     },
-    "Las Vegas, USA": {
-      "lat": 36.1674263,
-      "lon": -115.1484131,
-      "displayName": "Las Vegas, Clark County, Nevada, United States of America"
+    "London, England, UK": {
+      "lat": 51.5074456,
+      "lon": -0.1277653,
+      "displayName": "Greater London, England, United Kingdom"
     },
-    "Winterthur, Switzerland": {
+    "Winterthur, Kanton Zurich, Switzerland": {
       "lat": 47.4991723,
       "lon": 8.7291498,
       "displayName": "Winterthur, Bezirk Winterthur, Zürich, Schweiz/Suisse/Svizzera/Svizra"
-    },
-    "Space": {
-      "lat": 48.848139,
-      "lon": 2.3043031,
-      "displayName": "European Space Agency, 10, Rue Mario Nikis, Quartier Necker, Paris 15e Arrondissement, Paris, France métropolitaine, 75015, France"
     },
     "Johannesburg, South Africa": {
       "lat": -26.205,
       "lon": 28.049722,
       "displayName": "Johannesburg, City of Johannesburg Metropolitan Municipality, Gauteng, 2001, South Africa"
     },
-    "Germany": {
-      "lat": 51.1638175,
-      "lon": 10.4478313,
-      "displayName": "Deutschland"
-    },
-    "Pacific Islands": {
-      "lat": -20.7823011,
-      "lon": 167.2208967,
-      "displayName": "Pacific, Route des Éoliennes, Hnathalo, Lifou, Province des îles Loyauté, Nouvelle-Calédonie, 98820, France"
-    },
-    "Cambridge, England": {
+    "Cambridge, UK": {
       "lat": 52.2055314,
       "lon": 0.1186637,
       "displayName": "Cambridge, Cambridgeshire, Cambridgeshire and Peterborough, England, United Kingdom"
     },
-    "San Francisco, USA": {
-      "lat": 37.7792588,
-      "lon": -122.4193286,
-      "displayName": "San Francisco, California, United States of America"
-    },
-    "Seoul, Korea": {
-      "lat": 37.5666791,
-      "lon": 126.9782914,
-      "displayName": "서울특별시, 대한민국"
-    },
-    "Big Island, Hawaii)": {
-      "lat": 19.5895548,
-      "lon": -155.4486983,
-      "displayName": "Hawaiʻi, Hawaii, United States of America"
-    },
-    "San Jose, USA": {
+    "San Jose, California, USA": {
       "lat": 37.3361663,
       "lon": -121.890591,
       "displayName": "San Jose, Santa Clara County, California, United States of America"
@@ -135,222 +275,112 @@
       "lon": -105.996047,
       "displayName": "New Mexico, United States of America"
     },
-    "Puerto Rico": {
-      "lat": 18.2247706,
-      "lon": -66.4858295,
-      "displayName": "Puerto Rico, United States of America"
-    },
-    "Washington DC": {
-      "lat": 38.8950368,
-      "lon": -77.0365427,
-      "displayName": "Washington, District of Columbia, United States of America"
-    },
-    "Hokkaido, Japan": {
-      "lat": 43.4519831,
-      "lon": 142.8197834,
-      "displayName": "北海道, 日本"
-    },
     "Sydney, Australia": {
       "lat": -33.8698439,
       "lon": 151.2082848,
       "displayName": "Sydney, Council of the City of Sydney, New South Wales, Australia"
-    },
-    "Dark City": {
-      "lat": -25.6713889,
-      "lon": 28.7288889,
-      "displayName": "Dark City, Tshwane Ward 104, City of Tshwane Metropolitan Municipality, Gauteng, 1021, South Africa"
     },
     "Czech Republic": {
       "lat": 49.7439047,
       "lon": 15.3381061,
       "displayName": "Česko"
     },
-    "Arrakis": {
-      "lat": 43.3518038,
-      "lon": -2.5272504,
-      "displayName": "Arrakis, Ispaster, Bizkaia, Euskadi, 48288, España"
-    },
     "France, UK": {
       "lat": 51.5029386,
       "lon": -0.0014592,
-      "displayName": "France, Blackwall Tunnel, Blackwall Reach, Greenwich Peninsula, Royal Borough of Greenwich, London, Greater London, England, E14 9PB, United Kingdom"
-    },
-    "Industrial city, USA": {
-      "lat": 33.4439977,
-      "lon": -86.9819379,
-      "displayName": "Industrial City, Hueytown, Jefferson County, Alabama, 35061, United States of America"
+      "displayName": "France, Blackwall Tunnel, Blackwall Reach, Greenwich Peninsula, Royal Borough of Greenwich, Greater London, England, E14 9PB, United Kingdom"
     },
     "New York, USA": {
       "lat": 40.7127281,
       "lon": -74.0060152,
-      "displayName": "City of New York, New York, United States of America"
-    },
-    "Europa": {
-      "lat": 51,
-      "lon": 10,
-      "displayName": "Europe"
+      "displayName": "New York, 10000, United States of America"
     },
     "Valldal, Norway": {
       "lat": 62.2980545,
       "lon": 7.2623851,
       "displayName": "Valldal, Fjord, Møre og Romsdal, Norge"
     },
-    "Norway": {
-      "lat": 61.1529386,
-      "lon": 8.7876653,
-      "displayName": "Norge"
+    "Alaska, USA": {
+      "lat": 64.4459613,
+      "lon": -149.680909,
+      "displayName": "Alaska, United States of America"
     },
-    "Toronto, Canada": {
+    "Toronto, Ontario, Canada": {
       "lat": 43.6534817,
       "lon": -79.3839347,
       "displayName": "Toronto, Golden Horseshoe, Ontario, Canada"
     },
-    "Canada": {
-      "lat": 61.0666922,
-      "lon": -107.991707,
-      "displayName": "Canada"
+    "San Rafael, California, USA": {
+      "lat": 37.9747795,
+      "lon": -122.5316686,
+      "displayName": "San Rafael, Marin County, California, United States of America"
     },
-    "Altair IV": {
-      "lat": -20.5238955,
-      "lon": -49.0606135,
-      "displayName": "Altair, Região Imediata de São José do Rio Preto, Região Geográfica Intermediária de São José do Rio Preto, São Paulo, Região Sudeste, 15430-000, Brasil"
-    },
-    "California, USA": {
-      "lat": 36.7014631,
-      "lon": -118.755997,
-      "displayName": "California, United States of America"
-    },
-    "USA": {
-      "lat": 39.7837304,
-      "lon": -100.445882,
-      "displayName": "United States of America"
-    },
-    "Hong Kong": {
-      "lat": 22.350627,
-      "lon": 114.1849161,
-      "displayName": "香港 Hong Kong, 中国"
+    "New Zealand": {
+      "lat": -41.5000831,
+      "lon": 172.8344077,
+      "displayName": "Aotearoa / New Zealand"
     },
     "New York City, USA": {
       "lat": 40.7127281,
       "lon": -74.0060152,
-      "displayName": "City of New York, New York, United States of America"
+      "displayName": "New York, 10000, United States of America"
     },
-    "Shanghai, China": {
-      "lat": 31.2312707,
-      "lon": 121.4700152,
-      "displayName": "上海市, 中国"
-    },
-    "India": {
-      "lat": 22.3511148,
-      "lon": 78.6677428,
-      "displayName": "India"
+    "Delhi, India": {
+      "lat": 28.6328027,
+      "lon": 77.2197713,
+      "displayName": "Delhi, India"
     },
     "North Vancouver, Canada": {
       "lat": 49.3206294,
       "lon": -123.0737925,
       "displayName": "North Vancouver, Metro Vancouver Regional District, British Columbia, Canada"
     },
-    "Chicago, USA": {
+    "Chicago, Illinois, USA": {
       "lat": 41.8755616,
       "lon": -87.6244212,
       "displayName": "Chicago, South Chicago Township, Cook County, Illinois, United States of America"
-    },
-    "UK": {
-      "lat": 54.7023545,
-      "lon": -3.2765753,
-      "displayName": "United Kingdom"
     },
     "Paris, France": {
       "lat": 48.8588897,
       "lon": 2.320041,
       "displayName": "Paris, Île-de-France, France métropolitaine, France"
     },
-    "Africa": {
-      "lat": 11.5024338,
-      "lon": 17.7578122,
-      "displayName": "Afrika / أفريقيا"
-    },
-    "Dream Worlds": {
-      "lat": 48.8703417,
-      "lon": 2.7800104,
-      "displayName": "My Royal Dream, Town Square, Main Street U.S.A., Chessy, Torcy, Seine-et-Marne, Île-de-France, France métropolitaine, 77700, France"
-    },
-    "Alberta, Canada": {
-      "lat": 55.001251,
-      "lon": -115.002136,
-      "displayName": "Alberta, Canada"
-    },
-    "American Midwest": {
-      "lat": 27.9444164,
-      "lon": -82.5069472,
-      "displayName": "American Legion Cemetery, North Bon Air, Tampa, Hillsborough County, Florida, United States of America"
-    },
     "Berlin, Germany": {
       "lat": 52.5173885,
       "lon": 13.3951309,
       "displayName": "Berlin, Deutschland"
     },
-    "Metropolis": {
-      "lat": 38.1260765,
-      "lon": 27.324371,
-      "displayName": "Metropolis, İzmir - Aydın Otoyolu, Yeniköy Mahallesi, Torbalı, Ege Bölgesi, 35860, Türkiye"
-    },
-    "Washington, USA": {
+    "Washington, D.C., USA": {
       "lat": 38.8950368,
       "lon": -77.0365427,
       "displayName": "Washington, District of Columbia, United States of America"
     },
-    "Shepperton Studios, UK": {
+    "Shepperton Studios, England, UK": {
       "lat": 51.4079823,
       "lon": -0.4662004,
       "displayName": "Shepperton Studios, Littleton, Spelthorne, Surrey, England, United Kingdom"
     },
-    "Moon": {
-      "lat": 58.5959044,
-      "lon": 23.2196461,
-      "displayName": "Muhu, Saare maakond, Eesti"
-    },
-    "Belgium, Canada": {
-      "lat": 50.4838825,
-      "lon": 5.8059646,
-      "displayName": "Canada, La Reid, Theux, Verviers, Liège, Wallonie, 4910, België / Belgique / Belgien"
-    },
-    "New York": {
-      "lat": 40.7127281,
-      "lon": -74.0060152,
-      "displayName": "City of New York, New York, United States of America"
-    },
-    "Mars": {
-      "lat": 45.022172,
-      "lon": 4.3221548,
-      "displayName": "Mars, Tournon-sur-Rhône, Ardèche, Auvergne-Rhône-Alpes, France métropolitaine, 07320, France"
-    },
-    "Baton Rouge, LA": {
-      "lat": 30.4494155,
-      "lon": -91.1869659,
-      "displayName": "Baton Rouge, East Baton Rouge Parish, Louisiana, United States of America"
+    "Montreal, Canada": {
+      "lat": 45.5031824,
+      "lon": -73.5698065,
+      "displayName": "Montréal, Agglomération de Montréal, Montréal (région administrative), Québec, Canada"
     },
     "Madrid, Spain": {
       "lat": 40.416782,
       "lon": -3.703507,
       "displayName": "Madrid, Comunidad de Madrid, España"
     },
-    "Dream world": {
-      "lat": 28.5474511,
-      "lon": 77.1268211,
-      "displayName": "Dream World, Road Number 2, Mahipalpur, Vasant Vihar Tehsil, New Delhi, Delhi, 110037, India"
+    "Ottawa, Ontario, Canada": {
+      "lat": 45.4208777,
+      "lon": -75.6901106,
+      "displayName": "Ottawa, Eastern Ontario, Ontario, Canada"
     },
     "Melbourne, Australia": {
       "lat": -37.8142454,
       "lon": 144.9631732,
       "displayName": "Melbourne, City of Melbourne, Victoria, Australia"
     },
-    "Cleveland, USA": {
-      "lat": 41.4996574,
-      "lon": -81.6936772,
-      "displayName": "Cleveland, Cuyahoga County, Ohio, United States of America"
-    },
-    "Dallas, USA": {
+    "Dallas, Texas, USA": {
       "lat": 32.7762719,
       "lon": -96.7968559,
       "displayName": "Dallas, Dallas County, Texas, United States of America"
@@ -360,150 +390,90 @@
       "lon": -98.5456116,
       "displayName": "Texas, United States of America"
     },
-    "Sirius 6B": {
-      "lat": 60.811828,
-      "lon": 11.051854,
-      "displayName": "6B, Sirius, Bekkesvea, Hamar, Innlandet, 2315, Norge"
-    },
     "Prague, Czech Republic": {
       "lat": 50.0596288,
       "lon": 14.4464593,
       "displayName": "Praha, obvod Praha 4, Hlavní město Praha, Praha, Česko"
     },
-    "Mexico": {
-      "lat": 23.6585116,
-      "lon": -102.0077097,
-      "displayName": "México"
+    "Pripyat, Ukraine": {
+      "lat": 51.8559923,
+      "lon": 25.4326835,
+      "displayName": "Припʼять, Любешівська селищна громада, Камінь-Каширський район, Волинська область, Україна"
     },
-    "Soviet Union": {
-      "lat": 44.5666334,
-      "lon": 27.359793,
-      "displayName": "Soviet Union, Strada Lacului, Slobozia, Ialomița, 920012, România"
-    },
-    "Denmark, USA": {
-      "lat": 43.9707277,
-      "lon": -70.8035298,
-      "displayName": "Denmark, Oxford County, Maine, 04022, United States of America"
-    },
-    "Oslo": {
-      "lat": 59.9133301,
-      "lon": 10.7389701,
-      "displayName": "Oslo, Norge"
-    },
-    "Mumbai": {
-      "lat": 19.054999,
-      "lon": 72.8692035,
-      "displayName": "Mumbai, Mumbai Suburban, Maharashtra, India"
-    },
-    "Tallinn": {
+    "Tallinn, Estonia": {
       "lat": 59.4372419,
       "lon": 24.7572802,
       "displayName": "Tallinn, Harju maakond, Eesti"
     },
-    "Italy": {
-      "lat": 42.6384261,
-      "lon": 12.674297,
-      "displayName": "Italia"
+    "Siberia, Russia": {
+      "lat": 60,
+      "lon": 100,
+      "displayName": "Сибирь, Богучанский район, Красноярский край, Сибирский федеральный округ, Россия"
     },
-    "France": {
-      "lat": 46.603354,
-      "lon": 1.8883335,
-      "displayName": "France"
+    "Essonne, France": {
+      "lat": 48.5303402,
+      "lon": 2.2392918,
+      "displayName": "Essonne, Île-de-France, France métropolitaine, France"
     },
-    "Port city": {
-      "lat": -32.0533326,
-      "lon": 115.7468805,
-      "displayName": "Port City, 13-15, Cantonment Street, Fremantle, City of Fremantle, Western Australia, 6959, Australia"
+    "Hertfordshire, England, UK": {
+      "lat": 51.8400523,
+      "lon": -0.0978552,
+      "displayName": "Hertfordshire, England, United Kingdom"
     },
-    "UK, USA": {
-      "lat": 38.0266291,
-      "lon": -84.5047222,
-      "displayName": "University of Kentucky, 101, Arboretum Woods Trail, Greg Page, University of Kentucky, Lexington, Fayette County, Kentucky, 40506, United States of America"
-    },
-    "Earth": {
-      "lat": 34.2331373,
-      "lon": -102.4107493,
-      "displayName": "Earth, Lamb County, Texas, United States of America"
-    },
-    "Rhyolite, Nevada": {
+    "Rhyolite, Nevada, USA": {
       "lat": 36.9038245,
       "lon": -116.8288837,
       "displayName": "Rhyolite, Nye County, Nevada, United States of America"
     },
-    "Arizona Desert": {
-      "lat": 32.2598642,
-      "lon": -112.9262583,
-      "displayName": "Sonoran Desert, Pima County, Arizona, United States of America"
-    },
-    "Los Angeles": {
-      "lat": 34.0536909,
-      "lon": -118.242766,
-      "displayName": "Los Angeles, Los Angeles County, California, United States of America"
-    },
-    "New York City": {
-      "lat": 40.7127281,
-      "lon": -74.0060152,
-      "displayName": "City of New York, New York, United States of America"
-    },
-    "Machine City": {
-      "lat": 37.781993,
-      "lon": -122.410998,
-      "displayName": "Machine, 1024, Market Street, Tenderloin, South of Market, San Francisco, California, 94102, United States of America"
+    "Agua Dulce, California, USA": {
+      "lat": 34.4963817,
+      "lon": -118.3256348,
+      "displayName": "Agua Dulce, Los Angeles County, California, United States of America"
     },
     "Nevada, USA": {
       "lat": 39.5158825,
       "lon": -116.853722,
       "displayName": "Nevada, United States of America"
     },
-    "Virtual 1937 Los Angeles": {
-      "lat": 34.0260494,
-      "lon": -118.4573704,
-      "displayName": "Virtual Snow, 3105, Pico Boulevard, Santa Monica, Los Angeles County, California, 90405, United States of America"
-    },
-    "Culver City, CA": {
+    "Culver City, California, USA": {
       "lat": 34.0211224,
       "lon": -118.396466,
       "displayName": "Culver City, Los Angeles County, California, 90232, United States of America"
     },
-    "Philadelphia, PA": {
+    "Albuquerque, New Mexico, USA": {
+      "lat": 35.0841034,
+      "lon": -106.650985,
+      "displayName": "Albuquerque, Bernalillo County, New Mexico, 87102, United States of America"
+    },
+    "Philadelphia, Pennsylvania, USA": {
       "lat": 39.9527237,
       "lon": -75.1635262,
       "displayName": "Philadelphia, Philadelphia County, Pennsylvania, United States of America"
     },
-    "Baltimore, MA": {
-      "lat": 39.2908816,
-      "lon": -76.610759,
-      "displayName": "Baltimore, Maryland, United States of America"
+    "New York City, New York, USA": {
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "displayName": "New York, 10000, United States of America"
     },
-    "USS Enterprise": {
-      "lat": 38.8749557,
-      "lon": -76.9945144,
-      "displayName": "USS Enterprise, Kidder Breese Street Southeast, Navy Yard, Ward 8, Washington, District of Columbia, 20388, United States of America"
-    },
-    "Regula I": {
-      "lat": 47.409157,
-      "lon": 1.0534338,
-      "displayName": "Saint-Règle, Loches, Indre-et-Loire, Centre-Val de Loire, France métropolitaine, 37530, France"
+    "Vancouver, British Columbia, Canada": {
+      "lat": 49.2608724,
+      "lon": -123.113952,
+      "displayName": "Vancouver, Metro Vancouver Regional District, British Columbia, Canada"
     },
     "Vancouver, Canada": {
       "lat": 49.2608724,
       "lon": -123.113952,
       "displayName": "Vancouver, Metro Vancouver Regional District, British Columbia, Canada"
     },
-    "Battlestar Galactica": {
-      "lat": 1.2531956,
-      "lon": 103.8217917,
-      "displayName": "Battlestar Galactica, Artillery Avenue, Southern Islands, Central, Singapore, 099394, Singapore"
+    "Wales, UK": {
+      "lat": 52.2928116,
+      "lon": -3.73893,
+      "displayName": "Cymru / Wales, United Kingdom"
     },
-    "UK, South Africa": {
-      "lat": 53.9056772,
-      "lon": -2.4902092,
-      "displayName": "South Africa, Cow Ark, Bowland Forest Low, Ribble Valley, Lancashire, England, United Kingdom"
-    },
-    "global": {
-      "lat": 55.702215,
-      "lon": 12.5592485,
-      "displayName": "Global Biodiversity Information Facility, Universitetsparken, Nørrebro, København, Københavns Kommune, Region Hovedstaden, 2200, Danmark"
+    "San Francisco, California, USA": {
+      "lat": 37.7932754,
+      "lon": -122.3963589,
+      "displayName": "San Francisco, California, United States of America"
     },
     "British Columbia, Canada": {
       "lat": 55.001251,
@@ -515,65 +485,40 @@
       "lon": -120.737257,
       "displayName": "Oregon, United States of America"
     },
-    "Moya": {
-      "lat": 39.9479049,
-      "lon": -1.366237,
-      "displayName": "Moya, Cuenca, Castilla-La Mancha, España"
+    "California, USA": {
+      "lat": 36.7014631,
+      "lon": -118.755997,
+      "displayName": "California, United States of America"
     },
-    "Boston, USA": {
+    "Boston, Massachusetts, USA": {
       "lat": 42.3554334,
       "lon": -71.060511,
       "displayName": "Boston, Suffolk County, Massachusetts, United States of America"
     },
-    "Deep space": {
-      "lat": 42.9985628,
-      "lon": -89.5676261,
-      "displayName": "Deep Space, Hubble Road, Epic Systems Corporation, Verona, Dane County, Wisconsin, 53593, United States of America"
+    "Manchester, England, UK": {
+      "lat": 53.4794892,
+      "lon": -2.2451148,
+      "displayName": "Manchester, Greater Manchester, England, United Kingdom"
     },
-    "Burbank, USA": {
+    "Burbank, California, USA": {
       "lat": 34.1812089,
       "lon": -118.307201,
       "displayName": "Burbank, Los Angeles County, California, United States of America"
     },
-    "Multiverse": {
-      "lat": 51.5203753,
-      "lon": -0.1570152,
-      "displayName": "Multiverse, 91-93, Baker Street, Marylebone, London, Greater London, England, W1U 4HG, United Kingdom"
+    "Toronto, Canada": {
+      "lat": 43.6534817,
+      "lon": -79.3839347,
+      "displayName": "Toronto, Golden Horseshoe, Ontario, Canada"
     },
-    "Bajor": {
-      "lat": 48.9527668,
-      "lon": 21.1138888,
-      "displayName": "Bajerov, okres Prešov, Prešovský kraj, Východné Slovensko, 082 41, Slovensko"
+    "Yuma, Arizona, USA": {
+      "lat": 32.7253096,
+      "lon": -114.6188787,
+      "displayName": "Yuma, Yuma County, Arizona, United States of America"
     },
-    "USS Enterprise NX-01": {
-      "lat": 38.8749557,
-      "lon": -76.9945144,
-      "displayName": "USS Enterprise, Kidder Breese Street Southeast, Navy Yard, Ward 8, Washington, District of Columbia, 20388, United States of America"
-    },
-    "USS Enterprise-D": {
-      "lat": 38.8749557,
-      "lon": -76.9945144,
-      "displayName": "USS Enterprise, Kidder Breese Street Southeast, Navy Yard, Ward 8, Washington, District of Columbia, 20388, United States of America"
-    },
-    "Atlantis": {
-      "lat": 26.5909025,
-      "lon": -80.1008762,
-      "displayName": "Atlantis, Palm Beach County, Florida, United States of America"
-    },
-    "Destiny": {
-      "lat": 18.7585778,
-      "lon": 98.9872731,
-      "displayName": "Destiny, บ้านป่าแดดเหนือ, ป่าแดด, Mueang Chiang Mai, จังหวัดเชียงใหม่, ประเทศไทย"
-    },
-    "Portmeirion, UK": {
+    "Portmeirion, Wales, UK": {
       "lat": 52.9134555,
       "lon": -4.0993672,
       "displayName": "Portmeirion, Gwynedd, Cymru / Wales, LL48 6ER, United Kingdom"
-    },
-    "The Village": {
-      "lat": 35.5658553,
-      "lon": -97.5494185,
-      "displayName": "The Village, Oklahoma County, Oklahoma, 73120, United States of America"
     }
   },
   "connections": [
@@ -581,22 +526,8 @@
       "movie": "2001: A Space Odyssey",
       "year": "1968",
       "from": "England",
-      "to": "African Desert",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "2001: A Space Odyssey",
-      "year": "1968",
-      "from": "African Desert",
-      "to": "Illinois",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "2001: A Space Odyssey",
-      "year": "1968",
-      "from": "Illinois",
       "to": "Jupiter",
-      "type": "depicted-to-depicted"
+      "type": "filming-to-depicted"
     },
     {
       "movie": "A Clockwork Orange",
@@ -608,8 +539,8 @@
     {
       "movie": "A Scanner Darkly",
       "year": "2006",
-      "from": "Austin, USA",
-      "to": "Orange County, USA",
+      "from": "Austin, Texas, USA",
+      "to": "Orange County, California, USA",
       "type": "filming-to-depicted"
     },
     {
@@ -622,36 +553,22 @@
     {
       "movie": "Arrival",
       "year": "2016",
-      "from": "Montreal, Canada",
+      "from": "Montreal, Quebec, Canada",
       "to": "Montana, USA",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Blade Runner",
       "year": "1982",
-      "from": "United States",
-      "to": "Los Angeles, USA",
+      "from": "Los Angeles, California, USA",
+      "to": "Los Angeles, California, USA",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Blade Runner 2049",
       "year": "2017",
       "from": "Budapest, Hungary",
-      "to": "Los Angeles, USA",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Blade Runner 2049",
-      "year": "2017",
-      "from": "Los Angeles, USA",
-      "to": "Las Vegas, USA",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Cargo",
-      "year": "2009",
-      "from": "Winterthur, Switzerland",
-      "to": "Space",
+      "to": "Los Angeles, California, USA",
       "type": "filming-to-depicted"
     },
     {
@@ -669,87 +586,17 @@
       "type": "filming-to-depicted"
     },
     {
-      "movie": "Cloud Atlas",
-      "year": "2012",
-      "from": "Germany",
-      "to": "Pacific Islands",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Cloud Atlas",
-      "year": "2012",
-      "from": "Pacific Islands",
-      "to": "Cambridge, England",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Cloud Atlas",
-      "year": "2012",
-      "from": "Cambridge, England",
-      "to": "San Francisco, USA",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Cloud Atlas",
-      "year": "2012",
-      "from": "San Francisco, USA",
-      "to": "London, UK",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Cloud Atlas",
-      "year": "2012",
-      "from": "London, UK",
-      "to": "Seoul, Korea",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Cloud Atlas",
-      "year": "2012",
-      "from": "Seoul, Korea",
-      "to": "Big Island, Hawaii)",
-      "type": "depicted-to-depicted"
-    },
-    {
       "movie": "Coherence",
       "year": "2013",
-      "from": "Los Angeles, USA",
-      "to": "San Jose, USA",
+      "from": "Los Angeles, California, USA",
+      "to": "San Jose, California, USA",
       "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Contact",
-      "year": "1997",
-      "from": "New Mexico, USA",
-      "to": "New Mexico, USA",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Contact",
-      "year": "1997",
-      "from": "New Mexico, USA",
-      "to": "Puerto Rico",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Contact",
-      "year": "1997",
-      "from": "Puerto Rico",
-      "to": "Washington DC",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Contact",
-      "year": "1997",
-      "from": "Washington DC",
-      "to": "Hokkaido, Japan",
-      "type": "depicted-to-depicted"
     },
     {
       "movie": "Dark City",
       "year": "1998",
       "from": "Sydney, Australia",
-      "to": "Dark City",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
     },
     {
@@ -763,21 +610,21 @@
       "movie": "Dune",
       "year": "1984",
       "from": "Czech Republic",
-      "to": "Arrakis",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Edge of Tomorrow",
       "year": "2014",
-      "from": "London, UK",
+      "from": "London, England, UK",
       "to": "France, UK",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Eraserhead",
       "year": "1977",
-      "from": "Los Angeles, USA",
-      "to": "Industrial city, USA",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
     },
     {
@@ -791,34 +638,34 @@
       "movie": "Ex Machina",
       "year": "2015",
       "from": "Valldal, Norway",
-      "to": "Norway",
+      "to": "Alaska, USA",
       "type": "filming-to-depicted"
     },
     {
       "movie": "eXistenZ",
       "year": "1999",
-      "from": "Toronto, Canada",
-      "to": "Canada",
+      "from": "Toronto, Ontario, Canada",
+      "to": "Toronto, Ontario, Canada",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Forbidden Planet",
       "year": "1956",
-      "from": "Los Angeles, USA",
-      "to": "Altair IV",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Gattaca",
       "year": "1997",
-      "from": "California, USA",
-      "to": "USA",
+      "from": "Los Angeles, California, USA",
+      "to": "San Rafael, California, USA",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Ghost in the Shell",
       "year": "1995",
-      "from": "Hong Kong",
+      "from": "New Zealand",
       "to": "Tokyo, Japan",
       "type": "filming-to-depicted"
     },
@@ -839,71 +686,29 @@
     {
       "movie": "Her",
       "year": "2014",
-      "from": "Shanghai, China",
-      "to": "Los Angeles, USA",
+      "from": "Los Angeles, California, USA",
+      "to": "Los Angeles, California, USA",
       "type": "filming-to-depicted"
     },
     {
       "movie": "I Origins",
       "year": "2014",
       "from": "New York City, USA",
-      "to": "New York City, USA",
+      "to": "Delhi, India",
       "type": "filming-to-depicted"
-    },
-    {
-      "movie": "I Origins",
-      "year": "2014",
-      "from": "New York City, USA",
-      "to": "India",
-      "type": "depicted-to-depicted"
     },
     {
       "movie": "I, Robot",
       "year": "2004",
       "from": "North Vancouver, Canada",
-      "to": "Chicago, USA",
+      "to": "Chicago, Illinois, USA",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Inception",
       "year": "2010",
-      "from": "UK",
-      "to": "Paris, France",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Inception",
-      "year": "2010",
-      "from": "Paris, France",
-      "to": "USA",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Inception",
-      "year": "2010",
-      "from": "USA",
-      "to": "Japan",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Inception",
-      "year": "2010",
-      "from": "Japan",
-      "to": "Africa",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Inception",
-      "year": "2010",
-      "from": "Africa",
-      "to": "Dream Worlds",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Interstellar",
-      "year": "2014",
-      "from": "Alberta, Canada",
-      "to": "American Midwest",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
     },
     {
@@ -917,56 +722,28 @@
       "movie": "Metropolis",
       "year": "1927",
       "from": "Berlin, Germany",
-      "to": "Metropolis",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Minority Report",
       "year": "2002",
-      "from": "Los Angeles, USA",
-      "to": "Washington, USA",
+      "from": "Los Angeles, California, USA",
+      "to": "Washington, D.C., USA",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Moon",
       "year": "2009",
-      "from": "Shepperton Studios, UK",
+      "from": "Shepperton Studios, England, UK",
       "to": "Moon",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Mr. Nobody",
       "year": "2009",
-      "from": "Belgium, Canada",
-      "to": "England",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Mr. Nobody",
-      "year": "2009",
-      "from": "England",
-      "to": "Montreal, Canada",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Mr. Nobody",
-      "year": "2009",
       "from": "Montreal, Canada",
-      "to": "New York",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Mr. Nobody",
-      "year": "2009",
-      "from": "New York",
       "to": "Mars",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Oblivion",
-      "year": "2013",
-      "from": "Baton Rouge, LA",
-      "to": "New York City, USA",
       "type": "filming-to-depicted"
     },
     {
@@ -984,17 +761,10 @@
       "type": "filming-to-depicted"
     },
     {
-      "movie": "Paprika",
-      "year": "2006",
-      "from": "Tokyo, Japan",
-      "to": "Dream world",
-      "type": "depicted-to-depicted"
-    },
-    {
       "movie": "Possible Worlds",
       "year": "2000",
       "from": "Montreal, Canada",
-      "to": "Canada",
+      "to": "Ottawa, Ontario, Canada",
       "type": "filming-to-depicted"
     },
     {
@@ -1005,16 +775,9 @@
       "type": "filming-to-depicted"
     },
     {
-      "movie": "Predestination",
-      "year": "2014",
-      "from": "New York, USA",
-      "to": "Cleveland, USA",
-      "type": "depicted-to-depicted"
-    },
-    {
       "movie": "Primer",
       "year": "2004",
-      "from": "Dallas, USA",
+      "from": "Dallas, Texas, USA",
       "to": "Texas, USA",
       "type": "filming-to-depicted"
     },
@@ -1022,77 +785,28 @@
       "movie": "Screamers",
       "year": "1995",
       "from": "Montreal, Canada",
-      "to": "Sirius 6B",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Serenity (Firefly)",
-      "year": "2005",
-      "from": "Los Angeles, USA",
-      "to": "Space",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Snowpiercer",
-      "year": "2013",
-      "from": "Canada",
-      "to": "Mexico",
-      "type": "depicted-to-depicted"
     },
     {
       "movie": "Source Code",
       "year": "2011",
       "from": "Montreal, Canada",
-      "to": "Chicago, USA",
+      "to": "Chicago, Illinois, USA",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Strange Days",
       "year": "1995",
-      "from": "Los Angeles, USA",
-      "to": "Los Angeles, USA",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Sunshine",
-      "year": "2007",
-      "from": "London, UK",
-      "to": "Space",
+      "from": "Los Angeles, California, USA",
+      "to": "Los Angeles, California, USA",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Tenet",
       "year": "2020",
-      "from": "Denmark, USA",
-      "to": "Oslo",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Tenet",
-      "year": "2020",
-      "from": "Oslo",
-      "to": "Mumbai",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Tenet",
-      "year": "2020",
-      "from": "Mumbai",
-      "to": "Tallinn",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Tenet",
-      "year": "2020",
-      "from": "Tallinn",
-      "to": "Italy",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "The City of Lost Children",
-      "year": "1995",
-      "from": "France",
-      "to": "Port city",
+      "from": "Tallinn, Estonia",
+      "to": "Siberia, Russia",
       "type": "filming-to-depicted"
     },
     {
@@ -1103,52 +817,17 @@
       "type": "filming-to-depicted"
     },
     {
-      "movie": "The Fifth Element",
-      "year": "1997",
-      "from": "New York City, USA",
-      "to": "Space",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "The Hitchhiker's Guide to the Galaxy",
+      "movie": "The Island",
       "year": "2005",
-      "from": "UK, USA",
-      "to": "Earth",
+      "from": "Rhyolite, Nevada, USA",
+      "to": "Los Angeles, California, USA",
       "type": "filming-to-depicted"
-    },
-    {
-      "movie": "The Hitchhiker's Guide to the Galaxy",
-      "year": "2005",
-      "from": "Earth",
-      "to": "Space",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "The Island",
-      "year": "2005",
-      "from": "Rhyolite, Nevada",
-      "to": "Arizona Desert",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "The Island",
-      "year": "2005",
-      "from": "Arizona Desert",
-      "to": "Los Angeles",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "The Island",
-      "year": "2005",
-      "from": "Los Angeles",
-      "to": "New York City",
-      "type": "depicted-to-depicted"
     },
     {
       "movie": "The Man from Earth",
       "year": "2007",
-      "from": "California, USA",
-      "to": "California, USA",
+      "from": "Agua Dulce, California, USA",
+      "to": "Agua Dulce, California, USA",
       "type": "filming-to-depicted"
     },
     {
@@ -1159,6 +838,13 @@
       "type": "filming-to-depicted"
     },
     {
+      "movie": "The Matrix",
+      "year": "1999",
+      "from": "Sydney, Australia",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted"
+    },
+    {
       "movie": "The Signal",
       "year": "2014",
       "from": "New Mexico, USA",
@@ -1166,150 +852,73 @@
       "type": "filming-to-depicted"
     },
     {
-      "movie": "The Signal",
-      "year": "2014",
-      "from": "Nevada, USA",
-      "to": "Space",
-      "type": "depicted-to-depicted"
-    },
-    {
       "movie": "The Thirteenth Floor",
       "year": "1999",
-      "from": "Los Angeles, USA",
-      "to": "Los Angeles, USA",
+      "from": "Los Angeles, California, USA",
+      "to": "Los Angeles, California, USA",
       "type": "filming-to-depicted"
-    },
-    {
-      "movie": "The Thirteenth Floor",
-      "year": "1999",
-      "from": "Los Angeles, USA",
-      "to": "Virtual 1937 Los Angeles",
-      "type": "depicted-to-depicted"
     },
     {
       "movie": "The Time Machine",
       "year": "2002",
-      "from": "Culver City, CA",
+      "from": "Culver City, California, USA",
       "to": "London, UK",
       "type": "filming-to-depicted"
     },
     {
-      "movie": "Transcendence",
-      "year": "2014",
-      "from": "New Mexico, USA",
-      "to": "California, USA",
-      "type": "filming-to-depicted"
-    },
-    {
       "movie": "Twelve Monkeys",
       "year": "1996",
-      "from": "Philadelphia, PA",
-      "to": "Philadelphia, PA",
+      "from": "Philadelphia, Pennsylvania, USA",
+      "to": "Philadelphia, Pennsylvania, USA",
       "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Twelve Monkeys",
-      "year": "1996",
-      "from": "Philadelphia, PA",
-      "to": "Baltimore, MA",
-      "type": "depicted-to-depicted"
     },
     {
       "movie": "Vanilla Sky",
       "year": "2001",
-      "from": "New York City, USA",
-      "to": "New York City, USA",
+      "from": "New York City, New York, USA",
+      "to": "New York City, New York, USA",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Star Trek II: The Wrath of Khan",
       "year": "1982",
-      "from": "California, USA",
-      "to": "Space",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Star Trek II: The Wrath of Khan",
-      "year": "1982",
-      "from": "Space",
-      "to": "USS Enterprise",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Star Trek II: The Wrath of Khan",
-      "year": "1982",
-      "from": "USS Enterprise",
-      "to": "Regula I",
-      "type": "depicted-to-depicted"
     },
     {
       "movie": "Battlestar Galactica",
       "year": "2004–2009",
-      "from": "Vancouver, Canada",
-      "to": "Battlestar Galactica",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Black Mirror",
-      "year": "2011–",
-      "from": "UK, South Africa",
-      "to": "UK",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Black Mirror",
-      "year": "2011–",
-      "from": "UK",
-      "to": "USA",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Black Mirror",
-      "year": "2011–",
-      "from": "USA",
-      "to": "global",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Blakes 7",
-      "year": "1978–1981",
-      "from": "UK",
-      "to": "Space",
+      "from": "Vancouver, British Columbia, Canada",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Children of Dune",
       "year": "2003",
       "from": "Prague, Czech Republic",
-      "to": "Arrakis",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Continuum",
       "year": "2012–2015",
-      "from": "Vancouver, Canada",
+      "from": "Vancouver, British Columbia, Canada",
       "to": "Vancouver, Canada",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Doctor Who",
       "year": "1964-1989 / 2005–",
-      "from": "UK",
-      "to": "Earth",
+      "from": "Wales, UK",
+      "to": "San Francisco, California, USA",
       "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Doctor Who",
-      "year": "1964-1989 / 2005–",
-      "from": "Earth",
-      "to": "Space",
-      "type": "depicted-to-depicted"
     },
     {
       "movie": "Dune",
       "year": "2000",
       "from": "Czech Republic",
-      "to": "Arrakis",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
     },
     {
@@ -1320,45 +929,17 @@
       "type": "filming-to-depicted"
     },
     {
-      "movie": "Farscape",
-      "year": "1999–2003",
-      "from": "Sydney, Australia",
-      "to": "Moya",
-      "type": "filming-to-depicted"
-    },
-    {
       "movie": "Fringe",
       "year": "2008–2013",
       "from": "Vancouver, Canada",
-      "to": "Boston, USA",
+      "to": "Boston, Massachusetts, USA",
       "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Fringe",
-      "year": "2008–2013",
-      "from": "Boston, USA",
-      "to": "New York, USA",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Hitchhiker's Guide to the Galaxy",
-      "year": "1981",
-      "from": "UK",
-      "to": "Earth",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Hitchhiker's Guide to the Galaxy",
-      "year": "1981",
-      "from": "Earth",
-      "to": "Space",
-      "type": "depicted-to-depicted"
     },
     {
       "movie": "Mr. Robot",
       "year": "-2015",
-      "from": "New York City, USA",
-      "to": "New York City, USA",
+      "from": "New York City, New York, USA",
+      "to": "New York City, New York, USA",
       "type": "filming-to-depicted"
     },
     {
@@ -1371,113 +952,81 @@
     {
       "movie": "Person of Interest",
       "year": "2011-2016",
-      "from": "New York City, USA",
-      "to": "New York City, USA",
+      "from": "New York City, New York, USA",
+      "to": "New York City, New York, USA",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Rick and Morty",
-      "year": "-2013",
-      "from": "Burbank, USA",
-      "to": "Earth",
+      "year": "2013",
+      "from": "Burbank, California, USA",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Rick and Morty",
-      "year": "-2013",
-      "from": "Earth",
-      "to": "Multiverse",
-      "type": "depicted-to-depicted"
     },
     {
       "movie": "Star Trek: Enterprise",
       "year": "2001–2005",
-      "from": "California, USA",
-      "to": "USS Enterprise NX-01",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Star Trek: The Next Generation",
       "year": "1987–1994",
-      "from": "California, USA",
-      "to": "USS Enterprise-D",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Star Trek: The Original Series",
       "year": "1966–1969",
-      "from": "California, USA",
-      "to": "USS Enterprise",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Stargate Atlantis",
       "year": "2004–2009",
-      "from": "Vancouver, Canada",
-      "to": "Earth",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "Stargate Atlantis",
-      "year": "2004–2009",
-      "from": "Earth",
-      "to": "Atlantis",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Stargate SG1",
-      "year": "1997–2007",
-      "from": "Vancouver, Canada",
-      "to": "Earth",
+      "from": "Vancouver, British Columbia, Canada",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Stargate SG1",
       "year": "1997–2007",
-      "from": "Earth",
-      "to": "Space",
-      "type": "depicted-to-depicted"
-    },
-    {
-      "movie": "Stargate Universe",
-      "year": "2009–2011",
-      "from": "Vancouver, Canada",
-      "to": "Destiny",
-      "type": "filming-to-depicted"
-    },
-    {
-      "movie": "The 100",
-      "year": "2014–",
-      "from": "Vancouver, Canada",
-      "to": "Earth",
+      "from": "Vancouver, British Columbia, Canada",
+      "to": "Yuma, Arizona, USA",
       "type": "filming-to-depicted"
     },
     {
       "movie": "The Prisoner",
       "year": "1967–1968",
-      "from": "Portmeirion, UK",
-      "to": "The Village",
+      "from": "Portmeirion, Wales, UK",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted"
     },
     {
       "movie": "The X-Files",
       "year": "1993-2002 / 2016-",
       "from": "Vancouver, Canada",
-      "to": "USA",
+      "to": "London, UK",
       "type": "filming-to-depicted"
     },
     {
       "movie": "Twilight Zone",
       "year": "1959–1964",
       "from": "California, USA",
-      "to": "USA",
+      "to": "Los Angeles, California, USA",
       "type": "filming-to-depicted"
     }
   ],
-  "generatedAt": "2025-11-09T18:58:44.667Z",
+  "generatedAt": "2025-11-26T23:37:03.289Z",
   "stats": {
     "totalMovies": 99,
-    "uniqueLocations": 115,
-    "connections": 128
+    "uniqueLocations": 104,
+    "earthLocations": 69,
+    "solarSystemBodies": 14,
+    "fantasyLocations": 23,
+    "connections": 71
   }
 }

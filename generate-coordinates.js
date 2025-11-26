@@ -6,96 +6,59 @@
 const fs = require('fs');
 const https = require('https');
 
-// Fantasy location keywords to filter out
-const FANTASY_KEYWORDS = [
-  'neo-', 'fictional', 'unnamed', 'dystopian', 'space', 'orbit', 'moon', 'planet',
-  'solar system', 'outer space', 'dream', 'parallel', 'asteroid', 'future',
-  'kassandra', 'altair', 'arrakis', 'rhea', 'europa', 'sarang', 'metropolis',
-  'dark city', 'gattaca'
-];
+// Solar system planet coordinates (matching morph.js customPositions)
+const SOLAR_SYSTEM_COORDS = {
+  'Sun': { lat: 0, lon: 0, type: 'planet' },
+  'Mercury': { lat: 0, lon: 0, type: 'planet' },
+  'Venus': { lat: 0, lon: 0, type: 'planet' },
+  'Earth': { lat: 0, lon: 0, type: 'planet' },
+  'Mars': { lat: 0, lon: 0, type: 'planet' },
+  'Jupiter': { lat: 0, lon: 0, type: 'planet' },
+  'Saturn': { lat: 0, lon: 0, type: 'planet' },
+  'Uranus': { lat: 0, lon: 0, type: 'planet' },
+  'Neptune': { lat: 0, lon: 0, type: 'planet' },
+  'Moon': { lat: 0, lon: 0, type: 'planet' },
+  'Io': { lat: 0, lon: 0, type: 'moon' },
+  'Europa': { lat: 0, lon: 0, type: 'moon' },
+  'Ganymede': { lat: 0, lon: 0, type: 'moon' },
+  'Callisto': { lat: 0, lon: 0, type: 'moon' }
+};
 
-/**
- * Check if a location is a real place (not fantasy/sci-fi)
- */
-function isRealLocation(location) {
-  if (!location || location.trim() === '') return false;
+// Fantasy location categories - all map to (0,0) which will be filtered to solar system
+const FANTASY_CATEGORIES = {
+  // Spaceships and vessels
+  'USS Enterprise': 'Fictional Locations',
+  'USS Enterprise NX-01': 'Fictional Locations',
+  'USS Enterprise-D': 'Fictional Locations',
+  'Battlestar Galactica': 'Fictional Locations',
+  'Moya': 'Fictional Locations',
+  'Destiny': 'Fictional Locations',
 
-  const lower = location.toLowerCase();
+  // Space stations and bases
+  'Regula I': 'Fictional Locations',
+  'Atlantis': 'Fictional Locations',
 
-  // Check for fantasy keywords
-  if (FANTASY_KEYWORDS.some(keyword => lower.includes(keyword))) {
-    return false;
-  }
+  // Planets and systems
+  'Arrakis': 'Fictional Locations',
+  'Altair IV': 'Fictional Locations',
+  'Bajor': 'Fictional Locations',
+  'Sirius 6B': 'Fictional Locations',
 
-  return true;
-}
+  // Fictional Earth locations
+  'Metropolis': 'Fictional Locations',
+  'Dark City': 'Fictional Locations',
+  'The Village': 'Fictional Locations',
+  'Industrial city, USA': 'Fictional Locations',
+  'Port city': 'Fictional Locations',
+  'Machine City': 'Fictional Locations',
 
-/**
- * Extract main city from location string
- */
-function extractCity(locationString) {
-  if (!locationString) return null;
-
-  // Remove parenthetical notes like "(near future)"
-  let cleaned = locationString.replace(/\([^)]*\)/g, '').trim();
-
-  // Handle "Multiple locations" cases
-  if (cleaned.toLowerCase().includes('multiple')) return null;
-
-  // Split by "/" to handle multiple locations, take first
-  cleaned = cleaned.split('/')[0].trim();
-
-  // For format "City, State/Province, Country" - keep city and country
-  const parts = cleaned.split(',').map(s => s.trim());
-
-  if (parts.length >= 1) {
-    // Return city with country if available
-    if (parts.length >= 3) {
-      return `${parts[0]}, ${parts[parts.length - 1]}`;
-    } else if (parts.length === 2) {
-      return `${parts[0]}, ${parts[1]}`;
-    }
-    return parts[0];
-  }
-
-  return cleaned;
-}
-
-/**
- * Extract all locations from a location string (handles "/" separators)
- */
-function extractAllLocations(locationString) {
-  if (!locationString || !locationString.trim()) return [];
-
-  // Remove parenthetical notes like "(near future)"
-  let cleaned = locationString.replace(/\([^)]*\)/g, '').trim();
-
-  // Handle "Multiple locations" cases
-  if (cleaned.toLowerCase().includes('multiple')) return [];
-
-  // Split by "/" to get all locations
-  const locations = cleaned.split('/').map(loc => {
-    const trimmed = loc.trim();
-    if (!trimmed) return null;
-
-    // For format "City, State/Province, Country" - keep city and country
-    const parts = trimmed.split(',').map(s => s.trim());
-
-    if (parts.length >= 1) {
-      // Return city with country if available
-      if (parts.length >= 3) {
-        return `${parts[0]}, ${parts[parts.length - 1]}`;
-      } else if (parts.length === 2) {
-        return `${parts[0]}, ${parts[1]}`;
-      }
-      return parts[0];
-    }
-
-    return trimmed;
-  }).filter(loc => loc !== null);
-
-  return locations;
-}
+  // Abstract/dimensional
+  'Dream World': 'Fictional Locations',
+  'Dream world': 'Fictional Locations',
+  'Dream Worlds': 'Fictional Locations',
+  'Multiverse': 'Fictional Locations',
+  'Virtual 1937 Los Angeles': 'Fictional Locations'
+};
 
 /**
  * Parse CSV file
@@ -103,7 +66,6 @@ function extractAllLocations(locationString) {
 function parseCSV(filePath) {
   const content = fs.readFileSync(filePath, 'utf-8');
   const lines = content.split('\n');
-  const headers = lines[0].split(',');
 
   const movies = [];
 
@@ -123,12 +85,12 @@ function parseCSV(filePath) {
     if (!movieName) continue;
 
     movies.push({
-      name: movieName,
-      year: year,
-      depictedEarth: depictedEarth,
-      depictedSpace: depictedSpace,
-      depictedFantasy: depictedFantasy,
-      production: productionLocation
+      name: movieName.trim(),
+      year: year.trim(),
+      depictedEarth: depictedEarth ? depictedEarth.trim() : '',
+      depictedSpace: depictedSpace ? depictedSpace.trim() : '',
+      depictedFantasy: depictedFantasy ? depictedFantasy.trim() : '',
+      production: productionLocation ? productionLocation.trim() : ''
     });
   }
 
@@ -158,6 +120,39 @@ function parseCSVRow(row) {
 
   result.push(current.trim());
   return result;
+}
+
+/**
+ * Extract primary location from a string (handles "/" and "," separators)
+ */
+function extractPrimaryLocation(locationString) {
+  if (!locationString || !locationString.trim()) return null;
+
+  // Remove parenthetical notes
+  let cleaned = locationString.replace(/\([^)]*\)/g, '').trim();
+  if (!cleaned) return null;
+
+  // Split by "/" to get first location
+  const parts = cleaned.split('/').map(s => s.trim()).filter(s => s);
+  if (parts.length === 0) return null;
+
+  return parts[0];
+}
+
+/**
+ * Check if location is a known solar system body
+ */
+function isSolarSystemLocation(location) {
+  const normalized = location.trim();
+  return SOLAR_SYSTEM_COORDS.hasOwnProperty(normalized);
+}
+
+/**
+ * Check if location is a fantasy location
+ */
+function isFantasyLocation(location) {
+  const normalized = location.trim();
+  return FANTASY_CATEGORIES.hasOwnProperty(normalized);
 }
 
 /**
@@ -218,61 +213,89 @@ async function main() {
   const movies = parseCSV('./merged_movies_data.csv');
   console.log(`   Loaded ${movies.length} movies\n`);
 
-  // Extract unique locations
-  const uniqueLocations = new Set();
+  // Collect all unique Earth locations that need geocoding
+  const earthLocationsToGeocode = new Set();
   const movieConnections = [];
 
   movies.forEach(movie => {
-    // Get all depicted locations from Earth, Space, and Fantasy columns
-    const allDepictedLocations = [
-      ...extractAllLocations(movie.depictedEarth),
-      ...extractAllLocations(movie.depictedSpace),
-      ...extractAllLocations(movie.depictedFantasy)
-    ];
-
     // Get production location
-    const production = extractCity(movie.production);
+    const production = extractPrimaryLocation(movie.production);
 
-    // Add all locations to unique set (no filtering)
-    if (production) {
-      uniqueLocations.add(production);
+    // Determine primary depicted location (Earth, Space, or Fantasy)
+    let depicted = null;
+    let depictedType = null;
+
+    // Priority: Earth → Space → Fantasy
+    if (movie.depictedEarth) {
+      depicted = extractPrimaryLocation(movie.depictedEarth);
+      depictedType = 'earth';
+    } else if (movie.depictedSpace) {
+      depicted = extractPrimaryLocation(movie.depictedSpace);
+      depictedType = 'space';
+    } else if (movie.depictedFantasy) {
+      depicted = extractPrimaryLocation(movie.depictedFantasy);
+      depictedType = 'fantasy';
     }
-    allDepictedLocations.forEach(loc => {
-      if (loc) uniqueLocations.add(loc);
-    });
 
-    // Create connections from filming location to first depicted location
-    if (production && allDepictedLocations.length > 0 && allDepictedLocations[0]) {
+    // Add production location to geocoding set if it's an Earth location
+    if (production && !isSolarSystemLocation(production) && !isFantasyLocation(production)) {
+      earthLocationsToGeocode.add(production);
+    }
+
+    // Add depicted Earth locations to geocoding set
+    if (depictedType === 'earth' && depicted && !isSolarSystemLocation(depicted) && !isFantasyLocation(depicted)) {
+      earthLocationsToGeocode.add(depicted);
+    }
+
+    // Create connection: Production → Depicted
+    if (production && depicted) {
       movieConnections.push({
         movie: movie.name,
         year: movie.year,
         from: production,
-        to: allDepictedLocations[0],
+        to: depicted,
         type: 'filming-to-depicted'
       });
     }
-
-    // Create connections between depicted locations in order
-    for (let i = 0; i < allDepictedLocations.length - 1; i++) {
-      if (allDepictedLocations[i] && allDepictedLocations[i + 1]) {
-        movieConnections.push({
-          movie: movie.name,
-          year: movie.year,
-          from: allDepictedLocations[i],
-          to: allDepictedLocations[i + 1],
-          type: 'depicted-to-depicted'
-        });
-      }
-    }
   });
 
-  console.log(`🌍 Found ${uniqueLocations.size} unique real locations`);
-  console.log(`🔗 Found ${movieConnections.length} valid connections\n`);
+  console.log(`🌍 Found ${earthLocationsToGeocode.size} unique Earth locations to geocode`);
+  console.log(`🔗 Created ${movieConnections.length} movie connections\n`);
 
-  // Geocode all unique locations
-  console.log('🔍 Starting geocoding (1 request per second)...\n');
+  // Initialize coordinates with solar system bodies
   const coordinates = {};
-  const locationArray = Array.from(uniqueLocations);
+
+  // Add solar system coordinates (all at 0,0 to be handled in visualization)
+  Object.keys(SOLAR_SYSTEM_COORDS).forEach(body => {
+    coordinates[body] = {
+      lat: 0,
+      lon: 0,
+      displayName: `${body} (Solar System)`
+    };
+  });
+
+  // Add fantasy location group
+  coordinates['Fictional Locations'] = {
+    lat: 0,
+    lon: 0,
+    displayName: 'Fictional Locations (Solar System)'
+  };
+
+  // Map all fantasy locations to the Fictional Locations group in coordinates
+  Object.keys(FANTASY_CATEGORIES).forEach(fantasyLoc => {
+    coordinates[fantasyLoc] = {
+      lat: 0,
+      lon: 0,
+      displayName: 'Fictional Locations (Solar System)'
+    };
+  });
+
+  console.log(`✨ Added ${Object.keys(SOLAR_SYSTEM_COORDS).length} solar system bodies`);
+  console.log(`🎭 Added ${Object.keys(FANTASY_CATEGORIES).length} fantasy locations\n`);
+
+  // Geocode Earth locations
+  console.log('🔍 Starting geocoding (1 request per second)...\n');
+  const locationArray = Array.from(earthLocationsToGeocode);
 
   for (let i = 0; i < locationArray.length; i++) {
     const location = locationArray[i];
@@ -296,14 +319,27 @@ async function main() {
     }
   }
 
-  console.log(`\n✅ Successfully geocoded ${Object.keys(coordinates).length} locations`);
+  console.log(`\n✅ Successfully geocoded ${locationArray.length} Earth locations`);
 
-  // Filter connections to only include successfully geocoded locations
-  const validConnections = movieConnections.filter(conn =>
+  // Update connections to map fantasy locations to "Fictional Locations"
+  const finalConnections = movieConnections.map(conn => {
+    // Map fantasy "from" locations
+    if (FANTASY_CATEGORIES[conn.from]) {
+      return { ...conn, from: FANTASY_CATEGORIES[conn.from] };
+    }
+    // Map fantasy "to" locations
+    if (FANTASY_CATEGORIES[conn.to]) {
+      return { ...conn, to: FANTASY_CATEGORIES[conn.to] };
+    }
+    return conn;
+  });
+
+  // Filter connections to only include locations with coordinates
+  const validConnections = finalConnections.filter(conn =>
     coordinates[conn.from] && coordinates[conn.to]
   );
 
-  console.log(`🎯 Valid connections after geocoding: ${validConnections.length}\n`);
+  console.log(`🎯 Valid connections: ${validConnections.length}\n`);
 
   // Save to JSON file
   const output = {
@@ -313,6 +349,9 @@ async function main() {
     stats: {
       totalMovies: movies.length,
       uniqueLocations: Object.keys(coordinates).length,
+      earthLocations: locationArray.length,
+      solarSystemBodies: Object.keys(SOLAR_SYSTEM_COORDS).length,
+      fantasyLocations: Object.keys(FANTASY_CATEGORIES).length,
       connections: validConnections.length
     }
   };
@@ -321,7 +360,13 @@ async function main() {
   fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
 
   console.log(`💾 Saved coordinates to: ${outputPath}`);
-  console.log('\n✨ Done! You can now open connection-map.html\n');
+  console.log('\n📊 Summary:');
+  console.log(`   • Total locations: ${Object.keys(coordinates).length}`);
+  console.log(`   • Earth locations: ${locationArray.length}`);
+  console.log(`   • Solar system: ${Object.keys(SOLAR_SYSTEM_COORDS).length}`);
+  console.log(`   • Fantasy locations: ${Object.keys(FANTASY_CATEGORIES).length + 1} (grouped)`);
+  console.log(`   • Connections: ${validConnections.length}`);
+  console.log('\n✨ Done! Reload morph.html to see changes.\n');
 }
 
 // Run the script

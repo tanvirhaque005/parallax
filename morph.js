@@ -2,9 +2,115 @@ import * as THREE from 'three';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
 // ==========================================================
+// TEXT OVERLAY CONTENT - DECADE AWARE
+// ==========================================================
+const decadeTexts = {
+  'All': {
+    title: '1950-2020',
+    description: 'Most sci-fi futures originate from the same real cities—Los Angeles, Vancouver, London. Real landscapes anchor imagined ones.'
+  },
+  1950: {
+    title: '1950-1954',
+    description: 'The golden age begins. Early science fiction films establish Los Angeles and London as the primary filming hubs for imagined futures.'
+  },
+  1955: {
+    title: '1955-1959',
+    description: 'Cold War anxieties shape narratives. Science fiction explores nuclear fears and space race ambitions through familiar urban landscapes.'
+  },
+  1960: {
+    title: '1960-1964',
+    description: 'The space age accelerates. Films increasingly venture beyond Earth while still grounding production in major metropolitan centers.'
+  },
+  1965: {
+    title: '1965-1969',
+    description: 'Cultural revolution meets cosmic speculation. Psychedelic influences and counter-culture merge with science fiction storytelling.'
+  },
+  1970: {
+    title: '1970-1974',
+    description: 'Dystopian futures emerge. Environmental and social concerns begin reshaping how filmmakers imagine tomorrow.'
+  },
+  1975: {
+    title: '1975-1979',
+    description: 'Blockbuster era begins. Star Wars transforms science fiction into mainstream spectacle, filmed across multiple continents.'
+  },
+  1980: {
+    title: '1980-1984',
+    description: 'Cyberpunk aesthetics arrive. Urban decay and technological advancement create new visual languages for future worlds.'
+  },
+  1985: {
+    title: '1985-1989',
+    description: 'Digital effects emerge. Computer graphics begin supplementing practical effects, changing what futures can be visualized.'
+  },
+  1990: {
+    title: '1990-1994',
+    description: 'Virtual reality becomes real. Films explore digital worlds while production techniques become increasingly globalized.'
+  },
+  1995: {
+    title: '1995-1999',
+    description: 'Millennium approaches. Y2K anxieties and internet culture reshape how filmmakers imagine technological futures.'
+  },
+  2000: {
+    title: '2000-2004',
+    description: 'Post-9/11 narratives. Science fiction grapples with surveillance, security, and new forms of global uncertainty.'
+  },
+  2005: {
+    title: '2005-2009',
+    description: 'Climate crisis enters frame. Environmental catastrophe becomes central to how futures are imagined and filmed.'
+  },
+  2010: {
+    title: '2010-2014',
+    description: 'Marvel universe expands. Interconnected narratives and superhero science fiction dominate global box offices.'
+  },
+  2015: {
+    title: '2015-2019',
+    description: 'Streaming transforms production. International co-productions multiply as platforms compete for science fiction content.'
+  },
+  2020: {
+    title: '2020-2024',
+    description: 'Pandemic impacts storytelling. Isolation, contagion, and social distance themes emerge in science fiction production.'
+  }
+};
+
+// ==========================================================
+// TEXT OVERLAY UPDATE FUNCTION
+// ==========================================================
+function updateTextOverlay() {
+  const usText = document.querySelector('.zoom-text[data-zoom="US"]');
+  const worldText = document.querySelector('.zoom-text[data-zoom="WORLD"]');
+  const solarText = document.querySelector('.zoom-text[data-zoom="SOLAR"]');
+
+  // Hide all first
+  [usText, worldText, solarText].forEach(el => el?.classList.remove('active'));
+
+  // Show appropriate text based on zoom state
+  switch(currentZoomState) {
+    case ZOOM_STATES.US:
+      if (usText) {
+        // Update US text based on current decade filter
+        const textData = currentDecade === null 
+          ? decadeTexts['All'] 
+          : (decadeTexts[currentDecade] || decadeTexts['All']);
+        
+        usText.querySelector('.main-title').textContent = textData.title;
+        usText.querySelector('.description').textContent = textData.description;
+        usText.classList.add('active');
+      }
+      break;
+      
+    case ZOOM_STATES.WORLD:
+      worldText?.classList.add('active');
+      break;
+      
+    case ZOOM_STATES.SOLAR:
+      solarText?.classList.add('active');
+      break;
+  }
+}
+
+// ==========================================================
 // RENDERER + CAMERA
 // ==========================================================
-const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene") });
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene"), antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor("#0a1628"); // Deep navy background
 
@@ -31,17 +137,22 @@ camera.lookAt(0, 0, 0);
 // ==========================================================
 // EARTH GEOMETRIES
 // ==========================================================
-const widthSegments = 100, heightSegments = 50;
+const widthSegments = 200, heightSegments = 100; // Higher resolution geometry
 const planeGeometry = new THREE.PlaneGeometry(2, 1, widthSegments, heightSegments);
 const sphereGeometry = new THREE.SphereGeometry(1, widthSegments, heightSegments);
 
+// World Map Canvas (used for both US zoom and full world view)
 const mapCanvas = document.getElementById('mapCanvas');
 const mapContext = mapCanvas.getContext('2d');
-mapCanvas.width = 2048;
-mapCanvas.height = 1024;
+mapCanvas.width = 4096;  // Higher resolution texture
+mapCanvas.height = 2048;
 
 const texture = new THREE.CanvasTexture(mapCanvas);
-const material = new THREE.MeshBasicMaterial({ map: texture });
+const material = new THREE.MeshBasicMaterial({
+  map: texture,
+  transparent: true,
+  opacity: 0.35  // More transparent so paths stand out
+});
 
 const geometry = planeGeometry.clone();
 const earthMesh = new THREE.Mesh(geometry, material);
@@ -82,7 +193,9 @@ renderD3Map();
 // ==========================================================
 // FLIGHT PATHS
 // ==========================================================
-const flightPathGroup = new THREE.Group();
+const usFlightPathGroup = new THREE.Group(); // US domestic paths
+const flightPathGroup = new THREE.Group();    // International paths
+scene.add(usFlightPathGroup);
 scene.add(flightPathGroup);
 
 const flowVertexShader = `
@@ -100,9 +213,25 @@ const flowFragmentShader = `
   varying vec2 vUv;
 
   void main(){
-    float t = fract((vUv.x*8.0) - time*0.5);
-    float soft = smoothstep(0.55,0.65,t) + (1.0 - smoothstep(0.0,0.1,t));
-    gl_FragColor = vec4(color*(0.4 + soft*0.6), opacity);
+    // Create moving dots along the path
+    float dotSpacing = 0.04; // Distance between dots (very close)
+    float dotSize = 0.15;    // Size of each dot
+
+    // Position along path with time offset for movement
+    float pos = fract((vUv.x - time * 0.05) / dotSpacing);
+
+    // Create square/pixel-like dot shape with very sharp edges
+    float dist = abs(pos - 0.5);
+    float dot = step(dist, dotSize); // Hard edge for square pixels
+
+    // Bright sky blue dots
+    vec3 lightTeal = vec3(0.29, 0.62, 1.0); // Bright sky blue #4A9EFF
+
+    // Only show dots, transparent elsewhere
+    vec3 finalColor = lightTeal;
+    float finalAlpha = opacity * dot;
+
+    gl_FragColor = vec4(finalColor, finalAlpha);
   }
 `;
 
@@ -110,6 +239,25 @@ let animationTime = 0;
 
 function latLonToPlane(lat, lon) {
   return { x: lon/180, y: (lat/90)*0.5 };
+}
+
+// Check if coordinates are within continental US bounds
+function isInUS(lat, lon) {
+  // Continental US approximate bounds:
+  // Latitude: 25°N to 49°N
+  // Longitude: -125°W to -66°W
+  return lat >= 25 && lat <= 49 && lon >= -125 && lon <= -66;
+}
+
+// List of solar system bodies (should only appear in solar system view)
+const SOLAR_SYSTEM_BODIES = [
+  'Sun', 'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune',
+  'Moon', 'Io', 'Europa', 'Ganymede', 'Callisto'
+];
+
+// Check if a location name is a solar system body
+function isSolarSystemBody(locationName) {
+  return SOLAR_SYSTEM_BODIES.includes(locationName);
 }
 
 function createArc(a,b,h){
@@ -126,7 +274,16 @@ async function loadPaths(){
   const data = await res.json();
 
   const { coordinates, connections } = data;
-  const paths = connections.filter(c => c.type === "filming-to-depicted");
+  // Filter to only include Earth-to-Earth paths
+  // Exclude: Fictional Locations, Solar System bodies
+  const paths = connections.filter(c => {
+    if (c.type !== "filming-to-depicted") return false;
+    if (c.from === "Fictional Locations" || c.to === "Fictional Locations") return false;
+    if (isSolarSystemBody(c.from) || isSolarSystemBody(c.to)) return false;
+    return true;
+  });
+
+  console.log(`🌍 Loading ${paths.length} Earth-only map paths (space & fantasy excluded)`);
 
   paths.forEach((c,i)=>{
     const A = coordinates[c.from];
@@ -139,10 +296,10 @@ async function loadPaths(){
     const dist = Math.hypot(p2.x-p1.x, p2.y-p1.y);
     const curve = createArc(p1,p2, dist*0.15);
 
-    const tube = new THREE.TubeGeometry(curve,50,0.0015,8,false);
+    const tube = new THREE.TubeGeometry(curve,200,0.0015,24,false);
 
     const mat = new THREE.ShaderMaterial({
-      uniforms:{ time:{value:0}, color:{value:new THREE.Color(0x1e40af)}, opacity:{value:0.7} },
+      uniforms:{ time:{value:0}, color:{value:new THREE.Color(0x46AACB)}, opacity:{value:0.7} },
       vertexShader:flowVertexShader,
       fragmentShader:flowFragmentShader,
       transparent:true
@@ -152,7 +309,18 @@ async function loadPaths(){
     // Parse year to integer for filtering
     const yearInt = parseInt(c.year) || 0;
     mesh.userData = { movie:c.movie, year:yearInt, from:c.from, to:c.to };
-    flightPathGroup.add(mesh);
+
+    // Check if both locations are in the US
+    const isAInUS = isInUS(A.lat, A.lon);
+    const isBInUS = isInUS(B.lat, B.lon);
+
+    if (isAInUS && isBInUS) {
+      // Both in US - add to US domestic paths
+      usFlightPathGroup.add(mesh);
+    } else {
+      // At least one location outside US - add to international paths
+      flightPathGroup.add(mesh);
+    }
   });
 }
 
@@ -186,7 +354,22 @@ for (let y = minYear; y <= maxYear; y += WINDOW_STEP) {
 }
 
 function updateFlightPathVisibility() {
-  // Update map flight paths
+  // Update US domestic flight paths
+  usFlightPathGroup.children.forEach(path => {
+    if (!currentDecade) {
+      // Show all
+      path.visible = true;
+    } else {
+      const year = path.userData.year;
+      if (year >= currentDecade && year < currentDecade + WINDOW_STEP) {
+        path.visible = true;
+      } else {
+        path.visible = false;
+      }
+    }
+  });
+
+  // Update international flight paths
   flightPathGroup.children.forEach(path => {
     if (!currentDecade) {
       // Show all
@@ -202,8 +385,13 @@ function updateFlightPathVisibility() {
   });
 
   // Update solar flight paths
+  let fictionalPathsCount = 0;
   solarFlightPathsGroup.children.forEach(path => {
-    if (!currentDecade) {
+    // Always show Fictional Locations paths regardless of decade filter
+    if (path.userData.to === "Fictional Locations") {
+      path.visible = true;
+      fictionalPathsCount++;
+    } else if (!currentDecade) {
       // Show all
       path.visible = true;
     } else {
@@ -215,6 +403,10 @@ function updateFlightPathVisibility() {
       }
     }
   });
+
+  if (fictionalPathsCount > 0) {
+    console.log(`✨ Fictional Location paths visible: ${fictionalPathsCount}`);
+  }
 }
 
 function updateDecadeDisplay(decade) {
@@ -225,6 +417,11 @@ function updateDecadeDisplay(decade) {
     // decadeValue.textContent = `${decade}s`;
     decadeValue.textContent = `${decade}–${decade + WINDOW_STEP - 1}`;
 
+  }
+  
+  // Update text overlay when decade changes (if in US view)
+  if (currentZoomState === ZOOM_STATES.US) {
+    updateTextOverlay();
   }
 }
 
@@ -281,6 +478,11 @@ function updateDecadeDisplay(decade) {
     // Update display and filter
     updateDecadeDisplay(currentDecade);
     updateFlightPathVisibility();
+    
+    // Update text when timeline changes (if in US view)
+    if (currentZoomState === ZOOM_STATES.US) {
+      updateTextOverlay();
+    }
   }
 })();
 
@@ -296,7 +498,8 @@ const customPositions = {
   jupiter:  new THREE.Vector3(6, 0, -7),
   saturn:   new THREE.Vector3(8, 2, 0),
   uranus:   new THREE.Vector3(-7, 2, -2),
-  neptune:  new THREE.Vector3(-9, -2, 1)
+  neptune:  new THREE.Vector3(-9, -2, 1),
+  "fictional locations": new THREE.Vector3(-11, -3, 2)  // Beyond Neptune for fictional places
 };
 
 // ==========================================================
@@ -315,7 +518,8 @@ const planetColors = {
   jupiter: 0xd9a066,
   saturn: 0xdcc58a,
   uranus: 0x7fdbff,
-  neptune: 0x4169e1
+  neptune: 0x4169e1,
+  "fictional locations": 0x9b59b6  // Purple for fictional/unknown
 };
 
 const radii = {
@@ -327,7 +531,8 @@ const radii = {
   jupiter: 0.8,    // Smaller Jupiter
   saturn: 0.9,     // Smaller Saturn
   uranus: 0.4,     // Bigger Uranus
-  neptune: 0.4     // Bigger Neptune
+  neptune: 0.4,     // Bigger Neptune
+  "fictional locations": 0.3  // Medium-sized sphere
 };
 
 Object.keys(planetColors).forEach((name)=>{
@@ -480,7 +685,7 @@ scene.add(solarFlightPathsGroup);
 solarFlightPathsGroup.visible = false;
 
 // Valid solar system destinations
-const solarDestinations = ['Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Io', 'Europa', 'Ganymede', 'Callisto'];
+const solarDestinations = ['Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Io', 'Europa', 'Ganymede', 'Callisto', 'Fictional Locations'];
 
 async function loadSolarFlightPaths(){
   try {
@@ -504,6 +709,12 @@ async function loadSolarFlightPaths(){
 
     console.log(`✅ Found ${solarConnections.length} solar system flight paths`);
 
+    // Debug: Check for Fictional Locations
+    const fictionalConns = solarConnections.filter(c =>
+      c.from === "Fictional Locations" || c.to === "Fictional Locations"
+    );
+    console.log(`📍 Fictional Locations connections: ${fictionalConns.length}`);
+
     // Create flight paths between Earth and destinations
     solarConnections.forEach((conn) => {
       const fromLower = conn.from.toLowerCase();
@@ -522,15 +733,27 @@ async function loadSolarFlightPaths(){
         destName.toLowerCase().includes(loc.toLowerCase())
       );
 
-      if (!matchedLocation) return;
+      if (!matchedLocation) {
+        console.log(`⚠️ No match for: ${destName}`);
+        return;
+      }
 
       // Get destination position
       let destPos;
       const lowerMatch = matchedLocation.toLowerCase();
 
+      // Debug logging for Fictional Locations
+      if (matchedLocation === "Fictional Locations") {
+        console.log(`🔍 Processing Fictional Locations path: ${conn.from} → ${conn.to}`);
+        console.log(`🔍 Looking up: customPositions["${lowerMatch}"]`);
+      }
+
       // Check if it's a planet or moon
       if (customPositions[lowerMatch]) {
         destPos = customPositions[lowerMatch];
+        if (matchedLocation === "Fictional Locations") {
+          console.log(`✅ Found position:`, destPos);
+        }
       } else {
         // It's a moon - calculate position
         const moon = moonsGroup.children.find(m =>
@@ -546,7 +769,10 @@ async function loadSolarFlightPaths(){
         }
       }
 
-      if (!destPos) return;
+      if (!destPos) {
+        console.log(`❌ No position found for: ${matchedLocation} (lowerMatch: ${lowerMatch})`);
+        return;
+      }
 
       // Create arc from Earth to destination
       const earthPos = customPositions.earth;
@@ -559,12 +785,12 @@ async function loadSolarFlightPaths(){
       mid.y += dist * 0.3; // Arc upward
 
       const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
-      const tubeGeometry = new THREE.TubeGeometry(curve, 50, 0.012, 8, false);
+      const tubeGeometry = new THREE.TubeGeometry(curve, 50, 0.05, 8, false);
 
       const lineMaterial = new THREE.ShaderMaterial({
         uniforms: {
           time: { value: 0 },
-          color: { value: new THREE.Color(0xffa500) }, // Orange for solar paths
+          color: { value: new THREE.Color(0x46AACB) }, // Teal for solar paths
           opacity: { value: 0.6 }
         },
         vertexShader: flowVertexShader,
@@ -584,7 +810,13 @@ async function loadSolarFlightPaths(){
       };
 
       solarFlightPathsGroup.add(pathMesh);
+
+      if (matchedLocation === "Fictional Locations") {
+        console.log(`✅ Created path to Fictional Locations from ${conn.from}`);
+      }
     });
+
+    console.log(`📊 Total solar paths created: ${solarFlightPathsGroup.children.length}`);
 
   } catch (error) {
     console.error('❌ Error loading solar flight paths:', error);
@@ -602,11 +834,34 @@ let morphProgress = 0;
 let targetMorphProgress = 0;
 let morphSpeed = 0.15;
 
+// Discrete zoom level structure:
+// 1.2 (zoomMin) = US Map view
+// 5.0 (usToWorldZoom) = World Map view
+// 20.0 (zoomMax) = Globe/Solar System view
 let zoomMin = 1.2;
+let usToWorldZoom = 5.0;
 let zoomMax = 20.0;
+
+// Zoom state management
+const ZOOM_STATES = {
+  US: 0,
+  WORLD: 1,
+  SOLAR: 2
+};
+
+const ZOOM_POSITIONS = {
+  [ZOOM_STATES.US]: 1.2,
+  [ZOOM_STATES.WORLD]: 5.0,
+  [ZOOM_STATES.SOLAR]: 20.0
+};
+
+let currentZoomState = ZOOM_STATES.US;
+let targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.US];
+let isTransitioning = false;
 
 let scaleStart = 1.0;
 let scaleEnd = 0.4;
+let worldScale = 3.8; // Fullscreen scale for world view
 
 let autoZoomingOut = false;
 
@@ -636,7 +891,23 @@ function animate(){
 
   animationTime += 0.01;
 
-  // ZOOM OUT
+  // SMOOTH CAMERA TRANSITIONS
+  const cameraDiff = Math.abs(camera.position.z - targetCameraZ);
+  if (cameraDiff > 0.01) {
+    // Smooth interpolation to target position
+    camera.position.z += (targetCameraZ - camera.position.z) * 0.08;
+    isTransitioning = true;
+    updateMorphFromZoom();
+  } else {
+    // Snap to exact position when close enough
+    if (isTransitioning) {
+      camera.position.z = targetCameraZ;
+      isTransitioning = false;
+      updateMorphFromZoom();
+    }
+  }
+
+  // ZOOM OUT (legacy auto-zoom)
   if(autoZoomingOut){
     camera.position.z += 0.4;
     if(camera.position.z >= zoomMax){
@@ -646,7 +917,83 @@ function animate(){
     updateMorphFromZoom();
   }
 
-  // MORPH EARTH
+  // MAP TRANSITIONS (US zoom → World)
+  // Calculate transition progress: 0 at zoomMin (US zoomed), 1 at usToWorldZoom (World full)
+  const mapTransitionProgress = Math.max(0, Math.min(1,
+    (camera.position.z - zoomMin) / (usToWorldZoom - zoomMin)
+  ));
+
+  // Apply zoom/pan for US view or transition to world view
+  if (camera.position.z <= usToWorldZoom) {
+    // US center coordinates: -95.5° lon, 37° lat
+    // In plane coordinates: x = -95.5/180 = -0.53, y = (37/90)*0.5 = 0.206
+    const usCenter = { x: -0.6, y: 0.30 };
+
+    // Zoom scales
+    const usZoomScale = 4.0;    // US view scale
+
+    // Interpolate scale: 5.5x at zoomMin, worldScale at usToWorldZoom
+    const currentScale = THREE.MathUtils.lerp(usZoomScale, worldScale, mapTransitionProgress);
+
+    // Interpolate position: centered on US at zoomMin, centered at origin at usToWorldZoom
+    const currentOffsetX = THREE.MathUtils.lerp(-usCenter.x, 0, mapTransitionProgress);
+    const currentOffsetY = THREE.MathUtils.lerp(-usCenter.y, 0, mapTransitionProgress);
+
+    // Apply scale (but don't override morph scale)
+    const verticalScale = currentScale * 1.3
+    earthMesh.scale.set(currentScale, verticalScale, currentScale);
+
+    // Apply position offset
+    earthMesh.position.x = currentOffsetX * currentScale;
+    earthMesh.position.y = currentOffsetY * currentScale;
+    earthMesh.position.z = 0;
+  } else {
+    // At world view and beyond, ensure map is centered at fullscreen scale
+    // (unless morphing to globe, which is handled separately)
+    if (camera.position.z < zoomMax - 1) {
+      earthMesh.position.x = 0;
+      earthMesh.position.y = 0;
+      earthMesh.position.z = 0;
+      earthMesh.scale.set(worldScale, worldScale, worldScale);
+    }
+  }
+
+  // Update flight path group visibility and transformations
+  // US paths visible when in US zoom state
+  usFlightPathGroup.visible = currentZoomState === ZOOM_STATES.US;
+
+  // Match US flight paths to map transformation
+  if (currentZoomState === ZOOM_STATES.US) {
+    const usCenter = { x: -0.6, y: 0.3 };
+    const usZoomScale = 4.0;
+    const currentScale = THREE.MathUtils.lerp(usZoomScale, worldScale, mapTransitionProgress);
+    const currentOffsetX = THREE.MathUtils.lerp(-usCenter.x, 0, mapTransitionProgress);
+    const currentOffsetY = THREE.MathUtils.lerp(-usCenter.y, 0, mapTransitionProgress);
+
+    // Apply same transformation to US flight paths
+    const verticalScale = currentScale * 1.3
+    usFlightPathGroup.scale.set(currentScale, verticalScale, currentScale);
+    usFlightPathGroup.position.x = currentOffsetX * currentScale;
+    usFlightPathGroup.position.y = currentOffsetY * currentScale;
+    usFlightPathGroup.position.z = 0;
+  }
+
+  // International paths visible when in WORLD state
+  flightPathGroup.visible = currentZoomState === ZOOM_STATES.WORLD;
+
+  // Scale international flight paths to match fullscreen world map
+  if (currentZoomState === ZOOM_STATES.WORLD) {
+    flightPathGroup.scale.set(worldScale, worldScale, worldScale);
+    flightPathGroup.position.set(0, 0, 0);
+  }
+
+  // Update US flight path animations
+  usFlightPathGroup.children.forEach(line => {
+    line.material.uniforms.time.value = animationTime;
+    line.material.uniforms.opacity.value = 0.7; // Constant opacity for US paths
+  });
+
+  // MORPH EARTH (only when past usToWorldZoom)
   morphProgress += (targetMorphProgress - morphProgress) * morphSpeed;
   const eased = ease(Math.min(1, morphProgress));
 
@@ -661,11 +1008,15 @@ function animate(){
 
   geometry.attributes.position.needsUpdate = true;
 
-  earthMesh.scale.set(
-    THREE.MathUtils.lerp(scaleStart, scaleEnd, eased),
-    THREE.MathUtils.lerp(scaleStart, scaleEnd, eased),
-    THREE.MathUtils.lerp(scaleStart, scaleEnd, eased)
-  );
+  // Only apply morph scale when zoomed out past world view
+  if (camera.position.z >= usToWorldZoom) {
+    // Morph from world fullscreen scale to globe scale
+    earthMesh.scale.set(
+      THREE.MathUtils.lerp(worldScale, scaleEnd, eased),
+      THREE.MathUtils.lerp(worldScale, scaleEnd, eased),
+      THREE.MathUtils.lerp(worldScale, scaleEnd, eased)
+    );
+  }
 
   // Fade-out flight paths
   const fade = Math.max(0, 1 - morphProgress*5);
@@ -687,9 +1038,11 @@ function animate(){
     morphProgress > 0.98 &&
     camera.position.z >= zoomMax - 0.1
   ){
+    console.log(`🌟 Showing solar system (camera.z = ${camera.position.z.toFixed(2)})`);
     planetGroup.visible = true;
     moonsGroup.visible = true;
     solarFlightPathsGroup.visible = true;
+    console.log(`📊 Solar paths visibility set to: ${solarFlightPathsGroup.visible}, children: ${solarFlightPathsGroup.children.length}`);
     starGroup.visible = true;
     planetZoomInProgress = true;
 
@@ -776,29 +1129,30 @@ function animate(){
     });
   }
 
-  // Return Earth to center as we zoom in
-  // The globe will morph back to map automatically via updateMorphFromZoom
-  if(!planetGroup.visible && camera.position.z > zoomMin){
+  // Return Earth to center as we zoom in from solar system to world map
+  // Only apply when between usToWorldZoom and zoomMax (not in US zoom range)
+  if(!planetGroup.visible && camera.position.z > usToWorldZoom){
     // Calculate how much we should return to center based on zoom
-    const returnProgress = 1 - ((camera.position.z - zoomMin) / (zoomMax - zoomMin));
+    const returnProgress = 1 - ((camera.position.z - usToWorldZoom) / (zoomMax - usToWorldZoom));
 
     // Return Earth to center
     earthMesh.position.lerp(new THREE.Vector3(0, 0, 0), returnProgress * 0.3);
 
-    // Return Earth to normal scale (globe size matching scaleEnd at first, then growing)
+    // Return Earth to world fullscreen scale
     // When at max zoom, Earth should be at scaleEnd (0.4)
-    // When at min zoom, Earth should be at scaleStart (1.0)
-    const currentTargetScale = THREE.MathUtils.lerp(scaleEnd, scaleStart, returnProgress);
+    // When at usToWorldZoom, Earth should be at worldScale
+    const currentTargetScale = THREE.MathUtils.lerp(scaleEnd, worldScale, returnProgress);
     earthMesh.scale.lerp(
       new THREE.Vector3(currentTargetScale, currentTargetScale, currentTargetScale),
       0.3
     );
   }
 
-  // Snap Earth to exact center when fully zoomed in
-  if(!planetGroup.visible && camera.position.z <= zoomMin + 0.1){
+  // Snap Earth to world view center when at usToWorldZoom
+  // Don't snap at zoomMin since we're showing US zoom there
+  if(!planetGroup.visible && camera.position.z <= usToWorldZoom + 0.1 && camera.position.z >= usToWorldZoom - 0.1){
     earthMesh.position.set(0, 0, 0);
-    earthMesh.scale.set(scaleStart, scaleStart, scaleStart);
+    earthMesh.scale.set(worldScale, worldScale, worldScale);
   }
 
   // ==========================================================
@@ -901,17 +1255,17 @@ if (newShapesVisible) {
 animate();
 
 function updateMorphFromZoom(){
-  const n = (camera.position.z - zoomMin)/(zoomMax - zoomMin);
+  // Morph should happen between world map (usToWorldZoom) and globe (zoomMax)
+  const n = (camera.position.z - usToWorldZoom)/(zoomMax - usToWorldZoom);
   targetMorphProgress = Math.max(0, Math.min(1, n));
 }
 
 // ==========================================================
-// TOOLTIP
+// TOOLTIP (HOVER)
 // ==========================================================
 const tooltip = document.getElementById('flightPathTooltip');
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
-let selectedLine = null;
 
 window.addEventListener("mousemove", (evt) => {
   mouse.x = (evt.clientX / window.innerWidth) * 2 - 1;
@@ -919,70 +1273,39 @@ window.addEventListener("mousemove", (evt) => {
 
   raycaster.setFromCamera(mouse, camera);
 
-  const mapHits = raycaster.intersectObjects(flightPathGroup.children, false);
-  const solarHits = raycaster.intersectObjects(solarFlightPathsGroup.children, false);
+  // Only check flight path groups that are currently visible based on zoom state
+  let allHits = [];
 
-  const hovering = mapHits.length > 0 || solarHits.length > 0;
+  if (currentZoomState === ZOOM_STATES.US) {
+    // US view: only check US domestic paths
+    allHits = raycaster.intersectObjects(usFlightPathGroup.children, false);
+  } else if (currentZoomState === ZOOM_STATES.WORLD) {
+    // World view: only check international Earth paths
+    allHits = raycaster.intersectObjects(flightPathGroup.children, false);
+  } else if (currentZoomState === ZOOM_STATES.SOLAR) {
+    // Solar system view: only check solar paths
+    allHits = raycaster.intersectObjects(solarFlightPathsGroup.children, false);
+  }
+
+  const hovering = allHits.length > 0;
 
   if (hovering) {
     cursor.classList.add("hover");
+
+    // Show tooltip
+    const obj = allHits[0].object;
+    const d = obj.userData;
+
+    // Format tooltip text with line breaks
+    tooltip.textContent = `${d.movie} (${d.year}) — ${d.from} → ${d.to}`;
+
+    // Position tooltip above cursor
+    tooltip.style.left = evt.clientX + "px";
+    tooltip.style.top = (evt.clientY - 30) + "px";
+    tooltip.style.transform = "translateX(-50%)";
+    tooltip.style.opacity = 0.9;
   } else {
     cursor.classList.remove("hover");
-  }
-});
-
-window.addEventListener('click', evt=>{
-  mouse.x = (evt.clientX/window.innerWidth)*2 - 1;
-  mouse.y = -(evt.clientY/window.innerHeight)*2 + 1;
-
-  raycaster.setFromCamera(mouse,camera);
-
-  // Check map flight paths
-  const mapHits = raycaster.intersectObjects(flightPathGroup.children,false);
-
-  // Check solar flight paths
-  const solarHits = raycaster.intersectObjects(solarFlightPathsGroup.children,false);
-
-  // Combine hits and get the closest one
-  const allHits = [...mapHits, ...solarHits];
-
-  if(allHits.length>0){
-    const obj = allHits[0].object;
-
-    // Reset previous selection
-    if(selectedLine && selectedLine !== obj){
-      // Determine original color based on which group it belongs to
-      if(flightPathGroup.children.includes(selectedLine)){
-        selectedLine.material.uniforms.color.value.setHex(0x1e40af); // Map path blue
-      } else {
-        selectedLine.material.uniforms.color.value.setHex(0xffa500); // Solar path orange
-      }
-    }
-
-    // Highlight selected path with lighter color
-    if(flightPathGroup.children.includes(obj)){
-      obj.material.uniforms.color.value.setHex(0x60a5fa); // Lighter blue for map
-    } else {
-      obj.material.uniforms.color.value.setHex(0xffcc66); // Lighter orange for solar
-    }
-    selectedLine = obj;
-
-    const d = obj.userData;
-    tooltip.innerHTML = `<strong>${d.movie}</strong> (${d.year})<br>From: ${d.from}<br>To: ${d.to}`;
-    tooltip.style.left = (evt.clientX + 12) + "px";
-    tooltip.style.top = (evt.clientY - 20) + "px";
-    tooltip.style.opacity = 1;
-
-  } else {
-    if(selectedLine){
-      // Reset to original color
-      if(flightPathGroup.children.includes(selectedLine)){
-        selectedLine.material.uniforms.color.value.setHex(0x1e40af); // Map path blue
-      } else {
-        selectedLine.material.uniforms.color.value.setHex(0xffa500); // Solar path orange
-      }
-      selectedLine = null;
-    }
     tooltip.style.opacity = 0;
   }
 });
@@ -990,22 +1313,59 @@ window.addEventListener('click', evt=>{
 // ==========================================================
 // SCROLL & TOUCH ZOOM CONTROLS
 // ==========================================================
-// Mouse wheel zoom control
+// Discrete zoom level transitions
+let scrollCooldown = false;
+const SCROLL_COOLDOWN_TIME = 800; // ms to wait before allowing next scroll
+
 window.addEventListener('wheel', (event) => {
   event.preventDefault();
 
-  const zoomSpeed = 2.0;
-  camera.position.z += event.deltaY * zoomSpeed * 0.01;
+  // Ignore scroll during transitions or cooldown
+  if (isTransitioning || scrollCooldown) {
+    return;
+  }
 
-  // Clamp camera position
-  camera.position.z = Math.max(zoomMin, Math.min(zoomMax, camera.position.z));
+  // Determine scroll direction
+  const scrollingOut = event.deltaY > 0; // Scrolling down = zoom out
+  const scrollingIn = event.deltaY < 0;  // Scrolling up = zoom in
 
-  // Update morph target based on new zoom
-  updateMorphFromZoom();
+  // Transition to next/previous zoom state
+  if (scrollingOut) {
+    // Zoom out: US → World → Solar
+    if (currentZoomState === ZOOM_STATES.US) {
+      currentZoomState = ZOOM_STATES.WORLD;
+      targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.WORLD];
+      updateTextOverlay(); // UPDATE TEXT OVERLAY
+    } else if (currentZoomState === ZOOM_STATES.WORLD) {
+      currentZoomState = ZOOM_STATES.SOLAR;
+      targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.SOLAR];
+      updateTextOverlay(); // UPDATE TEXT OVERLAY
+    }
+  } else if (scrollingIn) {
+    // Zoom in: Solar → World → US
+    if (currentZoomState === ZOOM_STATES.SOLAR) {
+      currentZoomState = ZOOM_STATES.WORLD;
+      targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.WORLD];
+      updateTextOverlay(); // UPDATE TEXT OVERLAY
+    } else if (currentZoomState === ZOOM_STATES.WORLD) {
+      currentZoomState = ZOOM_STATES.US;
+      targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.US];
+      updateTextOverlay(); // UPDATE TEXT OVERLAY
+    }
+  }
+
+  // Set cooldown to prevent multiple rapid transitions
+  scrollCooldown = true;
+  setTimeout(() => {
+    scrollCooldown = false;
+  }, SCROLL_COOLDOWN_TIME);
+
 }, { passive: false });
 
-// Touch pinch/expand gesture support
+// Touch pinch/expand gesture support (discrete zoom levels)
 let lastTouchDistance = null;
+let touchDistanceAccumulator = 0;
+const TOUCH_THRESHOLD = 100; // pixels of pinch/expand needed to trigger zoom change
 
 function getTouchDistance(touch1, touch2) {
   const dx = touch2.clientX - touch1.clientX;
@@ -1016,6 +1376,7 @@ function getTouchDistance(touch1, touch2) {
 window.addEventListener('touchstart', (event) => {
   if (event.touches.length === 2) {
     lastTouchDistance = getTouchDistance(event.touches[0], event.touches[1]);
+    touchDistanceAccumulator = 0;
   }
 }, { passive: true });
 
@@ -1025,19 +1386,43 @@ window.addEventListener('touchmove', (event) => {
 
     const currentDistance = getTouchDistance(event.touches[0], event.touches[1]);
 
-    if (lastTouchDistance !== null) {
+    if (lastTouchDistance !== null && !isTransitioning && !scrollCooldown) {
       const distanceChange = currentDistance - lastTouchDistance;
+      touchDistanceAccumulator += distanceChange;
 
-      // Pinch in (fingers closer) = zoom out (globe)
-      // Expand (fingers apart) = zoom in (map)
-      const touchZoomSpeed = 1.5;
-      camera.position.z -= distanceChange * touchZoomSpeed;
+      // Check if accumulated distance exceeds threshold
+      if (Math.abs(touchDistanceAccumulator) >= TOUCH_THRESHOLD) {
+        if (touchDistanceAccumulator > 0) {
+          // Expand (fingers apart) = zoom in (map)
+          if (currentZoomState === ZOOM_STATES.SOLAR) {
+            currentZoomState = ZOOM_STATES.WORLD;
+            targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.WORLD];
+            updateTextOverlay(); // UPDATE TEXT OVERLAY
+          } else if (currentZoomState === ZOOM_STATES.WORLD) {
+            currentZoomState = ZOOM_STATES.US;
+            targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.US];
+            updateTextOverlay(); // UPDATE TEXT OVERLAY
+          }
+        } else {
+          // Pinch in (fingers closer) = zoom out (globe)
+          if (currentZoomState === ZOOM_STATES.US) {
+            currentZoomState = ZOOM_STATES.WORLD;
+            targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.WORLD];
+            updateTextOverlay(); // UPDATE TEXT OVERLAY
+          } else if (currentZoomState === ZOOM_STATES.WORLD) {
+            currentZoomState = ZOOM_STATES.SOLAR;
+            targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.SOLAR];
+            updateTextOverlay(); // UPDATE TEXT OVERLAY
+          }
+        }
 
-      // Clamp camera position
-      camera.position.z = Math.max(zoomMin, Math.min(zoomMax, camera.position.z));
-
-      // Update morph target based on new zoom
-      updateMorphFromZoom();
+        // Reset accumulator and set cooldown
+        touchDistanceAccumulator = 0;
+        scrollCooldown = true;
+        setTimeout(() => {
+          scrollCooldown = false;
+        }, SCROLL_COOLDOWN_TIME);
+      }
     }
 
     lastTouchDistance = currentDistance;
@@ -1047,6 +1432,7 @@ window.addEventListener('touchmove', (event) => {
 window.addEventListener('touchend', (event) => {
   if (event.touches.length < 2) {
     lastTouchDistance = null;
+    touchDistanceAccumulator = 0;
   }
 }, { passive: true });
 
@@ -1119,6 +1505,11 @@ document.querySelectorAll(".book-bar").forEach(bar => {
     updateFlightPathVisibility();
 
     updateActiveBookBar(index);
+    
+    // Update text when book bar is clicked (if in US view)
+    if (currentZoomState === ZOOM_STATES.US) {
+      updateTextOverlay();
+    }
   });
 });
 
@@ -1298,3 +1689,10 @@ function positionLabelOverBar(labelEl, barEl, text) {
   labelEl.style.top  = rect.top - 12 + "px";
   labelEl.style.opacity = 0.9;
 }
+
+// ==========================================================
+// INITIALIZE TEXT OVERLAY ON PAGE LOAD
+// ==========================================================
+window.addEventListener('DOMContentLoaded', () => {
+  updateTextOverlay();
+});
