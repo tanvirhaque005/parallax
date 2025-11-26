@@ -823,7 +823,7 @@ function updateBarForCenteredBook() {
    FULL-WIDTH SINUSOIDAL WAVE EFFECT
 ----------------------------------------------------------- */
 
-const BASE_HEIGHT = 12;       // height at edges
+const BASE_HEIGHT = 32;       // height at edges
 const PEAK_HEIGHT = 70;       // tallest at hovered bar
 
 function applyWaveEffect(centerIndex) {

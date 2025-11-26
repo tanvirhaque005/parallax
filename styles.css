@@ -622,7 +622,7 @@ body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circl
  /* Top-left horizontal bars — thicker + lower on the page */
 #bookBars {
   position: fixed;
-  top: 48px; 
+  bottom: 48px; 
   left: 24px;
   height: 60px;
   display: flex;
@@ -654,7 +654,7 @@ body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circl
 
 .book-bar {
   width: 4px;
-  height: 28px;
+  height: 48px;
   background: rgba(255, 255, 255, 0.45);
   border-radius: 2px;
   pointer-events: auto;
