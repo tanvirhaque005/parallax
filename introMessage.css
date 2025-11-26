@@ -1,0 +1,43 @@
+.timeline-intro {
+    position: fixed;
+    top: 28px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    color: rgba(255,255,255,0.90);
+    opacity: 0.95;
+    z-index: 5000;
+    pointer-events: none;
+  }
+  
+  .timeline-intro .intro-icon {
+    width: 26px;
+    height: 26px;
+    background: rgba(255,255,255,0.75);
+    flex-shrink: 0;
+  }
+  
+  .timeline-intro .intro-text {
+    max-width: 1050px;
+    line-height: 1.4;
+  }
+  
+  #introText::after {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 18px;
+    background: rgba(255,255,255,0.8);
+    margin-left: 6px;
+    animation: blink 0.8s step-end infinite;
+  }
+  
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+  
