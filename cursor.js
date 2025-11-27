@@ -18,7 +18,7 @@ function enableCursorHover(selector) {
 }
 
 // Enable hover on interactive elements
-enableCursorHover("button, a, .btn, .menu-button, .menu-close");
+enableCursorHover("button, a, .btn, .menu-button, .menu-close, .cta-button");
 
 // Optional: Add selectors unique to this page
 // enableCursorHover(".myClickableThing");

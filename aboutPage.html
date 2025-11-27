@@ -6,6 +6,7 @@
     <title>Library of Futures - About</title>
     <link rel="stylesheet" href="navigation-menu.css">
     <link rel="stylesheet" href="introMessage.css">
+    <link rel="stylesheet" href="cursor.css">
     <style>
         * {
             margin: 0;
@@ -122,9 +123,9 @@
 
         /* Background Gradient Effect - bottom left with text */
         .cover-gradient {
-            position: absolute;
-            bottom: -350px;
-            left: -250px;
+            position: fixed;
+            bottom: -29.17vh;
+            left: -20.83vw;
             width: 1200px;
             height: 1200px;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 25%, rgba(255, 255, 255, 0.08) 45%, rgba(255, 255, 255, 0.03) 65%, transparent 85%);
@@ -135,6 +136,39 @@
             box-shadow: 0 0 150px 80px rgba(255, 255, 255, 0.2),
                         0 0 250px 120px rgba(255, 255, 255, 0.1),
                         0 0 350px 160px rgba(255, 255, 255, 0.05);
+            transform: translate(0, 0);
+        }
+        
+        /* Scale the gradient proportionally on smaller screens */
+        @media (max-width: 1600px) {
+            .cover-gradient {
+                width: 75vw;
+                height: 75vw;
+                min-width: 800px;
+                min-height: 800px;
+                bottom: -25vh;
+                left: -15vw;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .cover-gradient {
+                width: 100vw;
+                height: 100vw;
+                min-width: 600px;
+                min-height: 600px;
+                bottom: -20vh;
+                left: -10vw;
+            }
+        }
+        
+        @media (max-height: 900px) {
+            .cover-gradient {
+                width: 100vh;
+                height: 100vh;
+                bottom: -25vh;
+                left: -15vw;
+            }
         }
 
         .cover-description-text {
@@ -280,6 +314,12 @@
     </style>
 </head>
 <body>
+    <!-- Custom Cursor -->
+    <div id="cursorCircle"></div>
+    
+    <!-- Intro Message Container -->
+    <div id="introMessageDefault" data-text="Welcome to the Library of Futures. Explore how science fiction has imagined our tomorrow."></div>
+    
     <!-- Navigation Menu -->
     <div class="navigation-menu" id="navigationMenu"></div>
 
@@ -396,6 +436,12 @@
                                 typeText(headerTitle, 'ABOUT', 80);
                             }, 600);
                         }
+                        // Show intro message when about page becomes active
+                        setTimeout(() => {
+                            if (window.showDefaultIntro) {
+                                window.showDefaultIntro(true);
+                            }
+                        }, 100);
                     }
                 } else if (index > currentPage) {
                     page.classList.add('next');
@@ -415,6 +461,15 @@
 
         // Initialize
         updatePages();
+        
+        // Show intro message when page loads (if on about page)
+        setTimeout(() => {
+            if (window.showDefaultIntro && currentPage === 1) {
+                window.showDefaultIntro(true);
+            }
+        }, 200);
     </script>
+    <script src="cursor.js" defer></script>
+    <script src="introMessage.js" defer></script>
 </body>
 </html>

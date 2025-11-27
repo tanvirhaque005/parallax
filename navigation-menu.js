@@ -130,8 +130,8 @@
             
             // Calculate position relative to the progress line
             // The blue bar is centered vertically on the link, so use link center
-            // Move it slightly higher by subtracting a small offset (about 3-4px)
-            const offsetPixels = 4;
+            // Move it slightly lower by using a smaller offset
+            const offsetPixels = 2; // Smaller value (was 4) moves dot slightly lower
             const linkCenterY = activeLinkRect.top + activeLinkRect.height / 2;
             const adjustedY = linkCenterY - offsetPixels;
             const lineTop = progressLineRect.top;
@@ -142,15 +142,15 @@
             const clampedPosition = Math.max(0, Math.min(100, relativePosition));
             progressDot.style.top = `${clampedPosition}%`;
           } else if (items.length > 0) {
-            // Fallback: use percentage calculation with slight upward offset
+            // Fallback: use percentage calculation with slight downward offset
             const totalItems = items.length;
             if (totalItems > 1) {
               const basePosition = (currentIdx / (totalItems - 1)) * 100;
-              // Move up by about 2-3% to make it slightly higher
-              const adjustedPosition = Math.max(0, basePosition - 2.5);
+              // Move down by about 1% to make it slightly lower
+              const adjustedPosition = Math.max(0, basePosition - 1.5);
               progressDot.style.top = `${adjustedPosition}%`;
             } else {
-              progressDot.style.top = '47.5%'; // Slightly higher than center
+              progressDot.style.top = '49%'; // Slightly lower than center
             }
           }
         });
