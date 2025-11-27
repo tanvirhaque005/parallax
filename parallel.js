@@ -52,7 +52,8 @@ let windowStart =
   Math.floor(minRelease / WINDOW_SIZE_YEARS) * WINDOW_SIZE_YEARS;
 
   window.addEventListener('DOMContentLoaded', () => {
-    showDefaultIntro();
+    // Don't show text initially - only show square
+    showDefaultIntro(false);
   })
 
 /* ----------------------------

@@ -82,4 +82,11 @@
         opacity: 0;
     }
   }
-  
+  .page-header .intro-text {
+    opacity: 1 !important;
+}
+
+.page-header .intro-icon {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+}
