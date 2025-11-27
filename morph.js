@@ -261,11 +261,17 @@ async function loadPaths(){
     const points = curve.getPoints(100);
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-    // Create dashed line material with MUCH larger, more visible dashes
+    // Calculate total line length for drawing effect
+    let totalLength = 0;
+    for (let i = 1; i < points.length; i++) {
+      totalLength += points[i].distanceTo(points[i - 1]);
+    }
+
+    // Create dashed line material with shorter, consistent dashes
     const mat = new THREE.LineDashedMaterial({
       color: 0x4A9EFF,        // Bright sky blue
-      dashSize: 0.01,         // MUCH larger dash size for visibility
-      gapSize: 0.01,          // Equal gaps create clear dot/dash pattern
+      dashSize: 0.006,        // Shorter dash size
+      gapSize: 0.006,         // Equal gap size for dot effect
       linewidth: 3,           // Thicker lines (may not work on all platforms)
       opacity: 0.9,
       transparent: true
@@ -276,7 +282,14 @@ async function loadPaths(){
 
     // Parse year to integer for filtering
     const yearInt = parseInt(c.year) || 0;
-    line.userData = { movie:c.movie, year:yearInt, from:c.from, to:c.to };
+    line.userData = {
+      movie: c.movie,
+      year: yearInt,
+      from: c.from,
+      to: c.to,
+      totalLength: totalLength,
+      animationProgress: 0 // Track drawing progress (0 to 1)
+    };
 
     // Check if both locations are in the US
     const isAInUS = isInUS(A.lat, A.lon);
@@ -758,11 +771,18 @@ async function loadSolarFlightPaths(){
       const points = curve.getPoints(100);
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-      // Create dashed line material for solar paths - MUCH larger for visibility at solar scale
+      // Calculate total line length for drawing effect
+      let totalLength = 0;
+      for (let i = 1; i < points.length; i++) {
+        totalLength += points[i].distanceTo(points[i - 1]);
+      }
+
+      // Create dashed line material for solar paths - scaled to match map dash sizes
+      // Solar coordinate space is ~10x larger than map space, so scale dashes accordingly
       const lineMaterial = new THREE.LineDashedMaterial({
         color: 0x4A9EFF,        // Bright sky blue
-        dashSize: 0.3,          // Very large dashes for solar system scale
-        gapSize: 0.3,           // Equal gaps create clear dot/dash pattern
+        dashSize: 0.06,         // Scaled to appear same length as map dashes (0.006 * 10)
+        gapSize: 0.06,          // Equal gaps create clear dot/dash pattern
         linewidth: 3,
         opacity: 0.85,
         transparent: true
@@ -777,7 +797,9 @@ async function loadSolarFlightPaths(){
         movie: conn.movie,
         year: yearInt,
         from: 'Earth',
-        to: matchedLocation
+        to: matchedLocation,
+        totalLength: totalLength,
+        animationProgress: 0 // Track drawing progress (0 to 1)
       };
 
       solarFlightPathsGroup.add(line);
@@ -855,29 +877,82 @@ let collapseProgress = 0;
 let newShapes = [];
 let newShapesVisible = false;
 
+// Animation redraw timer
+let lastRedrawTime = performance.now();
+const REDRAW_INTERVAL = 3000; // Redraw every 3 seconds (3000ms)
+
 
 
 function animate(){
   requestAnimationFrame(animate);
 
-  // ANIMATE DASHED LINES - Clearer, faster animation
-  // Moving dots travel from production location (from) to depicted location (to)
+  // Check if it's time to redraw all lines
+  const currentTime = performance.now();
+  if (currentTime - lastRedrawTime > REDRAW_INTERVAL) {
+    // Reset all animation progress to restart drawing effect
+    usFlightPathGroup.children.forEach(line => {
+      if (line.userData) line.userData.animationProgress = 0;
+    });
+    flightPathGroup.children.forEach(line => {
+      if (line.userData) line.userData.animationProgress = 0;
+    });
+    solarFlightPathsGroup.children.forEach(line => {
+      if (line.userData) line.userData.animationProgress = 0;
+    });
+    lastRedrawTime = currentTime;
+  }
+
+  // ANIMATE DASHED LINES - Drawing effect with moving dots
+  // Lines appear to be drawn from production location (from) to depicted location (to)
   usFlightPathGroup.children.forEach(line => {
-    if (line.material && line.material.type === 'LineDashedMaterial') {
-      // Animate dash offset to create movement
+    if (line.material && line.material.type === 'LineDashedMaterial' && line.visible) {
+      // Drawing animation: gradually reveal the line
+      if (line.userData.animationProgress < 1) {
+        line.userData.animationProgress += 0.01; // Speed of drawing
+        if (line.userData.animationProgress > 1) line.userData.animationProgress = 1;
+
+        // Use geometry drawRange to reveal line progressively
+        const totalPoints = line.geometry.attributes.position.count;
+        const visiblePoints = Math.floor(totalPoints * line.userData.animationProgress);
+        line.geometry.setDrawRange(0, visiblePoints);
+      }
+
+      // Move dots along the visible portion
       line.material.dashOffset -= 0.01; // Faster, more visible movement
     }
   });
 
   flightPathGroup.children.forEach(line => {
-    if (line.material && line.material.type === 'LineDashedMaterial') {
-      line.material.dashOffset -= 0.01; // Faster, more visible movement
+    if (line.material && line.material.type === 'LineDashedMaterial' && line.visible) {
+      // Drawing animation
+      if (line.userData.animationProgress < 1) {
+        line.userData.animationProgress += 0.01;
+        if (line.userData.animationProgress > 1) line.userData.animationProgress = 1;
+
+        const totalPoints = line.geometry.attributes.position.count;
+        const visiblePoints = Math.floor(totalPoints * line.userData.animationProgress);
+        line.geometry.setDrawRange(0, visiblePoints);
+      }
+
+      // Move dots along the visible portion
+      line.material.dashOffset -= 0.01;
     }
   });
 
   solarFlightPathsGroup.children.forEach(line => {
-    if (line.material && line.material.type === 'LineDashedMaterial') {
-      line.material.dashOffset -= 0.02; // Even faster for solar system scale
+    if (line.material && line.material.type === 'LineDashedMaterial' && line.visible) {
+      // Drawing animation
+      if (line.userData.animationProgress < 1) {
+        line.userData.animationProgress += 0.01;
+        if (line.userData.animationProgress > 1) line.userData.animationProgress = 1;
+
+        const totalPoints = line.geometry.attributes.position.count;
+        const visiblePoints = Math.floor(totalPoints * line.userData.animationProgress);
+        line.geometry.setDrawRange(0, visiblePoints);
+      }
+
+      // Move dots along the visible portion
+      line.material.dashOffset -= 0.02;
     }
   });
 
@@ -1240,14 +1315,21 @@ const tooltip = document.getElementById('flightPathTooltip');
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
-// CRITICAL: Set much tighter threshold for line picking
-raycaster.params.Line.threshold = 0.001; // Very tight - must be very close to line
-
 window.addEventListener("mousemove", (evt) => {
   mouse.x = (evt.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(evt.clientY / window.innerHeight) * 2 + 1;
 
   raycaster.setFromCamera(mouse, camera);
+
+  // Adjust hover sensitivity based on zoom state
+  // Higher values = more sensitive (easier to hover)
+  if (currentZoomState === ZOOM_STATES.US) {
+    raycaster.params.Line.threshold = 0.007; // Very sensitive for US map
+  } else if (currentZoomState === ZOOM_STATES.WORLD) {
+    raycaster.params.Line.threshold = 0.015; // Less sensitive for world view
+  } else if (currentZoomState === ZOOM_STATES.SOLAR) {
+    raycaster.params.Line.threshold = 0.05; // Least sensitive for solar view
+  }
 
   // Only check the currently visible flight path group based on zoom state
   let allHits = [];
@@ -1674,4 +1756,5 @@ function positionLabelOverBar(labelEl, barEl, text) {
 // ==========================================================
 window.addEventListener('DOMContentLoaded', () => {
   updateTextOverlay();
+  // Note: mapIntroMessage is triggered by page transition, not on initial load
 });

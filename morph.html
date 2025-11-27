@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Map Morph to Globe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="navigation-menu.css">
   <style>
     body {
@@ -10,6 +11,130 @@
       font-family: 'Courier New', Courier, monospace;
       overflow: hidden;
       background: #0a1628;
+    }
+
+    /* Page Container for Slides */
+    .page-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Page Slide */
+    .page-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+
+    .page-slide.active {
+      transform: translateX(0);
+    }
+
+    .page-slide.next {
+      transform: translateX(100%);
+    }
+
+    .page-slide.prev {
+      transform: translateX(-100%);
+    }
+
+    /* Intro Panel Styles */
+    .intro-panel {
+      position: fixed;
+      top: 10%;
+      left: 0;
+      width: 70%;
+      height: 100vh;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      padding: 60px;
+      pointer-events: auto;
+    }
+
+    .intro-category {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.6px;
+      border: 1px solid rgba(255,255,255,0.45);
+      color: rgba(255,255,255,0.90);
+      background: rgba(255,255,255,0.02);
+      margin-bottom: 24px;
+      font-family: 'Inter', sans-serif;
+      width: fit-content;
+    }
+
+    .intro-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 400;
+      color: #ffffff;
+      margin: 0 0 32px 0;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+
+    .intro-description {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      color: #ffffff;
+      line-height: 1.6;
+      margin: 0 0 40px 0;
+      max-width: 600px;
+      font-weight: 300;
+    }
+
+    /* Enter Button */
+    .enter-map-button {
+      position: fixed;
+      bottom: 40%;
+      right: 40px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 16px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+      font-family: 'Courier New', monospace;
+      cursor: pointer;
+    }
+
+    .enter-map-button:hover {
+      opacity: 0.7;
+    }
+
+    .enter-map-arrow {
+      width: 60px;
+      height: 60px;
+      border: 1px solid #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+
+    .enter-map-button:hover .enter-map-arrow {
+      transform: translateX(3px);
+    }
+
+    .enter-map-arrow::after {
+      content: '→';
+      font-size: 24px;
+      color: #ffffff;
     }
   /* Page Header */
     .page-header {
@@ -331,16 +456,38 @@
 }
 
   </style>
+  <link rel="stylesheet" href="mapIntroMessage.css">
 </head>
 
 <body>
-  <!-- Page Header -->
-  <div class="page-header">
-    <a href="parallel.html" class="back-link">
-      <span class="back-arrow">←</span>
-      <span>Return to Timeline</span>
-    </a>
-  </div>
+  <div class="page-container">
+    <!-- Intro Page (Page 1) -->
+    <div class="page-slide active intro-page" id="introPage">
+      <div class="intro-panel">
+        <div class="intro-category">FILMING LOCATION MAP</div>
+        <h1 class="intro-title">Where were these futures filmed?</h1>
+        <p class="intro-description">Science fiction imagines distant futures and far-off worlds, but every frame is shot somewhere real. Explore the cities that became backdrops for tomorrow—and discover how far stories traveled from their filming locations.</p>
+
+        <div class="enter-map-button" id="enterMapBtn">
+          <span>EXPLORE THE MAP</span>
+          <div class="enter-map-arrow"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map Page (Page 2) -->
+    <div class="page-slide next map-page" id="mapPage">
+      <!-- Map Intro Message Container -->
+      <div id="mapIntroContainer" data-text="Explore where science fiction futures were filmed and where stories imagined them. Scroll or press → to begin."></div>
+      <script src="mapIntroMessage.js" defer></script>
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <a href="parallel.html" class="back-link">
+          <span class="back-arrow">←</span>
+          <span>Return to Timeline</span>
+        </a>
+      </div>
 
   <!-- Navigation Buttons -->
   <!-- <div class="nav-buttons">
@@ -422,10 +569,86 @@
   <div class="zoom-text" data-zoom="SOLAR">
     <h1 class="main-title">Beyond Earth</h1>
     <p class="description">
-      Science fiction doesn't stop at our planet. From the Moon to fictional 
+      Science fiction doesn't stop at our planet. From the Moon to fictional
       locations beyond our solar system, stories venture into the cosmos.
     </p>
   </div>
 </div>
+    </div> <!-- End map-page -->
+  </div> <!-- End page-container -->
+
+  <!-- Page Transition Script -->
+  <script>
+    let currentPage = 0;
+    const pages = document.querySelectorAll('.page-slide');
+    const enterMapBtn = document.getElementById('enterMapBtn');
+    const navMenu = document.getElementById('navigationMenu');
+
+    function updatePages() {
+      pages.forEach((page, index) => {
+        page.classList.remove('active', 'next', 'prev');
+        if (index === currentPage) {
+          page.classList.add('active');
+          // Show navigation menu only on map page
+          if (index === 1) {
+            if (navMenu) navMenu.style.display = '';
+          }
+        } else if (index > currentPage) {
+          page.classList.add('next');
+        } else {
+          page.classList.add('prev');
+        }
+      });
+
+      // Hide navigation menu on intro page
+      if (currentPage === 0) {
+        if (navMenu) navMenu.style.display = 'none';
+      }
+    }
+
+    // Arrow key navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' && currentPage < pages.length - 1) {
+        // Don't navigate if map intro is active (let it handle arrow keys)
+        if (window.isMapIntroActive && window.isMapIntroActive()) {
+          return;
+        }
+
+        const wasOnIntroPage = currentPage === 0;
+        currentPage++;
+        updatePages();
+
+        // Show map intro message when entering map page
+        if (wasOnIntroPage && currentPage === 1) {
+          setTimeout(() => {
+            if (window.showMapIntro) {
+              window.showMapIntro(true);
+            }
+          }, 100);
+        }
+      } else if (e.key === 'ArrowLeft' && currentPage > 0) {
+        currentPage--;
+        updatePages();
+      }
+    });
+
+    enterMapBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (currentPage < pages.length - 1) {
+        currentPage++;
+        updatePages();
+
+        // Show map intro message when entering map page
+        setTimeout(() => {
+          if (window.showMapIntro) {
+            window.showMapIntro(true);
+          }
+        }, 100); // Small delay to ensure page transition starts
+      }
+    });
+
+    // Initialize
+    updatePages();
+  </script>
 </body>
 </html>
