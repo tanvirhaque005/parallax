@@ -167,6 +167,7 @@
     
     // Auto-collapse after 5 seconds
     let collapseTimer;
+    let collapseAnimationTimeout = null;
     let isHovering = false;
     let isAnimating = false;
     
@@ -227,6 +228,13 @@
     
     function collapseMenu() {
       if (isAnimating) return;
+      
+      // Clear any existing collapse timeout
+      if (collapseAnimationTimeout) {
+        clearTimeout(collapseAnimationTimeout);
+        collapseAnimationTimeout = null;
+      }
+      
       isAnimating = true;
       menuContainer.classList.add('animating');
       
@@ -240,6 +248,13 @@
         item.style.transition = 'opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
         
         setTimeout(() => {
+          // Check if user hovered - cancel collapse if so
+          if (isHovering) {
+            isAnimating = false;
+            menuContainer.classList.remove('animating');
+            expandMenu();
+            return;
+          }
           void item.offsetHeight;
           item.style.opacity = '0';
           item.style.transform = 'translateX(20px)';
@@ -251,6 +266,13 @@
         // Start line animation at the same time as the first item to collapse (last item)
         // This creates the same smooth glide effect as expand
         setTimeout(() => {
+          // Check if user hovered - cancel collapse if so
+          if (isHovering) {
+            isAnimating = false;
+            menuContainer.classList.remove('animating');
+            expandMenu();
+            return;
+          }
           progressLineEl.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
           void progressLineEl.offsetHeight;
           progressLineEl.style.transform = 'translateX(20px)';
@@ -259,15 +281,21 @@
       }
       
       setTimeout(() => {
+        // Check if user hovered during collapse - if so, don't mark as collapsed
         if (!isHovering) {
           menuContainer.classList.add('collapsed');
           if (menuItemsEl) {
             menuItemsEl.style.width = '0';
             menuItemsEl.style.overflow = 'hidden';
           }
+          menuContainer.classList.remove('animating');
+          isAnimating = false;
+        } else {
+          // User hovered, cancel collapse and expand
+          isAnimating = false;
+          menuContainer.classList.remove('animating');
+          expandMenu();
         }
-        menuContainer.classList.remove('animating');
-        isAnimating = false;
       }, 50 + items.length * 40 + 400);
     }
     
@@ -296,8 +324,18 @@
       isHovering = true;
       clearTimeout(collapseTimer);
       
-      // Only trigger expand animation if menu is collapsed
-      if (menuContainer.classList.contains('collapsed') && !isAnimating) {
+      // If menu is collapsing, cancel it and expand immediately
+      if (isAnimating && !menuContainer.classList.contains('collapsed')) {
+        // Cancel collapse animation
+        if (collapseAnimationTimeout) {
+          clearTimeout(collapseAnimationTimeout);
+          collapseAnimationTimeout = null;
+        }
+        // Reset animation state and expand
+        isAnimating = false;
+        expandMenu();
+      } else if (menuContainer.classList.contains('collapsed') && !isAnimating) {
+        // Menu is already collapsed, expand it
         expandMenu();
       }
     });

@@ -786,7 +786,8 @@ window.addEventListener("mousedown", (e) => {
   }
 
   // (existing non-overlay logic below)
-  if (menuOpen || hoveringBars) return;
+  // Only block if hovering bars, not if menu is open
+  if (hoveringBars) return;
 
   // Don't scroll if clicking on navigation menu
   if (navigationMenu && navigationMenu.contains(e.target)) return;
