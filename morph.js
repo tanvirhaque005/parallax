@@ -198,45 +198,6 @@ const flightPathGroup = new THREE.Group();    // International paths
 scene.add(usFlightPathGroup);
 scene.add(flightPathGroup);
 
-const flowVertexShader = `
-  varying vec2 vUv;
-  void main(){
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-
-const flowFragmentShader = `
-  uniform float time;
-  uniform vec3 color;
-  uniform float opacity;
-  varying vec2 vUv;
-
-  void main(){
-    // Create moving dots along the path
-    float dotSpacing = 0.04; // Distance between dots (very close)
-    float dotSize = 0.15;    // Size of each dot
-
-    // Position along path with time offset for movement
-    float pos = fract((vUv.x - time * 0.05) / dotSpacing);
-
-    // Create square/pixel-like dot shape with very sharp edges
-    float dist = abs(pos - 0.5);
-    float dot = step(dist, dotSize); // Hard edge for square pixels
-
-    // Bright sky blue dots
-    vec3 lightTeal = vec3(0.29, 0.62, 1.0); // Bright sky blue #4A9EFF
-
-    // Only show dots, transparent elsewhere
-    vec3 finalColor = lightTeal;
-    float finalAlpha = opacity * dot;
-
-    gl_FragColor = vec4(finalColor, finalAlpha);
-  }
-`;
-
-let animationTime = 0;
-
 function latLonToPlane(lat, lon) {
   return { x: lon/180, y: (lat/90)*0.5 };
 }
@@ -296,19 +257,26 @@ async function loadPaths(){
     const dist = Math.hypot(p2.x-p1.x, p2.y-p1.y);
     const curve = createArc(p1,p2, dist*0.15);
 
-    const tube = new THREE.TubeGeometry(curve,200,0.0015,24,false);
+    // Get points from curve for line geometry
+    const points = curve.getPoints(100);
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-    const mat = new THREE.ShaderMaterial({
-      uniforms:{ time:{value:0}, color:{value:new THREE.Color(0x46AACB)}, opacity:{value:0.7} },
-      vertexShader:flowVertexShader,
-      fragmentShader:flowFragmentShader,
-      transparent:true
+    // Create dashed line material with MUCH larger, more visible dashes
+    const mat = new THREE.LineDashedMaterial({
+      color: 0x4A9EFF,        // Bright sky blue
+      dashSize: 0.01,         // MUCH larger dash size for visibility
+      gapSize: 0.01,          // Equal gaps create clear dot/dash pattern
+      linewidth: 3,           // Thicker lines (may not work on all platforms)
+      opacity: 0.9,
+      transparent: true
     });
 
-    const mesh = new THREE.Mesh(tube,mat);
+    const line = new THREE.Line(geometry, mat);
+    line.computeLineDistances(); // Required for dashed lines to work
+
     // Parse year to integer for filtering
     const yearInt = parseInt(c.year) || 0;
-    mesh.userData = { movie:c.movie, year:yearInt, from:c.from, to:c.to };
+    line.userData = { movie:c.movie, year:yearInt, from:c.from, to:c.to };
 
     // Check if both locations are in the US
     const isAInUS = isInUS(A.lat, A.lon);
@@ -316,10 +284,10 @@ async function loadPaths(){
 
     if (isAInUS && isBInUS) {
       // Both in US - add to US domestic paths
-      usFlightPathGroup.add(mesh);
+      usFlightPathGroup.add(line);
     } else {
       // At least one location outside US - add to international paths
-      flightPathGroup.add(mesh);
+      flightPathGroup.add(line);
     }
   });
 }
@@ -785,31 +753,34 @@ async function loadSolarFlightPaths(){
       mid.y += dist * 0.3; // Arc upward
 
       const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
-      const tubeGeometry = new THREE.TubeGeometry(curve, 50, 0.05, 8, false);
 
-      const lineMaterial = new THREE.ShaderMaterial({
-        uniforms: {
-          time: { value: 0 },
-          color: { value: new THREE.Color(0x46AACB) }, // Teal for solar paths
-          opacity: { value: 0.6 }
-        },
-        vertexShader: flowVertexShader,
-        fragmentShader: flowFragmentShader,
-        transparent: true,
-        side: THREE.DoubleSide
+      // Get points from curve for line geometry
+      const points = curve.getPoints(100);
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+      // Create dashed line material for solar paths - MUCH larger for visibility at solar scale
+      const lineMaterial = new THREE.LineDashedMaterial({
+        color: 0x4A9EFF,        // Bright sky blue
+        dashSize: 0.3,          // Very large dashes for solar system scale
+        gapSize: 0.3,           // Equal gaps create clear dot/dash pattern
+        linewidth: 3,
+        opacity: 0.85,
+        transparent: true
       });
 
-      const pathMesh = new THREE.Mesh(tubeGeometry, lineMaterial);
+      const line = new THREE.Line(geometry, lineMaterial);
+      line.computeLineDistances(); // Required for dashed lines to work
+
       // Parse year to integer for filtering
       const yearInt = parseInt(conn.year) || 0;
-      pathMesh.userData = {
+      line.userData = {
         movie: conn.movie,
         year: yearInt,
         from: 'Earth',
         to: matchedLocation
       };
 
-      solarFlightPathsGroup.add(pathMesh);
+      solarFlightPathsGroup.add(line);
 
       if (matchedLocation === "Fictional Locations") {
         console.log(`✅ Created path to Fictional Locations from ${conn.from}`);
@@ -889,7 +860,26 @@ let newShapesVisible = false;
 function animate(){
   requestAnimationFrame(animate);
 
-  animationTime += 0.01;
+  // ANIMATE DASHED LINES - Clearer, faster animation
+  // Moving dots travel from production location (from) to depicted location (to)
+  usFlightPathGroup.children.forEach(line => {
+    if (line.material && line.material.type === 'LineDashedMaterial') {
+      // Animate dash offset to create movement
+      line.material.dashOffset -= 0.01; // Faster, more visible movement
+    }
+  });
+
+  flightPathGroup.children.forEach(line => {
+    if (line.material && line.material.type === 'LineDashedMaterial') {
+      line.material.dashOffset -= 0.01; // Faster, more visible movement
+    }
+  });
+
+  solarFlightPathsGroup.children.forEach(line => {
+    if (line.material && line.material.type === 'LineDashedMaterial') {
+      line.material.dashOffset -= 0.02; // Even faster for solar system scale
+    }
+  });
 
   // SMOOTH CAMERA TRANSITIONS
   const cameraDiff = Math.abs(camera.position.z - targetCameraZ);
@@ -987,12 +977,6 @@ function animate(){
     flightPathGroup.position.set(0, 0, 0);
   }
 
-  // Update US flight path animations
-  usFlightPathGroup.children.forEach(line => {
-    line.material.uniforms.time.value = animationTime;
-    line.material.uniforms.opacity.value = 0.7; // Constant opacity for US paths
-  });
-
   // MORPH EARTH (only when past usToWorldZoom)
   morphProgress += (targetMorphProgress - morphProgress) * morphSpeed;
   const eased = ease(Math.min(1, morphProgress));
@@ -1018,18 +1002,10 @@ function animate(){
     );
   }
 
-  // Fade-out flight paths
+  // Fade-out flight paths as we morph to globe
   const fade = Math.max(0, 1 - morphProgress*5);
   flightPathGroup.children.forEach(line=>{
-    line.material.uniforms.time.value = animationTime;
-    line.material.uniforms.opacity.value = fade;
-  });
-
-  // Update solar flight path animations
-  solarFlightPathsGroup.children.forEach(path => {
-    if (path.material && path.material.uniforms) {
-      path.material.uniforms.time.value = animationTime;
-    }
+    line.material.opacity = fade * 0.9; // Fade from 0.9 to 0
   });
 
   // SHOW SOLAR SYSTEM
@@ -1158,9 +1134,6 @@ function animate(){
   // ==========================================================
   // SECOND CLICK → COLLAPSE EVERYTHING TO (0,0,0)
   // ==========================================================
-  // ==========================================================
-// SECOND CLICK → COLLAPSE EVERYTHING
-// ==========================================================
 if (secondZoomOut) {
 
     // Accelerate collapse (0 → 1)
@@ -1261,11 +1234,14 @@ function updateMorphFromZoom(){
 }
 
 // ==========================================================
-// TOOLTIP (HOVER)
+// TOOLTIP (HOVER) - FIXED VERSION
 // ==========================================================
 const tooltip = document.getElementById('flightPathTooltip');
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
+
+// CRITICAL: Set much tighter threshold for line picking
+raycaster.params.Line.threshold = 0.001; // Very tight - must be very close to line
 
 window.addEventListener("mousemove", (evt) => {
   mouse.x = (evt.clientX / window.innerWidth) * 2 - 1;
@@ -1273,18 +1249,21 @@ window.addEventListener("mousemove", (evt) => {
 
   raycaster.setFromCamera(mouse, camera);
 
-  // Only check flight path groups that are currently visible based on zoom state
+  // Only check the currently visible flight path group based on zoom state
   let allHits = [];
 
-  if (currentZoomState === ZOOM_STATES.US) {
-    // US view: only check US domestic paths
-    allHits = raycaster.intersectObjects(usFlightPathGroup.children, false);
-  } else if (currentZoomState === ZOOM_STATES.WORLD) {
-    // World view: only check international Earth paths
-    allHits = raycaster.intersectObjects(flightPathGroup.children, false);
-  } else if (currentZoomState === ZOOM_STATES.SOLAR) {
-    // Solar system view: only check solar paths
-    allHits = raycaster.intersectObjects(solarFlightPathsGroup.children, false);
+  if (currentZoomState === ZOOM_STATES.US && usFlightPathGroup.visible) {
+    // US view: only check US domestic paths that are visible
+    const visiblePaths = usFlightPathGroup.children.filter(child => child.visible);
+    allHits = raycaster.intersectObjects(visiblePaths, false);
+  } else if (currentZoomState === ZOOM_STATES.WORLD && flightPathGroup.visible) {
+    // World view: only check international Earth paths that are visible
+    const visiblePaths = flightPathGroup.children.filter(child => child.visible);
+    allHits = raycaster.intersectObjects(visiblePaths, false);
+  } else if (currentZoomState === ZOOM_STATES.SOLAR && solarFlightPathsGroup.visible) {
+    // Solar system view: only check solar paths that are visible
+    const visiblePaths = solarFlightPathsGroup.children.filter(child => child.visible);
+    allHits = raycaster.intersectObjects(visiblePaths, false);
   }
 
   const hovering = allHits.length > 0;
@@ -1292,11 +1271,11 @@ window.addEventListener("mousemove", (evt) => {
   if (hovering) {
     cursor.classList.add("hover");
 
-    // Show tooltip
+    // Show tooltip for the closest hit
     const obj = allHits[0].object;
     const d = obj.userData;
 
-    // Format tooltip text with line breaks
+    // Format tooltip text
     tooltip.textContent = `${d.movie} (${d.year}) — ${d.from} → ${d.to}`;
 
     // Position tooltip above cursor
