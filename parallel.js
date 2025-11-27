@@ -51,6 +51,10 @@ for (let y = minRelease; y <= maxRelease; y += WINDOW_SIZE_YEARS) {
 let windowStart =
   Math.floor(minRelease / WINDOW_SIZE_YEARS) * WINDOW_SIZE_YEARS;
 
+  window.addEventListener('DOMContentLoaded', () => {
+    showDefaultIntro();
+  })
+
 /* ----------------------------
     SVG SETUP
 -----------------------------*/
