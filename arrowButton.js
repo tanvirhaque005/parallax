@@ -24,11 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
       // Insert into DOM
       ph.replaceWith(wrapper);
   
-      // Show after delay
-      setTimeout(() => {
-        wrapper.style.opacity = "1";
-        wrapper.style.pointerEvents = "auto";
-      }, delay * 1000);
+      // Show after delay (only if delay > 0, or if delay is 0 and no manual control is needed)
+      // If delay is 0, don't auto-show - let manual control handle it
+      if (delay > 0) {
+        setTimeout(() => {
+          wrapper.style.opacity = "1";
+          wrapper.style.pointerEvents = "auto";
+        }, delay * 1000);
+      }
     });
   });
   

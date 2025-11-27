@@ -40,7 +40,7 @@
        SHOW / HIDE DEFAULT INTRO
     ====================================================== */
 
-    window.showDefaultIntro = async function showDefaultIntro() {
+    window.showDefaultIntro = async function showDefaultIntro(showText = false) {
         const component = await injectInto("introMessageDefault",
                           (defaultPromise ||= { current: null }));
 
@@ -48,11 +48,15 @@
 
         resetText(component);
         component.style.display = "flex";
-
-        startTypingAnimation(
-            component.querySelector("#introText"),
-            text
-        );
+        
+        // Only show text if explicitly requested (after scroll)
+        if (showText) {
+            component.classList.add('show-text');
+            startTypingAnimation(
+                component.querySelector("#introText"),
+                text
+            );
+        }
     };
 
     window.hideDefaultIntro = function hideDefaultIntro() {
@@ -77,6 +81,7 @@
 
         resetText(component);
         component.style.display = "flex";
+        component.classList.add('show-text'); // Ensure text is visible
 
         startTypingAnimation(
             component.querySelector("#introText"),

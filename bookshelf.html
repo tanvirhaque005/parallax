@@ -14,6 +14,13 @@
   <body>
     <!-- Navigation Menu -->
     <div class="navigation-menu" id="navigationMenu"></div>
+    
+    <!-- Intro Panel (shown initially, hidden on scroll) -->
+    <div id="introPanel" class="intro-panel">
+      <h1 class="intro-title">Explore the Library of Futures</h1>
+      <p class="intro-description">These are the films that make up our dataset—sorted chronologically from early sci-fi to modern futurism. You can browse by decade (a chronological sweep through sci-fi history) or subgenre (cyberpunk, space opera, climate fiction, biotech dystopias, etc.) Scroll horizontally to move through time, watching how storytelling evolves across generations.</p>
+    </div>
+    
     <!-- ONLY SEE WHEN NOT IN OVERLAY -->
     <div id="introMessageDefault" data-text="Scroll through a century of sci-fi films. Click on any movie cover to step inside its world (This is our data btw)."></div>
     <script src="introMessage.js" defer></script>
@@ -47,7 +54,8 @@
     <div data-arrow-button 
     text="Explore Tropes" 
     href="chordGraph.html"
-    delay="3">
+    delay="0"
+    id="exploreTropesButton">
     </div>
 
     <!-- Card overlay -->

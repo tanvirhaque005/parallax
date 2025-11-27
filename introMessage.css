@@ -58,6 +58,12 @@
     text-transform: uppercase;
     max-width: 1050px;
     line-height: 1.4;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  
+  .timeline-intro.show-text .intro-text {
+    opacity: 1;
   }
   
   .timeline-intro .intro-text.typing::after,

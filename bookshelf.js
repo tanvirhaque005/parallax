@@ -34,13 +34,21 @@ let activeBook = null;
 let overlayBook = null;
 
 /* -----------------------------------------------------------
+   INTRO PANEL STATE
+----------------------------------------------------------- */
+let introDismissed = false;
+const INITIAL_CAMERA_OFFSET = 15; // How far right the shelf starts
+let introPanelOffset = INITIAL_CAMERA_OFFSET; // Camera offset to position shelf off to the right initially
+
+/* -----------------------------------------------------------
    SCENE SETUP – BASE
 ----------------------------------------------------------- */
 const scene = new THREE.Scene();
 scene.background = null;
 
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 0.6, 8);
+// Initially position camera to the right so shelf appears off-screen
+camera.position.set(introPanelOffset, 0.6, 8);
 
 const renderer = new THREE.WebGLRenderer({ canvas: baseCanvas, antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -230,6 +238,9 @@ function updateScrollButtons() {
 }
 
 scrollLeftBtn.addEventListener('click', () => {
+  if (!introDismissed) {
+    dismissIntroPanel();
+  }
   if (targetShelfOffset < MAX_SCROLL_LEFT) {
     targetShelfOffset += 2.5;
     updateScrollButtons();
@@ -237,6 +248,9 @@ scrollLeftBtn.addEventListener('click', () => {
 });
 
 scrollRightBtn.addEventListener('click', () => {
+  if (!introDismissed) {
+    dismissIntroPanel();
+  }
   if (targetShelfOffset > MAX_SCROLL_RIGHT) {
     targetShelfOffset -= 2.5;
     updateScrollButtons();
@@ -246,6 +260,11 @@ scrollRightBtn.addEventListener('click', () => {
 window.addEventListener("wheel", (e) => {
   // disable shelf scrolling when overlay is open
   if (bookinfo.classList.contains("open")) return;
+
+  // Dismiss intro panel on first scroll
+  if (!introDismissed) {
+    dismissIntroPanel();
+  }
 
   // push the scroll velocity
   scrollVelocity += e.deltaY * WHEEL_PUSH;
@@ -405,7 +424,13 @@ function closeOverlay() {
     activeBook.hoverTiltZ = 0;
     activeBook.mesh.visible = true;
   }
-  showDefaultIntro();
+  
+  // Show default intro - with text if intro has been dismissed (user has scrolled)
+  if (introDismissed) {
+    showDefaultIntro(true); // Show with text since intro panel is gone
+  } else {
+    showDefaultIntro(false); // Show without text since intro panel is still visible
+  }
 }
 
 
@@ -470,6 +495,10 @@ function rebuildOverlayForIndex() {
 }
 
 renderer.domElement.addEventListener('click', (e) => {
+  if (!introDismissed) {
+    dismissIntroPanel();
+  }
+  
   setMouseFromEvent(e);
   raycaster.setFromCamera(mouse, camera);
 
@@ -515,10 +544,45 @@ window.addEventListener('resize', () => {
 });
 
 /* -----------------------------------------------------------
+   INTRO PANEL DISMISSAL
+----------------------------------------------------------- */
+function dismissIntroPanel() {
+  if (introDismissed) return;
+  introDismissed = true;
+  
+  const introPanel = document.getElementById('introPanel');
+  if (introPanel) {
+    introPanel.classList.add('hidden');
+  }
+  
+  // Show arrow button after 3 seconds
+  setTimeout(() => {
+    const arrowButton = document.querySelector('.arrow-button-wrapper');
+    if (arrowButton) {
+      arrowButton.style.opacity = "1";
+      arrowButton.style.pointerEvents = "auto";
+    }
+  }, 3000);
+  
+  // Show intro message text after a delay
+  setTimeout(() => {
+    if (typeof showDefaultIntro === 'function') {
+      showDefaultIntro(true); // Show text now
+    }
+  }, 500);
+}
+
+/* -----------------------------------------------------------
    ANIMATE
 ----------------------------------------------------------- */
 function animate() {
   requestAnimationFrame(animate);
+
+  // Animate camera back to center when intro is dismissed
+  if (introDismissed) {
+    introPanelOffset += (0 - introPanelOffset) * 0.05;
+    camera.position.x = introPanelOffset;
+  }
 
   shelfOffset += (targetShelfOffset - shelfOffset) * 0.1;
   // --- MOMENTUM SCROLLING ---
@@ -766,6 +830,10 @@ function updateActiveBookBar(index) {
    Click → jump to book
 ----------------------------------------------------------- */
 function jumpToBook(index) {
+  if (!introDismissed) {
+    dismissIntroPanel();
+  }
+  
   const bookX = startX + index * spacing;
   
   // Center book: shelf must move by -bookX
