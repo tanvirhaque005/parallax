@@ -54,6 +54,57 @@
       transform: translateX(-100%);
     }
 
+    /* Make the intro overlay translucent so the chart shows behind it */
+.intro-page {
+    pointer-events: auto;
+    backdrop-filter: blur(6px);
+    z-index: 5;
+
+    .intro-panel {
+        background: linear-gradient(
+            to right,
+            rgba(14, 14, 15, 1) 80%,
+            rgba(14, 14, 15, 0) 100%
+        ) !important;
+
+        backdrop-filter: blur(6px);
+    }
+}
+
+.intro-panel {
+    background: rgba(14, 14, 15, 0.40) !important;  /* make panel see-through */
+    backdrop-filter: blur(6px);                     /* match page blur */
+}
+/* Override ONLY for chart page → keep chart always underneath intro */
+.chart-page.next {
+    transform: translateX(0) !important;
+}
+
+/* When intro-page leaves, fade + slide it */
+.intro-page.prev {
+    opacity: 0;
+    pointer-events: none !important;   /* <— THIS FIXES SCROLLING */
+    transition:
+        transform 0.8s cubic-bezier(0.16,1,0.3,1),
+        opacity 0.8s ease-out;
+}
+
+
+.chart-page {
+    z-index: 1; /* under intro */
+}
+
+/* Fade the intro away when sliding out */
+.page-slide.prev.intro-page {
+    opacity: 0;
+    transition: 
+      transform 0.8s cubic-bezier(0.16,1,0.3,1),
+      opacity 0.6s ease-out;
+}
+
+
+
+
     /* Intro Panel Styles */
     .intro-panel {
       position: fixed;
@@ -139,8 +190,8 @@
     /* The First Decade Button */
     .first-decade-button {
       position: fixed;
-      bottom: 40%;
-      right: 40px;
+      bottom: 30%;
+      left: 50px;
       display: flex;
       align-items: center;
       gap: 18px;
@@ -583,48 +634,30 @@
       });
     }
 
-    /* ---------------------------------------------------------
+   /* ---------------------------------------------------------
    DISCRETE SCROLL DETECTOR (1 scroll = 1 gesture)
 --------------------------------------------------------- */
-
-let scrolling = false;
-let scrollTimeout;
+let scrollLocked = false;
 
 window.addEventListener("wheel", (e) => {
-    // Already processing a scroll gesture → ignore additional events
-    if (scrolling) return;
-    scrolling = true;
+    if (scrollLocked) return;
+
+    scrollLocked = true;
 
     const direction = e.deltaY > 0 ? "down" : "up";
 
-    /* ============================
-       SCROLL DOWN → ACTIVATE BUTTON
-    ============================= */
-    if (direction === "down") {
-
-        // Only trigger on Page 0 (intro)
-        if (currentPage === 0) {
-            currentPage = 1;
-            updatePages();
-        }
+    // scroll down from INTRO → go to chart
+    if (direction === "down" && currentPage === 0) {
+        currentPage = 1;
+        updatePages();
     }
 
-    /* ============================
-       SCROLL UP → GO BACK (DISABLED!!!!)
-    ============================= */
-    // if (direction === "up") {
-    //     if (currentPage === 1) {
-    //         currentPage = 0;
-    //         updatePages();
-    //     }
-    // }
-
-    // Reset gesture tracking after scroll ends
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-        scrolling = false;
-    }, 180); // adjust if you want slower or faster gesture resets
+    // unlock after gesture completes
+    setTimeout(() => {
+        scrollLocked = false;
+    }, 350);
 });
+
 
 
     firstDecadeBtn.addEventListener('click', (e) => {
