@@ -32,10 +32,6 @@
     
 
 
-    <div id="controls">
-      <button id="scrollLeft" aria-label="Scroll left">⟵</button>
-      <button id="scrollRight" aria-label="Scroll right">⟶</button>
-    </div>
 
     <!-- Base shelf canvas -->
     <canvas id="bookCanvas" aria-label="Interactive 3D bookshelf"></canvas>
@@ -113,16 +109,47 @@
       </div>
     </div>
 
+    <!-- Grid View Container -->
+    <div id="gridView" class="grid-view-container" style="display: none;">
+      <div class="grid-header">
+        <button class="back-button" id="backToListView">← BACK</button>
+        <div class="page-header" id="gridViewHeader">
+          <div class="intro-icon"></div>
+          <span class="intro-text" id="gridViewTitle"></span>
+        </div>
+      </div>
+      
+      <div class="grid-content" id="gridContent">
+        <div class="grid-section-title">1.1 | If sorted by decade</div>
+        <!-- Decade sections will be inserted here -->
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer" class="footer">
+      <div class="footer-left">
+        <span class="footer-text">Published 2025</span>
+      </div>
+      <div class="footer-right">
+        <div class="view-toggle">
+          <span class="view-label">View by</span>
+          <div class="view-toggle-buttons">
+            <button class="view-button" id="listViewBtn" data-view="list">LIST</button>
+            <button class="view-button" id="gridViewBtn" data-view="grid">GRID</button>
+          </div>
+        </div>
+        <div class="footer-creators">
+          <span class="footer-text">Created by Audrey Yang, Michael Cai, Tanvir Haque, Sydney Nguyen</span>
+        </div>
+      </div>
+    </div>
+
     <script type="module" src="./bookshelf.js"></script>
     <script src="navigation-menu.js"></script>
 
-    <!-- FOOTER LOGO
-    <div id="footerLogo">
-      <div class="footer-icon"></div>
-      <span class="footer-text">LIBRARY OF FUTURES</span>
-    </div> -->
     <div id="cursorCircle"></div>
-
+    <link rel="stylesheet" href="cursor.css">
+    <script src="cursor.js" defer></script>
 
   </body>
 </html>

@@ -24,6 +24,270 @@ import booksMeta from "./movies_data_for_shelf.js"; // note this is sorted (id i
 console.log(booksMeta)
 
 /* -----------------------------------------------------------
+   GRID VIEW FUNCTIONALITY
+----------------------------------------------------------- */
+let currentView = 'list'; // 'list' or 'grid'
+
+// Group books by decade
+function groupBooksByDecade(books) {
+  const grouped = {};
+  books.forEach(book => {
+    const year = parseInt(book.year);
+    if (isNaN(year)) return;
+    
+    const decade = Math.floor(year / 10) * 10;
+    const decadeKey = `${decade}s`;
+    
+    if (!grouped[decadeKey]) {
+      grouped[decadeKey] = [];
+    }
+    grouped[decadeKey].push(book);
+  });
+  
+  // Sort decades numerically
+  const sortedDecades = Object.keys(grouped).sort((a, b) => {
+    const decadeA = parseInt(a.replace('s', ''));
+    const decadeB = parseInt(b.replace('s', ''));
+    return decadeA - decadeB;
+  });
+  
+  return { grouped, sortedDecades };
+}
+
+// Render grid view
+function renderGridView() {
+  const gridContent = document.getElementById('gridContent');
+  if (!gridContent) return;
+  
+  const { grouped, sortedDecades } = groupBooksByDecade(booksMeta);
+  
+  gridContent.innerHTML = '';
+  
+  sortedDecades.forEach(decadeKey => {
+    const decadeSection = document.createElement('div');
+    decadeSection.className = 'decade-section';
+    
+    const decadeTitle = document.createElement('h2');
+    decadeTitle.className = 'decade-title';
+    // Format: "1900s", "2010s", etc.
+    const decadeNum = parseInt(decadeKey);
+    if (decadeNum >= 1900) {
+      decadeTitle.textContent = `${decadeKey}`;
+    } else {
+      decadeTitle.textContent = `${decadeKey}`;
+    }
+    decadeSection.appendChild(decadeTitle);
+    
+    const moviesGrid = document.createElement('div');
+    moviesGrid.className = 'movies-grid';
+    
+    grouped[decadeKey].forEach(book => {
+      const movieCard = document.createElement('div');
+      movieCard.className = 'movie-card';
+      movieCard.dataset.bookId = book.id;
+      
+      const coverImg = document.createElement('img');
+      coverImg.className = 'movie-cover';
+      coverImg.src = `/postersID/${book.id}.jpg`;
+      coverImg.alt = book.title;
+      coverImg.loading = 'lazy';
+      
+      const titleOverlay = document.createElement('div');
+      titleOverlay.className = 'movie-title-overlay';
+      const titleText = document.createElement('p');
+      titleText.className = 'movie-title-text';
+      titleText.textContent = book.title.toUpperCase();
+      titleOverlay.appendChild(titleText);
+      
+      movieCard.appendChild(coverImg);
+      movieCard.appendChild(titleOverlay);
+      
+      // Click handler to open book details
+      movieCard.addEventListener('click', () => {
+        const bookIndex = booksMeta.findIndex(b => b.id === book.id);
+        if (bookIndex !== -1) {
+          // Switch back to list view and open the book
+          switchView('list');
+          // Wait a moment for the view to switch, then open the book
+          setTimeout(() => {
+            openOverlayForIndex(bookIndex);
+          }, 100);
+        }
+      });
+      
+      moviesGrid.appendChild(movieCard);
+    });
+    
+    decadeSection.appendChild(moviesGrid);
+    gridContent.appendChild(decadeSection);
+  });
+}
+
+// Switch between list and grid views
+function switchView(view) {
+  currentView = view;
+  const gridView = document.getElementById('gridView');
+  const listViewBtn = document.getElementById('listViewBtn');
+  const gridViewBtn = document.getElementById('gridViewBtn');
+  const bookinfo = document.getElementById('bookinfo');
+  
+  if (view === 'grid') {
+    // Close any open book overlay
+    if (bookinfo && bookinfo.classList.contains('open')) {
+      closeOverlay();
+    }
+    
+    // Hide 3D bookshelf
+    baseCanvas.style.display = 'none';
+    overlayCanvas.style.display = 'none';
+    const bookBars = document.getElementById('bookBars');
+    if (bookBars) bookBars.style.display = 'none';
+    const introPanel = document.getElementById('introPanel');
+    if (introPanel) introPanel.style.display = 'none';
+    const introMessage = document.getElementById('introMessageDefault');
+    if (introMessage) introMessage.style.display = 'none';
+    
+    // Show grid view and enable scrolling
+    if (gridView) {
+      gridView.style.display = 'block';
+      document.body.style.overflow = 'hidden'; // Prevent body scroll
+      renderGridView();
+      
+      // Trigger typing animation for grid view header
+      setTimeout(() => {
+        const headerIcon = document.querySelector('#gridViewHeader .intro-icon');
+        const headerTitle = document.querySelector('#gridViewHeader .intro-text');
+        if (headerIcon && headerTitle) {
+          // Reset animation
+          headerIcon.style.animation = 'none';
+          setTimeout(() => {
+            headerIcon.style.animation = '';
+          }, 10);
+          // Start typing animation
+          setTimeout(() => {
+            typeTextForGrid(headerTitle, 'Click on any movie cover to step inside its world.', 80);
+          }, 600);
+        }
+      }, 100);
+    }
+    
+    // Update button states
+    if (listViewBtn) listViewBtn.classList.remove('active');
+    if (gridViewBtn) gridViewBtn.classList.add('active');
+  } else {
+    // Close any open book overlay first
+    if (bookinfo && bookinfo.classList.contains('open')) {
+      closeOverlay();
+    }
+    
+    // Reset book states - ensure no book is presented
+    if (activeBook) {
+      activeBook.isPresented = false;
+      activeBook.targetRotY = Math.PI / 2;
+      activeBook.targetPosZ = 0;
+      activeBook.mesh.visible = true;
+    }
+    
+    // Reset all books to default state
+    books.forEach(b => {
+      b.isPresented = false;
+      b.targetRotY = Math.PI / 2;
+      b.targetPosZ = 0;
+      b.mesh.visible = true;
+    });
+    
+    // Reset current index
+    currentIndex = -1;
+    activeBook = null;
+    
+    // Hide overlay canvas
+    overlayCanvas.style.display = 'none';
+    
+    // Show 3D bookshelf
+    baseCanvas.style.display = 'block';
+    const bookBars = document.getElementById('bookBars');
+    if (bookBars) bookBars.style.display = 'flex';
+    const introPanel = document.getElementById('introPanel');
+    if (introPanel) introPanel.style.display = 'block';
+    const introMessage = document.getElementById('introMessageDefault');
+    if (introMessage) introMessage.style.display = 'block';
+    
+    // Hide grid view and restore body scroll
+    if (gridView) gridView.style.display = 'none';
+    document.body.style.overflow = 'hidden'; // Keep body scroll hidden for 3D view
+    
+    // Update button states
+    if (listViewBtn) listViewBtn.classList.add('active');
+    if (gridViewBtn) gridViewBtn.classList.remove('active');
+  }
+}
+
+// Initialize view toggle buttons (run after DOM is ready)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initViewToggle);
+} else {
+  initViewToggle();
+}
+
+function initViewToggle() {
+  const listViewBtn = document.getElementById('listViewBtn');
+  const gridViewBtn = document.getElementById('gridViewBtn');
+  const backToListBtn = document.getElementById('backToListView');
+  
+  if (listViewBtn) {
+    listViewBtn.addEventListener('click', () => switchView('list'));
+    listViewBtn.classList.add('active');
+  }
+  
+  if (gridViewBtn) {
+    gridViewBtn.addEventListener('click', () => switchView('grid'));
+  }
+  
+  if (backToListBtn) {
+    backToListBtn.addEventListener('click', () => switchView('list'));
+  }
+}
+
+/* -----------------------------------------------------------
+   TYPING ANIMATION FUNCTION
+----------------------------------------------------------- */
+let currentTypingInterval = null;
+
+function typeTextForGrid(element, text, speed = 100) {
+  if (!element) {
+    return;
+  }
+  
+  // Clear any existing typing animation
+  if (currentTypingInterval) {
+    clearInterval(currentTypingInterval);
+    currentTypingInterval = null;
+  }
+  
+  const textToType = String(text || '').trim();
+  
+  // Clear element completely
+  element.textContent = '';
+  element.innerHTML = '';
+  // Make text visible and remove uppercase
+  element.style.opacity = '1';
+  element.style.textTransform = 'none';
+  element.classList.add('typing');
+  
+  let i = 0;
+  currentTypingInterval = setInterval(() => {
+    if (i < textToType.length) {
+      element.textContent = textToType.substring(0, i + 1);
+      i++;
+    } else {
+      clearInterval(currentTypingInterval);
+      currentTypingInterval = null;
+      element.classList.remove('typing');
+    }
+  }, speed);
+}
+
+/* -----------------------------------------------------------
    GLOBAL DOM REFERENCES
 ----------------------------------------------------------- */
 const baseCanvas = document.getElementById('bookCanvas');
@@ -233,31 +497,46 @@ const scrollLeftBtn = document.getElementById('scrollLeft');
 const scrollRightBtn = document.getElementById('scrollRight');
 
 function updateScrollButtons() {
-  scrollRightBtn.style.display = targetShelfOffset <= MAX_SCROLL_RIGHT ? 'none' : 'block';
-  scrollLeftBtn.style.display  = targetShelfOffset >= MAX_SCROLL_LEFT ? 'none' : 'block';
+  // Scroll buttons removed - function kept for compatibility but does nothing
+  if (scrollRightBtn) {
+    scrollRightBtn.style.display = 'none';
+  }
+  if (scrollLeftBtn) {
+    scrollLeftBtn.style.display = 'none';
+  }
 }
 
-scrollLeftBtn.addEventListener('click', () => {
-  if (!introDismissed) {
-    dismissIntroPanel();
-  }
-  if (targetShelfOffset < MAX_SCROLL_LEFT) {
-    targetShelfOffset += 2.5;
-    updateScrollButtons();
-  }
-});
+if (scrollLeftBtn) {
+  scrollLeftBtn.addEventListener('click', () => {
+    if (!introDismissed) {
+      dismissIntroPanel();
+    }
+    if (targetShelfOffset < MAX_SCROLL_LEFT) {
+      targetShelfOffset += 2.5;
+      updateScrollButtons();
+    }
+  });
+}
 
-scrollRightBtn.addEventListener('click', () => {
-  if (!introDismissed) {
-    dismissIntroPanel();
-  }
-  if (targetShelfOffset > MAX_SCROLL_RIGHT) {
-    targetShelfOffset -= 2.5;
-    updateScrollButtons();
-  }
-});
+if (scrollRightBtn) {
+  scrollRightBtn.addEventListener('click', () => {
+    if (!introDismissed) {
+      dismissIntroPanel();
+    }
+    if (targetShelfOffset > MAX_SCROLL_RIGHT) {
+      targetShelfOffset -= 2.5;
+      updateScrollButtons();
+    }
+  });
+}
 
 window.addEventListener("wheel", (e) => {
+  // Allow normal scrolling in grid view
+  const gridView = document.getElementById('gridView');
+  if (gridView && gridView.style.display === 'block') {
+    return; // Don't prevent default, allow normal scrolling
+  }
+  
   // disable shelf scrolling when overlay is open
   if (bookinfo.classList.contains("open")) return;
 
@@ -400,6 +679,11 @@ function openOverlayForIndex(i) {
   hideDefaultIntro();
   showOverlayIntro();
 
+  // Hide view toggle buttons when book details are open
+  const footer = document.getElementById('footer');
+  if (footer) {
+    footer.style.display = 'none';
+  }
 
   overlayCanvas.style.display = 'block';
   bookinfo.classList.add('open');
@@ -410,6 +694,12 @@ function closeOverlay() {
   hideOverlayIntro();
   bookinfo.classList.remove('open');
   overlayCanvas.style.display = 'none';
+
+  // Show view toggle buttons again when book details are closed
+  const footer = document.getElementById('footer');
+  if (footer) {
+    footer.style.display = 'flex';
+  }
 
   // remove overlay 3D mesh
   if (overlayBook) overlayScene.remove(overlayBook);
@@ -691,7 +981,7 @@ enableCursorHover("canvas");             // hovering the 3D shelf
 enableCursorHover(".tag-pill");          // tropes/tags
 enableCursorHover(".motif-circle");      // motif bubbles
 enableCursorHover(".btn");               // overlay buttons
-enableCursorHover("#scrollLeft, #scrollRight");  // arrows
+// Scroll buttons removed - cursor hover no longer needed
 enableCursorHover(".menu-button, .menu-close");  // menu
 enableCursorHover("#activeBookCanvas"); // overlay 3D book
 enableCursorHover(".menu-button");
@@ -712,9 +1002,16 @@ window.addEventListener("mousemove", (e) => {
   const overlayOpen = bookinfo.classList.contains("open");
   const navigationMenu = document.getElementById('navigationMenu');
   const menuOpen = navigationMenu && !navigationMenu.classList.contains('collapsed');
+  const gridView = document.getElementById('gridView');
+  const gridViewActive = gridView && gridView.style.display === 'block';
   const x = e.clientX;
   const w = window.innerWidth;
 
+  // 🚫 DISABLE ARROW CURSORS IN GRID VIEW
+  if (gridViewActive) {
+    cursor.classList.remove("arrow-left", "arrow-right");
+    return;
+  }
 
     // 🚫 DISABLE ARROW CURSORS WHEN HOVERING OVER THE BAR SELECTOR
     if (hoveringBars) {
@@ -801,9 +1098,9 @@ window.addEventListener("mousedown", (e) => {
   if (navigationMenu && navigationMenu.contains(e.target)) return;
 
   if (cursor.classList.contains("arrow-right")) {
-    scrollRightBtn.click();
+    if (scrollRightBtn) scrollRightBtn.click();
   } else if (cursor.classList.contains("arrow-left")) {
-    scrollLeftBtn.click();
+    if (scrollLeftBtn) scrollLeftBtn.click();
   }
 });
 
