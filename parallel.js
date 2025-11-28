@@ -573,25 +573,24 @@ function animateScrollToYear(targetYear, duration = 600) {
   requestAnimationFrame(tick);
 }
 
-document.querySelectorAll(".book-bar").forEach(bar => {
-  bar.addEventListener("click", (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+// document.querySelectorAll(".book-bar").forEach(bar => {
+//   bar.addEventListener("click", (e) => {
+//     e.stopPropagation();
+//     e.preventDefault();
 
-    const index = Number(bar.dataset.index);
-    const yr = years[index];
+//     const index = Number(bar.dataset.index);
+//     const yr = years[index];
 
-    // 1. Update the filtering window
-    windowStart = yr;
+//     // 1. Update the filtering window
+//     windowStart = yr;
 
-    // 2. Animate the scroll
-    animateScrollToYear(yr);
+//     // 2. Animate the scroll
+//     animateScrollToYear(yr);
 
-    // 3. Update the active bar highlight
-    updateActiveBookBar(index);
-  });
-});
-
+//     // 3. Update the active bar highlight
+//     updateActiveBookBar(index);
+//   });
+// });
 
 /* -----------------------------------------------------------
    CLICK-SAFE MOVEMENT SUPPRESSION
@@ -649,6 +648,41 @@ barsContainer.addEventListener("mousemove", (e) => {
   if (activeIndex !== -1) {
     positionLabelOverBar(activeLabel, bars[activeIndex], years[activeIndex]);
   }
+});
+
+/* -----------------------------------------------------------
+   GLOBAL CLICK REGION — clicking anywhere selects nearest bar
+----------------------------------------------------------- */
+
+barsContainer.addEventListener("click", (e) => {
+  const bars = Array.from(document.querySelectorAll(".book-bar"));
+  const containerRect = barsContainer.getBoundingClientRect();
+  const mouseX = e.clientX - containerRect.left;
+
+  // Find the nearest bar center
+  let closestIndex = 0;
+  let closestDist = Infinity;
+
+  bars.forEach((bar, i) => {
+    const rect = bar.getBoundingClientRect();
+    const center = rect.left - containerRect.left + rect.width / 2;
+    const dist = Math.abs(mouseX - center);
+    if (dist < closestDist) {
+      closestDist = dist;
+      closestIndex = i;
+    }
+  });
+
+  const yr = years[closestIndex];
+
+  // Update window
+  windowStart = yr;
+
+  // Animate scroll
+  animateScrollToYear(yr);
+
+  // Highlight the active bar
+  updateActiveBookBar(closestIndex);
 });
 
 /* -----------------------------------------------------------
