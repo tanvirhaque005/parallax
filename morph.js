@@ -251,8 +251,8 @@ async function loadPaths(){
     const dist = Math.hypot(p2.x-p1.x, p2.y-p1.y);
     const curve = createArc(p1,p2, dist*0.15);
 
-    // Get points from curve for line geometry
-    const points = curve.getPoints(100);
+    // Get points from curve for line geometry - more points = smoother
+    const points = curve.getPoints(200);
 
     // Create Line2 geometry with thick lines
     const positions = [];
@@ -274,14 +274,15 @@ async function loadPaths(){
     geometry.setPositions(positions);
     geometry.setColors(colors);
 
-    // Create thick line material
+    // Create thick line material with alpha for smoothness
     const mat = new LineMaterial({
       color: 0xffffff,
       linewidth: 3, // in pixels
       vertexColors: true,
       transparent: true,
       opacity: 0.8,
-      depthWrite: false
+      depthWrite: false,
+      alphaToCoverage: true // Enable for smoother edges
     });
     mat.resolution.set(window.innerWidth, window.innerHeight);
 
@@ -781,7 +782,7 @@ async function loadSolarFlightPaths(){
       mid.y += dist * 0.3;
 
       const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
-      const points = curve.getPoints(100);
+      const points = curve.getPoints(200); // More points for smoother lines
 
       const positions = [];
       const colors = [];
@@ -807,7 +808,8 @@ async function loadSolarFlightPaths(){
         vertexColors: true,
         transparent: true,
         opacity: 0.8,
-        depthWrite: false
+        depthWrite: false,
+        alphaToCoverage: true // Enable for smoother edges
       });
       lineMaterial.resolution.set(window.innerWidth, window.innerHeight);
 
@@ -906,8 +908,8 @@ async function loadSolarFlightPaths(){
 
       const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
 
-      // Get points from curve for line geometry
-      const points = curve.getPoints(100);
+      // Get points from curve for line geometry - more points = smoother
+      const points = curve.getPoints(200);
 
       // Create Line2 geometry with thick lines
       const positions = [];
@@ -929,14 +931,15 @@ async function loadSolarFlightPaths(){
       geometry.setPositions(positions);
       geometry.setColors(colors);
 
-      // Create thick line material for solar paths
+      // Create thick line material for solar paths with alpha for smoothness
       const lineMaterial = new LineMaterial({
         color: 0xffffff,
         linewidth: 3, // in pixels
         vertexColors: true,
         transparent: true,
         opacity: 0.8,
-        depthWrite: false
+        depthWrite: false,
+        alphaToCoverage: true // Enable for smoother edges
       });
       lineMaterial.resolution.set(window.innerWidth, window.innerHeight);
 

@@ -497,6 +497,64 @@
   }
 }
 
+/* Gradient Legend */
+#gradientLegend {
+  position: fixed;
+  top: 50%;
+  left: 40px;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  pointer-events: none;
+}
+
+.legend-line {
+  width: 120px;
+  height: 4px;
+  background: linear-gradient(to right, rgb(179, 77, 255), rgb(0, 204, 204));
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(179, 77, 255, 0.3);
+}
+
+.legend-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.legend-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.purple-dot {
+  background: rgb(179, 77, 255);
+  box-shadow: 0 0 6px rgba(179, 77, 255, 0.5);
+}
+
+.teal-dot {
+  background: rgb(0, 204, 204);
+  box-shadow: 0 0 6px rgba(0, 204, 204, 0.5);
+}
+
+.legend-text {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
   </style>
   <link rel="stylesheet" href="mapIntroMessage.css">
 </head>
@@ -541,6 +599,21 @@
   <div class="navigation-menu" id="navigationMenu"></div>
 
   <div id="flightPathTooltip"></div>
+
+  <!-- Gradient Legend -->
+  <div id="gradientLegend">
+    <div class="legend-line"></div>
+    <div class="legend-labels">
+      <div class="legend-label legend-start">
+        <span class="legend-color purple-dot"></span>
+        <span class="legend-text">Production Location</span>
+      </div>
+      <div class="legend-label legend-end">
+        <span class="legend-color teal-dot"></span>
+        <span class="legend-text">Depicted Location</span>
+      </div>
+    </div>
+  </div>
 
   <div id="timelineBar">
     <!-- <div id="timelineLabel">Decade Filter</div> -->
