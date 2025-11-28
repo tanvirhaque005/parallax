@@ -147,7 +147,7 @@ export default [
     ],
     "location": null,
     "blurb": "Rod Serling's seminal anthology series focused on ordinary folks who suddenly found themselves in extraordinary, usually supernatural, situations. The stories would typically end with an ironic twist that would see the guilty punished.",
-    "color": "#393935",
+    "color": "#404040",
     "coverfile": "amogus.jpg"
   },
   {
@@ -300,7 +300,7 @@ export default [
     ],
     "location": null,
     "blurb": "A psychologist is sent to a station orbiting a distant planet in order to discover what has caused the crew to go insane.",
-    "color": "#46292c",
+    "color": "#6b6764",
     "coverfile": "amogus.jpg"
   },
   {
@@ -326,9 +326,9 @@ export default [
   },
   {
     "id": 71,
-    "title": "Blakes 7",
+    "title": "Blake's 7",
     "director": "Terry Nation (creator)",
-    "year": "1978\u20131981",
+    "year": "1978",
     "depicted": "3rd Century of the second calendar",
     "rating": 8.0,
     "tropes": [
@@ -343,7 +343,7 @@ export default [
     ],
     "location": null,
     "blurb": "A group of convicts and outcasts fight a guerrilla war against the totalitarian Terran Federation from a highly advanced alien spaceship.",
-    "color": "#474246",
+    "color": "#2d2730",
     "coverfile": "amogus.jpg"
   },
   {
@@ -364,7 +364,7 @@ export default [
     ],
     "location": null,
     "blurb": "Near a gray and unnamed city is the Zone, an alien place guarded by barbed wire and soldiers. Over his wife's objections, a man rises in the early morning and leaves her with their disabled daughter to meet two men. He's a Stalker, one of a handful who have the mental gifts (and who risk imprisonment) to lead people into the Zone to the Room, a place where one's secret hopes come true.",
-    "color": "#383030",
+    "color": "#67625f",
     "coverfile": "amogus.jpg"
   },
   {
@@ -386,7 +386,7 @@ export default [
     ],
     "location": null,
     "blurb": "An Earth man and his alien friend escape Earth's destruction and go on a truly strange adventure as space hitchhikers.",
-    "color": "#4d5759",
+    "color": "#657765",
     "coverfile": "amogus.jpg"
   },
   {
@@ -453,7 +453,7 @@ export default [
     ],
     "location": null,
     "blurb": "A Duke's son leads desert warriors against the galactic emperor and his father's evil nemesis when they assassinate his father and free their desert world from the emperor's rule.",
-    "color": "#6a807a",
+    "color": "#5b3e36",
     "coverfile": "amogus.jpg"
   },
   {
@@ -526,7 +526,7 @@ export default [
     "id": 84,
     "title": "Red Dwarf",
     "director": "Rob Grant / Doug Naylor (creators)",
-    "year": "1988\u20131999 / 2009\u2013",
+    "year": "1988",
     "depicted": "3 million years in future",
     "rating": 8.5,
     "tropes": [
@@ -540,7 +540,7 @@ export default [
     ],
     "location": null,
     "blurb": "The adventures of the last human alive and his friends, stranded three million years into deep space on the mining ship Red Dwarf.",
-    "color": "#85764e",
+    "color": "#252228",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1038,7 +1038,7 @@ export default [
     ],
     "location": null,
     "blurb": "A three-part miniseries on politics, betrayal, lust, greed and the coming of a Messiah. Based on Frank Herbert's classic science fiction novel.",
-    "color": "#6a807a",
+    "color": "#837252",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1152,7 +1152,7 @@ export default [
     "id": 78,
     "title": "Firefly",
     "director": "Joss Whedon (creator)",
-    "year": "2002\u20132003",
+    "year": "2002",
     "depicted": "2517",
     "rating": 9.2,
     "tropes": [
@@ -1167,7 +1167,7 @@ export default [
     ],
     "location": null,
     "blurb": "Five hundred years in the future, a renegade crew aboard a small spacecraft tries to survive as they travel the unknown parts of the galaxy and evade warring factions as well as authority agents out to get them.",
-    "color": "#809f98",
+    "color": "#3f2e26",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1189,7 +1189,7 @@ export default [
     ],
     "location": null,
     "blurb": "The twins of Paul \"Muad'dib\" Atreides become embroiled in the political landscape of Arrakis (\"Dune\") and the rest of the universe.",
-    "color": "#1d0e04",
+    "color": "#8c6143",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1239,7 +1239,7 @@ export default [
     "id": 69,
     "title": "Battlestar Galactica",
     "director": "Ronald D. Moore (developer)",
-    "year": "2004\u20132009",
+    "year": "2004",
     "depicted": "~150,000 years ago",
     "rating": 8.8,
     "tropes": [
@@ -1254,7 +1254,7 @@ export default [
     ],
     "location": null,
     "blurb": "When an old enemy, the Cylons, resurfaces and obliterate the 12 colonies, the crew of the aged Galactica protects a small civilian fleet - the last of humanity - as they journey toward the fabled 13th colony of Earth.",
-    "color": "#545961",
+    "color": "#4c5463",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1342,7 +1342,7 @@ export default [
     ],
     "location": null,
     "blurb": "Lincoln Six-Echo is a resident of a seemingly Utopian but contained facility in the year 2019. Like all of the inhabitants of this carefully controlled environment, Lincoln hopes to be chosen to go to the \"The Island\" - reportedly the last uncontaminated spot on the planet. But Lincoln soon discovers that everything about his existence is a lie. He and all of the other inhabitants of the facility are actually human clones. Lincoln makes a daring escape with a beautiful fellow resident named Jordan Two-Delta. Relentlessly pursued by the forces of the sinister institute that once housed them, Lincoln and Jordan engage in a race for their lives to literally meet their makers.",
-    "color": "#5e5e4c",
+    "color": "#a37867",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1429,7 +1429,7 @@ export default [
     ],
     "location": null,
     "blurb": "A U.S. Marshall becomes the sheriff of a remote cozy little Northwestern town of Eureka where the best minds in the US have secretly been tucked away to build futuristic inventions for the government which often go disastrously wrong.",
-    "color": "#855d41",
+    "color": "#667774",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1478,7 +1478,7 @@ export default [
     "id": 79,
     "title": "Fringe",
     "director": "J.J. Abrams / Alex Kurtzman / Roberto Orci (creators)",
-    "year": "2008\u20132013",
+    "year": "2008",
     "depicted": "2008-2013",
     "rating": 8.5,
     "tropes": [
@@ -1492,7 +1492,7 @@ export default [
     ],
     "location": null,
     "blurb": "A television drama centered around a female FBI agent who is forced to work with an institutionalized scientist in order to rationalize a brewing storm of unexplained phenomena.",
-    "color": "#646c75",
+    "color": "#42382d",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1666,14 +1666,14 @@ export default [
     ],
     "location": null,
     "blurb": "A television anthology series that shows the dark side of life and technology.",
-    "color": "#a0988b",
+    "color": "#24242d",
     "coverfile": "amogus.jpg"
   },
   {
     "id": 83,
     "title": "Person of Interest",
     "director": "Jonathan Nolan (creator)",
-    "year": "2011-2016",
+    "year": "2011",
     "depicted": "2011-2016",
     "rating": 8.5,
     "tropes": [
@@ -1688,7 +1688,7 @@ export default [
     ],
     "location": null,
     "blurb": "An ex-assassin and a wealthy programmer save lives via a surveillance AI that sends them the identities of civilians involved in impending crimes. However, the details of the crimes--including the civilians' roles--are left a mystery.",
-    "color": "#666546",
+    "color": "#5e6366",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1717,7 +1717,7 @@ export default [
     "id": 73,
     "title": "Continuum",
     "director": "Simon Barry (creator)",
-    "year": "2012\u20132015",
+    "year": "2012",
     "depicted": "2077/2012",
     "rating": 7.8,
     "tropes": [
@@ -1731,7 +1731,7 @@ export default [
     ],
     "location": null,
     "blurb": "A detective from the year 2077 finds herself trapped in present day Vancouver and searching for ruthless criminals from the future.",
-    "color": "#c9b386",
+    "color": "#444141",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1946,7 +1946,7 @@ export default [
     ],
     "location": null,
     "blurb": "On a road trip, Nic and two friends are drawn to an isolated area by a computer genius. When everything suddenly goes dark, Nic regains consciousness - only to find himself in a waking nightmare.",
-    "color": "#5c4c3c",
+    "color": "#b2b8b8",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1974,7 +1974,7 @@ export default [
     "id": 94,
     "title": "The 100",
     "director": "Jason Rothenberg (developer)",
-    "year": "2014\u2013",
+    "year": "2014",
     "depicted": "2149",
     "rating": 7.7,
     "tropes": [
@@ -1989,7 +1989,7 @@ export default [
     ],
     "location": null,
     "blurb": "Set ninety-seven years after a nuclear war has destroyed civilization, when a spaceship housing humanity's lone survivors sends one hundred juvenile delinquents back to Earth, in hopes of possibly re-populating the planet.",
-    "color": "#393f3c",
+    "color": "#485759",
     "coverfile": "amogus.jpg"
   },
   {
