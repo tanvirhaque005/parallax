@@ -6,12 +6,47 @@
   <title>Map Morph to Globe</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="navigation-menu.css">
+  <link rel="stylesheet" href="cursor.css">
   <style>
     body {
       margin: 0;
       font-family: 'Courier New', Courier, monospace;
       overflow: hidden;
       background: #0a1628;
+      cursor: none !important;
+    }
+    
+    /* Ensure arrow button uses custom cursor */
+    .arrow-button-wrapper,
+    .arrow-button-wrapper *,
+    [data-arrow-button],
+    [data-arrow-button] * {
+      cursor: none !important;
+    }
+    
+    /* Ensure cursor is always visible and above everything */
+    #cursorCircle {
+      position: fixed !important;
+      z-index: 999999 !important;
+      opacity: 1 !important;
+      display: block !important;
+      pointer-events: none !important;
+    }
+    
+    /* Ensure canvas doesn't block cursor */
+    #scene {
+      pointer-events: auto;
+      z-index: 1;
+    }
+    
+    /* Force cursor to be on top of everything */
+    #cursorCircle {
+      position: fixed !important;
+      z-index: 2147483647 !important; /* Maximum z-index value */
+      opacity: 1 !important;
+      display: block !important;
+      visibility: visible !important;
+      pointer-events: none !important;
     }
 
     /* Page Container for Slides */
@@ -110,7 +145,7 @@
       transition: opacity 0.3s ease;
       z-index: 10;
       font-family: 'Courier New', monospace;
-      cursor: pointer;
+      cursor: none !important;
     }
 
     .enter-map-button:hover {
@@ -181,7 +216,7 @@
       font-family: 'Courier New', monospace;
       font-size: 12px;
       letter-spacing: 1.5px;
-      cursor: pointer;
+      cursor: none !important;
       transition: all 0.3s;
       text-decoration: none;
       display: inline-block;
@@ -284,7 +319,7 @@
   border-radius: 4px;
 
   position: relative;
-  cursor: pointer;
+  cursor: none !important;
   display: none;
 }
 
@@ -524,7 +559,6 @@
   <canvas id="mapCanvas" style="display:none;"></canvas>
   <canvas id="scene"></canvas>
 
-
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://d3js.org/d3-geo-projection.v4.min.js"></script>
   <script type="importmap">
@@ -547,9 +581,192 @@
   </div>
 
 
-  <div id="cursorCircle"></div>
-  <link rel="stylesheet" href="cursor.css">
-  <script src="cursor.js" defer></script>
+  <script>
+    // Create cursor element immediately and append to body AFTER all other elements
+    (function() {
+      function createCursor() {
+        // Remove existing cursor if any
+        const existing = document.getElementById('cursorCircle');
+        if (existing) {
+          existing.remove();
+        }
+        
+        // Create new cursor element
+        const cursor = document.createElement('div');
+        cursor.id = 'cursorCircle';
+        // Use CSS classes instead of inline styles for hover effect to work
+        cursor.className = '';
+        cursor.style.cssText = 'position: fixed !important; top: 50% !important; left: 50% !important; width: 18px !important; height: 18px !important; border-radius: 50% !important; background: rgba(95, 95, 95, 0.28) !important; pointer-events: none !important; transform: translate(-50%, -50%) !important; z-index: 2147483647 !important; opacity: 1 !important; display: block !important; visibility: visible !important; transition: width 0.25s cubic-bezier(0.25, 0.1, 0.25, 1), height 0.25s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.25s ease, opacity 0.25s ease !important;';
+        
+        // Append to body - this ensures it's on top of everything
+        document.body.appendChild(cursor);
+        
+        // Update cursor position on mouse move
+        const mousemoveHandler = (e) => {
+          cursor.style.top = `${e.clientY}px`;
+          cursor.style.left = `${e.clientX}px`;
+        };
+        window.addEventListener('mousemove', mousemoveHandler, { passive: true });
+        
+        // Set up hover effects for arrow buttons using event delegation
+        // This will work even for dynamically created buttons
+        const cursorEl = cursor;
+        
+        const handleMouseOver = (e) => {
+          const target = e.target.closest('.arrow-button-wrapper') || 
+                        e.target.closest('[data-arrow-button]') ||
+                        e.target.closest('a') ||
+                        e.target.closest('button') ||
+                        e.target.closest('.cta-button') ||
+                        e.target.closest('.enter-map-button');
+          if (target && cursorEl) {
+            cursorEl.classList.add('hover');
+            // Set styles directly with !important to override inline styles
+            cursorEl.style.setProperty('width', '45px', 'important');
+            cursorEl.style.setProperty('height', '45px', 'important');
+            cursorEl.style.setProperty('opacity', '0.5', 'important');
+            cursorEl.style.setProperty('background', 'white', 'important');
+          }
+        };
+        
+        const handleMouseOut = (e) => {
+          const target = e.target.closest('.arrow-button-wrapper') || 
+                        e.target.closest('[data-arrow-button]') ||
+                        e.target.closest('a') ||
+                        e.target.closest('button') ||
+                        e.target.closest('.cta-button') ||
+                        e.target.closest('.enter-map-button');
+          if (target && cursorEl) {
+            cursorEl.classList.remove('hover');
+            // Reset to default styles
+            cursorEl.style.setProperty('width', '18px', 'important');
+            cursorEl.style.setProperty('height', '18px', 'important');
+            cursorEl.style.setProperty('opacity', '1', 'important');
+            cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+          }
+        };
+        
+        // Add event listeners using capture phase to catch events early
+        document.addEventListener('mouseover', handleMouseOver, true);
+        document.addEventListener('mouseout', handleMouseOut, true);
+        
+        // Also set up direct listeners after arrow button is created (3 second delay)
+        setTimeout(() => {
+          const arrowButtons = document.querySelectorAll('.arrow-button-wrapper');
+          arrowButtons.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+              if (cursorEl) {
+                cursorEl.classList.add('hover');
+                cursorEl.style.setProperty('width', '45px', 'important');
+                cursorEl.style.setProperty('height', '45px', 'important');
+                cursorEl.style.setProperty('opacity', '0.5', 'important');
+                cursorEl.style.setProperty('background', 'white', 'important');
+              }
+            });
+            btn.addEventListener('mouseleave', () => {
+              if (cursorEl) {
+                cursorEl.classList.remove('hover');
+                cursorEl.style.setProperty('width', '18px', 'important');
+                cursorEl.style.setProperty('height', '18px', 'important');
+                cursorEl.style.setProperty('opacity', '1', 'important');
+                cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+              }
+            });
+          });
+        }, 3500);
+        
+        // Make cursor available globally
+        window.cursorElement = cursor;
+        
+        console.log('Cursor created and appended to body');
+        return cursor;
+      }
+      
+      // Create cursor immediately
+      let cursor = createCursor();
+      
+      // Also create after a delay to ensure it's after CSS2DRenderer
+      setTimeout(() => {
+        cursor = createCursor();
+      }, 100);
+      
+      setTimeout(() => {
+        cursor = createCursor();
+      }, 500);
+      
+      // Create after DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          cursor = createCursor();
+        });
+      }
+      
+      // Create after window loads
+      window.addEventListener('load', () => {
+        cursor = createCursor();
+      });
+      
+      // Continuously ensure cursor exists and is visible
+      setInterval(() => {
+        let cursor = document.getElementById('cursorCircle');
+        if (!cursor) {
+          cursor = createCursor();
+        } else {
+          // Force visibility
+          const computed = window.getComputedStyle(cursor);
+          if (computed.display === 'none' || computed.opacity === '0' || computed.visibility === 'hidden') {
+            cursor.style.display = 'block';
+            cursor.style.opacity = '1';
+            cursor.style.visibility = 'visible';
+            cursor.style.zIndex = '2147483647';
+          }
+          // Ensure it's at the end of body
+          if (cursor.parentNode !== document.body || cursor.nextSibling !== null) {
+            cursor.remove();
+            document.body.appendChild(cursor);
+          }
+        }
+      }, 300);
+    })();
+  </script>
+  <script src="cursor.js"></script>
+  <script>
+    // Additional hover effect setup after arrow button is created
+    // Wait for arrow button to be created (after 3 second delay)
+    setTimeout(() => {
+      const cursor = document.getElementById('cursorCircle');
+      if (cursor) {
+        // Set up hover effect specifically for arrow buttons
+        const setupArrowHover = () => {
+          const arrowButtons = document.querySelectorAll('.arrow-button-wrapper');
+          arrowButtons.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+              if (cursor) {
+                cursor.classList.add('hover');
+                cursor.style.setProperty('width', '45px', 'important');
+                cursor.style.setProperty('height', '45px', 'important');
+                cursor.style.setProperty('opacity', '0.5', 'important');
+                cursor.style.setProperty('background', 'white', 'important');
+              }
+            });
+            btn.addEventListener('mouseleave', () => {
+              if (cursor) {
+                cursor.classList.remove('hover');
+                cursor.style.setProperty('width', '18px', 'important');
+                cursor.style.setProperty('height', '18px', 'important');
+                cursor.style.setProperty('opacity', '1', 'important');
+                cursor.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+              }
+            });
+          });
+        };
+        
+        setupArrowHover();
+        // Also try a bit later to be sure
+        setTimeout(setupArrowHover, 500);
+      }
+    }, 3500);
+  </script>
 
   <!-- Add this to your HTML body, after your existing elements -->
 

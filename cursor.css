@@ -1,8 +1,8 @@
 /* Base custom cursor */
 #cursorCircle {
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
     width: 18px;
     height: 18px;
     border-radius: 50%;
@@ -15,14 +15,16 @@
       background 0.25s ease,
       opacity 0.25s ease,
       transform 0.15s ease;
-    z-index: 9999;
+    z-index: 99999;
+    opacity: 1;
+    display: block;
   }
   
   #cursorCircle.hover {
-    width: 45px;
-    height: 45px;
-    opacity: 0.5;
-    background: white;
+    width: 45px !important;
+    height: 45px !important;
+    opacity: 0.5 !important;
+    background: white !important;
   }
   
   /* Arrow right */

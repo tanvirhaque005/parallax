@@ -98,6 +98,15 @@ renderer.setClearColor("#0a1628"); // Deep navy background
 
 // CSS2D Renderer for labels
 const labelRenderer = new CSS2DRenderer();
+
+// Get cursor element for hover effects - try multiple ways to get it
+let cursor = document.getElementById("cursorCircle") || window.cursorElement;
+if (!cursor) {
+  // Retry after a delay
+  setTimeout(() => {
+    cursor = document.getElementById("cursorCircle") || window.cursorElement;
+  }, 100);
+}
 labelRenderer.setSize(window.innerWidth, window.innerHeight);
 labelRenderer.domElement.style.position = 'absolute';
 labelRenderer.domElement.style.top = '0';
@@ -1301,7 +1310,7 @@ window.addEventListener("mousemove", (evt) => {
   const hovering = allHits.length > 0;
 
   if (hovering) {
-    cursor.classList.add("hover");
+    if (cursor) cursor.classList.add("hover");
 
     // Show tooltip for the closest hit
     const obj = allHits[0].object;
@@ -1316,7 +1325,7 @@ window.addEventListener("mousemove", (evt) => {
     tooltip.style.transform = "translateX(-50%)";
     tooltip.style.opacity = 0.9;
   } else {
-    cursor.classList.remove("hover");
+    if (cursor) cursor.classList.remove("hover");
     tooltip.style.opacity = 0;
   }
 });
@@ -1581,7 +1590,7 @@ let hoveringBars = false;
 
 barsContainer.addEventListener("mouseenter", () => {
   hoveringBars = true;
-  cursor.classList.remove("arrow-left", "arrow-right");
+  if (cursor) cursor.classList.remove("arrow-left", "arrow-right");
 });
 
 barsContainer.addEventListener("mouseleave", () => {
