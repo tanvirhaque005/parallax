@@ -1,5 +1,8 @@
 import * as THREE from 'three';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { Line2 } from 'three/addons/lines/Line2.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 
 // ==========================================================
 // TEXT OVERLAY CONTENT - DECADE AWARE
@@ -189,51 +192,6 @@ const flightPathGroup = new THREE.Group();    // International paths
 scene.add(usFlightPathGroup);
 scene.add(flightPathGroup);
 
-// Shader for animated gradient along flight paths
-const gradientVertexShader = `
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-
-const gradientFragmentShader = `
-  uniform float time;
-  uniform float opacity;
-  varying vec2 vUv;
-
-  void main() {
-    // Base blue color
-    vec3 blueColor = vec3(0.29, 0.62, 1.0); // #4A9EFF
-
-    // Glowing purple color
-    vec3 purpleColor = vec3(0.7, 0.3, 1.0); // Bright purple with glow
-
-    // Create moving dash position (0 to 1, cycling)
-    float dashPos = fract(vUv.x - time * 0.2);
-
-    // Create small dash - much smaller than before
-    float dashSize = 0.08; // Small dash size
-    float dashFade = 0.04; // Soft edges for glow
-
-    // Distance from dash center (dash centered at 0.5 in the cycle)
-    float dist = abs(dashPos - 0.5);
-
-    // Create smooth dash with sharp falloff
-    float dashStrength = smoothstep(dashSize + dashFade, dashSize - dashFade, dist);
-
-    // Mix blue and purple based on dash
-    vec3 finalColor = mix(blueColor, purpleColor, dashStrength);
-
-    // Add extra brightness to purple dash for glow effect
-    float glow = dashStrength * 0.5;
-    finalColor += vec3(glow * 0.6, glow * 0.2, glow);
-
-    gl_FragColor = vec4(finalColor, opacity);
-  }
-`;
-
 function latLonToPlane(lat, lon) {
   return { x: lon/180, y: (lat/90)*0.5 };
 }
@@ -295,21 +253,39 @@ async function loadPaths(){
 
     // Get points from curve for line geometry
     const points = curve.getPoints(100);
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-    // Create shader material with animated gradient
-    const mat = new THREE.ShaderMaterial({
-      vertexShader: gradientVertexShader,
-      fragmentShader: gradientFragmentShader,
-      uniforms: {
-        time: { value: 0.0 },
-        opacity: { value: 0.8 }
-      },
+    // Create Line2 geometry with thick lines
+    const positions = [];
+    const colors = [];
+    const purpleColor = new THREE.Color(0.7, 0.3, 1.0);
+    const tealColor = new THREE.Color(0.0, 0.8, 0.8);
+
+    for (let i = 0; i < points.length; i++) {
+      const point = points[i];
+      positions.push(point.x, point.y, point.z);
+
+      // Gradient from purple to teal
+      const t = i / (points.length - 1);
+      const color = new THREE.Color().lerpColors(purpleColor, tealColor, t);
+      colors.push(color.r, color.g, color.b);
+    }
+
+    const geometry = new LineGeometry();
+    geometry.setPositions(positions);
+    geometry.setColors(colors);
+
+    // Create thick line material
+    const mat = new LineMaterial({
+      color: 0xffffff,
+      linewidth: 3, // in pixels
+      vertexColors: true,
       transparent: true,
+      opacity: 0.8,
       depthWrite: false
     });
+    mat.resolution.set(window.innerWidth, window.innerHeight);
 
-    const line = new THREE.Line(geometry, mat);
+    const line = new Line2(geometry, mat);
 
     // Parse year to integer for filtering
     const yearInt = parseInt(c.year) || 0;
@@ -398,7 +374,7 @@ function updateFlightPathVisibility() {
   let fictionalPathsCount = 0;
   solarFlightPathsGroup.children.forEach(path => {
     // Always show Fictional Locations paths regardless of decade filter
-    if (path.userData.to === "Fictional Locations") {
+    if (path.userData.isFictionalLocations || path.userData.to === "Fictional Locations") {
       path.visible = true;
       fictionalPathsCount++;
     } else if (!currentDecade) {
@@ -692,9 +668,71 @@ const solarDestinations = ['Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Satur
 
 async function loadSolarFlightPaths(){
   try {
+    // Load both movie coordinates and the CSV data for fictional location names
     const response = await fetch('./movie-coordinates.json');
     const data = await response.json();
     const { connections } = data;
+
+    // Load CSV data to get actual fictional location names
+    const csvResponse = await fetch('./merged_movies_data.csv');
+    const csvText = await csvResponse.text();
+
+    // Proper CSV parser that handles quoted fields with commas
+    function parseCSVLine(line) {
+      const fields = [];
+      let currentField = '';
+      let inQuotes = false;
+
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        const nextChar = line[i + 1];
+
+        if (char === '"') {
+          if (inQuotes && nextChar === '"') {
+            // Escaped quote
+            currentField += '"';
+            i++; // Skip next quote
+          } else {
+            // Toggle quote state
+            inQuotes = !inQuotes;
+          }
+        } else if (char === ',' && !inQuotes) {
+          // Field separator
+          fields.push(currentField);
+          currentField = '';
+        } else {
+          currentField += char;
+        }
+      }
+      fields.push(currentField); // Add last field
+      return fields;
+    }
+
+    // Parse CSV with proper handling of quoted fields
+    const csvLines = csvText.split('\n');
+    const headers = parseCSVLine(csvLines[0]);
+    const movieIndex = headers.findIndex(h => h.includes('Movie / TV Show Name'));
+    const fantasyLocationIndex = headers.findIndex(h => h.includes('Depicted Location (Fantasy)'));
+
+    console.log(`📊 CSV Headers - Movie Index: ${movieIndex}, Fantasy Location Index: ${fantasyLocationIndex}`);
+    console.log(`📊 Total headers found: ${headers.length}`);
+
+    // Create lookup map: movie name -> fictional location
+    const fictionalLocationMap = {};
+    for (let i = 1; i < csvLines.length; i++) {
+      const line = csvLines[i];
+      if (!line.trim()) continue;
+
+      const fields = parseCSVLine(line);
+      const movieName = fields[movieIndex]?.trim();
+      const fantasyLocation = fields[fantasyLocationIndex]?.trim();
+
+      if (movieName && fantasyLocation) {
+        fictionalLocationMap[movieName] = fantasyLocation;
+      }
+    }
+
+    console.log(`📍 Sample fictional locations:`, Object.entries(fictionalLocationMap).slice(0, 5));
 
     // Filter for connections that include any planet/moon
     const solarConnections = connections.filter(conn => {
@@ -712,14 +750,81 @@ async function loadSolarFlightPaths(){
 
     console.log(`✅ Found ${solarConnections.length} solar system flight paths`);
 
-    // Debug: Check for Fictional Locations
+    // Extract all Fictional Locations connections
     const fictionalConns = solarConnections.filter(c =>
-      c.from === "Fictional Locations" || c.to === "Fictional Locations"
+      c.to === "Fictional Locations"
     );
     console.log(`📍 Fictional Locations connections: ${fictionalConns.length}`);
 
-    // Create flight paths between Earth and destinations
-    solarConnections.forEach((conn) => {
+    // Create single arc to Fictional Locations with all movies
+    if (fictionalConns.length > 0) {
+      const earthPos = customPositions.earth;
+      const fictionalPos = customPositions["fictional locations"];
+
+      const start = new THREE.Vector3(earthPos.x, earthPos.y, earthPos.z);
+      const end = new THREE.Vector3(fictionalPos.x, fictionalPos.y, fictionalPos.z);
+
+      const mid = start.clone().lerp(end, 0.5);
+      const dist = start.distanceTo(end);
+      mid.y += dist * 0.3;
+
+      const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
+      const points = curve.getPoints(100);
+
+      const positions = [];
+      const colors = [];
+      const purpleColor = new THREE.Color(0.7, 0.3, 1.0);
+      const tealColor = new THREE.Color(0.0, 0.8, 0.8);
+
+      for (let i = 0; i < points.length; i++) {
+        const point = points[i];
+        positions.push(point.x, point.y, point.z);
+
+        const t = i / (points.length - 1);
+        const color = new THREE.Color().lerpColors(purpleColor, tealColor, t);
+        colors.push(color.r, color.g, color.b);
+      }
+
+      const geometry = new LineGeometry();
+      geometry.setPositions(positions);
+      geometry.setColors(colors);
+
+      const lineMaterial = new LineMaterial({
+        color: 0xffffff,
+        linewidth: 3,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8,
+        depthWrite: false
+      });
+      lineMaterial.resolution.set(window.innerWidth, window.innerHeight);
+
+      const line = new Line2(geometry, lineMaterial);
+
+      // Store all fictional location movies in userData with actual fictional location names
+      line.userData = {
+        to: "Fictional Locations",
+        from: "Earth",
+        isFictionalLocations: true,
+        movies: fictionalConns.map(c => ({
+          movie: c.movie,
+          year: c.year,
+          from: c.from,
+          to: fictionalLocationMap[c.movie] || "Fictional Locations"
+        }))
+      };
+
+      solarFlightPathsGroup.add(line);
+      console.log(`✅ Created Fictional Locations arc with ${fictionalConns.length} movies`);
+    }
+
+    // Filter out Fictional Locations from regular solar connections
+    const regularSolarConns = solarConnections.filter(c =>
+      c.to !== "Fictional Locations" && c.from !== "Fictional Locations"
+    );
+
+    // Create flight paths between Earth and destinations (excluding Fictional Locations)
+    regularSolarConns.forEach((conn) => {
       const fromLower = conn.from.toLowerCase();
       const toLower = conn.to.toLowerCase();
 
@@ -791,21 +896,39 @@ async function loadSolarFlightPaths(){
 
       // Get points from curve for line geometry
       const points = curve.getPoints(100);
-      const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-      // Create shader material with animated gradient for solar paths
-      const lineMaterial = new THREE.ShaderMaterial({
-        vertexShader: gradientVertexShader,
-        fragmentShader: gradientFragmentShader,
-        uniforms: {
-          time: { value: 0.0 },
-          opacity: { value: 0.8 }
-        },
+      // Create Line2 geometry with thick lines
+      const positions = [];
+      const colors = [];
+      const purpleColor = new THREE.Color(0.7, 0.3, 1.0);
+      const tealColor = new THREE.Color(0.0, 0.8, 0.8);
+
+      for (let i = 0; i < points.length; i++) {
+        const point = points[i];
+        positions.push(point.x, point.y, point.z);
+
+        // Gradient from purple to teal
+        const t = i / (points.length - 1);
+        const color = new THREE.Color().lerpColors(purpleColor, tealColor, t);
+        colors.push(color.r, color.g, color.b);
+      }
+
+      const geometry = new LineGeometry();
+      geometry.setPositions(positions);
+      geometry.setColors(colors);
+
+      // Create thick line material for solar paths
+      const lineMaterial = new LineMaterial({
+        color: 0xffffff,
+        linewidth: 3, // in pixels
+        vertexColors: true,
         transparent: true,
+        opacity: 0.8,
         depthWrite: false
       });
+      lineMaterial.resolution.set(window.innerWidth, window.innerHeight);
 
-      const line = new THREE.Line(geometry, lineMaterial);
+      const line = new Line2(geometry, lineMaterial);
 
       // Parse year to integer for filtering
       const yearInt = parseInt(conn.year) || 0;
@@ -893,27 +1016,6 @@ let newShapesVisible = false;
 
 function animate(){
   requestAnimationFrame(animate);
-
-  // UPDATE SHADER TIME UNIFORMS for animated gradients
-  const currentTime = performance.now() * 0.001; // Convert to seconds
-
-  usFlightPathGroup.children.forEach(line => {
-    if (line.material && line.material.uniforms && line.material.uniforms.time) {
-      line.material.uniforms.time.value = currentTime;
-    }
-  });
-
-  flightPathGroup.children.forEach(line => {
-    if (line.material && line.material.uniforms && line.material.uniforms.time) {
-      line.material.uniforms.time.value = currentTime;
-    }
-  });
-
-  solarFlightPathsGroup.children.forEach(line => {
-    if (line.material && line.material.uniforms && line.material.uniforms.time) {
-      line.material.uniforms.time.value = currentTime;
-    }
-  });
 
   // SMOOTH CAMERA TRANSITIONS
   const cameraDiff = Math.abs(camera.position.z - targetCameraZ);
@@ -1317,7 +1419,18 @@ window.addEventListener("mousemove", (evt) => {
     const d = obj.userData;
 
     // Format tooltip text
-    tooltip.textContent = `${d.movie} (${d.year}) — ${d.from} → ${d.to}`;
+    if (d.isFictionalLocations && d.movies) {
+      // Special case: Fictional Locations - show all movies
+      const movieList = d.movies
+        .map(m => `${m.movie} (${m.year}) — ${m.from} → ${m.to}`)
+        .join('\n');
+      tooltip.textContent = movieList;
+      tooltip.style.whiteSpace = 'pre-line'; // Allow line breaks
+    } else {
+      // Regular single movie path
+      tooltip.textContent = `${d.movie} (${d.year}) — ${d.from} → ${d.to}`;
+      tooltip.style.whiteSpace = 'nowrap';
+    }
 
     // Position tooltip above cursor
     tooltip.style.left = evt.clientX + "px";
@@ -1456,6 +1569,19 @@ window.addEventListener('resize',()=>{
   labelRenderer.setSize(window.innerWidth,window.innerHeight);
   camera.aspect = window.innerWidth/window.innerHeight;
   camera.updateProjectionMatrix();
+
+  // Update Line2 material resolutions
+  const updateLineMaterials = (group) => {
+    group.children.forEach(line => {
+      if (line.material && line.material.resolution) {
+        line.material.resolution.set(window.innerWidth, window.innerHeight);
+      }
+    });
+  };
+
+  updateLineMaterials(usFlightPathGroup);
+  updateLineMaterials(flightPathGroup);
+  updateLineMaterials(solarFlightPathsGroup);
 });
 
 
