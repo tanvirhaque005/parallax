@@ -1,9 +1,9 @@
-export default [
+let data = [
   {
     "id": 81,
     "title": "Mr. Robot",
     "director": "Sam Esmail (creator)",
-    "year": "-2015",
+    "year": "2015",
     "depicted": "2015",
     "rating": 8.6,
     "tropes": [
@@ -24,8 +24,8 @@ export default [
     "id": 85,
     "title": "Rick and Morty",
     "director": "Dan Harmon / Justin Roiland (creators)",
-    "year": "-2013",
-    "depicted": "2013-present",
+    "year": "2013",
+    "depicted": "2013",
     "rating": 9.3,
     "tropes": [
       "Space",
@@ -46,8 +46,8 @@ export default [
     "id": 87,
     "title": "Star Trek: Discovery",
     "director": "Bryan Fuller / Alex Kurtzman (creators)",
-    "year": "-2017",
-    "depicted": "2256/3188",
+    "year": "2017",
+    "depicted": "2256",
     "rating": 7.3,
     "tropes": [
       "Space",
@@ -111,7 +111,7 @@ export default [
     "title": "Forbidden Planet",
     "director": "Fred M. Wilcox",
     "year": "1956",
-    "depicted": "2200",
+    "depicted": "9999",
     "rating": 7.6,
     "tropes": [
       "Space",
@@ -132,8 +132,8 @@ export default [
     "id": 98,
     "title": "Twilight Zone",
     "director": "Rod Serling (creator)",
-    "year": "1959\u20131964",
-    "depicted": "1959-1964",
+    "year": "1959",
+    "depicted": "1959",
     "rating": 9.0,
     "tropes": [
       "Dystopia",
@@ -147,7 +147,7 @@ export default [
     ],
     "location": null,
     "blurb": "Rod Serling's seminal anthology series focused on ordinary folks who suddenly found themselves in extraordinary, usually supernatural, situations. The stories would typically end with an ironic twist that would see the guilty punished.",
-    "color": "#393935",
+    "color": "#404040",
     "coverfile": "amogus.jpg"
   },
   {
@@ -155,7 +155,7 @@ export default [
     "title": "La Jet\u00e9e",
     "director": "Chris Marker",
     "year": "1962",
-    "depicted": "Post-WW3",
+    "depicted": "2050", // Just "around ww3"
     "rating": 8.4,
     "tropes": [
       "Time Travel",
@@ -175,8 +175,8 @@ export default [
     "id": 74,
     "title": "Doctor Who",
     "director": "Various (Sydney Newman creator)",
-    "year": "1964-1989 / 2005\u2013",
-    "depicted": "All of time",
+    "year": "1964",
+    "depicted": "2700", // All of time
     "rating": 8.9,
     "tropes": [
       "Time Travel",
@@ -197,8 +197,8 @@ export default [
     "id": 90,
     "title": "Star Trek: The Original Series",
     "director": "Gene Roddenberry (creator)",
-    "year": "1966\u20131969",
-    "depicted": "2265-2269",
+    "year": "1966",
+    "depicted": "2265",
     "rating": 8.4,
     "tropes": [
       "Space",
@@ -219,7 +219,7 @@ export default [
     "id": 96,
     "title": "The Prisoner",
     "director": "Patrick McGoohan / George Markstein (creators)",
-    "year": "1967\u20131968",
+    "year": "1967",
     "depicted": "1967",
     "rating": 8.8,
     "tropes": [
@@ -300,7 +300,7 @@ export default [
     ],
     "location": null,
     "blurb": "A psychologist is sent to a station orbiting a distant planet in order to discover what has caused the crew to go insane.",
-    "color": "#46292c",
+    "color": "#6b6764",
     "coverfile": "amogus.jpg"
   },
   {
@@ -308,7 +308,7 @@ export default [
     "title": "Eraserhead",
     "director": "David Lynch",
     "year": "1977",
-    "depicted": "1970s",
+    "depicted": "1970",
     "rating": 7.4,
     "tropes": [
       "Consciousness",
@@ -326,10 +326,10 @@ export default [
   },
   {
     "id": 71,
-    "title": "Blakes 7",
+    "title": "Blake's 7",
     "director": "Terry Nation (creator)",
-    "year": "1978\u20131981",
-    "depicted": "3rd Century of the second calendar",
+    "year": "1978",
+    "depicted": "2700",
     "rating": 8.0,
     "tropes": [
       "Space",
@@ -343,7 +343,7 @@ export default [
     ],
     "location": null,
     "blurb": "A group of convicts and outcasts fight a guerrilla war against the totalitarian Terran Federation from a highly advanced alien spaceship.",
-    "color": "#474246",
+    "color": "#2d2730",
     "coverfile": "amogus.jpg"
   },
   {
@@ -364,7 +364,7 @@ export default [
     ],
     "location": null,
     "blurb": "Near a gray and unnamed city is the Zone, an alien place guarded by barbed wire and soldiers. Over his wife's objections, a man rises in the early morning and leaves her with their disabled daughter to meet two men. He's a Stalker, one of a handful who have the mental gifts (and who risk imprisonment) to lead people into the Zone to the Room, a place where one's secret hopes come true.",
-    "color": "#383030",
+    "color": "#67625f",
     "coverfile": "amogus.jpg"
   },
   {
@@ -386,7 +386,7 @@ export default [
     ],
     "location": null,
     "blurb": "An Earth man and his alien friend escape Earth's destruction and go on a truly strange adventure as space hitchhikers.",
-    "color": "#4d5759",
+    "color": "#657765",
     "coverfile": "amogus.jpg"
   },
   {
@@ -438,7 +438,7 @@ export default [
     "title": "Dune",
     "director": "John Harrison (director)",
     "year": "1984",
-    "depicted": "10,191 AG",
+    "depicted": "9999",
     "rating": 6.6,
     "tropes": [
       "Space",
@@ -453,7 +453,7 @@ export default [
     ],
     "location": null,
     "blurb": "A Duke's son leads desert warriors against the galactic emperor and his father's evil nemesis when they assassinate his father and free their desert world from the emperor's rule.",
-    "color": "#6a807a",
+    "color": "#5b3e36",
     "coverfile": "amogus.jpg"
   },
   {
@@ -461,7 +461,7 @@ export default [
     "title": "Brazil",
     "director": "Terry Gilliam",
     "year": "1985",
-    "depicted": "20th century (dystopian)",
+    "depicted": "1985",
     "rating": 8.0,
     "tropes": [
       "Dystopia",
@@ -482,8 +482,8 @@ export default [
     "id": 89,
     "title": "Star Trek: The Next Generation",
     "director": "Gene Roddenberry (creator)",
-    "year": "1987\u20131994",
-    "depicted": "2364-2370",
+    "year": "1987",
+    "depicted": "2370",
     "rating": 8.7,
     "tropes": [
       "Space",
@@ -526,8 +526,8 @@ export default [
     "id": 84,
     "title": "Red Dwarf",
     "director": "Rob Grant / Doug Naylor (creators)",
-    "year": "1988\u20131999 / 2009\u2013",
-    "depicted": "3 million years in future",
+    "year": "1988",
+    "depicted": "9999",
     "rating": 8.5,
     "tropes": [
       "Space",
@@ -540,15 +540,15 @@ export default [
     ],
     "location": null,
     "blurb": "The adventures of the last human alive and his friends, stranded three million years into deep space on the mining ship Red Dwarf.",
-    "color": "#85764e",
+    "color": "#252228",
     "coverfile": "amogus.jpg"
   },
   {
     "id": 86,
     "title": "Star Trek: Deep Space Nine",
     "director": "Rick Berman / Michael Piller (creators)",
-    "year": "1993\u20131999",
-    "depicted": "2369-2375",
+    "year": "1993",
+    "depicted": "2375",
     "rating": 7.9,
     "tropes": [
       "Space",
@@ -568,8 +568,8 @@ export default [
     "id": 97,
     "title": "The X-Files",
     "director": "Chris Carter (creator)",
-    "year": "1993-2002 / 2016-",
-    "depicted": "1993-2002",
+    "year": "1993",
+    "depicted": "1993",
     "rating": 8.8,
     "tropes": [
       "Alien Contact",
@@ -590,8 +590,8 @@ export default [
     "id": 68,
     "title": "Babylon 5",
     "director": "J. Michael Straczynski (creator)",
-    "year": "1994\u20131998",
-    "depicted": "2258-2262",
+    "year": "1994",
+    "depicted": "2262",
     "rating": 8.2,
     "tropes": [
       "Space",
@@ -718,7 +718,7 @@ export default [
     "id": 82,
     "title": "Neon Genesis Evangelion",
     "director": "Hideaki Anno (creator/director)",
-    "year": "1995\u20131996",
+    "year": "1995",
     "depicted": "2015",
     "rating": 8.6,
     "tropes": [
@@ -849,8 +849,8 @@ export default [
     "id": 92,
     "title": "Stargate SG1",
     "director": "Brad Wright / Jonathan Glassner (creators)",
-    "year": "1997\u20132007",
-    "depicted": "1997-2007",
+    "year": "1997",
+    "depicted": "1997",
     "rating": 8.5,
     "tropes": [
       "Space",
@@ -872,7 +872,7 @@ export default [
     "title": "Dark City",
     "director": "Alex Proyas",
     "year": "1998",
-    "depicted": "1940s-1990s",
+    "depicted": "1990",
     "rating": 7.7,
     "tropes": [
       "Dystopia",
@@ -959,7 +959,7 @@ export default [
     "title": "The Thirteenth Floor",
     "director": "Josef Rusnak",
     "year": "1999",
-    "depicted": "1999/1937",
+    "depicted": "1999",
     "rating": 7.0,
     "tropes": [
       "Simulation",
@@ -979,8 +979,8 @@ export default [
     "id": 77,
     "title": "Farscape",
     "director": "Rockne S. O'Brien (creator)",
-    "year": "1999\u20132003",
-    "depicted": "1999-2003",
+    "year": "1999",
+    "depicted": "1999",
     "rating": 8.4,
     "tropes": [
       "Space",
@@ -1024,7 +1024,7 @@ export default [
     "title": "Dune",
     "director": "John Harrison (director)",
     "year": "2000",
-    "depicted": "10,191 AG",
+    "depicted": "9999",
     "rating": 7.1,
     "tropes": [
       "Space",
@@ -1038,7 +1038,7 @@ export default [
     ],
     "location": null,
     "blurb": "A three-part miniseries on politics, betrayal, lust, greed and the coming of a Messiah. Based on Frank Herbert's classic science fiction novel.",
-    "color": "#6a807a",
+    "color": "#837252",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1066,8 +1066,8 @@ export default [
     "id": 88,
     "title": "Star Trek: Enterprise",
     "director": "Rick Berman / Brannon Braga (creators)",
-    "year": "2001\u20132005",
-    "depicted": "2151-2161",
+    "year": "2001",
+    "depicted": "2151",
     "rating": 7.5,
     "tropes": [
       "Space",
@@ -1132,7 +1132,7 @@ export default [
     "title": "The Time Machine",
     "director": "H.G Wells / George Pal",
     "year": "2002",
-    "depicted": "802,701 AD",
+    "depicted": "802701",
     "rating": 4.2,
     "tropes": [
       "Time Travel",
@@ -1152,7 +1152,7 @@ export default [
     "id": 78,
     "title": "Firefly",
     "director": "Joss Whedon (creator)",
-    "year": "2002\u20132003",
+    "year": "2002",
     "depicted": "2517",
     "rating": 9.2,
     "tropes": [
@@ -1167,7 +1167,7 @@ export default [
     ],
     "location": null,
     "blurb": "Five hundred years in the future, a renegade crew aboard a small spacecraft tries to survive as they travel the unknown parts of the galaxy and evade warring factions as well as authority agents out to get them.",
-    "color": "#809f98",
+    "color": "#3f2e26",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1175,7 +1175,7 @@ export default [
     "title": "Children of Dune",
     "director": "John Harrison (director)",
     "year": "2003",
-    "depicted": "10,209 AG",
+    "depicted": "9999",
     "rating": 7.7,
     "tropes": [
       "Space",
@@ -1189,7 +1189,7 @@ export default [
     ],
     "location": null,
     "blurb": "The twins of Paul \"Muad'dib\" Atreides become embroiled in the political landscape of Arrakis (\"Dune\") and the rest of the universe.",
-    "color": "#1d0e04",
+    "color": "#8c6143",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1239,8 +1239,8 @@ export default [
     "id": 69,
     "title": "Battlestar Galactica",
     "director": "Ronald D. Moore (developer)",
-    "year": "2004\u20132009",
-    "depicted": "~150,000 years ago",
+    "year": "2004",
+    "depicted": "0",
     "rating": 8.8,
     "tropes": [
       "Space",
@@ -1254,15 +1254,15 @@ export default [
     ],
     "location": null,
     "blurb": "When an old enemy, the Cylons, resurfaces and obliterate the 12 colonies, the crew of the aged Galactica protects a small civilian fleet - the last of humanity - as they journey toward the fabled 13th colony of Earth.",
-    "color": "#545961",
+    "color": "#4c5463",
     "coverfile": "amogus.jpg"
   },
   {
     "id": 91,
     "title": "Stargate Atlantis",
     "director": "Brad Wright / Robert C. Cooper (creators)",
-    "year": "2004\u20132009",
-    "depicted": "2004-2009",
+    "year": "2004",
+    "depicted": "2004",
     "rating": 8.1,
     "tropes": [
       "Space",
@@ -1342,7 +1342,7 @@ export default [
     ],
     "location": null,
     "blurb": "Lincoln Six-Echo is a resident of a seemingly Utopian but contained facility in the year 2019. Like all of the inhabitants of this carefully controlled environment, Lincoln hopes to be chosen to go to the \"The Island\" - reportedly the last uncontaminated spot on the planet. But Lincoln soon discovers that everything about his existence is a lie. He and all of the other inhabitants of the facility are actually human clones. Lincoln makes a daring escape with a beautiful fellow resident named Jordan Two-Delta. Relentlessly pursued by the forces of the sinister institute that once housed them, Lincoln and Jordan engage in a race for their lives to literally meet their makers.",
-    "color": "#5e5e4c",
+    "color": "#a37867",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1415,8 +1415,8 @@ export default [
     "id": 76,
     "title": "Eureka",
     "director": "Andrew Cosby / Jaime Paglia (creators)",
-    "year": "2006-2012",
-    "depicted": "2006-2012",
+    "year": "2006",
+    "depicted": "2006",
     "rating": 7.9,
     "tropes": [
       "Technology",
@@ -1429,7 +1429,7 @@ export default [
     ],
     "location": null,
     "blurb": "A U.S. Marshall becomes the sheriff of a remote cozy little Northwestern town of Eureka where the best minds in the US have secretly been tucked away to build futuristic inventions for the government which often go disastrously wrong.",
-    "color": "#855d41",
+    "color": "#667774",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1478,8 +1478,8 @@ export default [
     "id": 79,
     "title": "Fringe",
     "director": "J.J. Abrams / Alex Kurtzman / Roberto Orci (creators)",
-    "year": "2008\u20132013",
-    "depicted": "2008-2013",
+    "year": "2008",
+    "depicted": "2008",
     "rating": 8.5,
     "tropes": [
       "Technology",
@@ -1492,7 +1492,7 @@ export default [
     ],
     "location": null,
     "blurb": "A television drama centered around a female FBI agent who is forced to work with an institutionalized scientist in order to rationalize a brewing storm of unexplained phenomena.",
-    "color": "#646c75",
+    "color": "#42382d",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1586,8 +1586,8 @@ export default [
     "id": 93,
     "title": "Stargate Universe",
     "director": "Brad Wright / Robert C. Cooper (creators)",
-    "year": "2009\u20132011",
-    "depicted": "2009-2011",
+    "year": "2009",
+    "depicted": "2009",
     "rating": 7.7,
     "tropes": [
       "Space",
@@ -1651,8 +1651,8 @@ export default [
     "id": 70,
     "title": "Black Mirror",
     "director": "Charlie Brooker (creator)",
-    "year": "2011\u2013",
-    "depicted": "2011-present",
+    "year": "2011",
+    "depicted": "2011",
     "rating": 8.8,
     "tropes": [
       "Technology",
@@ -1666,15 +1666,15 @@ export default [
     ],
     "location": null,
     "blurb": "A television anthology series that shows the dark side of life and technology.",
-    "color": "#a0988b",
+    "color": "#24242d",
     "coverfile": "amogus.jpg"
   },
   {
     "id": 83,
     "title": "Person of Interest",
     "director": "Jonathan Nolan (creator)",
-    "year": "2011-2016",
-    "depicted": "2011-2016",
+    "year": "2011",
+    "depicted": "2011",
     "rating": 8.5,
     "tropes": [
       "AI",
@@ -1688,7 +1688,7 @@ export default [
     ],
     "location": null,
     "blurb": "An ex-assassin and a wealthy programmer save lives via a surveillance AI that sends them the identities of civilians involved in impending crimes. However, the details of the crimes--including the civilians' roles--are left a mystery.",
-    "color": "#666546",
+    "color": "#5e6366",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1696,7 +1696,7 @@ export default [
     "title": "Cloud Atlas",
     "director": "Lana Wachowski / Lilly Wachowski / Tom Tykwer",
     "year": "2012",
-    "depicted": "1849-2321",
+    "depicted": "2321",
     "rating": 7.5,
     "tropes": [
       "Transcendence",
@@ -1717,8 +1717,8 @@ export default [
     "id": 73,
     "title": "Continuum",
     "director": "Simon Barry (creator)",
-    "year": "2012\u20132015",
-    "depicted": "2077/2012",
+    "year": "2012",
+    "depicted": "2012",
     "rating": 7.8,
     "tropes": [
       "Time Travel",
@@ -1731,7 +1731,7 @@ export default [
     ],
     "location": null,
     "blurb": "A detective from the year 2077 finds herself trapped in present day Vancouver and searching for ruthless criminals from the future.",
-    "color": "#c9b386",
+    "color": "#444141",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1825,7 +1825,7 @@ export default [
     "title": "Edge of Tomorrow",
     "director": "Doug Liman",
     "year": "2014",
-    "depicted": "2015-2020",
+    "depicted": "2015",
     "rating": 7.9,
     "tropes": [
       "Time Travel",
@@ -1847,7 +1847,7 @@ export default [
     "title": "Her",
     "director": "Spike Jonze",
     "year": "2014",
-    "depicted": "203-2040",
+    "depicted": "2025",
     "rating": 8.0,
     "tropes": [
       "AI",
@@ -1911,7 +1911,7 @@ export default [
     "title": "Predestination",
     "director": "Michael Spierig / Peter Spierig",
     "year": "2014",
-    "depicted": "1945-1993",
+    "depicted": "1993",
     "rating": 7.5,
     "tropes": [
       "Time Travel",
@@ -1946,7 +1946,7 @@ export default [
     ],
     "location": null,
     "blurb": "On a road trip, Nic and two friends are drawn to an isolated area by a computer genius. When everything suddenly goes dark, Nic regains consciousness - only to find himself in a waking nightmare.",
-    "color": "#5c4c3c",
+    "color": "#b2b8b8",
     "coverfile": "amogus.jpg"
   },
   {
@@ -1974,7 +1974,7 @@ export default [
     "id": 94,
     "title": "The 100",
     "director": "Jason Rothenberg (developer)",
-    "year": "2014\u2013",
+    "year": "2014",
     "depicted": "2149",
     "rating": 7.7,
     "tropes": [
@@ -1989,7 +1989,7 @@ export default [
     ],
     "location": null,
     "blurb": "Set ninety-seven years after a nuclear war has destroyed civilization, when a spaceship housing humanity's lone survivors sends one hundred juvenile delinquents back to Earth, in hopes of possibly re-populating the planet.",
-    "color": "#393f3c",
+    "color": "#485759",
     "coverfile": "amogus.jpg"
   },
   {
@@ -2019,7 +2019,7 @@ export default [
     "title": "Ex Machina",
     "director": "Alex Garland",
     "year": "2015",
-    "depicted": "2014\u20132060s",
+    "depicted": "2014",
     "rating": 7.9,
     "tropes": [
       "AI",
@@ -2105,8 +2105,8 @@ export default [
     "id": 95,
     "title": "The Orville",
     "director": "Seth MacFarlane (creator)",
-    "year": "2017\u2013",
-    "depicted": "2417-2421",
+    "year": "2017",
+    "depicted": "2417",
     "rating": 7.9,
     "tropes": [
       "Space",
@@ -2144,3 +2144,7 @@ export default [
     "color": "#677582"
   }
 ]
+
+data.sort((a, b) => a.year - b.year);
+
+export default data

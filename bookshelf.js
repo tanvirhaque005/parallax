@@ -715,6 +715,14 @@ window.addEventListener("mousemove", (e) => {
   const x = e.clientX;
   const w = window.innerWidth;
 
+
+    // 🚫 DISABLE ARROW CURSORS WHEN HOVERING OVER THE BAR SELECTOR
+    if (hoveringBars) {
+      cursor.classList.remove("arrow-left", "arrow-right");
+      return;
+    }
+  
+
   // 🔥 NEW — overlay mode: enable arrows for prev/next navigation
 if (overlayOpen) {
   const x = e.clientX;
@@ -847,23 +855,23 @@ function jumpToBook(index) {
 /* -----------------------------------------------------------
    CLICK HANDLER (works reliably)
 ----------------------------------------------------------- */
-document.querySelectorAll(".book-bar").forEach(bar => {
-  bar.addEventListener("click", (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+// document.querySelectorAll(".book-bar").forEach(bar => {
+//   bar.addEventListener("click", (e) => {
+//     e.stopPropagation();
+//     e.preventDefault();
 
-    const index = Number(bar.dataset.index);
+//     const index = Number(bar.dataset.index);
 
-    // Scroll to that book
-    jumpToBook(index);
+//     // Scroll to that book
+//     jumpToBook(index);
 
-    // Highlight the selected bar
-    updateActiveBookBar(index);
+//     // Highlight the selected bar
+//     updateActiveBookBar(index);
 
-    // ❌ DO NOT reset the wave here
-    // Wave should stay as long as the mouse is inside the container
-  });
-});
+//     // ❌ DO NOT reset the wave here
+//     // Wave should stay as long as the mouse is inside the container
+//   });
+// });
 
 
 /* -----------------------------------------------------------
@@ -923,6 +931,36 @@ barsContainer.addEventListener("mousemove", (e) => {
     positionLabelOverBar(activeLabel, bars[activeIndex], booksMeta[activeIndex].year);
   }
 });
+
+/* -----------------------------------------------------------
+   GLOBAL CLICK REGION — clicking anywhere selects nearest bar
+----------------------------------------------------------- */
+barsContainer.addEventListener("click", (e) => {
+  const bars = Array.from(document.querySelectorAll(".book-bar"));
+  const rect = barsContainer.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+
+  // Find nearest bar center
+  let closestIndex = 0;
+  let closestDist = Infinity;
+
+  bars.forEach((bar, i) => {
+    const barRect = bar.getBoundingClientRect();
+    const center = barRect.left - rect.left + barRect.width / 2;
+    const dist = Math.abs(mouseX - center);
+    if (dist < closestDist) {
+      closestDist = dist;
+      closestIndex = i;
+    }
+  });
+
+  // Jump to that book
+  jumpToBook(closestIndex);
+
+  // Update highlight
+  updateActiveBookBar(closestIndex);
+});
+
 
 /* -----------------------------------------------------------
    ENTER / LEAVE (disable arrow cursor + reset wave)
