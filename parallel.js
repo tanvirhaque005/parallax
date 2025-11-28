@@ -209,7 +209,7 @@ function drawLines(filtered) {
     .attr("d", d => `M${x(d.startDate)},${yTop} L${x(d.endDate)},${yBot}`)
     .attr("stroke", d => slopeColor(d))
     .attr("stroke-opacity", d =>
-      filtered.includes(d) ? 0.95 : 0.05   // full vs faded
+      filtered.includes(d) ? 0.95 : 0.0   // full vs faded
     )
     .style("pointer-events", d =>
       filtered.includes(d) ? "stroke" : "none"  // <— disable hovers
