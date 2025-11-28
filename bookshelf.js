@@ -109,7 +109,7 @@ function makeMaterials(spineColorHex, coverFile) {
 
 function createBook(x, meta) {
   const color = meta.color || "#ffffff";  // fallback just in case
-  const coverFile = `/movie-covers/${meta.coverfile}`;
+  const coverFile = `/postersID/${meta.id}.jpg`;
   const mesh = new THREE.Mesh(geometry, makeMaterials(color, coverFile));
   mesh.position.set(x, 0.2, 0);
   mesh.rotation.y = Math.PI / 2;
@@ -487,7 +487,7 @@ function rebuildOverlayForIndex() {
   `).join('');
 
   if (overlayBook) overlayScene.remove(overlayBook);
-  const coverFile = `/movie-covers/${meta.coverfile}`;
+  const coverFile = `/postersID/${meta.id}.jpg`;
   overlayBook = new THREE.Mesh(geometry, makeMaterials(meta.color, coverFile));
   overlayBook.rotation.set(0, 0.9, 0.1);
   overlayBook.position.set(-4.1, 0.6, 0.4);
