@@ -10,7 +10,7 @@ import rawData from "./settingdataraw.js";
 const WINDOW_SIZE_YEARS = 5;
 const WINDOW_STEP_YEARS = 5;
 const INITIAL_VIEW_YEARS = 30;
-
+const VIEW_OFFSET = -5;  // <— shift view before the window
 /* ----------------------------
     PREP DATA & BOUNDS
 -----------------------------*/
@@ -77,10 +77,11 @@ const yBot = H - 80;
 -----------------------------*/
 const x = d3.scaleTime()
   .domain([
-    new Date(windowStart,0,1),
-    new Date(windowStart + INITIAL_VIEW_YEARS,0,1)
+    new Date(windowStart + VIEW_OFFSET, 0, 1),
+    new Date(windowStart + VIEW_OFFSET + INITIAL_VIEW_YEARS, 0, 1)
   ])
   .range([0, W]);
+
 
 /* ----------------------------
     AXES, GRID, LAYERS
@@ -557,14 +558,17 @@ function jumpToBook(index) {
 /* -----------------------------------------------------------
    CLICK HANDLER (works reliably)
 ----------------------------------------------------------- */
-function animateScrollToYear(targetYear, duration = 200) {
+function animateScrollToYear(targetYear, duration = 250) {
+
+  
+
   const [d0, d1] = x.domain();
   const startMin = d0.getFullYear();
   const startMax = d1.getFullYear();
   const span = startMax - startMin;
 
-  const newMin = Math.max(ABS_MIN_YEAR, targetYear);
-  const newMax = Math.min(ABS_MAX_YEAR, targetYear + span);
+  const newMin = Math.max(ABS_MIN_YEAR, targetYear + VIEW_OFFSET);
+  const newMax = Math.min(ABS_MAX_YEAR, newMin + span);
 
   const interpolatorMin = d3.interpolateNumber(startMin, newMin);
   const interpolatorMax = d3.interpolateNumber(startMax, newMax);
@@ -573,22 +577,20 @@ function animateScrollToYear(targetYear, duration = 200) {
 
   function tick() {
     const t = Math.min(1, (performance.now() - startTime) / duration);
-
-    // Smooth easing (cosine)
     const eased = 0.5 - 0.5 * Math.cos(Math.PI * t);
 
     const currentMin = interpolatorMin(eased);
     const currentMax = interpolatorMax(eased);
 
     x.domain([new Date(currentMin, 0, 1), new Date(currentMax, 0, 1)]);
-
-    update(); // redraw graph
+    update();
 
     if (t < 1) requestAnimationFrame(tick);
   }
 
   requestAnimationFrame(tick);
 }
+
 
 // document.querySelectorAll(".book-bar").forEach(bar => {
 //   bar.addEventListener("click", (e) => {
