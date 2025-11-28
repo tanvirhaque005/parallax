@@ -19,6 +19,20 @@ function enableCursorHover(selector) {
 
 // Enable hover on interactive elements
 enableCursorHover("button, a, .btn, .menu-button, .menu-close, .cta-button");
+enableCursorHover(".first-decade-button");
+document.addEventListener("mouseover", (e) => {
+  const target = e.target.closest(".arrow-button-wrapper");
+  if (target) {
+    cursor.classList.add("hover");
+  }
+});
+
+document.addEventListener("mouseout", (e) => {
+  const target = e.target.closest(".arrow-button-wrapper");
+  if (target) {
+    cursor.classList.remove("hover");
+  }
+});
 
 // Optional: Add selectors unique to this page
 // enableCursorHover(".myClickableThing");

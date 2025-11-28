@@ -8,9 +8,7 @@
     display: inline-flex;
     align-items: center;
     gap: 14px;
-    cursor: default;
-cursor: auto;
-cursor: grab;
+
 
     user-select: none;
     text-decoration: none;
@@ -62,6 +60,13 @@ cursor: grab;
     opacity: 0;
     transition: opacity 0.5s ease;
   }
+
+  .arrow-button-wrapper,
+.arrow-button-wrapper * {
+  cursor: none !important;
+  pointer-events: auto !important; /* IMPORTANT FIX */
+}
+
   
 .arrow-button-wrapper,
 .arrow-button-wrapper * {
