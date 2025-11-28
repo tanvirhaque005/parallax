@@ -2120,7 +2120,7 @@ export default [
     ],
     "location": null,
     "blurb": "Follows the crew of the not-so-functional exploratory ship in the Earth's interstellar fleet, 400 years in the future.",
-    "color": "#b29254",
+    "color": "#51625a",
     "coverfile": "amogus.jpg"
   },
   {
