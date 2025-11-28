@@ -75,35 +75,17 @@ const decadeTexts = {
 // TEXT OVERLAY UPDATE FUNCTION
 // ==========================================================
 function updateTextOverlay() {
-  const usText = document.querySelector('.zoom-text[data-zoom="US"]');
-  const worldText = document.querySelector('.zoom-text[data-zoom="WORLD"]');
-  const solarText = document.querySelector('.zoom-text[data-zoom="SOLAR"]');
+  const textElement = document.querySelector('.zoom-text[data-zoom="US"]');
 
-  // Hide all first
-  [usText, worldText, solarText].forEach(el => el?.classList.remove('active'));
+  if (textElement) {
+    // Always use decade-filtered text regardless of zoom state
+    const textData = currentDecade === null
+      ? decadeTexts['All']
+      : (decadeTexts[currentDecade] || decadeTexts['All']);
 
-  // Show appropriate text based on zoom state
-  switch(currentZoomState) {
-    case ZOOM_STATES.US:
-      if (usText) {
-        // Update US text based on current decade filter
-        const textData = currentDecade === null 
-          ? decadeTexts['All'] 
-          : (decadeTexts[currentDecade] || decadeTexts['All']);
-        
-        usText.querySelector('.main-title').textContent = textData.title;
-        usText.querySelector('.description').textContent = textData.description;
-        usText.classList.add('active');
-      }
-      break;
-      
-    case ZOOM_STATES.WORLD:
-      worldText?.classList.add('active');
-      break;
-      
-    case ZOOM_STATES.SOLAR:
-      solarText?.classList.add('active');
-      break;
+    textElement.querySelector('.main-title').textContent = textData.title;
+    textElement.querySelector('.description').textContent = textData.description;
+    textElement.classList.add('active');
   }
 }
 
@@ -198,6 +180,51 @@ const flightPathGroup = new THREE.Group();    // International paths
 scene.add(usFlightPathGroup);
 scene.add(flightPathGroup);
 
+// Shader for animated gradient along flight paths
+const gradientVertexShader = `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const gradientFragmentShader = `
+  uniform float time;
+  uniform float opacity;
+  varying vec2 vUv;
+
+  void main() {
+    // Base blue color
+    vec3 blueColor = vec3(0.29, 0.62, 1.0); // #4A9EFF
+
+    // Glowing purple color
+    vec3 purpleColor = vec3(0.7, 0.3, 1.0); // Bright purple with glow
+
+    // Create moving dash position (0 to 1, cycling)
+    float dashPos = fract(vUv.x - time * 0.2);
+
+    // Create small dash - much smaller than before
+    float dashSize = 0.08; // Small dash size
+    float dashFade = 0.04; // Soft edges for glow
+
+    // Distance from dash center (dash centered at 0.5 in the cycle)
+    float dist = abs(dashPos - 0.5);
+
+    // Create smooth dash with sharp falloff
+    float dashStrength = smoothstep(dashSize + dashFade, dashSize - dashFade, dist);
+
+    // Mix blue and purple based on dash
+    vec3 finalColor = mix(blueColor, purpleColor, dashStrength);
+
+    // Add extra brightness to purple dash for glow effect
+    float glow = dashStrength * 0.5;
+    finalColor += vec3(glow * 0.6, glow * 0.2, glow);
+
+    gl_FragColor = vec4(finalColor, opacity);
+  }
+`;
+
 function latLonToPlane(lat, lon) {
   return { x: lon/180, y: (lat/90)*0.5 };
 }
@@ -261,24 +288,19 @@ async function loadPaths(){
     const points = curve.getPoints(100);
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-    // Calculate total line length for drawing effect
-    let totalLength = 0;
-    for (let i = 1; i < points.length; i++) {
-      totalLength += points[i].distanceTo(points[i - 1]);
-    }
-
-    // Create dashed line material with shorter, consistent dashes
-    const mat = new THREE.LineDashedMaterial({
-      color: 0x4A9EFF,        // Bright sky blue
-      dashSize: 0.006,        // Shorter dash size
-      gapSize: 0.006,         // Equal gap size for dot effect
-      linewidth: 3,           // Thicker lines (may not work on all platforms)
-      opacity: 0.9,
-      transparent: true
+    // Create shader material with animated gradient
+    const mat = new THREE.ShaderMaterial({
+      vertexShader: gradientVertexShader,
+      fragmentShader: gradientFragmentShader,
+      uniforms: {
+        time: { value: 0.0 },
+        opacity: { value: 0.8 }
+      },
+      transparent: true,
+      depthWrite: false
     });
 
     const line = new THREE.Line(geometry, mat);
-    line.computeLineDistances(); // Required for dashed lines to work
 
     // Parse year to integer for filtering
     const yearInt = parseInt(c.year) || 0;
@@ -286,9 +308,7 @@ async function loadPaths(){
       movie: c.movie,
       year: yearInt,
       from: c.from,
-      to: c.to,
-      totalLength: totalLength,
-      animationProgress: 0 // Track drawing progress (0 to 1)
+      to: c.to
     };
 
     // Check if both locations are in the US
@@ -399,11 +419,9 @@ function updateDecadeDisplay(decade) {
     decadeValue.textContent = `${decade}–${decade + WINDOW_STEP - 1}`;
 
   }
-  
-  // Update text overlay when decade changes (if in US view)
-  if (currentZoomState === ZOOM_STATES.US) {
-    updateTextOverlay();
-  }
+
+  // Update text overlay when decade changes
+  updateTextOverlay();
 }
 
 // Make timeline handle draggable (horizontal)
@@ -459,11 +477,6 @@ function updateDecadeDisplay(decade) {
     // Update display and filter
     updateDecadeDisplay(currentDecade);
     updateFlightPathVisibility();
-    
-    // Update text when timeline changes (if in US view)
-    if (currentZoomState === ZOOM_STATES.US) {
-      updateTextOverlay();
-    }
   }
 })();
 
@@ -771,25 +784,19 @@ async function loadSolarFlightPaths(){
       const points = curve.getPoints(100);
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-      // Calculate total line length for drawing effect
-      let totalLength = 0;
-      for (let i = 1; i < points.length; i++) {
-        totalLength += points[i].distanceTo(points[i - 1]);
-      }
-
-      // Create dashed line material for solar paths - scaled to match map dash sizes
-      // Solar coordinate space is ~10x larger than map space, so scale dashes accordingly
-      const lineMaterial = new THREE.LineDashedMaterial({
-        color: 0x4A9EFF,        // Bright sky blue
-        dashSize: 0.06,         // Scaled to appear same length as map dashes (0.006 * 10)
-        gapSize: 0.06,          // Equal gaps create clear dot/dash pattern
-        linewidth: 3,
-        opacity: 0.85,
-        transparent: true
+      // Create shader material with animated gradient for solar paths
+      const lineMaterial = new THREE.ShaderMaterial({
+        vertexShader: gradientVertexShader,
+        fragmentShader: gradientFragmentShader,
+        uniforms: {
+          time: { value: 0.0 },
+          opacity: { value: 0.8 }
+        },
+        transparent: true,
+        depthWrite: false
       });
 
       const line = new THREE.Line(geometry, lineMaterial);
-      line.computeLineDistances(); // Required for dashed lines to work
 
       // Parse year to integer for filtering
       const yearInt = parseInt(conn.year) || 0;
@@ -797,9 +804,7 @@ async function loadSolarFlightPaths(){
         movie: conn.movie,
         year: yearInt,
         from: 'Earth',
-        to: matchedLocation,
-        totalLength: totalLength,
-        animationProgress: 0 // Track drawing progress (0 to 1)
+        to: matchedLocation
       };
 
       solarFlightPathsGroup.add(line);
@@ -877,82 +882,27 @@ let collapseProgress = 0;
 let newShapes = [];
 let newShapesVisible = false;
 
-// Animation redraw timer
-let lastRedrawTime = performance.now();
-const REDRAW_INTERVAL = 3000; // Redraw every 3 seconds (3000ms)
-
-
-
 function animate(){
   requestAnimationFrame(animate);
 
-  // Check if it's time to redraw all lines
-  const currentTime = performance.now();
-  if (currentTime - lastRedrawTime > REDRAW_INTERVAL) {
-    // Reset all animation progress to restart drawing effect
-    usFlightPathGroup.children.forEach(line => {
-      if (line.userData) line.userData.animationProgress = 0;
-    });
-    flightPathGroup.children.forEach(line => {
-      if (line.userData) line.userData.animationProgress = 0;
-    });
-    solarFlightPathsGroup.children.forEach(line => {
-      if (line.userData) line.userData.animationProgress = 0;
-    });
-    lastRedrawTime = currentTime;
-  }
+  // UPDATE SHADER TIME UNIFORMS for animated gradients
+  const currentTime = performance.now() * 0.001; // Convert to seconds
 
-  // ANIMATE DASHED LINES - Drawing effect with moving dots
-  // Lines appear to be drawn from production location (from) to depicted location (to)
   usFlightPathGroup.children.forEach(line => {
-    if (line.material && line.material.type === 'LineDashedMaterial' && line.visible) {
-      // Drawing animation: gradually reveal the line
-      if (line.userData.animationProgress < 1) {
-        line.userData.animationProgress += 0.01; // Speed of drawing
-        if (line.userData.animationProgress > 1) line.userData.animationProgress = 1;
-
-        // Use geometry drawRange to reveal line progressively
-        const totalPoints = line.geometry.attributes.position.count;
-        const visiblePoints = Math.floor(totalPoints * line.userData.animationProgress);
-        line.geometry.setDrawRange(0, visiblePoints);
-      }
-
-      // Move dots along the visible portion
-      line.material.dashOffset -= 0.01; // Faster, more visible movement
+    if (line.material && line.material.uniforms && line.material.uniforms.time) {
+      line.material.uniforms.time.value = currentTime;
     }
   });
 
   flightPathGroup.children.forEach(line => {
-    if (line.material && line.material.type === 'LineDashedMaterial' && line.visible) {
-      // Drawing animation
-      if (line.userData.animationProgress < 1) {
-        line.userData.animationProgress += 0.01;
-        if (line.userData.animationProgress > 1) line.userData.animationProgress = 1;
-
-        const totalPoints = line.geometry.attributes.position.count;
-        const visiblePoints = Math.floor(totalPoints * line.userData.animationProgress);
-        line.geometry.setDrawRange(0, visiblePoints);
-      }
-
-      // Move dots along the visible portion
-      line.material.dashOffset -= 0.01;
+    if (line.material && line.material.uniforms && line.material.uniforms.time) {
+      line.material.uniforms.time.value = currentTime;
     }
   });
 
   solarFlightPathsGroup.children.forEach(line => {
-    if (line.material && line.material.type === 'LineDashedMaterial' && line.visible) {
-      // Drawing animation
-      if (line.userData.animationProgress < 1) {
-        line.userData.animationProgress += 0.01;
-        if (line.userData.animationProgress > 1) line.userData.animationProgress = 1;
-
-        const totalPoints = line.geometry.attributes.position.count;
-        const visiblePoints = Math.floor(totalPoints * line.userData.animationProgress);
-        line.geometry.setDrawRange(0, visiblePoints);
-      }
-
-      // Move dots along the visible portion
-      line.material.dashOffset -= 0.02;
+    if (line.material && line.material.uniforms && line.material.uniforms.time) {
+      line.material.uniforms.time.value = currentTime;
     }
   });
 
@@ -1396,22 +1346,18 @@ window.addEventListener('wheel', (event) => {
     if (currentZoomState === ZOOM_STATES.US) {
       currentZoomState = ZOOM_STATES.WORLD;
       targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.WORLD];
-      updateTextOverlay(); // UPDATE TEXT OVERLAY
     } else if (currentZoomState === ZOOM_STATES.WORLD) {
       currentZoomState = ZOOM_STATES.SOLAR;
       targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.SOLAR];
-      updateTextOverlay(); // UPDATE TEXT OVERLAY
     }
   } else if (scrollingIn) {
     // Zoom in: Solar → World → US
     if (currentZoomState === ZOOM_STATES.SOLAR) {
       currentZoomState = ZOOM_STATES.WORLD;
       targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.WORLD];
-      updateTextOverlay(); // UPDATE TEXT OVERLAY
     } else if (currentZoomState === ZOOM_STATES.WORLD) {
       currentZoomState = ZOOM_STATES.US;
       targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.US];
-      updateTextOverlay(); // UPDATE TEXT OVERLAY
     }
   }
 
@@ -1458,22 +1404,18 @@ window.addEventListener('touchmove', (event) => {
           if (currentZoomState === ZOOM_STATES.SOLAR) {
             currentZoomState = ZOOM_STATES.WORLD;
             targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.WORLD];
-            updateTextOverlay(); // UPDATE TEXT OVERLAY
           } else if (currentZoomState === ZOOM_STATES.WORLD) {
             currentZoomState = ZOOM_STATES.US;
             targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.US];
-            updateTextOverlay(); // UPDATE TEXT OVERLAY
           }
         } else {
           // Pinch in (fingers closer) = zoom out (globe)
           if (currentZoomState === ZOOM_STATES.US) {
             currentZoomState = ZOOM_STATES.WORLD;
             targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.WORLD];
-            updateTextOverlay(); // UPDATE TEXT OVERLAY
           } else if (currentZoomState === ZOOM_STATES.WORLD) {
             currentZoomState = ZOOM_STATES.SOLAR;
             targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.SOLAR];
-            updateTextOverlay(); // UPDATE TEXT OVERLAY
           }
         }
 
@@ -1566,11 +1508,6 @@ document.querySelectorAll(".book-bar").forEach(bar => {
     updateFlightPathVisibility();
 
     updateActiveBookBar(index);
-    
-    // Update text when book bar is clicked (if in US view)
-    if (currentZoomState === ZOOM_STATES.US) {
-      updateTextOverlay();
-    }
   });
 });
 
