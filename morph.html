@@ -401,7 +401,7 @@
   position: fixed;
   top: 120px;
   left: 60px;
-  max-width: 680px;
+  max-width: 800px;
   pointer-events: none;
   z-index: 100;
 }
@@ -412,6 +412,11 @@
   position: absolute;
   top: 0;
   left: 0;
+  background: rgba(200, 200, 205, 0.15);
+  padding: 32px 40px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .zoom-text.active {
@@ -426,6 +431,7 @@
   margin: 0 0 20px 0;
   line-height: 1.1;
   letter-spacing: -1px;
+  white-space: nowrap;
 }
 
 .description {
@@ -435,7 +441,7 @@
   color: rgba(255, 255, 255, 0.85);
   line-height: 1.6;
   margin: 0;
-  max-width: 600px;
+  max-width: 700px;
 }
 
 /* Responsive adjustments */
@@ -465,9 +471,10 @@
     <!-- Intro Page (Page 1) -->
     <div class="page-slide active intro-page" id="introPage">
       <div class="intro-panel">
-        <div class="intro-category">FILMING LOCATION MAP</div>
-        <h1 class="intro-title">Where were these futures filmed?</h1>
-        <p class="intro-description">Science fiction imagines distant futures and far-off worlds, but every frame is shot somewhere real. Explore the cities that became backdrops for tomorrow—and discover how far stories traveled from their filming locations.</p>
+        <div class="intro-category">WORLD BUILDING MAP</div>
+        <h1 class="intro-title">Where did the future take us?</h1>
+        <p class="intro-description">Sci-fi worlds often begin in the real, physical places where cameras roll. But the stories they create leap far beyond those locations—into imagined cities, reinterpreted geographies, and entirely new planets.
+          This map traces those leaps, showing how far filmmakers stretched reality to build their futures.</p>
 
         <div class="enter-map-button" id="enterMapBtn">
           <span>EXPLORE THE MAP</span>
@@ -479,7 +486,7 @@
     <!-- Map Page (Page 2) -->
     <div class="page-slide next map-page" id="mapPage">
       <!-- Map Intro Message Container -->
-      <div id="mapIntroContainer" data-text="Explore where science fiction futures were filmed and where stories imagined them. Scroll or press → to begin."></div>
+      <div id="mapIntroContainer" data-text="Scroll to zoom between local, global, and cosmic scales."></div>
       <script src="mapIntroMessage.js" defer></script>
 
       <!-- Page Header -->
