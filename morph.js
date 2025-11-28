@@ -1494,22 +1494,22 @@ function jumpToBook(index) {
 /* -----------------------------------------------------------
    CLICK HANDLER (works reliably)
 ----------------------------------------------------------- */
-document.querySelectorAll(".book-bar").forEach(bar => {
-  bar.addEventListener("click", (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+// document.querySelectorAll(".book-bar").forEach(bar => {
+//   bar.addEventListener("click", (e) => {
+//     e.stopPropagation();
+//     e.preventDefault();
 
-    const index = Number(bar.dataset.index);
-    const startYear = booksMeta[index].start;
+//     const index = Number(bar.dataset.index);
+//     const startYear = booksMeta[index].start;
 
-    // Update global filter
-    currentDecade = startYear;   // but now means 5-year start
-    updateDecadeDisplay(startYear);
-    updateFlightPathVisibility();
+//     // Update global filter
+//     currentDecade = startYear;   // but now means 5-year start
+//     updateDecadeDisplay(startYear);
+//     updateFlightPathVisibility();
 
-    updateActiveBookBar(index);
-  });
-});
+//     updateActiveBookBar(index);
+//   });
+// });
 
 
 
@@ -1571,6 +1571,39 @@ barsContainer.addEventListener("mousemove", (e) => {
     const metaActive = booksMeta[activeIndex];
     positionLabelOverBar(activeLabel, bars[activeIndex], `${metaActive.start}–${metaActive.end}`);
   }
+});
+
+
+/* -----------------------------------------------------------
+   GLOBAL CLICK REGION — clicking anywhere selects nearest bar
+----------------------------------------------------------- */
+bookBarsContainer.addEventListener("click", (e) => {
+  const bars = Array.from(document.querySelectorAll(".book-bar"));
+  const rect = bookBarsContainer.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+
+  // Find nearest bar center
+  let closestIndex = 0;
+  let closestDist = Infinity;
+
+  bars.forEach((bar, i) => {
+    const barRect = bar.getBoundingClientRect();
+    const center = barRect.left - rect.left + barRect.width / 2;
+    const dist = Math.abs(mouseX - center);
+    if (dist < closestDist) {
+      closestDist = dist;
+      closestIndex = i;
+    }
+  });
+
+  // Apply decade filter
+  const startYear = booksMeta[closestIndex].start;
+  currentDecade = startYear;
+  updateDecadeDisplay(startYear);
+  updateFlightPathVisibility();
+
+  // Highlight + animate
+  updateActiveBookBar(closestIndex);
 });
 
 /* -----------------------------------------------------------
