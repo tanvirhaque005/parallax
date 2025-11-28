@@ -373,12 +373,24 @@ function updateFlightPathVisibility() {
   // Update solar flight paths
   let fictionalPathsCount = 0;
   solarFlightPathsGroup.children.forEach(path => {
-    // Always show Fictional Locations paths regardless of decade filter
-    if (path.userData.isFictionalLocations || path.userData.to === "Fictional Locations") {
-      path.visible = true;
-      fictionalPathsCount++;
+    // Special handling for Fictional Locations arc - check if any movies match the time period
+    if (path.userData.isFictionalLocations) {
+      if (!currentDecade) {
+        // Show all when no decade filter
+        path.visible = true;
+        fictionalPathsCount++;
+      } else {
+        // Check if any movies in this arc match the current time period
+        const hasMoviesInPeriod = path.userData.movies.some(m => {
+          const year = parseInt(m.year);
+          return year >= currentDecade && year < currentDecade + WINDOW_STEP;
+        });
+
+        path.visible = hasMoviesInPeriod;
+        if (hasMoviesInPeriod) fictionalPathsCount++;
+      }
     } else if (!currentDecade) {
-      // Show all
+      // Show all regular paths
       path.visible = true;
     } else {
       const year = path.userData.year;
@@ -1420,12 +1432,28 @@ window.addEventListener("mousemove", (evt) => {
 
     // Format tooltip text
     if (d.isFictionalLocations && d.movies) {
-      // Special case: Fictional Locations - show all movies
-      const movieList = d.movies
-        .map(m => `${m.movie} (${m.year}) — ${m.from} → ${m.to}`)
-        .join('\n');
-      tooltip.textContent = movieList;
-      tooltip.style.whiteSpace = 'pre-line'; // Allow line breaks
+      // Special case: Fictional Locations - filter by current decade
+      let filteredMovies = d.movies;
+
+      if (currentDecade !== null) {
+        // Filter to only show movies from the selected 5-year window
+        filteredMovies = d.movies.filter(m => {
+          const year = parseInt(m.year);
+          return year >= currentDecade && year < currentDecade + WINDOW_STEP;
+        });
+      }
+
+      if (filteredMovies.length > 0) {
+        const movieList = filteredMovies
+          .map(m => `${m.movie} (${m.year}) — ${m.from} → ${m.to}`)
+          .join('\n');
+        tooltip.textContent = movieList;
+        tooltip.style.whiteSpace = 'pre-line'; // Allow line breaks
+      } else {
+        // No movies in this time period
+        tooltip.textContent = `No fictional location movies in ${currentDecade}–${currentDecade + WINDOW_STEP - 1}`;
+        tooltip.style.whiteSpace = 'nowrap';
+      }
     } else {
       // Regular single movie path
       tooltip.textContent = `${d.movie} (${d.year}) — ${d.from} → ${d.to}`;
