@@ -583,6 +583,50 @@
       });
     }
 
+    /* ---------------------------------------------------------
+   DISCRETE SCROLL DETECTOR (1 scroll = 1 gesture)
+--------------------------------------------------------- */
+
+let scrolling = false;
+let scrollTimeout;
+
+window.addEventListener("wheel", (e) => {
+    // Already processing a scroll gesture → ignore additional events
+    if (scrolling) return;
+    scrolling = true;
+
+    const direction = e.deltaY > 0 ? "down" : "up";
+
+    /* ============================
+       SCROLL DOWN → ACTIVATE BUTTON
+    ============================= */
+    if (direction === "down") {
+
+        // Only trigger on Page 0 (intro)
+        if (currentPage === 0) {
+            currentPage = 1;
+            updatePages();
+        }
+    }
+
+    /* ============================
+       SCROLL UP → GO BACK (DISABLED!!!!)
+    ============================= */
+    // if (direction === "up") {
+    //     if (currentPage === 1) {
+    //         currentPage = 0;
+    //         updatePages();
+    //     }
+    // }
+
+    // Reset gesture tracking after scroll ends
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        scrolling = false;
+    }, 180); // adjust if you want slower or faster gesture resets
+});
+
+
     firstDecadeBtn.addEventListener('click', (e) => {
       e.preventDefault();
       if (currentPage < pages.length - 1) {

@@ -468,6 +468,66 @@
                 window.showDefaultIntro(true);
             }
         }, 200);
+
+        /* ---------------------------------------------------------
+   DISCRETE SCROLL DETECTOR (1 scroll per wheel gesture)
+--------------------------------------------------------- */
+
+let scrolling = false;
+let scrollTimeout;
+let aboutScrollCount = 0;
+
+window.addEventListener("wheel", (e) => {
+    // If already scrolling, ignore continuous events
+    if (scrolling) return;
+
+    scrolling = true;
+
+    const direction = e.deltaY > 0 ? "down" : "up";
+
+    /* ---- SCROLL DOWN LOGIC ---- */
+    if (direction === "down") {
+
+        // Page 0 → Page 1
+        if (currentPage === 0) {
+            currentPage = 1;
+            aboutScrollCount = 0;
+            updatePages();
+        }
+
+        // Page 1 → Require 2 discrete scroll gestures
+        else if (currentPage === 1) {
+            aboutScrollCount++;
+
+            console.log("SCROLL STEP:", aboutScrollCount);
+
+            if (aboutScrollCount === 1) {
+                // optional hint
+                console.log("Scroll once more to enter the library…");
+            }
+
+            if (aboutScrollCount >= 2) {
+                window.location.href = "bookshelf.html";
+            }
+        }
+    }
+
+    /* ---- SCROLL UP LOGIC ---- */
+    if (direction === "up") {
+        if (currentPage === 1) {
+            currentPage = 0;
+            aboutScrollCount = 0;
+            updatePages();
+        }
+    }
+
+    // Reset scrolling state after gesture ends
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        scrolling = false;
+    }, 1000); // adjust if needed
+});
+
     </script>
     <script src="cursor.js" defer></script>
     <script src="introMessage.js" defer></script>

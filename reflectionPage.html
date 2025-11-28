@@ -548,6 +548,50 @@
                 window.hideDefaultIntro();
             }
         }, 100);
+
+        /* ---------------------------------------------------------
+   DISCRETE SCROLL DETECTOR (1 scroll = 1 gesture)
+   For: ONLY "CONTINUE"
+--------------------------------------------------------- */
+
+let scrollingReflection = false;
+let scrollTimeoutReflection;
+
+window.addEventListener("wheel", (e) => {
+    // Momentum protection
+    if (scrollingReflection) return;
+    scrollingReflection = true;
+
+    const direction = e.deltaY > 0 ? "down" : "up";
+
+    /* ============================
+       SCROLL DOWN → CONTINUE
+       (Equivalent to clicking CONTINUE)
+    ============================= */
+    if (direction === "down") {
+        if (currentPage === 0) {
+            currentPage = 1;
+            updatePages();
+        }
+    }
+
+    /* ============================
+       SCROLL UP → GO BACK
+    ============================= */
+    if (direction === "up") {
+        if (currentPage === 1) {
+            currentPage = 0;
+            updatePages();
+        }
+    }
+
+    // Unlock scrolling after gesture ends
+    clearTimeout(scrollTimeoutReflection);
+    scrollTimeoutReflection = setTimeout(() => {
+        scrollingReflection = false;
+    }, 180); // debounce duration
+});
+
     </script>
 </body>
 </html>
