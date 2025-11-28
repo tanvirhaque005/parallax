@@ -176,37 +176,45 @@ function slopeColor(d) {
 
 
 function drawLines(filtered) {
-  /** Halos */
-  halos = halos.data(filtered, d => d.id);
+
+  /* ============================================================
+     1. JOIN ALL DATA (not only filtered)
+  ============================================================ */
+  const all = data;  // full dataset
+
+  /* ------------------ HALOS ------------------ */
+  halos = halos.data(all, d => d.id);
   halos.exit().remove();
 
-  // halos = halos.enter()
-  //   .append("path")
-  //   .attr("class", "halo")
-  //   .merge(halos)
-  //   .attr("d", d => `M${x(d.startDate)},${yTop} L${x(d.endDate)},${yBot}`);
   halos = halos.enter()
     .append("path")
     .attr("class", "halo")
     .merge(halos)
     .attr("d", d => `M${x(d.startDate)},${yTop} L${x(d.endDate)},${yBot}`)
     .attr("stroke", d => slopeColor(d))
-    .attr("stroke-opacity", 0.15);
-  
-  /** Lines */
-  links = links.data(filtered, d => d.id);
+    .attr("stroke-opacity", d =>
+      filtered.includes(d) ? 0.18 : 0.03  // low-opacity background
+    );
+
+
+  /* ------------------ MAIN LINES ------------------ */
+  links = links.data(all, d => d.id);
   links.exit().remove();
 
-  const enter = links.enter().append("path")
-    .attr("class","link")
-
-  links = enter.merge(links)
+  links = links.enter()
+    .append("path")
+    .attr("class", "link")
+    .merge(links)
     .attr("d", d => `M${x(d.startDate)},${yTop} L${x(d.endDate)},${yBot}`)
     .attr("stroke", d => slopeColor(d))
-    .attr("stroke-opacity", 0.95);
-  
-  
+    .attr("stroke-opacity", d =>
+      filtered.includes(d) ? 0.95 : 0.1   // full vs faded
+    )
+    .style("pointer-events", d =>
+      filtered.includes(d) ? "stroke" : "none"  // <— disable hovers
+    );
 }
+
 
 /* ----------------------------
     TOOLTIP
@@ -223,7 +231,15 @@ function hideTip() { tip.style.display = "none"; }
 
 linkLayer.on("mousemove", function(event) {
   const d = d3.select(event.target).datum();
+
+  // ignore faded, inactive lines
   if (!d) return;
+
+  // ignore if d is not in the active window
+  if (!(d.endYear >= windowStart && d.endYear < windowStart + WINDOW_SIZE_YEARS)) {
+    hideTip();
+    return;
+  }
 
   const [mx, my] = d3.pointer(event, document.body);
 
@@ -234,6 +250,7 @@ linkLayer.on("mousemove", function(event) {
     <div class="sub">Δ: ${d.diff}</div>
   `, mx, my);
 });
+
 linkLayer.on("mouseout", hideTip);
 
 /* ----------------------------
@@ -540,7 +557,7 @@ function jumpToBook(index) {
 /* -----------------------------------------------------------
    CLICK HANDLER (works reliably)
 ----------------------------------------------------------- */
-function animateScrollToYear(targetYear, duration = 600) {
+function animateScrollToYear(targetYear, duration = 200) {
   const [d0, d1] = x.domain();
   const startMin = d0.getFullYear();
   const startMax = d1.getFullYear();
@@ -789,3 +806,83 @@ function positionLabelOverBar(labelEl, barEl, text) {
   labelEl.style.top  = rect.top - 12 + "px";
   labelEl.style.opacity = 0.9;
 }
+
+
+/* ===================================================================
+   EDGE-BASED CURSOR ARROWS FOR PREV/NEXT 5-YEAR WINDOW
+=================================================================== */
+
+const cursor = document.getElementById("cursorCircle");
+const EDGE_ZONE = 800;  // px from left/right side of screen
+
+window.addEventListener("mousemove", (e) => {
+  // Disable when hovering bars (wave zone)
+  if (hoveringBars) {
+    cursor.classList.remove("arrow-left", "arrow-right");
+    return;
+  }
+
+  // Disable in intro page (Page 1)
+  const onIntroPage = document.querySelector(".intro-page.active");
+  if (onIntroPage) {
+    cursor.classList.remove("arrow-left", "arrow-right");
+    return;
+  }
+
+  const x = e.clientX;
+  const w = window.innerWidth;
+
+  const leftActive  = x < EDGE_ZONE;
+  const rightActive = x > w - EDGE_ZONE;
+
+  // Clamp navigation if we're already at first/last window
+  const atFirst = windowStart <= years[0];
+  const atLast  = windowStart >= years[years.length - 1];
+
+  if (leftActive && !atFirst) {
+    cursor.classList.add("arrow-left");
+    cursor.classList.remove("arrow-right");
+    return;
+  }
+  if (rightActive && !atLast) {
+    cursor.classList.add("arrow-right");
+    cursor.classList.remove("arrow-left");
+    return;
+  }
+
+  cursor.classList.remove("arrow-left", "arrow-right");
+});
+
+
+/* ---- CLICK TO NAVIGATE WINDOWS VIA ARROW CURSOR ---- */
+
+window.addEventListener("mousedown", (e) => {
+  // Only on chart page
+  const onChartPage = document.querySelector(".chart-page.active");
+  if (!onChartPage) return;
+
+  // Disable while hovering bars
+  if (hoveringBars) return;
+
+  if (cursor.classList.contains("arrow-right")) {
+    // Move forward one window
+    const nextIndex = years.indexOf(windowStart) + 1;
+    if (nextIndex < years.length) {
+      const yr = years[nextIndex];
+      windowStart = yr;
+      animateScrollToYear(yr);
+      updateActiveBookBar(nextIndex);
+    }
+  }
+
+  if (cursor.classList.contains("arrow-left")) {
+    // Move backward one window
+    const prevIndex = years.indexOf(windowStart) - 1;
+    if (prevIndex >= 0) {
+      const yr = years[prevIndex];
+      windowStart = yr;
+      animateScrollToYear(yr);
+      updateActiveBookBar(prevIndex);
+    }
+  }
+});
