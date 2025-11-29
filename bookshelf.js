@@ -562,26 +562,22 @@ window.addEventListener("wheel", (e) => {
 }, { passive: false });
 
 
-window.addEventListener("wheel", (e) => {
-  // Only apply when overlay is open
-  if (!bookinfo.classList.contains("open")) return;
+window.addEventListener("mousemove", (e) => {
 
-  const now = performance.now();
-  if (now - lastOverlayScrollTime < OVERLAY_SCROLL_COOLDOWN) {
-    e.preventDefault();
-    return;
+  // 🚫 BLOCK ALL BOOK INTERACTIONS BEFORE INTRO DISMISSED
+  if (!introDismissed) {
+    cursor.classList.remove("hover");
+    // reset books fully
+    books.forEach(b => {
+      b.hoverTiltX = 0;
+      b.hoverTiltY = 0;
+      b.hoverWobble = 0;
+      b.targetPosZ = 0;
+      b.hoverTiltZ = 0;
+      b.targetRotY = Math.PI / 2;
+    });
+    return; // ← do not raycast or interact yet
   }
-  lastOverlayScrollTime = now;
-
-  if (e.deltaY > 0) {
-    // scroll down → NEXT movie
-    openOverlayForIndex(currentIndex + 1);
-  } else if (e.deltaY < 0) {
-    // scroll up → PREVIOUS movie
-    openOverlayForIndex(currentIndex - 1);
-  }
-
-  e.preventDefault();
 }, { passive: false });
 
 
@@ -781,9 +777,13 @@ function rebuildOverlayForIndex() {
 }
 
 renderer.domElement.addEventListener('click', (e) => {
+
+  // 🚫 disable clicking books entirely before intro is dismissed
   if (!introDismissed) {
-    dismissIntroPanel();
+    // user can scroll to dismiss intro, but NOT click books
+    return;
   }
+
   
   setMouseFromEvent(e);
   raycaster.setFromCamera(mouse, camera);
@@ -1083,11 +1083,8 @@ window.addEventListener("mousedown", (e) => {
   // Don't scroll if clicking on navigation menu
   if (navigationMenu && navigationMenu.contains(e.target)) return;
 
-  if (cursor.classList.contains("arrow-right")) {
-    if (scrollRightBtn) scrollRightBtn.click();
-  } else if (cursor.classList.contains("arrow-left")) {
-    if (scrollLeftBtn) scrollLeftBtn.click();
-  }
+  if (!introDismissed) return; // 🚫 prevent arrow triggers before intro
+
 });
 
 
