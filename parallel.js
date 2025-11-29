@@ -373,29 +373,60 @@ function updateWindowLabel() {
 //  Replace this with your actual leftCardContent mapping.
 // -----------------------------
 const leftCardContent = {
-    // Example:
-    // 1920: { title:"", tag:"", desc:"", images:[...] }
-};
+    1925: {
+      title: "1925–1930s",
+      tags: [
+        "10–30 YEAR SLOPE",
+        "CONSERVATIVE FUTURES",
+        "POSTWAR UNCERTAINTY"
+      ],
+      desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+    },
+    1945: {
+        title: "1940–1950s",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      1955: {
+        title: "1955–1960s",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+  }
+  
 
-function updateLeftCard() {
+  function updateLeftCard() {
     const card = document.querySelector(".left-card");
     if (!card) return;
 
     const content = leftCardContent[currentWindowStart];
     if (!content) return;
 
-    card.querySelector("h2").textContent     = content.title;
-    card.querySelector(".tag").textContent   = content.tag;
-    card.querySelector(".desc").textContent  = content.desc;
+    // Title
+    document.getElementById("leftCardTitle").textContent = content.title;
 
-    const imgs = card.querySelector(".img-boxes").children;
-    if (content.images && content.images.length >= 2) {
-        imgs[0].style.backgroundImage = `url(${content.images[0]})`;
-        imgs[1].style.backgroundImage = `url(${content.images[1]})`;
-    } else {
-        imgs[0].style.backgroundImage = "";
-        imgs[1].style.backgroundImage = "";
+    // Tags
+    const tagRow = document.getElementById("leftCardTags");
+    tagRow.innerHTML = "";
+    if (content.tags) {
+        content.tags.forEach(t => {
+            const el = document.createElement("div");
+            el.className = "tag";
+            el.textContent = t;
+            tagRow.appendChild(el);
+        });
     }
+
+    // Description
+    document.getElementById("leftCardDesc").textContent = content.desc;
 }
 
 
@@ -641,7 +672,7 @@ bookBarsContainer.addEventListener("click", (e) => {
 
     updateWindowHighlight();
     updateActiveBookBar();
-
+    updateLeftCard();
     slideToWindow(yr);
 });
 
@@ -693,6 +724,7 @@ window.addEventListener("mousedown", (e) => {
             currentWindowStart = yr;
             updateWindowHighlight();
             updateActiveBookBar();
+            updateLeftCard();
             slideToWindow(yr);
         }
     }
@@ -703,6 +735,7 @@ window.addEventListener("mousedown", (e) => {
             currentWindowStart = yr;
             updateWindowHighlight();
             updateActiveBookBar();
+            updateLeftCard();
             slideToWindow(yr);
         }
     }

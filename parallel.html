@@ -293,84 +293,79 @@
       display: flex;
     }
 
-    /* ===========================================
-   LEFT CARD — Minimal Modern Style (screenshot)
+   /* ===========================================
+   LEFT DECADE CARD (New Modern Style)
    =========================================== */
 
 .left-card {
   position: absolute;
-  left: 72px;
-  top: 220px;
+  left: 70px;
+  top: 160px;
 
-  width: 260px;
-  padding: 22px 20px;
+  width: 420px;
+  padding: 28px 32px 40px 32px;
 
-  background: rgba(255,255,255,0.02);
-  border: 2px solid rgba(208, 208, 208, 0.304);
-  border-radius: 18px;
+  /* background: rgba(255,255,255,0.03); */
+  /* border: 1px solid rgba(255,255,255,0.15); */
+  /* border-radius: 22px; */
+  /* backdrop-filter: blur(8px); */
 
-  backdrop-filter: blur(5px);
   color: rgba(255,255,255,0.92);
 
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 24px;
 
   font-family: 'Inter', sans-serif;
+
+  /* box-shadow: 0 10px 28px rgba(0,0,0,0.3); */
 }
 
-
-/* Year Range Title */
+/* Large decade header */
 .left-card h2 {
   margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: 46px;
+  font-weight: 300;
+  letter-spacing: -1px;
 }
 
+/* Tags row */
+.left-card .tag-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
-/* Capsule label (e.g., "CONSERVATIVE FUTURES") */
+/* Individual pill tags */
 .left-card .tag {
-  display: inline-block;
-  padding: 6px 14px;
+  padding: 6px 16px;
   border-radius: 999px;
-
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1.6px;
-
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1px;
   border: 1px solid rgba(255,255,255,0.45);
   color: rgba(255,255,255,0.90);
-  background: rgba(255,255,255,0.02);
-
-  align-self: flex-start;
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(4px);
+  text-transform: uppercase;
+  display: inline-block;
 }
 
-
-/* Description text */
+/* Description paragraph */
 .left-card .desc {
-  font-size: 13px;
-  line-height: 1.45;
-  color: rgba(255,255,255,0.75);
-  letter-spacing: 0.2px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.80);
+  letter-spacing: 0.3px;
+  font-weight: 300;
+  margin-top: -6px;
 }
 
-
-/* Optional: images can stay small or subtle */
+/* Hide image boxes (optional) */
 .left-card .img-boxes {
-  display: flex;
-  gap: 10px;
-  margin-top: 4px;
+  display: none;
 }
 
-.left-card .img-boxes div {
-  width: 70px;
-  height: 70px;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.12);
-  background-size: cover;
-  background-position: center;
-}
 
 
     /* Axes and Lines */
@@ -618,19 +613,12 @@
     <div class="page-slide next chart-page" id="chartPage">
       <!-- LEFT CARD -->
       <div class="left-card">
-        <h2>???</h2>
-      
-        <div class="tag">???</div>
-      
-        <div class="desc">
-          ???
-        </div>
-      
-        <div class="img-boxes">
-          <div></div>
-          <div></div>
-        </div>
+        <h2 id="leftCardTitle"></h2>
+        <div class="tag-row" id="leftCardTags"></div>
+        <div class="desc" id="leftCardDesc"></div>
       </div>
+      
+      
       
 
       <!-- WINDOW LABEL -->
