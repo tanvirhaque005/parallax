@@ -485,6 +485,98 @@
   transition: opacity 0.15s ease, top 0.1s ease, left 0.1s ease;
 }
 
+.hover-card {
+    position: fixed;
+    pointer-events: none; /* prevents flicker */
+    background: rgba(20,20,20,0.92);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 12px 18px;
+    border-radius: 10px;
+    backdrop-filter: blur(4px);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    width: 260px;
+
+    opacity: 0;
+    transform: translate(-50%, -40%);
+    transition: opacity 0.18s ease-out, transform 0.08s ease-out;
+    z-index: 99999;
+}
+
+.hover-card.shown {
+    opacity: 1;
+}
+
+.hover-card.hidden {
+    opacity: 0;
+}
+
+.movieLine {
+    pointer-events: stroke; /* ensure hover catches strokes */
+}
+
+.hover-card .hover-img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Hover Card */
+#movieHoverCard {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 320px;
+  padding: 22px 26px;
+  background: rgba(255, 255, 255, 0.287);
+  backdrop-filter: blur(8px);
+  border-radius: 18px;
+  border: 2px solid rgba(255,255,255,0.15);
+  color: white;
+  font-family: "Inter", sans-serif;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.20s ease;
+  z-index: 999999;
+}
+
+#movieHoverCard h2 {
+  margin: 0 0 12px 0;
+  font-size: 22px;
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+#movieHoverPoster {
+  width: 120px;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-right: 16px;
+}
+
+.movieHoverRow {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.movieHoverDetails {
+  font-size: 14px;
+  line-height: 1.4;
+  color: rgba(255,255,255,0.9);
+}
+
+.movieHoverDivider {
+  width: 100%;
+  height: 1px;
+  background: rgba(251, 251, 251, 0.555);
+  margin: 12px 0;
+}
+
   </style>
   <link rel="stylesheet" href="introMessage.css">
 </head>
@@ -590,12 +682,31 @@
   id="exploreTropesButton">
   </div>
   <!-- RETURN -->
-  <div class="page-header">
-    <a href="chordGraph.html" class="back-link">
-      <span class="back-arrow">←</span>
-      <span>Return to Network</span>
-    </a>
+  <div id="hoverCard" class="hover-card hidden">
+    <img class="hover-img" src="" alt="">
+    <h3 class="hover-title"></h3>
+    <div class="hover-sub"></div>
+    <p class="hover-desc"></p>
   </div>
+  
+  <div id="hoverCard" class="hover-card hidden">
+    <h3 class="hover-title"></h3>
+    <div class="hover-sub"></div>
+    <p class="hover-desc"></p>
+  </div>
+  
+  <div id="movieHoverCard">
+    <h2 id="movieHoverTitle"></h2>
+  
+    <div class="movieHoverDivider"></div>
+  
+    <div class="movieHoverRow">
+      <img id="movieHoverPoster" src="" alt="poster">
+      <div class="movieHoverDetails" id="movieHoverInfo"></div>
+    </div>
+  </div>
+  
+  
 
   <div id="cursorCircle"></div>
   <link rel="stylesheet" href="cursor.css">

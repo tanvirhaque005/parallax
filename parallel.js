@@ -69,6 +69,7 @@ function clear(node) {
 // -----------------------------
 //  DATA PREP (unchanged)
 // -----------------------------
+// NOTE: start = depicted year, end = release year
 const data = rawData.map(d => ({
     ...d,
     startYear : +d.start,
@@ -706,4 +707,118 @@ window.addEventListener("mousedown", (e) => {
         }
     }
 });
+
+
+/* ============================================================
+   MOVIE HOVER CARD
+============================================================ */
+
+const hoverCard      = document.getElementById("movieHoverCard");
+const hoverTitle     = document.getElementById("movieHoverTitle");
+const hoverPoster    = document.getElementById("movieHoverPoster");
+const hoverInfo      = document.getElementById("movieHoverInfo");
+
+let hoverFadeTimer = null;
+
+// Helper: compute imaginative leap text
+function computeLeap(d) {
+    const leap = d.startYear - d.endYear;  // depicted - release
+
+    if (d.startYear === 9999) {
+        return `>${9999 - d.endYear} years in the future`;
+    }
+    if (d.startYear === 0) {
+        return `>${d.endYear} years in the past`;
+    }
+
+    if (leap >= 0) return `${leap} years in the future`;
+    return `${leap} years in the past`;
+}
+
+function showHoverCard(d, x, y) {
+    // Title shows RELEASE YEAR
+    hoverTitle.textContent = `${d.label} (${d.endYear})`;
+
+    // Poster image
+    hoverPoster.src = `postersID/${d.id}.jpg`;
+
+    // Info block
+    const leap = computeLeap(d);
+    let settingYear = d.startYear
+    if (settingYear == 0) {
+        settingYear = "<0"
+    } else if (settingYear == 9999) {
+        settingYear = ">9999"
+    }
+    hoverInfo.innerHTML =
+        `Depicted Year: ${settingYear}<br><br>` +
+        `Imaginative Leap: ${leap}`;
+
+    // Show immediately so we can measure its size
+    hoverCard.style.opacity = 1;
+
+    // Slight cursor offset by default
+    let cardX = x + 20;
+    let cardY = y + 20;
+
+    const cardRect = hoverCard.getBoundingClientRect();
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
+
+    // -----------------------------------------
+    // 1. Prevent RIGHT overflow → move left
+    // -----------------------------------------
+    if (cardX + cardRect.width > screenW - 10) {
+        cardX = x - cardRect.width - 20;
+    }
+
+    // -----------------------------------------
+    // 2. Prevent BOTTOM overflow → move above
+    // -----------------------------------------
+    if (cardY + cardRect.height > screenH - 10) {
+        cardY = y - cardRect.height - 20;
+    }
+
+    // -----------------------------------------
+    // 3. Clamp positions just in case
+    // -----------------------------------------
+    cardX = Math.max(10, Math.min(cardX, screenW - cardRect.width - 10));
+    cardY = Math.max(10, Math.min(cardY, screenH - cardRect.height - 10));
+
+    // Apply final position
+    hoverCard.style.left = `${cardX}px`;
+    hoverCard.style.top  = `${cardY}px`;
+
+    clearTimeout(hoverFadeTimer);
+}
+
+
+// fade-out helper
+function hideHoverCard() {
+    hoverFadeTimer = setTimeout(() => {
+        hoverCard.style.opacity = 0;
+    }, 120);
+}
+
+/* Attach hover listeners to all movie lines + halos */
+function enableMovieHover() {
+    const halos = worldG.querySelectorAll(".movieHalo");
+    const lines = worldG.querySelectorAll(".movieLine");
+
+    const all = [...halos, ...lines];
+
+    all.forEach(el => {
+        el.addEventListener("mousemove", (e) => {
+            const d = data.find(m => m.id == el.dataset.id);
+            if (!d) return;
+
+            showHoverCard(d, e.clientX, e.clientY);
+        });
+
+        el.addEventListener("mouseleave", hideHoverCard);
+    });
+}
+
+// Call after world is built
+enableMovieHover();
 
