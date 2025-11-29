@@ -235,8 +235,10 @@ function buildFixedAxisLabels() {
     // Clear old
     while (overlay.firstChild) overlay.removeChild(overlay.firstChild);
 
-    // --- SVG FILTER: GLOW EFFECT ---
+    // --- SVG DEFINITIONS ---
     const defs = S("defs");
+
+    // === GLOW FILTER ===
     const filter = S("filter");
     filter.setAttribute("id", "axisGlow");
     filter.setAttribute("x", "-20%");
@@ -250,43 +252,85 @@ function buildFixedAxisLabels() {
     filter.appendChild(gaussian);
 
     const merge = S("feMerge");
-    const m1 = S("feMergeNode");
-    m1.setAttribute("in", "blur");
+    merge.appendChild(S("feMergeNode"));
     const m2 = S("feMergeNode");
     m2.setAttribute("in", "SourceGraphic");
-    merge.appendChild(m1);
     merge.appendChild(m2);
 
     filter.appendChild(merge);
     defs.appendChild(filter);
+
+    // === GRADIENT BACKGROUND ===
+    const grad = S("linearGradient");
+    grad.setAttribute("id", "axisFadeBg");
+    grad.setAttribute("x1", "0%");
+    grad.setAttribute("y1", "0%");
+    grad.setAttribute("x2", "100%");
+    grad.setAttribute("y2", "0%");
+
+    const stop1 = S("stop");
+    stop1.setAttribute("offset", "0%");
+    stop1.setAttribute("stop-color", "rgba(0,0,0,1)");
+
+    const stop2 = S("stop");
+    stop2.setAttribute("offset", "100%");
+    stop2.setAttribute("stop-color", "rgba(0,0,0,0.3)");
+
+    
+    grad.appendChild(stop1);
+    grad.appendChild(stop2);
+
+    defs.appendChild(grad);
     overlay.appendChild(defs);
 
-    // --- Common style for both labels ---
+    // --- Common text style ---
     const labelStyle = {
         fill: "white",
-        "font-size": 24,                   // Larger text
-        "font-family": "Inter, sans-serif",
-        "font-weight": 300,                // bolder for clarity
+        "font-size": 18,
+        "font-family": "IBM Plex Sans, sans-serif",
+        "font-weight": 300,
         "letter-spacing": "1.5px",
         "pointer-events": "none",
-        filter: "url(#axisGlow)"           // glow applied here
+        filter: "url(#axisGlow)"
     };
 
-    // DEPicted Year (top axis)
-    const topLabel = S("text");
-    topLabel.textContent = "DEPICTED YEAR";
-    topLabel.setAttribute("x", 40);
-    topLabel.setAttribute("y", yTop - 35);   // slightly above the axis
-    for (const [k, v] of Object.entries(labelStyle)) topLabel.setAttribute(k, v);
-    overlay.appendChild(topLabel);
+    // Helper to create label + background
+    function makeLabel(text, x, y) {
+        // Text
+        const label = S("text");
+        label.textContent = text;
+        label.setAttribute("x", x);
+        label.setAttribute("y", y);
 
-    // RELEASE Year (bottom axis)
-    const bottomLabel = S("text");
-    bottomLabel.textContent = "RELEASE YEAR";
-    bottomLabel.setAttribute("x", 40);
-    bottomLabel.setAttribute("y", yBot + 64);
-    for (const [k, v] of Object.entries(labelStyle)) bottomLabel.setAttribute(k, v);
-    overlay.appendChild(bottomLabel);
+        for (const [k, v] of Object.entries(labelStyle))
+            label.setAttribute(k, v);
+
+        overlay.appendChild(label);
+
+        // Measure text size AFTER adding it
+        const bb = label.getBBox();
+
+        const padding = 10;
+
+        // Background rect
+        const bg = S("rect");
+        bg.setAttribute("x", bb.x - padding*4);
+        bg.setAttribute("y", bb.y - padding / 2);
+        bg.setAttribute("width", bb.width + padding * 10);
+        bg.setAttribute("height", bb.height);
+        bg.setAttribute("rx", 6);
+        bg.setAttribute("fill", "url(#axisFadeBg)");
+        bg.setAttribute("opacity", 1);
+
+        // Insert *before* the text node
+        overlay.insertBefore(bg, label);
+    }
+
+    // DEPicted Year (top)
+    makeLabel("DEPICTED YEAR", 40, yTop - 12);
+
+    // RELEASE Year (bottom)
+    makeLabel("RELEASE YEAR", 40, yBot + 26);
 }
 
 function buildSlopeExamples() {
@@ -296,7 +340,7 @@ function buildSlopeExamples() {
     const slopeGroup = S("g");
     slopeGroup.setAttribute(
         "transform",
-        `translate(520,120) scale(${SLOPE_SCALE})`
+        `translate(500,80) scale(${SLOPE_SCALE})`
     );
     slopeGroup.setAttribute("id", "svgSlopeExamples");
 

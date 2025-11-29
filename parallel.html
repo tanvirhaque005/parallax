@@ -114,7 +114,7 @@
     /* Intro Panel Styles */
     .intro-panel {
       position: fixed;
-      top: 10%;
+      top: 5%;
       left: 0;
       width: 70%;
       height: 100vh;
@@ -164,7 +164,7 @@
     /* The First Decade Button */
     .first-decade-button {
       position: fixed;
-      bottom: 30%;
+      bottom: 25%;
       left: 50px;
       display: flex;
       align-items: center;
@@ -379,7 +379,7 @@
     /* Top-left horizontal bars — thicker + lower on the page */
 #bookBars {
   position: fixed;
-  bottom: 28px; 
+  bottom: 65px; 
   left: 64px;
   display: flex;
   align-items: flex-end;
@@ -591,6 +591,27 @@
     text-align: center;
 }
 
+/* Footer */
+.page-footer {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    padding: 0 40px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+
+    z-index: 99999;
+    pointer-events: none;
+}
+
+
   </style>
   <link rel="stylesheet" href="introMessage.css">
 </head>
@@ -603,7 +624,7 @@
       <span>Back</span>
     </a>
   </div>
-  <div id="introMessageDefault" data-text="Now that you've seen how motifs evolve, let's explore how far films leap into the future. Scroll to travel through time."></div>
+  <div id="introMessageDefault" data-text="Scroll to travel through time."></div>
   <script src="introMessage.js" defer></script>
   
   <!-- Navigation Menu -->
@@ -615,12 +636,16 @@
       <div class="intro-panel">
         <div class="intro-category">FICTION VS REALITY TIMELINE</div>
         <h1 class="intro-title">How far into the future did they dare to look?</h1>
-        <p class="intro-description">Each slope shows the distance between a film's release year and the future it imagines. Short slopes = near futures Long slopes = bold leaps across centuries. Now that you've seen how motifs evolve, let's explore how far films leap into the future.</p>
+        <p class="intro-description">
+          This timeline compares a film’s release year with the future year it imagines. The “slope” between those two points reflects ambition: Short slope → cautious, near-future realism, Long slope → bold speculation, far-future world-building. These slopes reveal how cultural optimism, anxiety, and tech progress shaped our willingness to imagine the unknown.
+          </p>
+          <p class="intro-description">
+          Each slope shows the distance between a film's release year and the future it imagines. Short slopes = near futures Long slopes = bold leaps across centuries. Now that you've seen how motifs evolve, let's explore how far films leap into the future.</p>
         
         
 
         <div class="first-decade-button" id="firstDecadeBtn">
-          <span>THE FIRST DECADE</span>
+          <span>BEGIN</span>
           <div class="first-decade-arrow"></div>
         </div>
       </div>
@@ -726,7 +751,10 @@
     </div>
   </div>
   
-  
+  <div class="page-footer">
+    <div>Published 2025</div>
+    <div>Created by Michael, Audrey, Tanvir, Sydney</div>
+  </div>
 
   <div id="cursorCircle"></div>
   <link rel="stylesheet" href="cursor.css">
