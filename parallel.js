@@ -289,6 +289,57 @@ function buildFixedAxisLabels() {
     overlay.appendChild(bottomLabel);
 }
 
+function buildSlopeExamples() {
+    const slopeGroup = S("g");
+    slopeGroup.setAttribute("id", "svgSlopeExamples");
+    slopeGroup.setAttribute("transform", "translate(80, 150)"); 
+    // moved upward (180 → 130)
+
+    // ---- Steep Line ----
+    const steepLine = S("line");
+    steepLine.setAttribute("x1", 0);
+    steepLine.setAttribute("y1", 0);
+    steepLine.setAttribute("x2", 32);
+    steepLine.setAttribute("y2", -38);
+    steepLine.setAttribute("stroke", "#7EC3E3");
+    steepLine.setAttribute("stroke-width", 6);
+    // steepLine.setAttribute("stroke-linecap", "round");
+    slopeGroup.appendChild(steepLine);
+
+    const steepLabel = S("text");
+    steepLabel.setAttribute("x", 55);
+    steepLabel.setAttribute("y", -10);
+    steepLabel.setAttribute("fill", "rgba(255,255,255,0.7)");
+    steepLabel.setAttribute("font-family", "Inter");
+    steepLabel.setAttribute("font-size", "20");
+    steepLabel.textContent = "Steeper Slope = Low Ambition";
+    slopeGroup.appendChild(steepLabel);
+
+    // ---- Flat Line ----
+    const flatLine = S("line");
+    flatLine.setAttribute("x1", 420);
+    flatLine.setAttribute("y1", -10);
+    flatLine.setAttribute("x2", 455);
+    flatLine.setAttribute("y2", -17);
+    flatLine.setAttribute("stroke", "#7EC3E3");
+    flatLine.setAttribute("stroke-width", 6);
+    // flatLine.setAttribute("stroke-linecap", "round");
+    slopeGroup.appendChild(flatLine);
+
+    const flatLabel = S("text");
+    flatLabel.setAttribute("x", 480);
+    flatLabel.setAttribute("y", -10);
+    flatLabel.setAttribute("fill", "rgba(255,255,255,0.7)");
+    flatLabel.setAttribute("font-family", "Inter");
+    flatLabel.setAttribute("font-size", "20");
+    flatLabel.textContent = "Flatter Slope = High Ambition";
+    slopeGroup.appendChild(flatLabel);
+
+    svg.appendChild(slopeGroup);
+}
+
+buildSlopeExamples();
+
 
 // -----------------------------
 //  FULL TICK MARKS (5-year spacing)
@@ -466,21 +517,21 @@ function updateWindowHighlight() {
         l.setAttribute("stroke-opacity", highlighted ? 1.0 : 0.0);
     });
 
-    updateWindowLabel();
+    // updateWindowLabel();
 }
 
 
 // -----------------------------
-//  WINDOW LABEL (bottom-right)
+//  WINDOW LABEL (bottom-right) DEBUGGING ONLY
 // -----------------------------
-function updateWindowLabel() {
-    const el = document.getElementById("window-label");
-    const start = currentWindowStart;
-    const end   = currentWindowStart + WINDOW_SIZE - 1;
+// function updateWindowLabel() {
+//     const el = document.getElementById("window-label");
+//     const start = currentWindowStart;
+//     const end   = currentWindowStart + WINDOW_SIZE - 1;
 
-    el.textContent = `Window: ${start}–${end}`;
-    el.style.display = "block";
-}
+//     el.textContent = `Window: ${start}–${end}`;
+//     el.style.display = "block";
+// }
 
 
 // -----------------------------
