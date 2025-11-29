@@ -10,6 +10,9 @@
 // ACTUAL WORLD SCROLL LIMITS (editable)
 const WORLD_START = 0;
 const WORLD_END   = 9999;
+let hoverShifted = false;
+let hoverOriginalTop = "";
+
 
 // RENDERED YEARS ONLY (do NOT draw anything outside this)
 const START_YEAR = 1925;
@@ -519,7 +522,9 @@ function updateActiveBookBar() {
     // also update active label position
     const activeLabel = document.getElementById("activeBarDate");
     const bar = bars[idx];
-    if (bar) positionLabelOverBar(activeLabel, bar, windowStarts[idx]);
+    if (bar) {
+        positionLabelOverBar(activeLabel, bar, windowStarts[idx]);
+    }
 }
 
 
@@ -560,16 +565,73 @@ function resetWave() {
 const hoverLabel = document.getElementById("hoverBarDate");
 const activeLabel = document.getElementById("activeBarDate");
 
+function separateLabelsIfNeeded(hoverIndex, activeIndex) {
+    const RADIUS = 3;
+
+    // Outside radius → restore original position
+    if (Math.abs(hoverIndex - activeIndex) > RADIUS) {
+        if (hoverShifted && hoverOriginalTop) {
+            hoverShifted = false;
+            hoverLabel.style.top = hoverOriginalTop;
+        }
+        return;
+    }
+
+    const hRect = hoverLabel.getBoundingClientRect();
+    const aRect = activeLabel.getBoundingClientRect();
+
+    if (hoverLabel.style.opacity === "0" ||
+        activeLabel.style.opacity === "0") return;
+
+    const overlapX = !(hRect.right < aRect.left || hRect.left > aRect.right);
+    const closeY = Math.abs(hRect.top - aRect.top) < 18;
+
+    if (overlapX && closeY) {
+        // apply upward shift once
+        if (!hoverShifted) {
+            hoverShifted = true;
+            const currentTop = parseFloat(hoverLabel.style.top);
+            hoverLabel.style.top = (currentTop - 20) + "px";
+        }
+    } else {
+        // restore to safe original
+        if (hoverShifted && hoverOriginalTop) {
+            hoverShifted = false;
+            hoverLabel.style.top = hoverOriginalTop;
+        }
+    }
+}
+
+
+
+
 function positionLabelOverBar(labelEl, barEl, yearText) {
-    if (!barEl) { labelEl.style.opacity = 0; return; }
+    if (!barEl) {
+        labelEl.style.opacity = 0;
+        return;
+    }
 
     const rect = barEl.getBoundingClientRect();
 
+    yearText = `${yearText}-${yearText+4}`
     labelEl.textContent = yearText;
+
+    // Set the horizontal position (always safe)
     labelEl.style.left = rect.left + rect.width / 2 + "px";
-    labelEl.style.top  = rect.top - 12 + "px";
+
+    // Compute intended top
+    const intendedTop = rect.top - 12 + "px";
+
+    // If label is NOT shifted, update originalTop + apply it
+    if (!hoverShifted) {
+        hoverOriginalTop = intendedTop;
+        labelEl.style.top = intendedTop;
+    }
+
+    // If label IS shifted, do not overwrite its shifted position
     labelEl.style.opacity = 0.9;
 }
+
 
 let hoveredIndex = null;
 let hoveringBars = false;
@@ -593,6 +655,7 @@ bookBarsContainer.addEventListener("mousemove", (e) => {
     hoveringBars = true;
 
     applyWaveEffect(best);
+    
 
     positionLabelOverBar(hoverLabel, bars[best], windowStarts[best]);
 
@@ -601,6 +664,8 @@ bookBarsContainer.addEventListener("mousemove", (e) => {
     if (activeIdx !== -1) {
         positionLabelOverBar(activeLabel, bars[activeIdx], windowStarts[activeIdx]);
     }
+    separateLabelsIfNeeded(activeIdx);
+
 });
 
 bookBarsContainer.addEventListener("mouseleave", () => {
@@ -610,6 +675,10 @@ bookBarsContainer.addEventListener("mouseleave", () => {
     resetWave();
     hoverLabel.style.opacity = 0;
     activeLabel.style.opacity = 0;
+    hoverShifted = false;
+    hoverOriginalTop = "";
+
+
 });
 
 
