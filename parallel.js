@@ -115,7 +115,7 @@ window.addEventListener("wheel", (e) => {
 
     e.preventDefault();
 
-    const delta = e.deltaY * 1.15;  // scroll sensitivity (editable)
+    const delta = -e.deltaY * 1.15;  // scroll sensitivity (editable)
 
     worldX += delta;
 
@@ -1041,7 +1041,7 @@ window.addEventListener("wheel", (e) => {
 
     scrollLocked = true;
 
-    const direction = e.deltaY > 0 ? "down" : "up";
+    const direction = -e.deltaY > 0 ? "down" : "up";
 
     // scroll down from INTRO → go to chart
     if (direction === "down" && currentPage === 0) {

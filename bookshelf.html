@@ -14,6 +14,14 @@
   <body>
     <!-- Navigation Menu -->
     <div class="navigation-menu" id="navigationMenu"></div>
+
+      <!-- Page Header -->
+    <div class="page-header">
+      <a href="aboutPage.html" class="back-link">
+        <span class="back-arrow">←</span>
+        <span>Back</span>
+      </a>
+    </div>
     
     <!-- Intro Panel (shown initially, hidden on scroll) -->
     <div id="introPanel" class="intro-panel">
@@ -75,23 +83,17 @@
               <h1 class="title" id="bookTitle">Title</h1>
             </div>
 
-            <div class="tags-row" id="pillContainer"></div>
-
-            
-
             <div class="film-info-grid">
               <div class="info-item">
-                <div class="info-label">Director</div>
+                <div class="tags-row" id="pillContainer"></div>
                 <div class="info-value" id="director">Director</div>
+                <!-- <div class="info-label">Director</div> -->
+                
+                
               </div>
             </div>
             <p class="plot" id="bookBlurb">Blurb</p>
-
-            <!-- <div class="info-item">
-              <div class="info-label">Depicted</div>
-              <div class="info-value" id="depicted">Year, Location</div>
-            </div> -->
-          </div>
+        </div>
 
           <div class="motifs-section">
             <h2 class="motifs-title">Technological Motifs</h2>
@@ -101,7 +103,7 @@
 
           <div class="bottomBox">
             <div class="actions">
-              <button class="btn back-btn" id="backToShelf">← Back to Library</button>
+              <div class="back-link" id="backToShelf">← Return to Library</div>
             </div>
           </div>
 

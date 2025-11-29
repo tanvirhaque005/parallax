@@ -670,58 +670,54 @@ window.addEventListener("mousemove", (e) => {
 }, { passive: true });
 
 function openOverlayForIndex(i) {
-  
   updateActiveBookBar(i);
   setActiveBookByIndex(i);
   rebuildOverlayForIndex();
 
-  // Remove default introMessage if needed
   hideDefaultIntro();
   showOverlayIntro();
 
-  // Hide view toggle buttons when book details are open
   const footer = document.getElementById('footer');
-  if (footer) {
-    footer.style.display = 'none';
-  }
+  if (footer) footer.style.display = 'none';
 
   overlayCanvas.style.display = 'block';
   bookinfo.classList.add('open');
+
+  // 🚫 Disable header
+  document.querySelector(".page-header")?.classList.add("disabled");
 }
 
+
 function closeOverlay() {
-  // Remove overlay introMessage if needed
   hideOverlayIntro();
   bookinfo.classList.remove('open');
   overlayCanvas.style.display = 'none';
 
-  // Show view toggle buttons again when book details are closed
-  const footer = document.getElementById('footer');
-  if (footer) {
-    footer.style.display = 'flex';
-  }
+  // ✅ Re-enable header
+  document.querySelector(".page-header")?.classList.remove("disabled");
 
-  // remove overlay 3D mesh
+  const footer = document.getElementById('footer');
+  if (footer) footer.style.display = 'flex';
+
   if (overlayBook) overlayScene.remove(overlayBook);
 
-  // restore base book state
   if (activeBook) {
     activeBook.isPresented = false;
-    activeBook.targetRotY = Math.PI / 2;  // spine forward
-    activeBook.targetPosZ = 0;            // move back
+    activeBook.targetRotY = Math.PI / 2;
+    activeBook.targetPosZ = 0;
     activeBook.tiltX = 0;
     activeBook.tiltY = 0;
     activeBook.hoverTiltZ = 0;
     activeBook.mesh.visible = true;
   }
-  
-  // Show default intro - with text if intro has been dismissed (user has scrolled)
+
   if (introDismissed) {
-    showDefaultIntro(true); // Show with text since intro panel is gone
+    showDefaultIntro(true);
   } else {
-    showDefaultIntro(false); // Show without text since intro panel is still visible
+    showDefaultIntro(false);
   }
 }
+
 
 
 function setActiveBookByIndex(i) {
@@ -761,7 +757,7 @@ function rebuildOverlayForIndex() {
 
   titleEl.textContent = `${meta.title} (${meta.year})`;
   blurbEl.textContent = meta.blurb;
-  directorEl.textContent = meta.director;
+  directorEl.textContent = `Director(s): ${meta.director}`;
   // releasedEl.textContent = `${meta.year}`;
   // depictedEl.textContent = `${meta.depicted}, Washington DC, USA`;
 
@@ -803,16 +799,6 @@ renderer.domElement.addEventListener('click', (e) => {
 
   openOverlayForIndex(idx);
 });
-
-// document.getElementById('cardPrev').addEventListener('click', (e) => {
-//   e.stopPropagation();
-//   openOverlayForIndex(currentIndex - 1);
-// });
-
-// document.getElementById('cardNext').addEventListener('click', (e) => {
-//   e.stopPropagation();
-//   openOverlayForIndex(currentIndex + 1);
-// });
 
 closeInfo.addEventListener('click', closeOverlay);
 backToShelf.addEventListener('click', closeOverlay);
