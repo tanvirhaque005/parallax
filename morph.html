@@ -16,7 +16,7 @@
       background: #0a1628;
       cursor: none !important;
     }
-    
+
     /* Ensure arrow button uses custom cursor */
     .arrow-button-wrapper,
     .arrow-button-wrapper *,
@@ -24,7 +24,7 @@
     [data-arrow-button] * {
       cursor: none !important;
     }
-    
+
     /* Ensure cursor is always visible and above everything */
     #cursorCircle {
       position: fixed !important;
@@ -33,13 +33,13 @@
       display: block !important;
       pointer-events: none !important;
     }
-    
+
     /* Ensure canvas doesn't block cursor */
     #scene {
       pointer-events: auto;
       z-index: 1;
     }
-    
+
     /* Force cursor to be on top of everything */
     #cursorCircle {
       position: fixed !important;
@@ -48,6 +48,47 @@
       display: block !important;
       visibility: visible !important;
       pointer-events: none !important;
+      border-radius: 50% !important;
+      transition: width 0.25s cubic-bezier(0.25, 0.1, 0.25, 1), height 0.25s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.25s ease !important;
+    }
+
+    /* Default cursor size when no class applied */
+    #cursorCircle:not(.arrow-left):not(.arrow-right):not(.hover) {
+      width: 18px !important;
+      height: 18px !important;
+      background: rgba(95, 95, 95, 0.28) !important;
+    }
+
+    /* Arrow right bubble */
+    #cursorCircle.arrow-right {
+      width: 60px !important;
+      height: 60px !important;
+      background: rgba(255, 255, 255, 0.18) !important;
+    }
+    #cursorCircle.arrow-right::after {
+      content: '→';
+      position: absolute;
+      font-size: 32px;
+      color: rgba(255, 255, 255, 0.85);
+      left: 50%;
+      top: 50%;
+      transform: translate(-40%, -50%);
+    }
+
+    /* Arrow left bubble */
+    #cursorCircle.arrow-left {
+      width: 60px !important;
+      height: 60px !important;
+      background: rgba(255, 255, 255, 0.18) !important;
+    }
+    #cursorCircle.arrow-left::after {
+      content: '←';
+      position: absolute;
+      font-size: 32px;
+      color: rgba(255, 255, 255, 0.85);
+      left: 50%;
+      top: 50%;
+      transform: translate(-60%, -50%);
     }
 
     /* Page Container for Slides */
@@ -133,8 +174,8 @@
     /* Enter Button */
     .enter-map-button {
       position: fixed;
-      bottom: 40%;
-      right: 40px;
+      bottom: 25%;
+      left: 50px;
       display: flex;
       align-items: center;
       gap: 18px;
@@ -180,7 +221,7 @@
       left: 40px;
       z-index: 50;
     }
-    
+
     .back-link {
       display: flex;
       align-items: center;
@@ -192,11 +233,11 @@
       transition: color 0.3s;
       text-transform: uppercase;
     }
-    
+
     .back-link:hover {
       color: #ffffff;
     }
-    
+
     .back-arrow {
       font-size: 20px;
     }
@@ -208,7 +249,7 @@
       right: 40px;
       z-index: 50;
     }
-    
+
     .nav-btn {
       background-color: #2a2a2a;
       border: 1px solid white;
@@ -223,7 +264,7 @@
       display: inline-block;
       text-transform: uppercase;
     }
-    
+
     .nav-btn:hover {
       background-color: #3a3a3a;
       border-color: #666666;
@@ -270,6 +311,7 @@
       pointer-events: none;
       user-select: none;
       text-transform: capitalize;
+      z-index: 1 !important;
     }
 /* MAIN TIMELINE BAR */
 #timelineBar {
@@ -304,11 +346,18 @@
 
 /* CURRENT DECADE VALUE */
 #decadeValue {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
-  color: #888;
+  color: #ffffff !important;
   text-align: center;
-  min-width: 60px;
+  min-width: 100px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.287);
+  backdrop-filter: blur(8px);
+  border-radius: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  font-family: 'Inter', sans-serif;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 /* TRACK — now a visible flat dark bar */
@@ -356,7 +405,7 @@
 /* Top-left horizontal bars — thicker + lower on the page */
 #bookBars {
   position: fixed;
-  bottom: 48px; 
+  bottom: 48px;
   left: 24px;
   height: 60px;
   display: flex;
@@ -435,7 +484,7 @@
 /* Text Overlay Styles */
 #textOverlay {
   position: fixed;
-  top: 120px;
+  bottom: 120px;
   left: 60px;
   max-width: 800px;
   pointer-events: none;
@@ -446,13 +495,9 @@
   opacity: 0;
   transition: opacity 0.6s ease-in-out;
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
-  background: rgba(200, 200, 205, 0.15);
-  padding: 32px 40px;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(10px);
+  padding: 0;
 }
 
 .zoom-text.active {
@@ -483,7 +528,7 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   #textOverlay {
-    top: 80px;
+    bottom: 80px;
     left: 30px;
     right: 30px;
     max-width: none;
@@ -498,12 +543,104 @@
   }
 }
 
+/* Movie Hover Card */
+#movieHoverCard {
+  position: fixed;
+  top: 0;
+  left: 0;
+  max-width: 400px;
+  max-height: 80vh;
+  padding: 22px 26px;
+  background: rgba(255, 255, 255, 0.287);
+  backdrop-filter: blur(8px);
+  border-radius: 18px;
+  border: 2px solid rgba(255,255,255,0.15);
+  color: white;
+  font-family: "Inter", sans-serif;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.20s ease;
+  z-index: 999999;
+  overflow: hidden;
+  cursor: auto;
+}
+
+#movieHoverCard h2 {
+  margin: 0 0 12px 0;
+  font-size: 22px;
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+.movieHoverDivider {
+  width: 100%;
+  height: 1px;
+  background: rgba(251, 251, 251, 0.555);
+  margin: 12px 0;
+}
+
+#movieHoverContent {
+  max-height: calc(80vh - 120px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+}
+
+#movieHoverContent::-webkit-scrollbar {
+  width: 6px;
+}
+
+#movieHoverContent::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+#movieHoverContent::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+#movieHoverContent::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.movieHoverRow {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.movieHoverRow:last-child {
+  margin-bottom: 0;
+}
+
+.movieHoverPoster {
+  width: 120px;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.movieHoverDetails {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.9);
+  flex: 1;
+}
+
+.movieHoverDetails strong {
+  color: rgba(255,255,255,1);
+  font-weight: 600;
+}
+
 /* Gradient Legend */
 #gradientLegend {
   position: fixed;
-  top: 50%;
-  left: 40px;
-  transform: translateY(-50%);
+  bottom: 500px;
+  left: 60px;
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -571,6 +708,7 @@
          left: 40px;
          z-index: 200;
     }
+
   </style>
   <link rel="stylesheet" href="mapIntroMessage.css">
 </head>
@@ -593,7 +731,7 @@
           This map traces those leaps, showing how far filmmakers stretched reality to build their futures.</p>
 
         <div class="enter-map-button" id="enterMapBtn">
-          <span>EXPLORE THE MAP</span>
+          <span>BEGIN</span>
           <div class="enter-map-arrow"></div>
         </div>
       </div>
@@ -605,7 +743,7 @@
       <div id="mapIntroContainer" data-text="Scroll to zoom between local, global, and cosmic scales."></div>
       <script src="mapIntroMessage.js" defer></script>
 
-      
+ 
 
   <!-- Navigation Buttons -->
   <!-- <div class="nav-buttons">
@@ -616,6 +754,13 @@
   <div class="navigation-menu" id="navigationMenu"></div>
 
   <div id="flightPathTooltip"></div>
+
+  <!-- Movie Hover Card -->
+  <div id="movieHoverCard">
+    <h2 id="movieHoverTitle"></h2>
+    <div class="movieHoverDivider"></div>
+    <div id="movieHoverContent"></div>
+  </div>
 
   <!-- Gradient Legend -->
   <div id="gradientLegend">
@@ -664,8 +809,8 @@
 
   <link rel="stylesheet" href="arrowButton.css">
   <script src="arrowButton.js"></script>
-  <div data-arrow-button 
-  text="textF" 
+  <div data-arrow-button
+  text="textF"
   href="reflectionPage.html"
   delay="3">
   </div>
@@ -680,30 +825,31 @@
         if (existing) {
           existing.remove();
         }
-        
+
         // Create new cursor element
         const cursor = document.createElement('div');
         cursor.id = 'cursorCircle';
         // Use CSS classes instead of inline styles for hover effect to work
         cursor.className = '';
-        cursor.style.cssText = 'position: fixed !important; top: 50% !important; left: 50% !important; width: 18px !important; height: 18px !important; border-radius: 50% !important; background: rgba(95, 95, 95, 0.28) !important; pointer-events: none !important; transform: translate(-50%, -50%) !important; z-index: 2147483647 !important; opacity: 1 !important; display: block !important; visibility: visible !important; transition: width 0.25s cubic-bezier(0.25, 0.1, 0.25, 1), height 0.25s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.25s ease, opacity 0.25s ease !important;';
-        
+        // Don't use !important for width, height, background so CSS classes can override them
+        cursor.style.cssText = 'position: fixed !important; top: 50% !important; left: 50% !important; pointer-events: none !important; transform: translate(-50%, -50%) !important; z-index: 2147483647 !important; opacity: 1 !important; display: block !important; visibility: visible !important;';
+
         // Append to body - this ensures it's on top of everything
         document.body.appendChild(cursor);
-        
+
         // Update cursor position on mouse move
         const mousemoveHandler = (e) => {
           cursor.style.top = `${e.clientY}px`;
           cursor.style.left = `${e.clientX}px`;
         };
         window.addEventListener('mousemove', mousemoveHandler, { passive: true });
-        
+
         // Set up hover effects for arrow buttons using event delegation
         // This will work even for dynamically created buttons
         const cursorEl = cursor;
-        
+
         const handleMouseOver = (e) => {
-          const target = e.target.closest('.arrow-button-wrapper') || 
+          const target = e.target.closest('.arrow-button-wrapper') ||
                         e.target.closest('[data-arrow-button]') ||
                         e.target.closest('a') ||
                         e.target.closest('button') ||
@@ -718,9 +864,9 @@
             cursorEl.style.setProperty('background', 'white', 'important');
           }
         };
-        
+
         const handleMouseOut = (e) => {
-          const target = e.target.closest('.arrow-button-wrapper') || 
+          const target = e.target.closest('.arrow-button-wrapper') ||
                         e.target.closest('[data-arrow-button]') ||
                         e.target.closest('a') ||
                         e.target.closest('button') ||
@@ -728,18 +874,21 @@
                         e.target.closest('.enter-map-button');
           if (target && cursorEl) {
             cursorEl.classList.remove('hover');
-            // Reset to default styles
-            cursorEl.style.setProperty('width', '18px', 'important');
-            cursorEl.style.setProperty('height', '18px', 'important');
-            cursorEl.style.setProperty('opacity', '1', 'important');
-            cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+            // Only reset to default if not in edge zone (arrow classes indicate edge zone)
+            if (!cursorEl.classList.contains('arrow-left') && !cursorEl.classList.contains('arrow-right')) {
+              cursorEl.style.setProperty('width', '18px', 'important');
+              cursorEl.style.setProperty('height', '18px', 'important');
+              cursorEl.style.setProperty('opacity', '1', 'important');
+              cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+            }
+            // If in edge zone, the mousemove handler in morph.js will maintain the 80px size
           }
         };
-        
+
         // Add event listeners using capture phase to catch events early
         document.addEventListener('mouseover', handleMouseOver, true);
         document.addEventListener('mouseout', handleMouseOut, true);
-        
+
         // Also set up direct listeners after arrow button is created (3 second delay)
         setTimeout(() => {
           const arrowButtons = document.querySelectorAll('.arrow-button-wrapper');
@@ -756,46 +905,50 @@
             btn.addEventListener('mouseleave', () => {
               if (cursorEl) {
                 cursorEl.classList.remove('hover');
-                cursorEl.style.setProperty('width', '18px', 'important');
-                cursorEl.style.setProperty('height', '18px', 'important');
-                cursorEl.style.setProperty('opacity', '1', 'important');
-                cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+                // Only reset to default if not in edge zone (arrow classes indicate edge zone)
+                if (!cursorEl.classList.contains('arrow-left') && !cursorEl.classList.contains('arrow-right')) {
+                  cursorEl.style.setProperty('width', '18px', 'important');
+                  cursorEl.style.setProperty('height', '18px', 'important');
+                  cursorEl.style.setProperty('opacity', '1', 'important');
+                  cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+                }
+                // If in edge zone, the mousemove handler in morph.js will maintain the 80px size
               }
             });
           });
         }, 3500);
-        
+
         // Make cursor available globally
         window.cursorElement = cursor;
-        
+
         console.log('Cursor created and appended to body');
         return cursor;
       }
-      
+
       // Create cursor immediately
       let cursor = createCursor();
-      
+
       // Also create after a delay to ensure it's after CSS2DRenderer
       setTimeout(() => {
         cursor = createCursor();
       }, 100);
-      
+
       setTimeout(() => {
         cursor = createCursor();
       }, 500);
-      
+
       // Create after DOM is ready
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
           cursor = createCursor();
         });
       }
-      
+
       // Create after window loads
       window.addEventListener('load', () => {
         cursor = createCursor();
       });
-      
+
       // Continuously ensure cursor exists and is visible
       setInterval(() => {
         let cursor = document.getElementById('cursorCircle');
@@ -842,15 +995,19 @@
             btn.addEventListener('mouseleave', () => {
               if (cursor) {
                 cursor.classList.remove('hover');
-                cursor.style.setProperty('width', '18px', 'important');
-                cursor.style.setProperty('height', '18px', 'important');
-                cursor.style.setProperty('opacity', '1', 'important');
-                cursor.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+                // Only reset to default if not in edge zone (arrow classes indicate edge zone)
+                if (!cursor.classList.contains('arrow-left') && !cursor.classList.contains('arrow-right')) {
+                  cursor.style.setProperty('width', '18px', 'important');
+                  cursor.style.setProperty('height', '18px', 'important');
+                  cursor.style.setProperty('opacity', '1', 'important');
+                  cursor.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+                }
+                // If in edge zone, the mousemove handler in morph.js will maintain the 80px size
               }
             });
           });
         };
-        
+
         setupArrowHover();
         // Also try a bit later to be sure
         setTimeout(setupArrowHover, 500);
@@ -866,7 +1023,7 @@
   <div class="zoom-text" data-zoom="US">
     <h1 class="main-title">1950-1970s</h1>
     <p class="description">
-      Most sci-fi futures originate from the same real cities—Los Angeles, 
+      Most sci-fi futures originate from the same real cities—Los Angeles,
       Vancouver, London. Real landscapes anchor imagined ones.
     </p>
   </div>
@@ -875,7 +1032,7 @@
   <div class="zoom-text" data-zoom="WORLD">
     <h1 class="main-title">Global Filming Network</h1>
     <p class="description">
-      Now let's explore where these futures were actually built—and how far 
+      Now let's explore where these futures were actually built—and how far
       stories traveled beyond real filming locations. Scroll to travel through time.
     </p>
   </div>
@@ -933,8 +1090,14 @@
         currentPage++;
         updatePages();
 
-        // Show map intro message when entering map page
+        // Reset to US zoom state when entering map page
         if (wasOnIntroPage && currentPage === 1) {
+          if (typeof window.currentZoomState !== 'undefined' && typeof window.ZOOM_STATES !== 'undefined') {
+            window.currentZoomState = window.ZOOM_STATES.US;
+            window.targetCameraZ = window.ZOOM_POSITIONS[window.ZOOM_STATES.US];
+          }
+
+          // Show map intro message when entering map page
           setTimeout(() => {
             if (window.showMapIntro) {
               window.showMapIntro(true);
@@ -947,11 +1110,28 @@
       }
     });
 
-    enterMapBtn.addEventListener('click', (e) => {
-      e.preventDefault();
+    // Function to transition to map page
+    function goToMapPage() {
       if (currentPage < pages.length - 1) {
         currentPage++;
         updatePages();
+
+        // Reset to US zoom state when entering map page
+        // These variables are defined in morph.js
+        if (typeof window.currentZoomState !== 'undefined' && typeof window.ZOOM_STATES !== 'undefined') {
+          window.currentZoomState = window.ZOOM_STATES.US;
+          window.targetCameraZ = window.ZOOM_POSITIONS[window.ZOOM_STATES.US];
+        }
+
+        // Set scroll cooldown to prevent immediate zoom after page transition
+        if (window.setScrollCooldown) {
+          window.setScrollCooldown(true);
+        }
+
+        // Initialize decade display to "All Years"
+        if (window.updateDecadeDisplay) {
+          window.updateDecadeDisplay(null);
+        }
 
         // Show map intro message when entering map page
         setTimeout(() => {
@@ -960,10 +1140,59 @@
           }
         }, 100); // Small delay to ensure page transition starts
       }
+    }
+
+    enterMapBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      goToMapPage();
     });
+
+    // Scroll functionality on intro page
+    let scrollCooldown = false;
+    let lastScrollTime = 0;
+    const SCROLL_THRESHOLD = 50; // Minimum scroll delta to trigger
+    const SCROLL_COOLDOWN_MS = 500; // Prevent rapid scrolling
+
+    window.addEventListener('wheel', (e) => {
+      // Only handle scroll on intro page (page 0)
+      if (currentPage !== 0) {
+        return;
+      }
+
+      // Prevent default scrolling behavior on intro page
+      e.preventDefault();
+
+      const now = Date.now();
+      
+      // Cooldown check
+      if (scrollCooldown || (now - lastScrollTime < SCROLL_COOLDOWN_MS)) {
+        return;
+      }
+
+      // Trigger on scroll down (negative deltaY with natural scrolling)
+      if (e.deltaY < -SCROLL_THRESHOLD) {
+        lastScrollTime = now;
+        scrollCooldown = true;
+
+        // Transition to map page
+        goToMapPage();
+        
+        // Reset cooldown
+        setTimeout(() => {
+          scrollCooldown = false;
+        }, SCROLL_COOLDOWN_MS);
+      }
+    }, { passive: false });
 
     // Initialize
     updatePages();
+    
+    // Initialize decade display to "All Years" if on map page
+    setTimeout(() => {
+      if (currentPage === 1 && window.updateDecadeDisplay) {
+        window.updateDecadeDisplay(null);
+      }
+    }, 100);
   </script>
 </body>
 </html>

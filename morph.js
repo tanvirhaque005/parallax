@@ -5,74 +5,44 @@ import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 
 // ==========================================================
-// TEXT OVERLAY CONTENT - DECADE AWARE
+// TEXT OVERLAY CONTENT - 20-YEAR PERIODS
 // ==========================================================
-const decadeTexts = {
+// Text changes every 20 years, while filtering bars stay at 5-year intervals
+const periodTexts = {
   'All': {
     title: '1950-2020',
     description: 'Most sci-fi futures originate from the same real cities—Los Angeles, Vancouver, London. Real landscapes anchor imagined ones.'
   },
   1950: {
-    title: '1950-1954',
-    description: 'The golden age begins. Early science fiction films establish Los Angeles and London as the primary filming hubs for imagined futures.'
-  },
-  1955: {
-    title: '1955-1959',
-    description: 'Cold War anxieties shape narratives. Science fiction explores nuclear fears and space race ambitions through familiar urban landscapes.'
-  },
-  1960: {
-    title: '1960-1964',
-    description: 'The space age accelerates. Films increasingly venture beyond Earth while still grounding production in major metropolitan centers.'
-  },
-  1965: {
-    title: '1965-1969',
-    description: 'Cultural revolution meets cosmic speculation. Psychedelic influences and counter-culture merge with science fiction storytelling.'
+    title: '1950-1970',
+    description: 'The golden age of science fiction. Early films establish Los Angeles and London as primary filming hubs. Cold War anxieties and space race ambitions shape narratives, while the space age accelerates and cultural revolution meets cosmic speculation.'
   },
   1970: {
-    title: '1970-1974',
-    description: 'Dystopian futures emerge. Environmental and social concerns begin reshaping how filmmakers imagine tomorrow.'
-  },
-  1975: {
-    title: '1975-1979',
-    description: 'Blockbuster era begins. Star Wars transforms science fiction into mainstream spectacle, filmed across multiple continents.'
-  },
-  1980: {
-    title: '1980-1984',
-    description: 'Cyberpunk aesthetics arrive. Urban decay and technological advancement create new visual languages for future worlds.'
-  },
-  1985: {
-    title: '1985-1989',
-    description: 'Digital effects emerge. Computer graphics begin supplementing practical effects, changing what futures can be visualized.'
+    title: '1970-1990',
+    description: 'Dystopian futures and blockbuster spectacle. Environmental and social concerns reshape imagined tomorrows. Star Wars transforms science fiction into mainstream entertainment. Cyberpunk aesthetics emerge, and digital effects begin supplementing practical filmmaking.'
   },
   1990: {
-    title: '1990-1994',
-    description: 'Virtual reality becomes real. Films explore digital worlds while production techniques become increasingly globalized.'
-  },
-  1995: {
-    title: '1995-1999',
-    description: 'Millennium approaches. Y2K anxieties and internet culture reshape how filmmakers imagine technological futures.'
-  },
-  2000: {
-    title: '2000-2004',
-    description: 'Post-9/11 narratives. Science fiction grapples with surveillance, security, and new forms of global uncertainty.'
-  },
-  2005: {
-    title: '2005-2009',
-    description: 'Climate crisis enters frame. Environmental catastrophe becomes central to how futures are imagined and filmed.'
+    title: '1990-2010',
+    description: 'Virtual reality and digital transformation. Films explore digital worlds as production techniques globalize. Millennium anxieties and internet culture reshape technological futures. Post-9/11 narratives grapple with surveillance and security, while climate crisis enters the frame.'
   },
   2010: {
-    title: '2010-2014',
-    description: 'Marvel universe expands. Interconnected narratives and superhero science fiction dominate global box offices.'
-  },
-  2015: {
-    title: '2015-2019',
-    description: 'Streaming transforms production. International co-productions multiply as platforms compete for science fiction content.'
-  },
-  2020: {
-    title: '2020-2024',
-    description: 'Pandemic impacts storytelling. Isolation, contagion, and social distance themes emerge in science fiction production.'
+    title: '2010-2030',
+    description: 'Marvel universe expansion and streaming revolution. Interconnected narratives and superhero science fiction dominate global box offices. Streaming platforms transform production, with international co-productions multiplying. Pandemic impacts reshape storytelling with themes of isolation and contagion.'
   }
 };
+
+// Map 5-year periods to 20-year periods for text display
+function getPeriodForDecade(decade) {
+  if (decade === null) return 'All';
+  
+  // Map each 5-year period to its 20-year period
+  if (decade >= 1950 && decade < 1970) return 1950;
+  if (decade >= 1970 && decade < 1990) return 1970;
+  if (decade >= 1990 && decade < 2010) return 1990;
+  if (decade >= 2010) return 2010;
+  
+  return 'All';
+}
 
 // ==========================================================
 // TEXT OVERLAY UPDATE FUNCTION
@@ -81,10 +51,9 @@ function updateTextOverlay() {
   const textElement = document.querySelector('.zoom-text[data-zoom="US"]');
 
   if (textElement) {
-    // Always use decade-filtered text regardless of zoom state
-    const textData = currentDecade === null
-      ? decadeTexts['All']
-      : (decadeTexts[currentDecade] || decadeTexts['All']);
+    // Map current 5-year decade to 20-year period for text display
+    const period = getPeriodForDecade(currentDecade);
+    const textData = periodTexts[period] || periodTexts['All'];
 
     textElement.querySelector('.main-title').textContent = textData.title;
     textElement.querySelector('.description').textContent = textData.description;
@@ -114,6 +83,7 @@ labelRenderer.setSize(window.innerWidth, window.innerHeight);
 labelRenderer.domElement.style.position = 'absolute';
 labelRenderer.domElement.style.top = '0';
 labelRenderer.domElement.style.pointerEvents = 'none';
+labelRenderer.domElement.style.zIndex = '10'; // Below popup (999999)
 document.body.appendChild(labelRenderer.domElement);
 
 const scene = new THREE.Scene();
@@ -127,6 +97,13 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.z = 1.2;
 camera.lookAt(0, 0, 0);
 
+// Basic scene lighting (always on for map views)
+const sceneAmbientLight = new THREE.AmbientLight(0xffffff, 0.6);
+scene.add(sceneAmbientLight);
+
+const sceneDirectionalLight = new THREE.DirectionalLight(0xffffff, 0.4);
+sceneDirectionalLight.position.set(0, 0, 10);
+scene.add(sceneDirectionalLight);
 
 // ==========================================================
 // EARTH GEOMETRIES
@@ -142,10 +119,14 @@ mapCanvas.width = 4096;  // Higher resolution texture
 mapCanvas.height = 2048;
 
 const texture = new THREE.CanvasTexture(mapCanvas);
-const material = new THREE.MeshBasicMaterial({
+const material = new THREE.MeshStandardMaterial({
   map: texture,
   transparent: true,
-  opacity: 0.35  // More transparent so paths stand out
+  opacity: 0.35,  // More transparent so paths stand out
+  roughness: 0.8,
+  metalness: 0.1,
+  emissive: 0x1a1a2e,  // Slight blue glow in non-solar views
+  emissiveIntensity: 0.2
 });
 
 const geometry = planeGeometry.clone();
@@ -153,36 +134,27 @@ const earthMesh = new THREE.Mesh(geometry, material);
 scene.add(earthMesh);
 
 // ==========================================================
-// D3 MAP
+// LOAD WORLD MAP IMAGE (MORPHV2 - USING World Map.svg)
 // ==========================================================
-async function renderD3Map() {
-  const world = await d3.json(
-    'https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson'
-  );
-
-  const proj = d3.geoEquirectangular()
-    .scale(mapCanvas.width / (2 * Math.PI))
-    .translate([mapCanvas.width / 2, mapCanvas.height / 2]);
-
-  const path = d3.geoPath(proj, mapContext);
-
-  mapContext.fillStyle = "#000";
-  mapContext.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
-
-  mapContext.strokeStyle = "#ffffff";
-  mapContext.fillStyle = "#2c3e50";
-
-  world.features.forEach(f => {
-    mapContext.beginPath();
-    path(f);
-    mapContext.fill();
-    mapContext.stroke();
+async function renderWorldMapImage() {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      // Draw the loaded SVG onto the canvas
+      mapContext.drawImage(img, 0, 0, mapCanvas.width, mapCanvas.height);
+      texture.needsUpdate = true;
+      console.log('✅ World Map.svg loaded and rendered');
+      resolve();
+    };
+    img.onerror = (error) => {
+      console.error('❌ Failed to load World Map.svg:', error);
+      reject(error);
+    };
+    img.src = './map_photos/World Map.svg';
   });
-
-  texture.needsUpdate = true;
 }
 
-renderD3Map();
+renderWorldMapImage();
 
 // ==========================================================
 // FLIGHT PATHS
@@ -193,7 +165,14 @@ scene.add(usFlightPathGroup);
 scene.add(flightPathGroup);
 
 function latLonToPlane(lat, lon) {
-  return { x: lon/180, y: (lat/90)*0.5 };
+  // Offset adjustments for World Map.png alignment
+  const xOffset = -0.056;  // Negative = shift left, Positive = shift right
+  const yOffset = -0.09;   // Negative = shift down, Positive = shift up (increased to show Philadelphia/NYC)
+
+  return {
+    x: (lon/180) + xOffset,
+    y: ((lat/90)*0.5) + yOffset
+  };
 }
 
 // Check if coordinates are within continental US bounds
@@ -224,6 +203,44 @@ function createArc(a,b,h){
   );
 }
 
+// Create a gradient-filled circle for same-location movies
+function createGradientCircle(position, size = 0.015) {
+  const circleGroup = new THREE.Group();
+
+  // Create canvas for gradient texture
+  const canvas = document.createElement('canvas');
+  canvas.width = 64;
+  canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+
+  // Create linear gradient from purple (left) to teal (right)
+  const gradient = ctx.createLinearGradient(0, 32, 64, 32);
+  gradient.addColorStop(0, '#9747FF');    // Purple left
+  gradient.addColorStop(1, '#46AACB');     // Teal right
+
+  ctx.fillStyle = gradient;
+  ctx.beginPath();
+  ctx.arc(32, 32, 32, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Create texture from canvas
+  const texture = new THREE.CanvasTexture(canvas);
+
+  // Create sprite with gradient texture
+  const spriteMaterial = new THREE.SpriteMaterial({
+    map: texture,
+    transparent: true,
+    opacity: 0.9,
+    depthWrite: false
+  });
+
+  const sprite = new THREE.Sprite(spriteMaterial);
+  sprite.scale.set(size, size, 1);
+  sprite.position.set(position.x, position.y, position.z);
+
+  return sprite;
+}
+
 async function loadPaths(){
   const res = await fetch('./movie-coordinates.json');
   const data = await res.json();
@@ -248,6 +265,31 @@ async function loadPaths(){
     const p1 = latLonToPlane(A.lat,A.lon);
     const p2 = latLonToPlane(B.lat,B.lon);
 
+    // Parse year to integer for filtering
+    const yearInt = parseInt(c.year) || 0;
+
+    // Check if production and depicted locations are the same
+    if (c.from === c.to) {
+      // Create a gradient circle instead of a line
+      const circle = createGradientCircle(new THREE.Vector3(p1.x, p1.y, 0.01), 0.02);
+      circle.userData = {
+        movie: c.movie,
+        year: yearInt,
+        from: c.from,
+        to: c.to,
+        isSameLocation: true
+      };
+
+      // Check if location is in the US
+      const isInUSLoc = isInUS(A.lat, A.lon);
+      if (isInUSLoc) {
+        usFlightPathGroup.add(circle);
+      } else {
+        flightPathGroup.add(circle);
+      }
+      return; // Skip line creation
+    }
+
     const dist = Math.hypot(p2.x-p1.x, p2.y-p1.y);
     const curve = createArc(p1,p2, dist*0.15);
 
@@ -257,8 +299,8 @@ async function loadPaths(){
     // Create Line2 geometry with thick lines
     const positions = [];
     const colors = [];
-    const purpleColor = new THREE.Color(0.7, 0.3, 1.0);
-    const tealColor = new THREE.Color(0.0, 0.8, 0.8);
+    const purpleColor = new THREE.Color(0x9747FF);
+    const tealColor = new THREE.Color(0x46AACB);
 
     for (let i = 0; i < points.length; i++) {
       const point = points[i];
@@ -288,8 +330,6 @@ async function loadPaths(){
 
     const line = new Line2(geometry, mat);
 
-    // Parse year to integer for filtering
-    const yearInt = parseInt(c.year) || 0;
     line.userData = {
       movie: c.movie,
       year: yearInt,
@@ -320,6 +360,7 @@ const minYear = 1950;
 const maxYear = 2020;
 
 const WINDOW_STEP = 5;
+const EDGE_ZONE = 400; // px from left/right edge for arrow cursor
 
 const booksMeta = [];
 for (let y = minYear; y <= maxYear; y += WINDOW_STEP) {
@@ -410,8 +451,10 @@ function updateFlightPathVisibility() {
 
 function updateDecadeDisplay(decade) {
   const decadeValue = document.getElementById('decadeValue');
+  if (!decadeValue) return; // Element might not exist yet
+  
   if (!decade) {
-    decadeValue.textContent = 'All';
+    decadeValue.textContent = 'All Years';
   } else {
     // decadeValue.textContent = `${decade}s`;
     decadeValue.textContent = `${decade}–${decade + WINDOW_STEP - 1}`;
@@ -421,6 +464,9 @@ function updateDecadeDisplay(decade) {
   // Update text overlay when decade changes
   updateTextOverlay();
 }
+
+// Expose to window for page transition script
+window.updateDecadeDisplay = updateDecadeDisplay;
 
 // Make timeline handle draggable (horizontal)
 (function enableTimelineDrag() {
@@ -482,7 +528,7 @@ function updateDecadeDisplay(decade) {
 // CUSTOM PLANET POSITIONS
 // ==========================================================
 const customPositions = {
-  sun:      new THREE.Vector3(0, 0, 0),    // Center the sun
+  sun:      new THREE.Vector3(0, 0, -3),    // Center the sun, behind flight paths
   mercury:  new THREE.Vector3(2, 1, 0),
   venus:    new THREE.Vector3(3, -1, 0),
   earth:    new THREE.Vector3(-2.5, -1.3, 0),  // Further away from sun
@@ -491,7 +537,7 @@ const customPositions = {
   saturn:   new THREE.Vector3(8, 2, 0),
   uranus:   new THREE.Vector3(-7, 2, -2),
   neptune:  new THREE.Vector3(-9, -2, 1),
-  "fictional locations": new THREE.Vector3(-11, -3, 2)  // Beyond Neptune for fictional places
+  "fictional locations": new THREE.Vector3(-5, -6, 2)  // Right side, lower to avoid text overlap
 };
 
 // ==========================================================
@@ -502,7 +548,7 @@ scene.add(planetGroup);
 planetGroup.visible = false;
 
 const planetColors = {
-  sun: 0xffcc33,
+  sun: 0xD4A520,  // Bronze/golden yellow
   mercury: 0xb1b1b1,
   venus: 0xe6b800,
   earth: 0x4ea5d5,
@@ -533,11 +579,111 @@ Object.keys(planetColors).forEach((name)=>{
 
   const radius = radii[name];
   const geo = new THREE.SphereGeometry(radius,32,32);
-  const mat = new THREE.MeshBasicMaterial({ color: planetColors[name] });
-  const p = new THREE.Mesh(geo,mat);
+
+  // Use MeshStandardMaterial for realistic lighting and shadows
+  let mat;
+  if (name === 'sun') {
+    // Sun should emit light - use emissive material
+    // depthWrite: false so flight paths can render in front
+    mat = new THREE.MeshStandardMaterial({
+      color: planetColors[name],
+      emissive: planetColors[name],
+      emissiveIntensity: 2,  // Increased for brighter glow
+      roughness: 1,
+      metalness: 0,
+      depthWrite: false  // Don't write to depth buffer so flight paths render in front
+    });
+  } else if (name === 'fictional locations') {
+    // Fictional locations - mystical glowing purple sphere
+    mat = new THREE.MeshStandardMaterial({
+      color: planetColors[name],
+      emissive: 0xaa44ff,  // Bright purple/magenta glow
+      emissiveIntensity: 1.5,
+      roughness: 0.3,
+      metalness: 0.5,
+      transparent: true,
+      opacity: 0.95
+    });
+  } else {
+    // Planets receive light and cast shadows
+    mat = new THREE.MeshStandardMaterial({
+      color: planetColors[name],
+      roughness: 0.7,
+      metalness: 0.2
+    });
+  }
+
+  const p = new THREE.Mesh(geo, mat);
 
   p.userData = { name };
   p.position.set(0,0,-20); // start far away
+
+  // Add glow halo around the sun with multiple layers for blur effect
+  if (name === 'sun') {
+    p.renderOrder = 0; // Render sun before flight paths
+
+    const glowLayers = [
+      { scale: 1.2, color: 0xFFD700, opacity: 0.4 },  // Innermost bright gold
+      { scale: 1.4, color: 0xFFD700, opacity: 0.35 }, // Close bright gold
+      { scale: 1.6, color: 0xFFCC66, opacity: 0.28 }, // Gold transition
+      { scale: 1.8, color: 0xFFB84D, opacity: 0.22 }, // Gold-orange
+      { scale: 2.0, color: 0xFFA500, opacity: 0.16 }, // Orange
+      { scale: 2.2, color: 0xFF9933, opacity: 0.11 }, // Mid orange
+      { scale: 2.4, color: 0xFF8C00, opacity: 0.06 }, // Far orange
+      { scale: 2.6, color: 0xFF7722, opacity: 0.03 }  // Outer diffuse orange
+    ];
+
+    glowLayers.forEach((layer, index) => {
+      const glowGeo = new THREE.SphereGeometry(radius * layer.scale, 32, 32);
+      const glowMat = new THREE.MeshBasicMaterial({
+        color: layer.color,
+        transparent: true,
+        opacity: layer.opacity,
+        side: THREE.BackSide,
+        depthWrite: false,  // Prevent z-fighting
+        blending: THREE.AdditiveBlending  // Creates softer, more luminous blend
+      });
+      const glow = new THREE.Mesh(glowGeo, glowMat);
+      glow.renderOrder = 0; // Render glow layers before flight paths
+      glow.userData.animationPhase = index * 0.4; // Different phase for each layer
+      glow.userData.baseOpacity = layer.opacity; // Store original opacity for animation
+      glow.userData.isSunGlow = true; // Mark for animation
+      p.add(glow);
+    });
+  }
+
+  // Add mystical glow around fictional locations planet
+  if (name === 'fictional locations') {
+    p.renderOrder = 0; // Render before flight paths
+
+    const mysticalGlowLayers = [
+      { scale: 1.3, color: 0xdd66ff, opacity: 0.4 },  // Close bright purple
+      { scale: 1.6, color: 0xcc55ee, opacity: 0.3 },  // Purple-pink
+      { scale: 2.0, color: 0xaa44ff, opacity: 0.22 }, // Deep purple
+      { scale: 2.5, color: 0x8844dd, opacity: 0.15 }, // Purple-blue
+      { scale: 3.0, color: 0x6655cc, opacity: 0.1 },  // Dark purple
+      { scale: 3.6, color: 0x5544bb, opacity: 0.06 }, // Very dark purple
+      { scale: 4.2, color: 0x4433aa, opacity: 0.03 }  // Diffuse outer purple
+    ];
+
+    mysticalGlowLayers.forEach((layer, index) => {
+      const glowGeo = new THREE.SphereGeometry(radius * layer.scale, 32, 32);
+      const glowMat = new THREE.MeshBasicMaterial({
+        color: layer.color,
+        transparent: true,
+        opacity: layer.opacity,
+        side: THREE.BackSide,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      });
+      const glow = new THREE.Mesh(glowGeo, glowMat);
+      glow.renderOrder = 0;
+      glow.userData.animationPhase = index * 0.5; // Different phase for each layer
+      glow.userData.baseOpacity = layer.opacity; // Store original opacity for animation
+      glow.userData.isMysticalGlow = true; // Mark for animation
+      p.add(glow);
+    });
+  }
 
   // Create label
   const labelDiv = document.createElement('div');
@@ -567,65 +713,73 @@ moonsGroup.visible = false;
 scene.add(moonsGroup);
 
 // ==========================================================
-// STARFIELD BACKGROUND
+// SPACE BACKGROUND (NASA HUBBLE IMAGE)
 // ==========================================================
 const starGroup = new THREE.Group();
 starGroup.visible = false;
 scene.add(starGroup);
 
-// Create stars
-const starGeometry = new THREE.BufferGeometry();
-const starCount = 2000;
-const starPositions = new Float32Array(starCount * 3);
-const starColors = new Float32Array(starCount * 3);
+// Load NASA Hubble space image as background
+const textureLoader = new THREE.TextureLoader();
+textureLoader.load('./map_photos/nasa-hubble-space-telescope-o1byzQYzMZA-unsplash.jpeg', (texture) => {
+  // Preserve original image quality without smoothing/blurring
+  texture.anisotropy = 1; // Minimal filtering for sharper appearance
+  texture.minFilter = THREE.LinearMipmapLinearFilter; // Sharper at distance
+  texture.magFilter = THREE.NearestFilter; // Crisp, no smoothing when close
+  texture.generateMipmaps = true; // Generate mipmaps for better quality at distance
+  texture.colorSpace = THREE.SRGBColorSpace; // Correct color space for accurate colors
 
-for (let i = 0; i < starCount; i++) {
-  // Random positions in a large sphere around the scene
-  const theta = Math.random() * Math.PI * 2;
-  const phi = Math.acos(Math.random() * 2 - 1);
-  const radius = 50 + Math.random() * 50;
+  // Create a large sphere that surrounds the entire scene
+  // Larger radius = less zoomed in appearance
+  const spaceGeometry = new THREE.SphereGeometry(200, 256, 256); // Higher segments for more detail
+  const spaceMaterial = new THREE.MeshBasicMaterial({
+    map: texture,
+    side: THREE.BackSide, // Render on the inside of the sphere
+    toneMapped: false // Disable tone mapping to preserve original colors and blacks
+  });
 
-  starPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-  starPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-  starPositions[i * 3 + 2] = radius * Math.cos(phi);
+  const spaceSphere = new THREE.Mesh(spaceGeometry, spaceMaterial);
+  starGroup.add(spaceSphere);
 
-  // Vary star colors from white to slight blue/yellow tints
-  const colorVariation = Math.random();
-  if (colorVariation > 0.8) {
-    // Blue-ish stars
-    starColors[i * 3] = 0.8;
-    starColors[i * 3 + 1] = 0.9;
-    starColors[i * 3 + 2] = 1.0;
-  } else if (colorVariation > 0.6) {
-    // Yellow-ish stars
-    starColors[i * 3] = 1.0;
-    starColors[i * 3 + 1] = 1.0;
-    starColors[i * 3 + 2] = 0.8;
-  } else {
-    // White stars
-    starColors[i * 3] = 1.0;
-    starColors[i * 3 + 1] = 1.0;
-    starColors[i * 3 + 2] = 1.0;
+  console.log('✅ NASA Hubble space background loaded');
+}, undefined, (error) => {
+  console.error('❌ Failed to load NASA Hubble image:', error);
+
+  // Fallback: Create simple starfield if image fails to load
+  const starGeometry = new THREE.BufferGeometry();
+  const starCount = 2000;
+  const starPositions = new Float32Array(starCount * 3);
+
+  for (let i = 0; i < starCount; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(Math.random() * 2 - 1);
+    const radius = 50 + Math.random() * 50;
+
+    starPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+    starPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+    starPositions[i * 3 + 2] = radius * Math.cos(phi);
   }
-}
 
-starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+  starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
 
-const starMaterial = new THREE.PointsMaterial({
-  size: 0.15,
-  vertexColors: true,
-  transparent: true,
-  opacity: 0.8,
-  sizeAttenuation: true
+  const starMaterial = new THREE.PointsMaterial({
+    size: 0.15,
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.8
+  });
+
+  const stars = new THREE.Points(starGeometry, starMaterial);
+  starGroup.add(stars);
 });
-
-const stars = new THREE.Points(starGeometry, starMaterial);
-starGroup.add(stars);
 
 // Earth's Moon
 const moonGeometry = new THREE.SphereGeometry(0.02, 16, 16);
-const moonMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa });
+const moonMaterial = new THREE.MeshStandardMaterial({
+  color: 0xaaaaaa,
+  roughness: 0.9,
+  metalness: 0.1
+});
 const earthMoon = new THREE.Mesh(moonGeometry, moonMaterial);
 earthMoon.userData = { parent: 'earth', name: 'Moon', offset: new THREE.Vector3(0.5, 0.5, 0.15) };
 
@@ -651,7 +805,11 @@ const jupiterMoonOffsets = [
 
 jupiterMoonNames.forEach((name, i) => {
   const jMoonGeo = new THREE.SphereGeometry(0.015, 16, 16);
-  const jMoonMat = new THREE.MeshBasicMaterial({ color: 0xcccccc });
+  const jMoonMat = new THREE.MeshStandardMaterial({
+    color: 0xcccccc,
+    roughness: 0.9,
+    metalness: 0.1
+  });
   const jMoon = new THREE.Mesh(jMoonGeo, jMoonMat);
   jMoon.userData = { parent: 'jupiter', name: name, offset: jupiterMoonOffsets[i] };
 
@@ -666,6 +824,27 @@ jupiterMoonNames.forEach((name, i) => {
 
   moonsGroup.add(jMoon);
 });
+
+// ==========================================================
+// SOLAR SYSTEM LIGHTING
+// ==========================================================
+const solarSystemLights = new THREE.Group();
+solarSystemLights.visible = false;
+scene.add(solarSystemLights);
+
+// Ambient light for general illumination
+const solarAmbientLight = new THREE.AmbientLight(0xffffff, 0.3);
+solarSystemLights.add(solarAmbientLight);
+
+// Point light from the sun's position
+const sunLight = new THREE.PointLight(0xFFD700, 2.5, 100);  // Golden light to match sun color
+sunLight.position.copy(customPositions.sun);
+solarSystemLights.add(sunLight);
+
+// Additional subtle directional light for definition
+const solarDirectionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+solarDirectionalLight.position.set(5, 5, 5);
+solarSystemLights.add(solarDirectionalLight);
 
 let planetZoomInProgress = false;
 
@@ -786,8 +965,8 @@ async function loadSolarFlightPaths(){
 
       const positions = [];
       const colors = [];
-      const purpleColor = new THREE.Color(0.7, 0.3, 1.0);
-      const tealColor = new THREE.Color(0.0, 0.8, 0.8);
+      const purpleColor = new THREE.Color(0x9747FF);
+      const tealColor = new THREE.Color(0x46AACB);
 
       for (let i = 0; i < points.length; i++) {
         const point = points[i];
@@ -808,12 +987,14 @@ async function loadSolarFlightPaths(){
         vertexColors: true,
         transparent: true,
         opacity: 0.8,
-        depthWrite: false,
+        depthWrite: true,
+        depthTest: true,
         alphaToCoverage: true // Enable for smoother edges
       });
       lineMaterial.resolution.set(window.innerWidth, window.innerHeight);
 
       const line = new Line2(geometry, lineMaterial);
+      line.renderOrder = 100; // Render on top of sun and planets
 
       // Store all fictional location movies in userData with actual fictional location names
       line.userData = {
@@ -914,8 +1095,8 @@ async function loadSolarFlightPaths(){
       // Create Line2 geometry with thick lines
       const positions = [];
       const colors = [];
-      const purpleColor = new THREE.Color(0.7, 0.3, 1.0);
-      const tealColor = new THREE.Color(0.0, 0.8, 0.8);
+      const purpleColor = new THREE.Color(0x9747FF);
+      const tealColor = new THREE.Color(0x46AACB);
 
       for (let i = 0; i < points.length; i++) {
         const point = points[i];
@@ -938,12 +1119,14 @@ async function loadSolarFlightPaths(){
         vertexColors: true,
         transparent: true,
         opacity: 0.8,
-        depthWrite: false,
+        depthWrite: true,
+        depthTest: true,
         alphaToCoverage: true // Enable for smoother edges
       });
       lineMaterial.resolution.set(window.innerWidth, window.innerHeight);
 
       const line = new Line2(geometry, lineMaterial);
+      line.renderOrder = 100; // Render on top of sun and planets
 
       // Parse year to integer for filtering
       const yearInt = parseInt(conn.year) || 0;
@@ -1004,6 +1187,19 @@ let currentZoomState = ZOOM_STATES.US;
 let targetCameraZ = ZOOM_POSITIONS[ZOOM_STATES.US];
 let isTransitioning = false;
 
+// Expose zoom state variables to window for HTML page script access
+window.ZOOM_STATES = ZOOM_STATES;
+window.ZOOM_POSITIONS = ZOOM_POSITIONS;
+// Use getters/setters so changes are reflected
+Object.defineProperty(window, 'currentZoomState', {
+  get: () => currentZoomState,
+  set: (value) => { currentZoomState = value; }
+});
+Object.defineProperty(window, 'targetCameraZ', {
+  get: () => targetCameraZ,
+  set: (value) => { targetCameraZ = value; }
+});
+
 let scaleStart = 1.0;
 let scaleEnd = 0.4;
 let worldScale = 3.8; // Fullscreen scale for world view
@@ -1031,6 +1227,67 @@ let newShapesVisible = false;
 
 function animate(){
   requestAnimationFrame(animate);
+
+  // Animate mystical glow on fictional locations planet and sun
+  const time = performance.now() * 0.001; // Convert to seconds
+  planetGroup.children.forEach(planet => {
+    // Animate fictional locations mystical glow
+    if (planet.userData && planet.userData.name === 'fictional locations') {
+      planet.children.forEach(child => {
+        if (child.userData && child.userData.isMysticalGlow) {
+          // Pulsing opacity effect with different phases for each layer
+          const phase = child.userData.animationPhase || 0;
+          const baseOpacity = child.userData.baseOpacity || child.material.opacity;
+          const pulse = Math.sin(time * 2 + phase) * 0.2 + 0.8; // Oscillates between 0.6 and 1.0
+          child.material.opacity = baseOpacity * pulse;
+
+          // Subtle scale pulsing
+          const scalePulse = Math.sin(time * 1.5 + phase) * 0.04 + 1.0; // Oscillates around 1.0
+          child.scale.set(scalePulse, scalePulse, scalePulse);
+        }
+      });
+    }
+
+    // Animate sun's glow
+    if (planet.userData && planet.userData.name === 'sun') {
+      planet.children.forEach(child => {
+        if (child.userData && child.userData.isSunGlow) {
+          // Pulsing opacity effect with different phases for each layer
+          const phase = child.userData.animationPhase || 0;
+          const baseOpacity = child.userData.baseOpacity || child.material.opacity;
+          const pulse = Math.sin(time * 1.5 + phase) * 0.15 + 0.85; // Oscillates between 0.7 and 1.0
+          child.material.opacity = baseOpacity * pulse;
+
+          // Subtle scale pulsing (less pronounced than fictional locations)
+          const scalePulse = Math.sin(time * 1.2 + phase) * 0.025 + 1.0; // Oscillates around 1.0
+          child.scale.set(scalePulse, scalePulse, scalePulse);
+        }
+      });
+    }
+  });
+
+  // Hide all solar system elements when not on map page (page 1)
+  if (typeof currentPage !== 'undefined' && currentPage !== 1) {
+    planetGroup.visible = false;
+    moonsGroup.visible = false;
+    solarFlightPathsGroup.visible = false;
+    solarSystemLights.visible = false;
+    starGroup.visible = false;
+
+    // Hide all labels
+    if (earthLabel) earthLabel.visible = false;
+    planetGroup.children.forEach(planet => {
+      if (!planet.children) return;
+      planet.children.forEach(child => {
+        if (child.isCSS2DObject) child.visible = false;
+      });
+    });
+    moonsGroup.children.forEach(moon => {
+      moon.children.forEach(child => {
+        if (child.isCSS2DObject) child.visible = false;
+      });
+    });
+  }
 
   // SMOOTH CAMERA TRANSITIONS
   const cameraDiff = Math.abs(camera.position.z - targetCameraZ);
@@ -1068,10 +1325,10 @@ function animate(){
   if (camera.position.z <= usToWorldZoom) {
     // US center coordinates: -95.5° lon, 37° lat
     // In plane coordinates: x = -95.5/180 = -0.53, y = (37/90)*0.5 = 0.206
-    const usCenter = { x: -0.6, y: 0.30 };
+    const usCenter = { x: -0.65, y: 0.15 };
 
     // Zoom scales
-    const usZoomScale = 4.0;    // US view scale
+    const usZoomScale = 3.0;    // US view scale
 
     // Interpolate scale: 5.5x at zoomMin, worldScale at usToWorldZoom
     const currentScale = THREE.MathUtils.lerp(usZoomScale, worldScale, mapTransitionProgress);
@@ -1105,8 +1362,8 @@ function animate(){
 
   // Match US flight paths to map transformation
   if (currentZoomState === ZOOM_STATES.US) {
-    const usCenter = { x: -0.6, y: 0.3 };
-    const usZoomScale = 4.0;
+    const usCenter = { x: -0.65, y: 0.15 };
+    const usZoomScale = 3.0;
     const currentScale = THREE.MathUtils.lerp(usZoomScale, worldScale, mapTransitionProgress);
     const currentOffsetX = THREE.MathUtils.lerp(-usCenter.x, 0, mapTransitionProgress);
     const currentOffsetY = THREE.MathUtils.lerp(-usCenter.y, 0, mapTransitionProgress);
@@ -1117,6 +1374,19 @@ function animate(){
     usFlightPathGroup.position.x = currentOffsetX * currentScale;
     usFlightPathGroup.position.y = currentOffsetY * currentScale;
     usFlightPathGroup.position.z = 0;
+
+    // Counter-scale circles (sprites) to maintain size and circular shape
+    usFlightPathGroup.children.forEach(child => {
+      if (child.isSprite) {
+        // Inverse scale to maintain original size and circular shape
+        const baseSize = 0.02; // Original circle size
+        child.scale.set(
+          baseSize / currentScale,      // Counter horizontal scale
+          baseSize / verticalScale,     // Counter vertical scale (different due to 1.3x)
+          1
+        );
+      }
+    });
   }
 
   // International paths visible when in WORLD state
@@ -1126,6 +1396,19 @@ function animate(){
   if (currentZoomState === ZOOM_STATES.WORLD) {
     flightPathGroup.scale.set(worldScale, worldScale, worldScale);
     flightPathGroup.position.set(0, 0, 0);
+
+    // Counter-scale circles (sprites) to maintain size
+    flightPathGroup.children.forEach(child => {
+      if (child.isSprite) {
+        const baseSize = 0.02; // Original circle size
+        const worldCircleMultiplier = 3.0; // Make world map circles 2x larger
+        child.scale.set(
+          (baseSize / worldScale) * worldCircleMultiplier,
+          (baseSize / worldScale) * worldCircleMultiplier,
+          1
+        );
+      }
+    });
   }
 
   // MORPH EARTH (only when past usToWorldZoom)
@@ -1169,20 +1452,23 @@ function animate(){
     planetGroup.visible = true;
     moonsGroup.visible = true;
     solarFlightPathsGroup.visible = true;
+    solarSystemLights.visible = true;
     console.log(`📊 Solar paths visibility set to: ${solarFlightPathsGroup.visible}, children: ${solarFlightPathsGroup.children.length}`);
     starGroup.visible = true;
     planetZoomInProgress = true;
 
-    // Show all planet and moon labels
-    earthLabel.visible = true;
+    // Keep all planet and moon labels hidden by default
+    // They will be shown on hover in the mousemove handler
+    earthLabel.visible = false;
     planetGroup.children.forEach(planet => {
+      if (!planet.children) return;
       planet.children.forEach(child => {
-        if (child.isCSS2DObject) child.visible = true;
+        if (child.isCSS2DObject) child.visible = false;
       });
     });
     moonsGroup.children.forEach(moon => {
       moon.children.forEach(child => {
-        if (child.isCSS2DObject) child.visible = true;
+        if (child.isCSS2DObject) child.visible = false;
       });
     });
   }
@@ -1199,8 +1485,9 @@ function animate(){
       0.12
     );
 
-    // Move other planets
+    // Move other planets (only meshes, not lights)
     planetGroup.children.forEach((planet)=>{
+      if (!planet.userData || !planet.userData.name) return; // Skip non-planet objects
       const name = planet.userData.name;
       planet.position.lerp(customPositions[name], 0.12);
     });
@@ -1231,12 +1518,14 @@ function animate(){
     planetGroup.visible = false;
     moonsGroup.visible = false;
     solarFlightPathsGroup.visible = false;
+    solarSystemLights.visible = false;
     starGroup.visible = false;
     planetZoomInProgress = false;
 
     // Hide all labels
     earthLabel.visible = false;
     planetGroup.children.forEach(planet => {
+      if (!planet.children) return; // Skip if no children
       planet.children.forEach(child => {
         if (child.isCSS2DObject) child.visible = false;
       });
@@ -1247,8 +1536,9 @@ function animate(){
       });
     });
 
-    // Reset planets and moons to start positions
+    // Reset planets and moons to start positions (only meshes with userData)
     planetGroup.children.forEach(p => {
+      if (!p.userData || !p.userData.name) return; // Skip non-planet objects
       p.position.set(0, 0, -20);
     });
     moonsGroup.children.forEach(m => {
@@ -1385,7 +1675,239 @@ function updateMorphFromZoom(){
 }
 
 // ==========================================================
-// TOOLTIP (HOVER) - FIXED VERSION
+// MOVIE DATA MAPPING (Title → ID for posters)
+// ==========================================================
+let movieTitleToId = {};
+
+async function loadMovieData() {
+  try {
+    const { default: moviesData } = await import('./movies_data_for_shelf.js');
+    movieTitleToId = {};
+    moviesData.forEach(movie => {
+      movieTitleToId[movie.title] = movie.id;
+    });
+    console.log(`✅ Loaded ${Object.keys(movieTitleToId).length} movie poster mappings`);
+  } catch (error) {
+    console.error('❌ Failed to load movie data:', error);
+  }
+}
+
+loadMovieData();
+
+// ==========================================================
+// MOVIE HOVER CARD
+// ==========================================================
+const hoverCard = document.getElementById('movieHoverCard');
+const hoverTitle = document.getElementById('movieHoverTitle');
+const hoverContent = document.getElementById('movieHoverContent');
+
+// Track whether mouse is over the hover card or a flight path
+let isMouseOverHoverCard = false;
+let isMouseOverFlightPath = false;
+let hideHoverCardTimeout = null;
+
+// Function to show only relevant planet/moon labels based on flight path destination
+function showRelevantLabel(destination) {
+  // Hide all labels first
+  hideAllSolarLabels();
+
+  if (!destination) return;
+
+  const destLower = destination.toLowerCase().trim();
+
+  // Show Earth label if destination is Earth
+  if (destLower === 'earth') {
+    if (earthLabel) {
+      earthLabel.visible = true;
+      console.log('Showing Earth label');
+    }
+    return;
+  }
+
+  // Check if it's a planet label (including "fictional locations")
+  let labelFound = false;
+  planetGroup.children.forEach(planet => {
+    if (planet.userData && planet.userData.name) {
+      const planetNameLower = planet.userData.name.toLowerCase().trim();
+      // Match exact name or partial match for "fictional locations"
+      if (planetNameLower === destLower ||
+          (destLower.includes('fictional') && planetNameLower.includes('fictional'))) {
+        planet.children.forEach(child => {
+          if (child.isCSS2DObject) {
+            child.visible = true;
+            labelFound = true;
+            console.log(`Showing label for planet: ${planet.userData.name}`);
+          }
+        });
+      }
+    }
+  });
+
+  // Check if it's a moon label
+  if (!labelFound) {
+    moonsGroup.children.forEach(moon => {
+      if (moon.userData && moon.userData.name && moon.userData.name.toLowerCase().trim() === destLower) {
+        moon.children.forEach(child => {
+          if (child.isCSS2DObject) {
+            child.visible = true;
+            console.log(`Showing label for moon: ${moon.userData.name}`);
+          }
+        });
+      }
+    });
+  }
+}
+
+// Function to hide all solar system labels
+function hideAllSolarLabels() {
+  if (earthLabel) earthLabel.visible = false;
+
+  planetGroup.children.forEach(planet => {
+    if (!planet.children) return;
+    planet.children.forEach(child => {
+      if (child.isCSS2DObject) child.visible = false;
+    });
+  });
+
+  moonsGroup.children.forEach(moon => {
+    moon.children.forEach(child => {
+      if (child.isCSS2DObject) child.visible = false;
+    });
+  });
+}
+
+function showMovieHoverCard(movies, x, y) {
+  // Clear any pending hide timeout since we're showing the card
+  if (hideHoverCardTimeout) {
+    clearTimeout(hideHoverCardTimeout);
+    hideHoverCardTimeout = null;
+  }
+
+  if (!Array.isArray(movies)) {
+    movies = [movies];
+  }
+
+  // Set title - if single movie, show movie name with year
+  // If multiple movies, show count
+  if (movies.length === 1) {
+    const movie = movies[0];
+    hoverTitle.textContent = `${movie.movie} (${movie.year})`;
+  } else {
+    hoverTitle.textContent = `${movies.length} Movies`;
+  }
+
+  // Build content with poster + details for each movie
+  hoverContent.innerHTML = '';
+
+  movies.forEach(movie => {
+    const row = document.createElement('div');
+    row.className = 'movieHoverRow';
+
+    // Poster image
+    const posterId = movieTitleToId[movie.movie];
+    const posterImg = document.createElement('img');
+    posterImg.className = 'movieHoverPoster';
+    posterImg.src = posterId !== undefined ? `./postersID/${posterId}.jpg` : './postersID/placeholder.jpg';
+    posterImg.alt = movie.movie;
+    posterImg.onerror = () => {
+      posterImg.src = './postersID/0.jpg'; // Fallback to first image if missing
+    };
+
+    // Details text
+    const details = document.createElement('div');
+    details.className = 'movieHoverDetails';
+
+    let detailsHTML = '';
+
+    // For multi-movie hover cards, show the movie name
+    if (movies.length > 1) {
+      detailsHTML += `<strong>${movie.movie} (${movie.year})</strong><br><br>`;
+    }
+
+    detailsHTML += `<strong>Production:</strong> ${movie.from}<br><br>`;
+    detailsHTML += `<strong>Depicted:</strong> ${movie.to}`;
+
+    if (movie.isSameLocation) {
+      detailsHTML += ` (same location)`;
+    }
+
+    details.innerHTML = detailsHTML;
+
+    row.appendChild(posterImg);
+    row.appendChild(details);
+    hoverContent.appendChild(row);
+  });
+
+  // Show the card and enable pointer events for scrolling
+  hoverCard.style.opacity = 1;
+  hoverCard.style.pointerEvents = 'auto';
+
+  // Position the card with smart overflow handling
+  const cardRect = hoverCard.getBoundingClientRect();
+  const screenW = window.innerWidth;
+  const screenH = window.innerHeight;
+
+  let cardX = x + 20;
+  let cardY = y + 20;
+
+  // Prevent right overflow
+  if (cardX + cardRect.width > screenW - 10) {
+    cardX = x - cardRect.width - 20;
+  }
+
+  // Prevent bottom overflow
+  if (cardY + cardRect.height > screenH - 10) {
+    cardY = y - cardRect.height - 20;
+  }
+
+  // Clamp positions
+  cardX = Math.max(10, Math.min(cardX, screenW - cardRect.width - 10));
+  cardY = Math.max(10, Math.min(cardY, screenH - cardRect.height - 10));
+
+  hoverCard.style.left = `${cardX}px`;
+  hoverCard.style.top = `${cardY}px`;
+}
+
+function hideMovieHoverCard() {
+  // Clear any existing timeout
+  if (hideHoverCardTimeout) {
+    clearTimeout(hideHoverCardTimeout);
+  }
+
+  // Add a small delay before hiding (250ms) to give user time to move cursor to popup
+  hideHoverCardTimeout = setTimeout(() => {
+    // Only hide if mouse is not over the hover card
+    if (!isMouseOverHoverCard && !isMouseOverFlightPath) {
+      hoverCard.style.opacity = 0;
+      hoverCard.style.pointerEvents = 'none';
+    }
+    hideHoverCardTimeout = null;
+  }, 250);
+}
+
+// Add event listeners to track mouse over hover card
+hoverCard.addEventListener('mouseenter', () => {
+  isMouseOverHoverCard = true;
+  // Clear any pending hide timeout when mouse enters the card
+  if (hideHoverCardTimeout) {
+    clearTimeout(hideHoverCardTimeout);
+    hideHoverCardTimeout = null;
+  }
+});
+
+hoverCard.addEventListener('mouseleave', () => {
+  isMouseOverHoverCard = false;
+  // Use delayed hide when mouse leaves
+  hideMovieHoverCard();
+});
+
+// Prevent wheel events on the hover card from affecting the main view zoom
+hoverCard.addEventListener('wheel', (e) => {
+  e.stopPropagation();
+}, { passive: true });
+
+// ==========================================================
+// TOOLTIP (HOVER) - UPDATED FOR HOVER CARD
 // ==========================================================
 const tooltip = document.getElementById('flightPathTooltip');
 const raycaster = new THREE.Raycaster();
@@ -1400,15 +1922,16 @@ window.addEventListener("mousemove", (evt) => {
   // Adjust hover sensitivity based on zoom state
   // Higher values = more sensitive (easier to hover)
   if (currentZoomState === ZOOM_STATES.US) {
-    raycaster.params.Line.threshold = 0.007; // Very sensitive for US map
+    raycaster.params.Line.threshold = 0.015; // Very sensitive for US map
   } else if (currentZoomState === ZOOM_STATES.WORLD) {
-    raycaster.params.Line.threshold = 0.015; // Less sensitive for world view
+    raycaster.params.Line.threshold = 0.025; // Less sensitive for world view
   } else if (currentZoomState === ZOOM_STATES.SOLAR) {
-    raycaster.params.Line.threshold = 0.05; // Least sensitive for solar view
+    raycaster.params.Line.threshold = 0.075; // Least sensitive for solar view
   }
 
   // Only check the currently visible flight path group based on zoom state
   let allHits = [];
+  let planetHits = [];
 
   if (currentZoomState === ZOOM_STATES.US && usFlightPathGroup.visible) {
     // US view: only check US domestic paths that are visible
@@ -1422,18 +1945,29 @@ window.addEventListener("mousemove", (evt) => {
     // Solar system view: only check solar paths that are visible
     const visiblePaths = solarFlightPathsGroup.children.filter(child => child.visible);
     allHits = raycaster.intersectObjects(visiblePaths, false);
+
+    // Also check for planet/moon hovers in solar view
+    const allPlanets = [...planetGroup.children, ...moonsGroup.children, earthMesh];
+    planetHits = raycaster.intersectObjects(allPlanets, true);
   }
 
   const hovering = allHits.length > 0;
+  const hoveringPlanet = planetHits.length > 0 && currentZoomState === ZOOM_STATES.SOLAR;
+  isMouseOverFlightPath = hovering;
 
   if (hovering) {
     if (cursor) cursor.classList.add("hover");
 
-    // Show tooltip for the closest hit
+    // Show hover card for the closest hit
     const obj = allHits[0].object;
     const d = obj.userData;
 
-    // Format tooltip text
+    // Show relevant planet/moon label when hovering in solar view
+    if (currentZoomState === ZOOM_STATES.SOLAR && d.to) {
+      showRelevantLabel(d.to);
+    }
+
+    // Prepare movie data for hover card
     if (d.isFictionalLocations && d.movies) {
       // Special case: Fictional Locations - filter by current decade
       let filteredMovies = d.movies;
@@ -1447,30 +1981,180 @@ window.addEventListener("mousemove", (evt) => {
       }
 
       if (filteredMovies.length > 0) {
-        const movieList = filteredMovies
-          .map(m => `${m.movie} (${m.year}) — ${m.from} → ${m.to}`)
-          .join('\n');
-        tooltip.textContent = movieList;
-        tooltip.style.whiteSpace = 'pre-line'; // Allow line breaks
+        showMovieHoverCard(filteredMovies, evt.clientX, evt.clientY);
       } else {
-        // No movies in this time period
-        tooltip.textContent = `No fictional location movies in ${currentDecade}–${currentDecade + WINDOW_STEP - 1}`;
-        tooltip.style.whiteSpace = 'nowrap';
+        // No movies in this time period - show simple tooltip
+        hideMovieHoverCard();
       }
     } else {
-      // Regular single movie path
-      tooltip.textContent = `${d.movie} (${d.year}) — ${d.from} → ${d.to}`;
-      tooltip.style.whiteSpace = 'nowrap';
+      // Single movie (regular path or same-location circle)
+      const movieData = {
+        movie: d.movie,
+        year: d.year,
+        from: d.from,
+        to: d.to,
+        isSameLocation: d.isSameLocation || false
+      };
+      showMovieHoverCard(movieData, evt.clientX, evt.clientY);
+    }
+  } else if (hoveringPlanet) {
+    // Hovering over a planet/moon but not a flight path
+    if (cursor) cursor.classList.add("hover");
+
+    // Find which planet/moon is being hovered
+    let planetName = null;
+
+    // Check if it's Earth
+    if (planetHits[0].object === earthMesh || planetHits[0].object.parent === earthMesh) {
+      planetName = 'Earth';
+    } else {
+      // Check planets
+      for (let planet of planetGroup.children) {
+        if (planetHits[0].object === planet || planetHits[0].object.parent === planet) {
+          planetName = planet.userData.name;
+          break;
+        }
+      }
+
+      // Check moons if not found in planets
+      if (!planetName) {
+        for (let moon of moonsGroup.children) {
+          if (planetHits[0].object === moon || planetHits[0].object.parent === moon) {
+            planetName = moon.userData.name;
+            break;
+          }
+        }
+      }
     }
 
-    // Position tooltip above cursor
-    tooltip.style.left = evt.clientX + "px";
-    tooltip.style.top = (evt.clientY - 30) + "px";
-    tooltip.style.transform = "translateX(-50%)";
-    tooltip.style.opacity = 0.9;
+    if (planetName) {
+      showRelevantLabel(planetName);
+    }
   } else {
     if (cursor) cursor.classList.remove("hover");
-    tooltip.style.opacity = 0;
+    hideMovieHoverCard();
+
+    // Hide all solar labels when not hovering
+    if (currentZoomState === ZOOM_STATES.SOLAR) {
+      hideAllSolarLabels();
+    }
+  }
+
+  // ==========================================================
+  // ARROW CURSOR LOGIC (LEFT/RIGHT EDGE NAVIGATION)
+  // ==========================================================
+  // Only show arrow cursors when on the map page (page 1)
+  if (typeof currentPage !== 'undefined' && currentPage === 1) {
+    const x = evt.clientX;
+    const w = window.innerWidth;
+
+    // Get cursor element (in case it wasn't available at script load time)
+    const cursorElement = document.getElementById("cursorCircle") || window.cursorElement;
+
+    // Don't show arrows if hovering over interactive elements or timeline bars
+    if (cursorElement && !cursorElement.classList.contains("hover") && !hoveringBars) {
+      if (x < EDGE_ZONE) {
+        // Left edge - show left arrow
+        cursorElement.classList.add("arrow-left");
+        cursorElement.classList.remove("arrow-right");
+        // Set size directly with !important to override hover handlers
+        cursorElement.style.setProperty('width', '80px', 'important');
+        cursorElement.style.setProperty('height', '80px', 'important');
+        cursorElement.style.setProperty('background', 'rgba(255, 255, 255, 0.18)', 'important');
+        cursorElement.style.setProperty('opacity', '1', 'important');
+      } else if (x > w - EDGE_ZONE) {
+        // Right edge - show right arrow
+        cursorElement.classList.add("arrow-right");
+        cursorElement.classList.remove("arrow-left");
+        // Set size directly with !important to override hover handlers
+        cursorElement.style.setProperty('width', '80px', 'important');
+        cursorElement.style.setProperty('height', '80px', 'important');
+        cursorElement.style.setProperty('background', 'rgba(255, 255, 255, 0.18)', 'important');
+        cursorElement.style.setProperty('opacity', '1', 'important');
+      } else {
+        // Middle - no arrows, reset to default
+        cursorElement.classList.remove("arrow-left", "arrow-right");
+        cursorElement.style.setProperty('width', '18px', 'important');
+        cursorElement.style.setProperty('height', '18px', 'important');
+        cursorElement.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+        cursorElement.style.setProperty('opacity', '1', 'important');
+      }
+    } else if (cursorElement) {
+      // Remove arrows if hovering interactive elements
+      cursorElement.classList.remove("arrow-left", "arrow-right");
+    }
+  }
+});
+
+// ==========================================================
+// ARROW CURSOR CLICK HANDLER
+// ==========================================================
+window.addEventListener("mousedown", (e) => {
+  // Only handle arrow clicks when on the map page (page 1)
+  if (typeof currentPage !== 'undefined' && currentPage !== 1) {
+    return;
+  }
+
+  // Get cursor element
+  const cursorElement = document.getElementById("cursorCircle") || window.cursorElement;
+  if (!cursorElement) return;
+
+  if (cursorElement.classList.contains("arrow-right")) {
+    // Navigate forward in time
+    if (currentDecade === null) {
+      // Currently on "All", move to first decade
+      currentDecade = decades[0];
+    } else {
+      // Find current index in decades array
+      const currentIndex = decades.indexOf(currentDecade);
+      if (currentIndex < decades.length - 1) {
+        // Move to next decade
+        currentDecade = decades[currentIndex + 1];
+      }
+      // If already at the last decade, stay there
+    }
+
+    updateDecadeDisplay(currentDecade);
+    updateFlightPathVisibility();
+
+    // Update the visual timeline bar if it exists
+    const currentIndexInMeta = booksMeta.findIndex(meta => meta.start === currentDecade);
+    if (currentIndexInMeta !== -1) {
+      updateActiveBookBar(currentIndexInMeta);
+    }
+
+  } else if (cursorElement.classList.contains("arrow-left")) {
+    // Navigate backward in time
+    if (currentDecade === null) {
+      // Currently on "All", move to last decade
+      currentDecade = decades[decades.length - 1];
+    } else {
+      // Find current index in decades array
+      const currentIndex = decades.indexOf(currentDecade);
+      if (currentIndex > 0) {
+        // Move to previous decade
+        currentDecade = decades[currentIndex - 1];
+      } else {
+        // If at first decade, go back to "All"
+        currentDecade = null;
+      }
+    }
+
+    updateDecadeDisplay(currentDecade);
+    updateFlightPathVisibility();
+
+    // Update the visual timeline bar if it exists
+    if (currentDecade === null) {
+      // Reset to "All" - no specific bar highlighted
+      document.querySelectorAll(".book-bar").forEach(bar => {
+        bar.classList.remove("active");
+      });
+    } else {
+      const currentIndexInMeta = booksMeta.findIndex(meta => meta.start === currentDecade);
+      if (currentIndexInMeta !== -1) {
+        updateActiveBookBar(currentIndexInMeta);
+      }
+    }
   }
 });
 
@@ -1479,15 +2163,53 @@ window.addEventListener("mousemove", (evt) => {
 // ==========================================================
 // Discrete zoom level transitions
 let scrollCooldown = false;
-const SCROLL_COOLDOWN_TIME = 800; // ms to wait before allowing next scroll
+const SCROLL_COOLDOWN_TIME = 1500; // ms to wait before allowing next scroll
+
+// Expose scrollCooldown to window for page transition cooldown
+window.setScrollCooldown = (enabled) => {
+  scrollCooldown = enabled;
+  if (enabled) {
+    setTimeout(() => {
+      scrollCooldown = false;
+    }, SCROLL_COOLDOWN_TIME);
+  }
+};
+
+// Momentum/coasting prevention
+let lastWheelTime = 0;
+const SCROLL_MOMENTUM_TIMEOUT = 500; // ms - ignore events that come too quickly after previous scroll
+const MIN_SCROLL_DELTA = 3; // minimum deltaY to be considered intentional
 
 window.addEventListener('wheel', (event) => {
+  // Only allow zoom controls when on the map page (page 1)
+  // currentPage is defined in the HTML page transition script
+  if (typeof currentPage === 'undefined' || currentPage !== 1) {
+    return; // Don't prevent default or handle zoom on intro page
+  }
+
   event.preventDefault();
 
   // Ignore scroll during transitions or cooldown
   if (isTransitioning || scrollCooldown) {
     return;
   }
+
+  // Get current time
+  const now = performance.now();
+
+  // Ignore momentum scrolling (events that come too quickly after the last one)
+  if (lastWheelTime > 0 && now - lastWheelTime < SCROLL_MOMENTUM_TIMEOUT) {
+    // Too close to last event, likely momentum - ignore
+    return;
+  }
+
+  // Ignore very small deltas (likely momentum/coasting)
+  if (Math.abs(event.deltaY) < MIN_SCROLL_DELTA) {
+    return;
+  }
+
+  // Update last wheel time (only when we're about to process)
+  lastWheelTime = now;
 
   // Determine scroll direction
   const scrollingOut = event.deltaY > 0; // Scrolling down = zoom out
@@ -1542,6 +2264,11 @@ window.addEventListener('touchstart', (event) => {
 
 window.addEventListener('touchmove', (event) => {
   if (event.touches.length === 2) {
+    // Only allow zoom controls when on the map page (page 1)
+    if (typeof currentPage === 'undefined' || currentPage !== 1) {
+      return; // Don't handle zoom on intro page
+    }
+
     event.preventDefault();
 
     const currentDistance = getTouchDistance(event.touches[0], event.touches[1]);
@@ -1649,7 +2376,7 @@ function updateActiveBookBar(index) {
 ----------------------------------------------------------- */
 function jumpToBook(index) {
   const bookX = startX + index * spacing;
-  
+
   // Center book: shelf must move by -bookX
   targetShelfOffset = -bookX;
 
@@ -1731,7 +2458,7 @@ barsContainer.addEventListener("mousemove", (e) => {
 
   const meta = booksMeta[closestIndex];
   positionLabelOverBar(hoverLabel, bars[closestIndex], `${meta.start}–${meta.end}`);
-  
+
   const activeIndex = bars.findIndex(b => b.classList.contains("active"));
   if (activeIndex !== -1) {
     const metaActive = booksMeta[activeIndex];
@@ -1794,6 +2521,74 @@ barsContainer.addEventListener("mouseleave", () => {
 
   document.getElementById("hoverBarDate").style.opacity = 0;
   document.getElementById("activeBarDate").style.opacity = 0;
+});
+
+/* -----------------------------------------------------------
+   KEYBOARD ARROW NAVIGATION (LEFT/RIGHT ARROWS)
+----------------------------------------------------------- */
+window.addEventListener('keydown', (e) => {
+  // Only handle arrow keys when on the map page (page 1)
+  if (typeof currentPage !== 'undefined' && currentPage !== 1) {
+    return;
+  }
+
+  if (e.key === 'ArrowRight') {
+    // Move to next decade
+    if (currentDecade === null) {
+      // Currently on "All", move to first decade
+      currentDecade = decades[0];
+    } else {
+      // Find current index in decades array
+      const currentIndex = decades.indexOf(currentDecade);
+      if (currentIndex < decades.length - 1) {
+        // Move to next decade
+        currentDecade = decades[currentIndex + 1];
+      }
+      // If already at the last decade, stay there
+    }
+
+    updateDecadeDisplay(currentDecade);
+    updateFlightPathVisibility();
+
+    // Update the visual timeline bar if it exists
+    const currentIndexInMeta = booksMeta.findIndex(meta => meta.start === currentDecade);
+    if (currentIndexInMeta !== -1) {
+      updateActiveBookBar(currentIndexInMeta);
+    }
+
+  } else if (e.key === 'ArrowLeft') {
+    // Move to previous decade
+    if (currentDecade === null) {
+      // Currently on "All", move to last decade
+      currentDecade = decades[decades.length - 1];
+    } else {
+      // Find current index in decades array
+      const currentIndex = decades.indexOf(currentDecade);
+      if (currentIndex > 0) {
+        // Move to previous decade
+        currentDecade = decades[currentIndex - 1];
+      } else {
+        // If at first decade, go back to "All"
+        currentDecade = null;
+      }
+    }
+
+    updateDecadeDisplay(currentDecade);
+    updateFlightPathVisibility();
+
+    // Update the visual timeline bar if it exists
+    if (currentDecade === null) {
+      // Reset to "All" - no specific bar highlighted
+      document.querySelectorAll(".book-bar").forEach(bar => {
+        bar.classList.remove("active");
+      });
+    } else {
+      const currentIndexInMeta = booksMeta.findIndex(meta => meta.start === currentDecade);
+      if (currentIndexInMeta !== -1) {
+        updateActiveBookBar(currentIndexInMeta);
+      }
+    }
+  }
 });
 
 
