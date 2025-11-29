@@ -72,3 +72,46 @@
 .arrow-button-wrapper * {
   cursor: none !important;
 }
+
+/* Gradient background behind the button */
+.arrow-button-wrapper::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    bottom: -20px;
+    right: -20px;
+    left: -20px;
+
+    /* Soft vertical fade-out gradient */
+    background: linear-gradient(
+        to left,
+        rgba(0,0,0,0.0) 0%,
+        rgba(0,0,0,0.85) 100%,
+        rgba(0,0,0,0) 100%
+    );
+
+    border-radius: 1px;
+
+    pointer-events: none;    /* never blocks clicking */
+    z-index: -1;             /* always stays behind button */
+    opacity: 0;              /* fade with wrapper */
+    transition: opacity 0.5s ease;
+}
+
+/* When wrapper becomes visible, the gradient fades in too */
+.arrow-button-wrapper[style*="opacity: 1"]::before {
+    opacity: 1;
+}
+.arrow-button-text {
+  font-family: 'Courier New', monospace;
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: white;
+  transition: opacity 0.25s ease;
+
+  /* TEXT SHADOW HERE */
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.6),
+    0 4px 8px rgba(0,0,0,0.4);
+
+}
