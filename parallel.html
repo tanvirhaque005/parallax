@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="navigation-menu.css">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -19,9 +20,14 @@
       height: 100%;
       background: var(--bg);
       color: var(--ink);
-      font-family: 'Courier New', monospace;
+      font-family: 'IBM Plex Sans', sans-serif !important;
       overflow: hidden;
     }
+
+    text {
+      font-family: 'IBM Plex Sans', sans-serif !important;
+    }
+
 
     /* Page Container for Slides */
     .page-container {
@@ -130,11 +136,11 @@
       color: rgba(255,255,255,0.90);
       background: rgba(255,255,255,0.02);
       margin-bottom: 24px;
-      font-family: 'Inter', sans-serif;
+      font-family: 'IBM Plex Sans', sans-serif;
     }
 
     .intro-title {
-      font-family: 'Inter', sans-serif;
+      font-family: 'IBM Plex Sans', sans-serif;
       font-size: 3.5rem;
       font-weight: 400;
       color: #ffffff;
@@ -144,7 +150,7 @@
     }
 
     .intro-description {
-      font-family: 'Inter', sans-serif;
+      font-family: 'IBM Plex Sans', sans-serif;
       font-size: 1rem;
       color: #ffffff;
       line-height: 1.6;
@@ -170,7 +176,7 @@
       text-transform: uppercase;
       transition: opacity 0.3s ease;
       z-index: 10;
-      font-family: 'Courier New', monospace;
+      font-family: 'IBM Plex Sans', sans-serif;
     }
 
     .first-decade-button,
@@ -215,15 +221,15 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      color: #cccccc;
+      color: #cccccca4;
       text-decoration: none;
-      font-size: 13px;
+      font-size: 12px;
       letter-spacing: 1px;
       transition: color 0.3s;
       text-transform: uppercase;
       position: fixed;
-         bottom: 40px;
-         right: 40px;
+         top: 20px;
+         left: 40px;
          z-index: 200;
     }
     .back-link:hover { color: #ffffff; }
@@ -241,7 +247,7 @@
       border: 1px solid white;
       color: #cccccc;
       padding: 14px 28px;
-      font-family: 'Courier New', monospace;
+      font-family: 'IBM Plex Sans', sans-serif;
       font-size: 12px;
       letter-spacing: 1.5px;
       cursor: pointer;
@@ -284,7 +290,7 @@
   flex-direction: column;
   gap: 24px;
 
-  font-family: 'Inter', sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
 
   /* box-shadow: 0 10px 28px rgba(0,0,0,0.3); */
 }
@@ -426,7 +432,7 @@
   top: 90px;            /* adjust as you want */
   left: 24px;
   color: #ffffff;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', sans-serif;
   font-size: 14px;
   opacity: 0.85;
   letter-spacing: 1px;
@@ -438,7 +444,7 @@
 .barDateLabel {
   position: fixed;
   color: #ffffff;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', sans-serif;
   font-size: 12px;
   letter-spacing: 1px;
   pointer-events: none;
@@ -457,7 +463,7 @@
     border-radius: 10px;
     backdrop-filter: blur(4px);
     color: white;
-    font-family: 'Inter', sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     width: 260px;
 
     opacity: 0;
@@ -590,6 +596,13 @@
 </head>
 
 <body>
+  <!-- Page Header -->
+  <div class="page-header">
+    <a href="chordGraph.html" class="back-link">
+      <span class="back-arrow">←</span>
+      <span>Back</span>
+    </a>
+  </div>
   <div id="introMessageDefault" data-text="Now that you've seen how motifs evolve, let's explore how far films leap into the future. Scroll to travel through time."></div>
   <script src="introMessage.js" defer></script>
   
@@ -631,7 +644,7 @@
              position: fixed;
              bottom: 80px;
              right: 40px;
-             font-family: 'Courier New', monospace;
+             font-family: 'IBM Plex Sans', sans-serif;
              color: #d12020;
              font-size: 15px;
              opacity: 0.85;

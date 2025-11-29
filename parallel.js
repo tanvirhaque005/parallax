@@ -656,7 +656,6 @@ buildWorld();  // rebuild world including events
 buildFixedAxisLabels(); // builds fixed labels
 
 window.addEventListener("resize", () => {
-    positionFixedAxisLabels(); // if needed
     buildFixedAxisLabels();    // recreate at new yTop/yBot
 });
 
