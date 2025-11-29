@@ -552,7 +552,7 @@ function updateDecadeDisplay(decade) {
 // CUSTOM PLANET POSITIONS
 // ==========================================================
 const customPositions = {
-  sun:      new THREE.Vector3(0, 0, 0),    // Center the sun
+  sun:      new THREE.Vector3(0, 0, -3),    // Center the sun, behind flight paths
   mercury:  new THREE.Vector3(2, 1, 0),
   venus:    new THREE.Vector3(3, -1, 0),
   earth:    new THREE.Vector3(-2.5, -1.3, 0),  // Further away from sun
@@ -631,6 +631,8 @@ Object.keys(planetColors).forEach((name)=>{
 
   // Add glow halo around the sun with multiple layers for blur effect
   if (name === 'sun') {
+    p.renderOrder = 0; // Render sun before flight paths
+
     const glowLayers = [
       { scale: 1.2, color: 0xFFD700, opacity: 0.3 },  // Very close bright gold
       { scale: 1.4, color: 0xFFD700, opacity: 0.25 }, // Close gold
@@ -653,6 +655,7 @@ Object.keys(planetColors).forEach((name)=>{
         blending: THREE.AdditiveBlending  // Creates softer, more luminous blend
       });
       const glow = new THREE.Mesh(glowGeo, glowMat);
+      glow.renderOrder = 0; // Render glow layers before flight paths
       p.add(glow);
     });
   }
@@ -956,12 +959,14 @@ async function loadSolarFlightPaths(){
         vertexColors: true,
         transparent: true,
         opacity: 0.8,
-        depthWrite: false,
+        depthWrite: true,
+        depthTest: true,
         alphaToCoverage: true // Enable for smoother edges
       });
       lineMaterial.resolution.set(window.innerWidth, window.innerHeight);
 
       const line = new Line2(geometry, lineMaterial);
+      line.renderOrder = 100; // Render on top of sun and planets
 
       // Store all fictional location movies in userData with actual fictional location names
       line.userData = {
@@ -1086,12 +1091,14 @@ async function loadSolarFlightPaths(){
         vertexColors: true,
         transparent: true,
         opacity: 0.8,
-        depthWrite: false,
+        depthWrite: true,
+        depthTest: true,
         alphaToCoverage: true // Enable for smoother edges
       });
       lineMaterial.resolution.set(window.innerWidth, window.innerHeight);
 
       const line = new Line2(geometry, lineMaterial);
+      line.renderOrder = 100; // Render on top of sun and planets
 
       // Parse year to integer for filtering
       const yearInt = parseInt(conn.year) || 0;
@@ -1627,7 +1634,18 @@ const hoverCard = document.getElementById('movieHoverCard');
 const hoverTitle = document.getElementById('movieHoverTitle');
 const hoverContent = document.getElementById('movieHoverContent');
 
+// Track whether mouse is over the hover card or a flight path
+let isMouseOverHoverCard = false;
+let isMouseOverFlightPath = false;
+let hideHoverCardTimeout = null;
+
 function showMovieHoverCard(movies, x, y) {
+  // Clear any pending hide timeout since we're showing the card
+  if (hideHoverCardTimeout) {
+    clearTimeout(hideHoverCardTimeout);
+    hideHoverCardTimeout = null;
+  }
+
   if (!Array.isArray(movies)) {
     movies = [movies];
   }
@@ -1683,8 +1701,9 @@ function showMovieHoverCard(movies, x, y) {
     hoverContent.appendChild(row);
   });
 
-  // Show the card
+  // Show the card and enable pointer events for scrolling
   hoverCard.style.opacity = 1;
+  hoverCard.style.pointerEvents = 'auto';
 
   // Position the card with smart overflow handling
   const cardRect = hoverCard.getBoundingClientRect();
@@ -1713,8 +1732,42 @@ function showMovieHoverCard(movies, x, y) {
 }
 
 function hideMovieHoverCard() {
-  hoverCard.style.opacity = 0;
+  // Clear any existing timeout
+  if (hideHoverCardTimeout) {
+    clearTimeout(hideHoverCardTimeout);
+  }
+
+  // Add a small delay before hiding (250ms) to give user time to move cursor to popup
+  hideHoverCardTimeout = setTimeout(() => {
+    // Only hide if mouse is not over the hover card
+    if (!isMouseOverHoverCard && !isMouseOverFlightPath) {
+      hoverCard.style.opacity = 0;
+      hoverCard.style.pointerEvents = 'none';
+    }
+    hideHoverCardTimeout = null;
+  }, 250);
 }
+
+// Add event listeners to track mouse over hover card
+hoverCard.addEventListener('mouseenter', () => {
+  isMouseOverHoverCard = true;
+  // Clear any pending hide timeout when mouse enters the card
+  if (hideHoverCardTimeout) {
+    clearTimeout(hideHoverCardTimeout);
+    hideHoverCardTimeout = null;
+  }
+});
+
+hoverCard.addEventListener('mouseleave', () => {
+  isMouseOverHoverCard = false;
+  // Use delayed hide when mouse leaves
+  hideMovieHoverCard();
+});
+
+// Prevent wheel events on the hover card from affecting the main view zoom
+hoverCard.addEventListener('wheel', (e) => {
+  e.stopPropagation();
+}, { passive: true });
 
 // ==========================================================
 // TOOLTIP (HOVER) - UPDATED FOR HOVER CARD
@@ -1757,6 +1810,7 @@ window.addEventListener("mousemove", (evt) => {
   }
 
   const hovering = allHits.length > 0;
+  isMouseOverFlightPath = hovering;
 
   if (hovering) {
     if (cursor) cursor.classList.add("hover");
