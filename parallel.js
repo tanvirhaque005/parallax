@@ -749,6 +749,83 @@ bookBarsContainer.addEventListener("click", (e) => {
 // ------------------------------------------------------------
 //  Arrow cursor logic
 // ------------------------------------------------------------
+
+let currentPage = 0;
+    const pages = document.querySelectorAll('.page-slide');
+    const firstDecadeBtn = document.getElementById('firstDecadeBtn');
+    const navMenu = document.getElementById('navigationMenu');
+
+    function updatePages() {
+      pages.forEach((page, index) => {
+        page.classList.remove('active', 'next', 'prev');
+        if (index === currentPage) {
+          page.classList.add('active');
+          // Show navigation menu only on chart page
+          if (index === 1) {
+            if (navMenu) navMenu.style.display = '';
+            // Show intro message text after chart is revealed
+            setTimeout(() => {
+              if (typeof showDefaultIntro === 'function') {
+                showDefaultIntro(true);
+              }
+            }, 500);
+            // Show arrow button after 3 seconds
+            setTimeout(() => {
+              const arrowButton = document.querySelector('.arrow-button-wrapper');
+              if (arrowButton) {
+                arrowButton.style.opacity = "1";
+                arrowButton.style.pointerEvents = "auto";
+              }
+            }, 3000);
+          } else {
+            if (navMenu) navMenu.style.display = 'none';
+          }
+        } else if (index > currentPage) {
+          page.classList.add('next');
+        } else {
+          page.classList.add('prev');
+        }
+      });
+    }
+
+   /* ---------------------------------------------------------
+   DISCRETE SCROLL DETECTOR (1 scroll = 1 gesture)
+--------------------------------------------------------- */
+let scrollLocked = false;
+
+window.addEventListener("wheel", (e) => {
+    if (scrollLocked) return;
+
+    scrollLocked = true;
+
+    const direction = e.deltaY > 0 ? "down" : "up";
+
+    // scroll down from INTRO → go to chart
+    if (direction === "down" && currentPage === 0) {
+        currentPage = 1;
+        updatePages();
+    }
+
+    // unlock after gesture completes
+    setTimeout(() => {
+        scrollLocked = false;
+    }, 350);
+});
+
+
+
+    firstDecadeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (currentPage < pages.length - 1) {
+        currentPage++;
+        updatePages();
+      }
+    });
+
+    // Initialize
+    updatePages();
+
+
 const cursorCircle = document.getElementById("cursorCircle");
 
 window.addEventListener("mousemove", (e) => {
@@ -783,14 +860,24 @@ window.addEventListener("mousemove", (e) => {
 //  Arrow click behavior
 // ------------------------------------------------------------
 window.addEventListener("mousedown", (e) => {
+    // 1. If on INTRO PAGE and RIGHT ARROW is shown → advance to main viz
+    if (currentPage === 0 && cursorCircle.classList.contains("arrow-right")) {
+        currentPage = 1;
+        updatePages();
+        return;   // IMPORTANT: prevent timeline window-changing logic from running
+    }
+
+    // If hovering bars, no arrow behavior
     if (hoveringBars) return;
 
     const idx = windowStarts.indexOf(currentWindowStart);
 
+    // 2. Normal RIGHT ARROW behavior (timeline windows)
     if (cursorCircle.classList.contains("arrow-right")) {
         if (idx < windowStarts.length - 1) {
             const yr = windowStarts[idx + 1];
             currentWindowStart = yr;
+
             updateWindowHighlight();
             updateActiveBookBar();
             updateLeftCard();
@@ -798,10 +885,12 @@ window.addEventListener("mousedown", (e) => {
         }
     }
 
+    // 3. Normal LEFT ARROW behavior (timeline windows)
     if (cursorCircle.classList.contains("arrow-left")) {
         if (idx > 0) {
             const yr = windowStarts[idx - 1];
             currentWindowStart = yr;
+
             updateWindowHighlight();
             updateActiveBookBar();
             updateLeftCard();
