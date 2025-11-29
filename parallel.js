@@ -52,8 +52,8 @@ const W = window.innerWidth;
 const H = window.innerHeight;
 
 // Vertical placement
-const yTop = 240;
-const yBot = H - 220;
+const yTop = 190;
+const yBot = H - 190;
 
 
 // -----------------------------
@@ -264,7 +264,7 @@ function buildFixedAxisLabels() {
     // --- Common style for both labels ---
     const labelStyle = {
         fill: "white",
-        "font-size": 34,                   // Larger text
+        "font-size": 24,                   // Larger text
         "font-family": "Inter, sans-serif",
         "font-weight": 300,                // bolder for clarity
         "letter-spacing": "1.5px",
@@ -290,10 +290,15 @@ function buildFixedAxisLabels() {
 }
 
 function buildSlopeExamples() {
+
+    const SLOPE_SCALE = 0.55;   // << master size control (0.5 = half size, 1 = original)
+
     const slopeGroup = S("g");
+    slopeGroup.setAttribute(
+        "transform",
+        `translate(520,120) scale(${SLOPE_SCALE})`
+    );
     slopeGroup.setAttribute("id", "svgSlopeExamples");
-    slopeGroup.setAttribute("transform", "translate(80, 150)"); 
-    // moved upward (180 → 130)
 
     // ---- Steep Line ----
     const steepLine = S("line");
@@ -337,6 +342,8 @@ function buildSlopeExamples() {
 
     svg.appendChild(slopeGroup);
 }
+
+
 
 buildSlopeExamples();
 
