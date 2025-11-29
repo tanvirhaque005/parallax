@@ -114,6 +114,7 @@ labelRenderer.setSize(window.innerWidth, window.innerHeight);
 labelRenderer.domElement.style.position = 'absolute';
 labelRenderer.domElement.style.top = '0';
 labelRenderer.domElement.style.pointerEvents = 'none';
+labelRenderer.domElement.style.zIndex = '10'; // Below popup (999999)
 document.body.appendChild(labelRenderer.domElement);
 
 const scene = new THREE.Scene();
@@ -390,6 +391,7 @@ const minYear = 1950;
 const maxYear = 2020;
 
 const WINDOW_STEP = 5;
+const EDGE_ZONE = 400; // px from left/right edge for arrow cursor
 
 const booksMeta = [];
 for (let y = minYear; y <= maxYear; y += WINDOW_STEP) {
@@ -608,12 +610,25 @@ Object.keys(planetColors).forEach((name)=>{
   let mat;
   if (name === 'sun') {
     // Sun should emit light - use emissive material
+    // depthWrite: false so flight paths can render in front
     mat = new THREE.MeshStandardMaterial({
       color: planetColors[name],
       emissive: planetColors[name],
       emissiveIntensity: 2,  // Increased for brighter glow
       roughness: 1,
-      metalness: 0
+      metalness: 0,
+      depthWrite: false  // Don't write to depth buffer so flight paths render in front
+    });
+  } else if (name === 'fictional locations') {
+    // Fictional locations - mystical glowing purple sphere
+    mat = new THREE.MeshStandardMaterial({
+      color: planetColors[name],
+      emissive: 0xaa44ff,  // Bright purple/magenta glow
+      emissiveIntensity: 1.5,
+      roughness: 0.3,
+      metalness: 0.5,
+      transparent: true,
+      opacity: 0.95
     });
   } else {
     // Planets receive light and cast shadows
@@ -634,17 +649,17 @@ Object.keys(planetColors).forEach((name)=>{
     p.renderOrder = 0; // Render sun before flight paths
 
     const glowLayers = [
-      { scale: 1.2, color: 0xFFD700, opacity: 0.3 },  // Very close bright gold
-      { scale: 1.4, color: 0xFFD700, opacity: 0.25 }, // Close gold
-      { scale: 1.7, color: 0xFFD700, opacity: 0.18 }, // Mid-close gold
-      { scale: 2.0, color: 0xFFCC66, opacity: 0.12 }, // Mid gold-orange
-      { scale: 2.4, color: 0xFFB84D, opacity: 0.08 }, // Mid-far gold-orange
-      { scale: 2.9, color: 0xFFA500, opacity: 0.05 }, // Far orange
-      { scale: 3.5, color: 0xFF9933, opacity: 0.03 }, // Very far orange
-      { scale: 4.0, color: 0xFF8C00, opacity: 0.015 } // Diffuse outer orange
+      { scale: 1.2, color: 0xFFD700, opacity: 0.4 },  // Innermost bright gold
+      { scale: 1.4, color: 0xFFD700, opacity: 0.35 }, // Close bright gold
+      { scale: 1.6, color: 0xFFCC66, opacity: 0.28 }, // Gold transition
+      { scale: 1.8, color: 0xFFB84D, opacity: 0.22 }, // Gold-orange
+      { scale: 2.0, color: 0xFFA500, opacity: 0.16 }, // Orange
+      { scale: 2.2, color: 0xFF9933, opacity: 0.11 }, // Mid orange
+      { scale: 2.4, color: 0xFF8C00, opacity: 0.06 }, // Far orange
+      { scale: 2.6, color: 0xFF7722, opacity: 0.03 }  // Outer diffuse orange
     ];
 
-    glowLayers.forEach(layer => {
+    glowLayers.forEach((layer, index) => {
       const glowGeo = new THREE.SphereGeometry(radius * layer.scale, 32, 32);
       const glowMat = new THREE.MeshBasicMaterial({
         color: layer.color,
@@ -656,6 +671,42 @@ Object.keys(planetColors).forEach((name)=>{
       });
       const glow = new THREE.Mesh(glowGeo, glowMat);
       glow.renderOrder = 0; // Render glow layers before flight paths
+      glow.userData.animationPhase = index * 0.4; // Different phase for each layer
+      glow.userData.baseOpacity = layer.opacity; // Store original opacity for animation
+      glow.userData.isSunGlow = true; // Mark for animation
+      p.add(glow);
+    });
+  }
+
+  // Add mystical glow around fictional locations planet
+  if (name === 'fictional locations') {
+    p.renderOrder = 0; // Render before flight paths
+
+    const mysticalGlowLayers = [
+      { scale: 1.3, color: 0xdd66ff, opacity: 0.4 },  // Close bright purple
+      { scale: 1.6, color: 0xcc55ee, opacity: 0.3 },  // Purple-pink
+      { scale: 2.0, color: 0xaa44ff, opacity: 0.22 }, // Deep purple
+      { scale: 2.5, color: 0x8844dd, opacity: 0.15 }, // Purple-blue
+      { scale: 3.0, color: 0x6655cc, opacity: 0.1 },  // Dark purple
+      { scale: 3.6, color: 0x5544bb, opacity: 0.06 }, // Very dark purple
+      { scale: 4.2, color: 0x4433aa, opacity: 0.03 }  // Diffuse outer purple
+    ];
+
+    mysticalGlowLayers.forEach((layer, index) => {
+      const glowGeo = new THREE.SphereGeometry(radius * layer.scale, 32, 32);
+      const glowMat = new THREE.MeshBasicMaterial({
+        color: layer.color,
+        transparent: true,
+        opacity: layer.opacity,
+        side: THREE.BackSide,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      });
+      const glow = new THREE.Mesh(glowGeo, glowMat);
+      glow.renderOrder = 0;
+      glow.userData.animationPhase = index * 0.5; // Different phase for each layer
+      glow.userData.baseOpacity = layer.opacity; // Store original opacity for animation
+      glow.userData.isMysticalGlow = true; // Mark for animation
       p.add(glow);
     });
   }
@@ -697,17 +748,20 @@ scene.add(starGroup);
 // Load NASA Hubble space image as background
 const textureLoader = new THREE.TextureLoader();
 textureLoader.load('./map_photos/nasa-hubble-space-telescope-o1byzQYzMZA-unsplash.jpeg', (texture) => {
-  // Improve texture quality
-  texture.anisotropy = renderer.capabilities.getMaxAnisotropy(); // Maximum anisotropic filtering
-  texture.minFilter = THREE.LinearFilter; // Better quality when viewing from distance
-  texture.magFilter = THREE.LinearFilter; // Better quality when viewing close up
+  // Preserve original image quality without smoothing/blurring
+  texture.anisotropy = 1; // Minimal filtering for sharper appearance
+  texture.minFilter = THREE.LinearMipmapLinearFilter; // Sharper at distance
+  texture.magFilter = THREE.NearestFilter; // Crisp, no smoothing when close
+  texture.generateMipmaps = true; // Generate mipmaps for better quality at distance
+  texture.colorSpace = THREE.SRGBColorSpace; // Correct color space for accurate colors
 
   // Create a large sphere that surrounds the entire scene
   // Larger radius = less zoomed in appearance
-  const spaceGeometry = new THREE.SphereGeometry(200, 128, 128); // Increased radius and segments
+  const spaceGeometry = new THREE.SphereGeometry(200, 256, 256); // Higher segments for more detail
   const spaceMaterial = new THREE.MeshBasicMaterial({
     map: texture,
-    side: THREE.BackSide // Render on the inside of the sphere
+    side: THREE.BackSide, // Render on the inside of the sphere
+    toneMapped: false // Disable tone mapping to preserve original colors and blacks
   });
 
   const spaceSphere = new THREE.Mesh(spaceGeometry, spaceMaterial);
@@ -1200,6 +1254,44 @@ let newShapesVisible = false;
 function animate(){
   requestAnimationFrame(animate);
 
+  // Animate mystical glow on fictional locations planet and sun
+  const time = performance.now() * 0.001; // Convert to seconds
+  planetGroup.children.forEach(planet => {
+    // Animate fictional locations mystical glow
+    if (planet.userData && planet.userData.name === 'fictional locations') {
+      planet.children.forEach(child => {
+        if (child.userData && child.userData.isMysticalGlow) {
+          // Pulsing opacity effect with different phases for each layer
+          const phase = child.userData.animationPhase || 0;
+          const baseOpacity = child.userData.baseOpacity || child.material.opacity;
+          const pulse = Math.sin(time * 2 + phase) * 0.2 + 0.8; // Oscillates between 0.6 and 1.0
+          child.material.opacity = baseOpacity * pulse;
+
+          // Subtle scale pulsing
+          const scalePulse = Math.sin(time * 1.5 + phase) * 0.04 + 1.0; // Oscillates around 1.0
+          child.scale.set(scalePulse, scalePulse, scalePulse);
+        }
+      });
+    }
+
+    // Animate sun's glow
+    if (planet.userData && planet.userData.name === 'sun') {
+      planet.children.forEach(child => {
+        if (child.userData && child.userData.isSunGlow) {
+          // Pulsing opacity effect with different phases for each layer
+          const phase = child.userData.animationPhase || 0;
+          const baseOpacity = child.userData.baseOpacity || child.material.opacity;
+          const pulse = Math.sin(time * 1.5 + phase) * 0.15 + 0.85; // Oscillates between 0.7 and 1.0
+          child.material.opacity = baseOpacity * pulse;
+
+          // Subtle scale pulsing (less pronounced than fictional locations)
+          const scalePulse = Math.sin(time * 1.2 + phase) * 0.025 + 1.0; // Oscillates around 1.0
+          child.scale.set(scalePulse, scalePulse, scalePulse);
+        }
+      });
+    }
+  });
+
   // Hide all solar system elements when not on map page (page 1)
   if (typeof currentPage !== 'undefined' && currentPage !== 1) {
     planetGroup.visible = false;
@@ -1391,17 +1483,18 @@ function animate(){
     starGroup.visible = true;
     planetZoomInProgress = true;
 
-    // Show all planet and moon labels
-    earthLabel.visible = true;
+    // Keep all planet and moon labels hidden by default
+    // They will be shown on hover in the mousemove handler
+    earthLabel.visible = false;
     planetGroup.children.forEach(planet => {
-      if (!planet.children) return; // Skip if no children (lights don't have children)
+      if (!planet.children) return;
       planet.children.forEach(child => {
-        if (child.isCSS2DObject) child.visible = true;
+        if (child.isCSS2DObject) child.visible = false;
       });
     });
     moonsGroup.children.forEach(moon => {
       moon.children.forEach(child => {
-        if (child.isCSS2DObject) child.visible = true;
+        if (child.isCSS2DObject) child.visible = false;
       });
     });
   }
@@ -1639,6 +1732,76 @@ let isMouseOverHoverCard = false;
 let isMouseOverFlightPath = false;
 let hideHoverCardTimeout = null;
 
+// Function to show only relevant planet/moon labels based on flight path destination
+function showRelevantLabel(destination) {
+  // Hide all labels first
+  hideAllSolarLabels();
+
+  if (!destination) return;
+
+  const destLower = destination.toLowerCase().trim();
+
+  // Show Earth label if destination is Earth
+  if (destLower === 'earth') {
+    if (earthLabel) {
+      earthLabel.visible = true;
+      console.log('Showing Earth label');
+    }
+    return;
+  }
+
+  // Check if it's a planet label (including "fictional locations")
+  let labelFound = false;
+  planetGroup.children.forEach(planet => {
+    if (planet.userData && planet.userData.name) {
+      const planetNameLower = planet.userData.name.toLowerCase().trim();
+      // Match exact name or partial match for "fictional locations"
+      if (planetNameLower === destLower ||
+          (destLower.includes('fictional') && planetNameLower.includes('fictional'))) {
+        planet.children.forEach(child => {
+          if (child.isCSS2DObject) {
+            child.visible = true;
+            labelFound = true;
+            console.log(`Showing label for planet: ${planet.userData.name}`);
+          }
+        });
+      }
+    }
+  });
+
+  // Check if it's a moon label
+  if (!labelFound) {
+    moonsGroup.children.forEach(moon => {
+      if (moon.userData && moon.userData.name && moon.userData.name.toLowerCase().trim() === destLower) {
+        moon.children.forEach(child => {
+          if (child.isCSS2DObject) {
+            child.visible = true;
+            console.log(`Showing label for moon: ${moon.userData.name}`);
+          }
+        });
+      }
+    });
+  }
+}
+
+// Function to hide all solar system labels
+function hideAllSolarLabels() {
+  if (earthLabel) earthLabel.visible = false;
+
+  planetGroup.children.forEach(planet => {
+    if (!planet.children) return;
+    planet.children.forEach(child => {
+      if (child.isCSS2DObject) child.visible = false;
+    });
+  });
+
+  moonsGroup.children.forEach(moon => {
+    moon.children.forEach(child => {
+      if (child.isCSS2DObject) child.visible = false;
+    });
+  });
+}
+
 function showMovieHoverCard(movies, x, y) {
   // Clear any pending hide timeout since we're showing the card
   if (hideHoverCardTimeout) {
@@ -1785,15 +1948,16 @@ window.addEventListener("mousemove", (evt) => {
   // Adjust hover sensitivity based on zoom state
   // Higher values = more sensitive (easier to hover)
   if (currentZoomState === ZOOM_STATES.US) {
-    raycaster.params.Line.threshold = 0.007; // Very sensitive for US map
+    raycaster.params.Line.threshold = 0.015; // Very sensitive for US map
   } else if (currentZoomState === ZOOM_STATES.WORLD) {
-    raycaster.params.Line.threshold = 0.015; // Less sensitive for world view
+    raycaster.params.Line.threshold = 0.025; // Less sensitive for world view
   } else if (currentZoomState === ZOOM_STATES.SOLAR) {
-    raycaster.params.Line.threshold = 0.05; // Least sensitive for solar view
+    raycaster.params.Line.threshold = 0.075; // Least sensitive for solar view
   }
 
   // Only check the currently visible flight path group based on zoom state
   let allHits = [];
+  let planetHits = [];
 
   if (currentZoomState === ZOOM_STATES.US && usFlightPathGroup.visible) {
     // US view: only check US domestic paths that are visible
@@ -1807,9 +1971,14 @@ window.addEventListener("mousemove", (evt) => {
     // Solar system view: only check solar paths that are visible
     const visiblePaths = solarFlightPathsGroup.children.filter(child => child.visible);
     allHits = raycaster.intersectObjects(visiblePaths, false);
+
+    // Also check for planet/moon hovers in solar view
+    const allPlanets = [...planetGroup.children, ...moonsGroup.children, earthMesh];
+    planetHits = raycaster.intersectObjects(allPlanets, true);
   }
 
   const hovering = allHits.length > 0;
+  const hoveringPlanet = planetHits.length > 0 && currentZoomState === ZOOM_STATES.SOLAR;
   isMouseOverFlightPath = hovering;
 
   if (hovering) {
@@ -1818,6 +1987,11 @@ window.addEventListener("mousemove", (evt) => {
     // Show hover card for the closest hit
     const obj = allHits[0].object;
     const d = obj.userData;
+
+    // Show relevant planet/moon label when hovering in solar view
+    if (currentZoomState === ZOOM_STATES.SOLAR && d.to) {
+      showRelevantLabel(d.to);
+    }
 
     // Prepare movie data for hover card
     if (d.isFictionalLocations && d.movies) {
@@ -1849,9 +2023,164 @@ window.addEventListener("mousemove", (evt) => {
       };
       showMovieHoverCard(movieData, evt.clientX, evt.clientY);
     }
+  } else if (hoveringPlanet) {
+    // Hovering over a planet/moon but not a flight path
+    if (cursor) cursor.classList.add("hover");
+
+    // Find which planet/moon is being hovered
+    let planetName = null;
+
+    // Check if it's Earth
+    if (planetHits[0].object === earthMesh || planetHits[0].object.parent === earthMesh) {
+      planetName = 'Earth';
+    } else {
+      // Check planets
+      for (let planet of planetGroup.children) {
+        if (planetHits[0].object === planet || planetHits[0].object.parent === planet) {
+          planetName = planet.userData.name;
+          break;
+        }
+      }
+
+      // Check moons if not found in planets
+      if (!planetName) {
+        for (let moon of moonsGroup.children) {
+          if (planetHits[0].object === moon || planetHits[0].object.parent === moon) {
+            planetName = moon.userData.name;
+            break;
+          }
+        }
+      }
+    }
+
+    if (planetName) {
+      showRelevantLabel(planetName);
+    }
   } else {
     if (cursor) cursor.classList.remove("hover");
     hideMovieHoverCard();
+
+    // Hide all solar labels when not hovering
+    if (currentZoomState === ZOOM_STATES.SOLAR) {
+      hideAllSolarLabels();
+    }
+  }
+
+  // ==========================================================
+  // ARROW CURSOR LOGIC (LEFT/RIGHT EDGE NAVIGATION)
+  // ==========================================================
+  // Only show arrow cursors when on the map page (page 1)
+  if (typeof currentPage !== 'undefined' && currentPage === 1) {
+    const x = evt.clientX;
+    const w = window.innerWidth;
+
+    // Get cursor element (in case it wasn't available at script load time)
+    const cursorElement = document.getElementById("cursorCircle") || window.cursorElement;
+
+    // Don't show arrows if hovering over interactive elements or timeline bars
+    if (cursorElement && !cursorElement.classList.contains("hover") && !hoveringBars) {
+      if (x < EDGE_ZONE) {
+        // Left edge - show left arrow
+        cursorElement.classList.add("arrow-left");
+        cursorElement.classList.remove("arrow-right");
+        // Set size directly with !important to override hover handlers
+        cursorElement.style.setProperty('width', '80px', 'important');
+        cursorElement.style.setProperty('height', '80px', 'important');
+        cursorElement.style.setProperty('background', 'rgba(255, 255, 255, 0.18)', 'important');
+        cursorElement.style.setProperty('opacity', '1', 'important');
+      } else if (x > w - EDGE_ZONE) {
+        // Right edge - show right arrow
+        cursorElement.classList.add("arrow-right");
+        cursorElement.classList.remove("arrow-left");
+        // Set size directly with !important to override hover handlers
+        cursorElement.style.setProperty('width', '80px', 'important');
+        cursorElement.style.setProperty('height', '80px', 'important');
+        cursorElement.style.setProperty('background', 'rgba(255, 255, 255, 0.18)', 'important');
+        cursorElement.style.setProperty('opacity', '1', 'important');
+      } else {
+        // Middle - no arrows, reset to default
+        cursorElement.classList.remove("arrow-left", "arrow-right");
+        cursorElement.style.setProperty('width', '18px', 'important');
+        cursorElement.style.setProperty('height', '18px', 'important');
+        cursorElement.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+        cursorElement.style.setProperty('opacity', '1', 'important');
+      }
+    } else if (cursorElement) {
+      // Remove arrows if hovering interactive elements
+      cursorElement.classList.remove("arrow-left", "arrow-right");
+    }
+  }
+});
+
+// ==========================================================
+// ARROW CURSOR CLICK HANDLER
+// ==========================================================
+window.addEventListener("mousedown", (e) => {
+  // Only handle arrow clicks when on the map page (page 1)
+  if (typeof currentPage !== 'undefined' && currentPage !== 1) {
+    return;
+  }
+
+  // Get cursor element
+  const cursorElement = document.getElementById("cursorCircle") || window.cursorElement;
+  if (!cursorElement) return;
+
+  if (cursorElement.classList.contains("arrow-right")) {
+    // Navigate forward in time
+    if (currentDecade === null) {
+      // Currently on "All", move to first decade
+      currentDecade = decades[0];
+    } else {
+      // Find current index in decades array
+      const currentIndex = decades.indexOf(currentDecade);
+      if (currentIndex < decades.length - 1) {
+        // Move to next decade
+        currentDecade = decades[currentIndex + 1];
+      }
+      // If already at the last decade, stay there
+    }
+
+    updateDecadeDisplay(currentDecade);
+    updateFlightPathVisibility();
+
+    // Update the visual timeline bar if it exists
+    const currentIndexInMeta = booksMeta.findIndex(meta => meta.start === currentDecade);
+    if (currentIndexInMeta !== -1) {
+      updateActiveBookBar(currentIndexInMeta);
+    }
+
+  } else if (cursorElement.classList.contains("arrow-left")) {
+    // Navigate backward in time
+    if (currentDecade === null) {
+      // Currently on "All", move to last decade
+      currentDecade = decades[decades.length - 1];
+    } else {
+      // Find current index in decades array
+      const currentIndex = decades.indexOf(currentDecade);
+      if (currentIndex > 0) {
+        // Move to previous decade
+        currentDecade = decades[currentIndex - 1];
+      } else {
+        // If at first decade, go back to "All"
+        currentDecade = null;
+      }
+    }
+
+    updateDecadeDisplay(currentDecade);
+    updateFlightPathVisibility();
+
+    // Update the visual timeline bar if it exists
+    if (currentDecade === null) {
+      // Reset to "All" - no specific bar highlighted
+      document.querySelectorAll(".book-bar").forEach(bar => {
+        bar.classList.remove("active");
+      });
+    } else {
+      const currentIndexInMeta = booksMeta.findIndex(meta => meta.start === currentDecade);
+      if (currentIndexInMeta !== -1) {
+        updateActiveBookBar(currentIndexInMeta);
+      }
+    }
   }
 });
 
@@ -1860,7 +2189,12 @@ window.addEventListener("mousemove", (evt) => {
 // ==========================================================
 // Discrete zoom level transitions
 let scrollCooldown = false;
-const SCROLL_COOLDOWN_TIME = 800; // ms to wait before allowing next scroll
+const SCROLL_COOLDOWN_TIME = 1500; // ms to wait before allowing next scroll
+
+// Momentum/coasting prevention
+let lastWheelTime = 0;
+const SCROLL_MOMENTUM_TIMEOUT = 500; // ms - ignore events that come too quickly after previous scroll
+const MIN_SCROLL_DELTA = 3; // minimum deltaY to be considered intentional
 
 window.addEventListener('wheel', (event) => {
   // Only allow zoom controls when on the map page (page 1)
@@ -1875,6 +2209,23 @@ window.addEventListener('wheel', (event) => {
   if (isTransitioning || scrollCooldown) {
     return;
   }
+
+  // Get current time
+  const now = performance.now();
+
+  // Ignore momentum scrolling (events that come too quickly after the last one)
+  if (lastWheelTime > 0 && now - lastWheelTime < SCROLL_MOMENTUM_TIMEOUT) {
+    // Too close to last event, likely momentum - ignore
+    return;
+  }
+
+  // Ignore very small deltas (likely momentum/coasting)
+  if (Math.abs(event.deltaY) < MIN_SCROLL_DELTA) {
+    return;
+  }
+
+  // Update last wheel time (only when we're about to process)
+  lastWheelTime = now;
 
   // Determine scroll direction
   const scrollingOut = event.deltaY > 0; // Scrolling down = zoom out
@@ -2186,6 +2537,74 @@ barsContainer.addEventListener("mouseleave", () => {
 
   document.getElementById("hoverBarDate").style.opacity = 0;
   document.getElementById("activeBarDate").style.opacity = 0;
+});
+
+/* -----------------------------------------------------------
+   KEYBOARD ARROW NAVIGATION (LEFT/RIGHT ARROWS)
+----------------------------------------------------------- */
+window.addEventListener('keydown', (e) => {
+  // Only handle arrow keys when on the map page (page 1)
+  if (typeof currentPage !== 'undefined' && currentPage !== 1) {
+    return;
+  }
+
+  if (e.key === 'ArrowRight') {
+    // Move to next decade
+    if (currentDecade === null) {
+      // Currently on "All", move to first decade
+      currentDecade = decades[0];
+    } else {
+      // Find current index in decades array
+      const currentIndex = decades.indexOf(currentDecade);
+      if (currentIndex < decades.length - 1) {
+        // Move to next decade
+        currentDecade = decades[currentIndex + 1];
+      }
+      // If already at the last decade, stay there
+    }
+
+    updateDecadeDisplay(currentDecade);
+    updateFlightPathVisibility();
+
+    // Update the visual timeline bar if it exists
+    const currentIndexInMeta = booksMeta.findIndex(meta => meta.start === currentDecade);
+    if (currentIndexInMeta !== -1) {
+      updateActiveBookBar(currentIndexInMeta);
+    }
+
+  } else if (e.key === 'ArrowLeft') {
+    // Move to previous decade
+    if (currentDecade === null) {
+      // Currently on "All", move to last decade
+      currentDecade = decades[decades.length - 1];
+    } else {
+      // Find current index in decades array
+      const currentIndex = decades.indexOf(currentDecade);
+      if (currentIndex > 0) {
+        // Move to previous decade
+        currentDecade = decades[currentIndex - 1];
+      } else {
+        // If at first decade, go back to "All"
+        currentDecade = null;
+      }
+    }
+
+    updateDecadeDisplay(currentDecade);
+    updateFlightPathVisibility();
+
+    // Update the visual timeline bar if it exists
+    if (currentDecade === null) {
+      // Reset to "All" - no specific bar highlighted
+      document.querySelectorAll(".book-bar").forEach(bar => {
+        bar.classList.remove("active");
+      });
+    } else {
+      const currentIndexInMeta = booksMeta.findIndex(meta => meta.start === currentDecade);
+      if (currentIndexInMeta !== -1) {
+        updateActiveBookBar(currentIndexInMeta);
+      }
+    }
+  }
 });
 
 

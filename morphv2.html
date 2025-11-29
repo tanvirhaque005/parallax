@@ -47,6 +47,47 @@
       display: block !important;
       visibility: visible !important;
       pointer-events: none !important;
+      border-radius: 50% !important;
+      transition: width 0.25s cubic-bezier(0.25, 0.1, 0.25, 1), height 0.25s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.25s ease !important;
+    }
+
+    /* Default cursor size when no class applied */
+    #cursorCircle:not(.arrow-left):not(.arrow-right):not(.hover) {
+      width: 18px !important;
+      height: 18px !important;
+      background: rgba(95, 95, 95, 0.28) !important;
+    }
+
+    /* Arrow right bubble */
+    #cursorCircle.arrow-right {
+      width: 80px !important;
+      height: 80px !important;
+      background: rgba(255, 255, 255, 0.18) !important;
+    }
+    #cursorCircle.arrow-right::after {
+      content: '→';
+      position: absolute;
+      font-size: 32px;
+      color: rgba(255, 255, 255, 0.85);
+      left: 50%;
+      top: 50%;
+      transform: translate(-40%, -50%);
+    }
+
+    /* Arrow left bubble */
+    #cursorCircle.arrow-left {
+      width: 80px !important;
+      height: 80px !important;
+      background: rgba(255, 255, 255, 0.18) !important;
+    }
+    #cursorCircle.arrow-left::after {
+      content: '←';
+      position: absolute;
+      font-size: 32px;
+      color: rgba(255, 255, 255, 0.85);
+      left: 50%;
+      top: 50%;
+      transform: translate(-60%, -50%);
     }
 
     /* Page Container for Slides */
@@ -269,6 +310,7 @@
       pointer-events: none;
       user-select: none;
       text-transform: capitalize;
+      z-index: 1 !important;
     }
 /* MAIN TIMELINE BAR */
 #timelineBar {
@@ -765,7 +807,8 @@
         cursor.id = 'cursorCircle';
         // Use CSS classes instead of inline styles for hover effect to work
         cursor.className = '';
-        cursor.style.cssText = 'position: fixed !important; top: 50% !important; left: 50% !important; width: 18px !important; height: 18px !important; border-radius: 50% !important; background: rgba(95, 95, 95, 0.28) !important; pointer-events: none !important; transform: translate(-50%, -50%) !important; z-index: 2147483647 !important; opacity: 1 !important; display: block !important; visibility: visible !important; transition: width 0.25s cubic-bezier(0.25, 0.1, 0.25, 1), height 0.25s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.25s ease, opacity 0.25s ease !important;';
+        // Don't use !important for width, height, background so CSS classes can override them
+        cursor.style.cssText = 'position: fixed !important; top: 50% !important; left: 50% !important; pointer-events: none !important; transform: translate(-50%, -50%) !important; z-index: 2147483647 !important; opacity: 1 !important; display: block !important; visibility: visible !important;';
 
         // Append to body - this ensures it's on top of everything
         document.body.appendChild(cursor);
@@ -807,11 +850,14 @@
                         e.target.closest('.enter-map-button');
           if (target && cursorEl) {
             cursorEl.classList.remove('hover');
-            // Reset to default styles
-            cursorEl.style.setProperty('width', '18px', 'important');
-            cursorEl.style.setProperty('height', '18px', 'important');
-            cursorEl.style.setProperty('opacity', '1', 'important');
-            cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+            // Only reset to default if not in edge zone (arrow classes indicate edge zone)
+            if (!cursorEl.classList.contains('arrow-left') && !cursorEl.classList.contains('arrow-right')) {
+              cursorEl.style.setProperty('width', '18px', 'important');
+              cursorEl.style.setProperty('height', '18px', 'important');
+              cursorEl.style.setProperty('opacity', '1', 'important');
+              cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+            }
+            // If in edge zone, the mousemove handler in morphv2.js will maintain the 80px size
           }
         };
 
@@ -835,10 +881,14 @@
             btn.addEventListener('mouseleave', () => {
               if (cursorEl) {
                 cursorEl.classList.remove('hover');
-                cursorEl.style.setProperty('width', '18px', 'important');
-                cursorEl.style.setProperty('height', '18px', 'important');
-                cursorEl.style.setProperty('opacity', '1', 'important');
-                cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+                // Only reset to default if not in edge zone (arrow classes indicate edge zone)
+                if (!cursorEl.classList.contains('arrow-left') && !cursorEl.classList.contains('arrow-right')) {
+                  cursorEl.style.setProperty('width', '18px', 'important');
+                  cursorEl.style.setProperty('height', '18px', 'important');
+                  cursorEl.style.setProperty('opacity', '1', 'important');
+                  cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+                }
+                // If in edge zone, the mousemove handler in morphv2.js will maintain the 80px size
               }
             });
           });
@@ -921,10 +971,14 @@
             btn.addEventListener('mouseleave', () => {
               if (cursor) {
                 cursor.classList.remove('hover');
-                cursor.style.setProperty('width', '18px', 'important');
-                cursor.style.setProperty('height', '18px', 'important');
-                cursor.style.setProperty('opacity', '1', 'important');
-                cursor.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+                // Only reset to default if not in edge zone (arrow classes indicate edge zone)
+                if (!cursor.classList.contains('arrow-left') && !cursor.classList.contains('arrow-right')) {
+                  cursor.style.setProperty('width', '18px', 'important');
+                  cursor.style.setProperty('height', '18px', 'important');
+                  cursor.style.setProperty('opacity', '1', 'important');
+                  cursor.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+                }
+                // If in edge zone, the mousemove handler in morphv2.js will maintain the 80px size
               }
             });
           });
