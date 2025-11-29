@@ -6,11 +6,12 @@
   <title>Map Morph to Globe</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="navigation-menu.css">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="cursor.css">
   <style>
     body {
       margin: 0;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: 'IBM Plex Sans', sans-serif;
       overflow: hidden;
       background: #0a1628;
       cursor: none !important;
@@ -286,7 +287,7 @@
   border-radius: 0;
 
   color: white;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'IBM Plex Sans', sans-serif;
 
   z-index: 100;
 }
@@ -555,11 +556,33 @@
   text-transform: uppercase;
 }
 
+.back-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #cccccca4;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 1px;
+      transition: color 0.3s;
+      text-transform: uppercase;
+      position: fixed;
+         top: 20px;
+         left: 40px;
+         z-index: 200;
+    }
   </style>
   <link rel="stylesheet" href="mapIntroMessage.css">
 </head>
 
 <body>
+  <!-- Page Header -->
+  <div class="page-header">
+    <a href="parallel.html" class="back-link">
+      <span class="back-arrow">←</span>
+      <span>Back</span>
+    </a>
+  </div>
   <div class="page-container">
     <!-- Intro Page (Page 1) -->
     <div class="page-slide active intro-page" id="introPage">
@@ -582,13 +605,7 @@
       <div id="mapIntroContainer" data-text="Scroll to zoom between local, global, and cosmic scales."></div>
       <script src="mapIntroMessage.js" defer></script>
 
-      <!-- Page Header -->
-      <div class="page-header">
-        <a href="parallel.html" class="back-link">
-          <span class="back-arrow">←</span>
-          <span>Return to Timeline</span>
-        </a>
-      </div>
+      
 
   <!-- Navigation Buttons -->
   <!-- <div class="nav-buttons">

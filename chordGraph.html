@@ -5,11 +5,12 @@
 		<title>Technological Network — Library of Futures</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="navigation-menu.css">
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 		<script src="https://d3js.org/d3.v7.min.js"></script>
 		<style>
 			body {
 				margin: 0;
-				font-family: 'Courier New', monospace;
+				font-family:'IBM Plex Sans', sans-serif;
 				background: #1a1a1a;
 				color: #cccccc;
 				overflow: hidden;
@@ -24,16 +25,20 @@
 			}
 			
 			.back-link {
-				display: flex;
-				align-items: center;
-				gap: 12px;
-				color: #cccccc;
-				text-decoration: none;
-				font-size: 13px;
-				letter-spacing: 1px;
-				transition: color 0.3s;
-				text-transform: uppercase;
-			}
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #cccccca4;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 1px;
+      transition: color 0.3s;
+      text-transform: uppercase;
+      position: fixed;
+         top: 20px;
+         left: 40px;
+         z-index: 200;
+    }
 			
 			.back-link:hover {
 				color: #ffffff;
@@ -124,7 +129,7 @@
 				border: 1px solid white;
 				color: #cccccc;
 				padding: 14px 28px;
-				font-family: 'Courier New', monospace;
+				font-family:'IBM Plex Sans', sans-serif;
 				font-size: 12px;
 				letter-spacing: 1.5px;
 				cursor: pointer;
@@ -329,7 +334,7 @@
   top: 90px;            /* adjust as you want */
   left: 24px;
   color: #ffffff;
-  font-family: 'Courier New', monospace;
+  font-family:'IBM Plex Sans', sans-serif;
   font-size: 14px;
   opacity: 0.85;
   letter-spacing: 1px;
@@ -341,7 +346,7 @@
 .barDateLabel {
   position: fixed;
   color: #ffffff;
-  font-family: 'Courier New', monospace;
+  font-family:'IBM Plex Sans', sans-serif;
   font-size: 12px;
   letter-spacing: 1px;
   pointer-events: none;
@@ -361,7 +366,7 @@
 		<div class="page-header">
 			<a href="bookshelf.html" class="back-link">
 				<span class="back-arrow">←</span>
-				<span>Return to Shelf</span>
+				<span>Back</span>
 			</a>
 		</div>
 
