@@ -5,74 +5,44 @@ import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 
 // ==========================================================
-// TEXT OVERLAY CONTENT - DECADE AWARE
+// TEXT OVERLAY CONTENT - 20-YEAR PERIODS
 // ==========================================================
-const decadeTexts = {
+// Text changes every 20 years, while filtering bars stay at 5-year intervals
+const periodTexts = {
   'All': {
     title: '1950-2020',
     description: 'Most sci-fi futures originate from the same real cities—Los Angeles, Vancouver, London. Real landscapes anchor imagined ones.'
   },
   1950: {
-    title: '1950-1954',
-    description: 'The golden age begins. Early science fiction films establish Los Angeles and London as the primary filming hubs for imagined futures.'
-  },
-  1955: {
-    title: '1955-1959',
-    description: 'Cold War anxieties shape narratives. Science fiction explores nuclear fears and space race ambitions through familiar urban landscapes.'
-  },
-  1960: {
-    title: '1960-1964',
-    description: 'The space age accelerates. Films increasingly venture beyond Earth while still grounding production in major metropolitan centers.'
-  },
-  1965: {
-    title: '1965-1969',
-    description: 'Cultural revolution meets cosmic speculation. Psychedelic influences and counter-culture merge with science fiction storytelling.'
+    title: '1950-1970',
+    description: 'The golden age of science fiction. Early films establish Los Angeles and London as primary filming hubs. Cold War anxieties and space race ambitions shape narratives, while the space age accelerates and cultural revolution meets cosmic speculation.'
   },
   1970: {
-    title: '1970-1974',
-    description: 'Dystopian futures emerge. Environmental and social concerns begin reshaping how filmmakers imagine tomorrow.'
-  },
-  1975: {
-    title: '1975-1979',
-    description: 'Blockbuster era begins. Star Wars transforms science fiction into mainstream spectacle, filmed across multiple continents.'
-  },
-  1980: {
-    title: '1980-1984',
-    description: 'Cyberpunk aesthetics arrive. Urban decay and technological advancement create new visual languages for future worlds.'
-  },
-  1985: {
-    title: '1985-1989',
-    description: 'Digital effects emerge. Computer graphics begin supplementing practical effects, changing what futures can be visualized.'
+    title: '1970-1990',
+    description: 'Dystopian futures and blockbuster spectacle. Environmental and social concerns reshape imagined tomorrows. Star Wars transforms science fiction into mainstream entertainment. Cyberpunk aesthetics emerge, and digital effects begin supplementing practical filmmaking.'
   },
   1990: {
-    title: '1990-1994',
-    description: 'Virtual reality becomes real. Films explore digital worlds while production techniques become increasingly globalized.'
-  },
-  1995: {
-    title: '1995-1999',
-    description: 'Millennium approaches. Y2K anxieties and internet culture reshape how filmmakers imagine technological futures.'
-  },
-  2000: {
-    title: '2000-2004',
-    description: 'Post-9/11 narratives. Science fiction grapples with surveillance, security, and new forms of global uncertainty.'
-  },
-  2005: {
-    title: '2005-2009',
-    description: 'Climate crisis enters frame. Environmental catastrophe becomes central to how futures are imagined and filmed.'
+    title: '1990-2010',
+    description: 'Virtual reality and digital transformation. Films explore digital worlds as production techniques globalize. Millennium anxieties and internet culture reshape technological futures. Post-9/11 narratives grapple with surveillance and security, while climate crisis enters the frame.'
   },
   2010: {
-    title: '2010-2014',
-    description: 'Marvel universe expands. Interconnected narratives and superhero science fiction dominate global box offices.'
-  },
-  2015: {
-    title: '2015-2019',
-    description: 'Streaming transforms production. International co-productions multiply as platforms compete for science fiction content.'
-  },
-  2020: {
-    title: '2020-2024',
-    description: 'Pandemic impacts storytelling. Isolation, contagion, and social distance themes emerge in science fiction production.'
+    title: '2010-2030',
+    description: 'Marvel universe expansion and streaming revolution. Interconnected narratives and superhero science fiction dominate global box offices. Streaming platforms transform production, with international co-productions multiplying. Pandemic impacts reshape storytelling with themes of isolation and contagion.'
   }
 };
+
+// Map 5-year periods to 20-year periods for text display
+function getPeriodForDecade(decade) {
+  if (decade === null) return 'All';
+  
+  // Map each 5-year period to its 20-year period
+  if (decade >= 1950 && decade < 1970) return 1950;
+  if (decade >= 1970 && decade < 1990) return 1970;
+  if (decade >= 1990 && decade < 2010) return 1990;
+  if (decade >= 2010) return 2010;
+  
+  return 'All';
+}
 
 // ==========================================================
 // TEXT OVERLAY UPDATE FUNCTION
@@ -81,10 +51,9 @@ function updateTextOverlay() {
   const textElement = document.querySelector('.zoom-text[data-zoom="US"]');
 
   if (textElement) {
-    // Always use decade-filtered text regardless of zoom state
-    const textData = currentDecade === null
-      ? decadeTexts['All']
-      : (decadeTexts[currentDecade] || decadeTexts['All']);
+    // Map current 5-year decade to 20-year period for text display
+    const period = getPeriodForDecade(currentDecade);
+    const textData = periodTexts[period] || periodTexts['All'];
 
     textElement.querySelector('.main-title').textContent = textData.title;
     textElement.querySelector('.description').textContent = textData.description;
@@ -197,8 +166,8 @@ scene.add(flightPathGroup);
 
 function latLonToPlane(lat, lon) {
   // Offset adjustments for World Map.png alignment
-  const xOffset = -0.05;  // Negative = shift left, Positive = shift right
-  const yOffset = -0.1;   // Negative = shift down, Positive = shift up
+  const xOffset = -0.056;  // Negative = shift left, Positive = shift right
+  const yOffset = -0.09;   // Negative = shift down, Positive = shift up (increased to show Philadelphia/NYC)
 
   return {
     x: (lon/180) + xOffset,
@@ -482,8 +451,10 @@ function updateFlightPathVisibility() {
 
 function updateDecadeDisplay(decade) {
   const decadeValue = document.getElementById('decadeValue');
+  if (!decadeValue) return; // Element might not exist yet
+  
   if (!decade) {
-    decadeValue.textContent = 'All';
+    decadeValue.textContent = 'All Years';
   } else {
     // decadeValue.textContent = `${decade}s`;
     decadeValue.textContent = `${decade}–${decade + WINDOW_STEP - 1}`;
@@ -493,6 +464,9 @@ function updateDecadeDisplay(decade) {
   // Update text overlay when decade changes
   updateTextOverlay();
 }
+
+// Expose to window for page transition script
+window.updateDecadeDisplay = updateDecadeDisplay;
 
 // Make timeline handle draggable (horizontal)
 (function enableTimelineDrag() {
@@ -563,7 +537,7 @@ const customPositions = {
   saturn:   new THREE.Vector3(8, 2, 0),
   uranus:   new THREE.Vector3(-7, 2, -2),
   neptune:  new THREE.Vector3(-9, -2, 1),
-  "fictional locations": new THREE.Vector3(-11, -3, 2)  // Beyond Neptune for fictional places
+  "fictional locations": new THREE.Vector3(-5, -6, 2)  // Right side, lower to avoid text overlap
 };
 
 // ==========================================================
@@ -2190,6 +2164,16 @@ window.addEventListener("mousedown", (e) => {
 // Discrete zoom level transitions
 let scrollCooldown = false;
 const SCROLL_COOLDOWN_TIME = 1500; // ms to wait before allowing next scroll
+
+// Expose scrollCooldown to window for page transition cooldown
+window.setScrollCooldown = (enabled) => {
+  scrollCooldown = enabled;
+  if (enabled) {
+    setTimeout(() => {
+      scrollCooldown = false;
+    }, SCROLL_COOLDOWN_TIME);
+  }
+};
 
 // Momentum/coasting prevention
 let lastWheelTime = 0;

@@ -345,11 +345,18 @@
 
 /* CURRENT DECADE VALUE */
 #decadeValue {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
-  color: #888;
+  color: #ffffff !important;
   text-align: center;
-  min-width: 60px;
+  min-width: 100px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.287);
+  backdrop-filter: blur(8px);
+  border-radius: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  font-family: 'Inter', sans-serif;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 /* TRACK — now a visible flat dark bar */
@@ -631,9 +638,8 @@
 /* Gradient Legend */
 #gradientLegend {
   position: fixed;
-  top: 50%;
-  left: 40px;
-  transform: translateY(-50%);
+  bottom: 500px;
+  left: 60px;
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -1086,8 +1092,8 @@
       }
     });
 
-    enterMapBtn.addEventListener('click', (e) => {
-      e.preventDefault();
+    // Function to transition to map page
+    function goToMapPage() {
       if (currentPage < pages.length - 1) {
         currentPage++;
         updatePages();
@@ -1099,6 +1105,16 @@
           window.targetCameraZ = window.ZOOM_POSITIONS[window.ZOOM_STATES.US];
         }
 
+        // Set scroll cooldown to prevent immediate zoom after page transition
+        if (window.setScrollCooldown) {
+          window.setScrollCooldown(true);
+        }
+
+        // Initialize decade display to "All Years"
+        if (window.updateDecadeDisplay) {
+          window.updateDecadeDisplay(null);
+        }
+
         // Show map intro message when entering map page
         setTimeout(() => {
           if (window.showMapIntro) {
@@ -1106,10 +1122,59 @@
           }
         }, 100); // Small delay to ensure page transition starts
       }
+    }
+
+    enterMapBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      goToMapPage();
     });
+
+    // Scroll functionality on intro page
+    let scrollCooldown = false;
+    let lastScrollTime = 0;
+    const SCROLL_THRESHOLD = 50; // Minimum scroll delta to trigger
+    const SCROLL_COOLDOWN_MS = 500; // Prevent rapid scrolling
+
+    window.addEventListener('wheel', (e) => {
+      // Only handle scroll on intro page (page 0)
+      if (currentPage !== 0) {
+        return;
+      }
+
+      // Prevent default scrolling behavior on intro page
+      e.preventDefault();
+
+      const now = Date.now();
+      
+      // Cooldown check
+      if (scrollCooldown || (now - lastScrollTime < SCROLL_COOLDOWN_MS)) {
+        return;
+      }
+
+      // Only trigger on scroll down (positive deltaY)
+      if (e.deltaY > SCROLL_THRESHOLD) {
+        lastScrollTime = now;
+        scrollCooldown = true;
+        
+        // Transition to map page
+        goToMapPage();
+        
+        // Reset cooldown
+        setTimeout(() => {
+          scrollCooldown = false;
+        }, SCROLL_COOLDOWN_MS);
+      }
+    }, { passive: false });
 
     // Initialize
     updatePages();
+    
+    // Initialize decade display to "All Years" if on map page
+    setTimeout(() => {
+      if (currentPage === 1 && window.updateDecadeDisplay) {
+        window.updateDecadeDisplay(null);
+      }
+    }, 100);
   </script>
 </body>
 </html>
