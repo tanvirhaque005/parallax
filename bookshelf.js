@@ -499,10 +499,10 @@ const scrollRightBtn = document.getElementById('scrollRight');
 function updateScrollButtons() {
   // Scroll buttons removed - function kept for compatibility but does nothing
   if (scrollRightBtn) {
-    scrollRightBtn.style.display = 'none';
+    scrollRightBtn.style.display = 'block';
   }
   if (scrollLeftBtn) {
-    scrollLeftBtn.style.display = 'none';
+    scrollLeftBtn.style.display = 'block';
   }
 }
 
