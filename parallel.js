@@ -12,6 +12,9 @@ const WORLD_START = 0;
 const WORLD_END   = 9999;
 let hoverShifted = false;
 let hoverOriginalTop = "";
+let currentlyHoveredID = null;
+let hoveredLineID = null;
+
 
 
 // RENDERED YEARS ONLY (do NOT draw anything outside this)
@@ -476,7 +479,24 @@ function buildMovieLines() {
         const x1 = yearToX(d.startYear);
         const x2 = yearToX(d.endYear);
 
-        // --- halo (background) ---
+        // Store DOM refs on the data object
+        d.dom = {};
+
+        // --- Huge hit-line (hover only) ---
+        const hit = S("line");
+        hit.setAttribute("x1", x1);
+        hit.setAttribute("y1", yTop);
+        hit.setAttribute("x2", x2);
+        hit.setAttribute("y2", yBot);
+        hit.setAttribute("stroke", "transparent");
+        hit.setAttribute("stroke-width", 42);
+        hit.setAttribute("pointer-events", "stroke");
+        hit.classList.add("movieHit");
+        hit.dataset.id = d.id;
+        worldG.appendChild(hit);
+        d.dom.hit = hit;
+
+        // --- halo line (background glow) ---
         const halo = S("line");
         halo.setAttribute("x1", x1);
         halo.setAttribute("y1", yTop);
@@ -484,10 +504,12 @@ function buildMovieLines() {
         halo.setAttribute("y2", yBot);
         halo.setAttribute("stroke", slopeColor(d));
         halo.setAttribute("stroke-width", 8);
-        halo.setAttribute("stroke-opacity", 0.03);
+        halo.setAttribute("stroke-opacity", 0.0);   // default: hidden
+        halo.style.pointerEvents = "none";
         halo.classList.add("movieHalo");
         halo.dataset.id = d.id;
         worldG.appendChild(halo);
+        d.dom.halo = halo;
 
         // --- main line (foreground) ---
         const line = S("line");
@@ -497,13 +519,15 @@ function buildMovieLines() {
         line.setAttribute("y2", yBot);
         line.setAttribute("stroke", slopeColor(d));
         line.setAttribute("stroke-width", 2.2);
-        line.setAttribute("stroke-opacity", 0.0); // hidden until highlighted
+        line.setAttribute("stroke-opacity", 0.0);
         line.style.pointerEvents = "none";
         line.classList.add("movieLine");
         line.dataset.id = d.id;
         worldG.appendChild(line);
+        d.dom.line = line;
     });
 }
+
 
 
 // -----------------------------
@@ -553,41 +577,23 @@ function isInWindow(d) {
 //  Update highlight of movie lines (fg + halo)
 // -----------------------------
 function updateWindowHighlight() {
-    const halos = worldG.querySelectorAll(".movieHalo");
-    const lines = worldG.querySelectorAll(".movieLine");
+    data.forEach(d => {
+        const inwin = isInWindow(d);
 
-    halos.forEach(h => {
-        const d = data.find(m => m.id == h.dataset.id);
-        const inRange = isInWindow(d);
-
-        if (!inRange) {
-            // completely hide outside-window lines + halos
-            h.setAttribute("stroke-opacity", 0);
+        // non-window = fully hidden
+        if (!inwin) {
+            d.dom.line.style.strokeOpacity = 0;
+            d.dom.halo.style.strokeOpacity = 0;
+            d.dom.hit.style.pointerEvents = "none";
         } else {
-            // subtle halo for in-window lines
-            h.setAttribute("stroke", "rgba(255,255,255,0.25)");
-            h.setAttribute("stroke-opacity", 0.25);
-        }
-    });
-
-    lines.forEach(l => {
-        const d = data.find(m => m.id == l.dataset.id);
-        const inRange = isInWindow(d);
-
-        if (!inRange) {
-            // fully invisible
-            l.setAttribute("stroke-opacity", 0);
-            l.style.pointerEvents = "none"; // DO NOT ALLOW HOVER
-        } else {
-            // default neutral appearance until hover
-            l.setAttribute("stroke", "rgba(255,255,255,0.65)");
-            l.setAttribute("stroke-width", 2.3);
-            l.setAttribute("stroke-opacity", 1);
-            l.style.pointerEvents = "stroke"; // enable hover
+            // window = grey by default (0.55 opacity)
+            d.dom.line.style.stroke = "#A9A9A9";   // grey-ish
+            d.dom.line.style.strokeOpacity = 0.55;
+            d.dom.halo.style.strokeOpacity = 0.06;
+            d.dom.hit.style.pointerEvents = "stroke";
         }
     });
 }
-
 
 // -----------------------------
 //  WINDOW LABEL (bottom-right) DEBUGGING ONLY
@@ -1227,52 +1233,66 @@ function hideHoverCard() {
         hoverCard.style.opacity = 0;
     }, 120);
 }
+function restoreNormalLine(id) {
+    const d = data.find(m => m.id == id);
+    if (!d) return;
+
+    const inWindow = isInWindow(d);
+
+    const line = worldG.querySelector(`.movieLine[data-id="${id}"]`);
+    const halo = worldG.querySelector(`.movieHalo[data-id="${id}"]`);
+
+    if (line) {
+        line.style.transition = "stroke 0.25s ease-out, stroke-opacity 0.25s ease-out";
+        line.setAttribute("stroke", "#e0e0e0");
+        line.setAttribute("stroke-opacity", inWindow ? 0.55 : 0.0);
+    }
+
+    if (halo) {
+        halo.style.transition = "stroke-opacity 0.25s ease-out";
+        halo.setAttribute("stroke", slopeColor(d));
+        halo.setAttribute("stroke-opacity", inWindow ? 0.12 : 0.0);
+    }
+}
+
 
 /* Attach hover listeners to all movie lines + halos */
 function enableMovieHover() {
-    const halos = worldG.querySelectorAll(".movieHalo");
-    const lines = worldG.querySelectorAll(".movieLine");
-    const all = [...halos, ...lines];
+    const hits = worldG.querySelectorAll(".movieHit");
 
-    all.forEach(el => {
-        el.addEventListener("mousemove", (e) => {
-            const d = data.find(m => m.id == el.dataset.id);
+    hits.forEach(hit => {
+
+        hit.addEventListener("mousemove", e => {
+            const d = data.find(m => m.id == hit.dataset.id);
             if (!d) return;
 
-            // Ignore hover for invisible (out-of-window) lines
-            if (el.getAttribute("stroke-opacity") === "0") return;
+            // Only window-visible lines can hover
+            if (!isInWindow(d)) return;
 
-            // ===== Change line color on hover =====
-            const paired = worldG.querySelector(`.movieLine[data-id="${d.id}"]`);
-            if (paired) {
-                paired.setAttribute("stroke", "#4ab2ff");   // glowing blue
-                paired.setAttribute("stroke-width", 3.8);
+            // --- make both halo + line blue ---
+            d.dom.line.style.transition = "stroke 0.18s ease, stroke-opacity 0.18s ease";
+            d.dom.halo.style.transition = "stroke-opacity 0.18s ease";
 
-                // Light halo pulse on hover
-                const h = worldG.querySelector(`.movieHalo[data-id="${d.id}"]`);
-                if (h) h.setAttribute("stroke-opacity", 0.4);
-            }
+            d.dom.line.style.stroke = "#7EC3E3";       // bright blue
+            d.dom.line.style.strokeOpacity = 1.0;
+
+            d.dom.halo.style.strokeOpacity = 0.28;      // glowing blue halo
 
             showHoverCard(d, e.clientX, e.clientY);
         });
 
-        el.addEventListener("mouseleave", () => {
-            const d = data.find(m => m.id == el.dataset.id);
+        hit.addEventListener("mouseleave", e => {
+            const d = data.find(m => m.id == hit.dataset.id);
             if (!d) return;
 
-            // revert to neutral
-            const paired = worldG.querySelector(`.movieLine[data-id="${d.id}"]`);
-            if (paired && isInWindow(d)) {
-                paired.setAttribute("stroke", "rgba(255,255,255,0.65)");
-                paired.setAttribute("stroke-width", 2.3);
-            }
-
-            const h = worldG.querySelector(`.movieHalo[data-id="${d.id}"]`);
-            if (h && isInWindow(d)) {
-                h.setAttribute("stroke-opacity", 0.25);
-            }
-
             hideHoverCard();
+
+            if (!isInWindow(d)) return;
+
+            // Reset to grey window style
+            d.dom.line.style.stroke = "#A9A9A9";
+            d.dom.line.style.strokeOpacity = 0.55;
+            d.dom.halo.style.strokeOpacity = 0.06;
         });
     });
 }
