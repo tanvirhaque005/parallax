@@ -300,9 +300,9 @@
 .left-card {
   position: absolute;
   left: 70px;
-  top: 160px;
+  top: 260px;
 
-  width: 420px;
+  width: 450px;
   padding: 28px 32px 40px 32px;
 
   /* background: rgba(255,255,255,0.03); */
@@ -572,6 +572,51 @@
   margin: 12px 0;
 }
 
+
+
+#depictedAxis {
+    top: 200px;                 /* ← pull closer to the top of viz */
+    padding-bottom: 10px;
+}
+
+#releaseAxis {
+    bottom: 200px;              /* ← pull closer upward */
+    padding-top: 10px;
+}
+
+/* Title text (Depicted Year / Release Year) */
+.axis-title {
+    font-size: 26px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+/* Horizontal white line */
+.axis-bar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: rgba(255,255,255,0.32);
+    top: 36px;
+}
+
+/* Year numbers */
+.axis-years {
+    margin-top: 16px;
+    font-size: 20px;
+    letter-spacing: 3px;
+    opacity: 0.92;
+}
+
+/* Individual year labels */
+.axis-year {
+    display: inline-block;
+    width: 80px;     /* spacing like screenshot */
+    text-align: center;
+}
+
   </style>
   <link rel="stylesheet" href="introMessage.css">
 </head>
@@ -645,10 +690,25 @@
       <!-- SVG STAGE -->
       <div class="stage">
         <svg id="parallel">
-          <g id="worldViewport">
-            <g id="worldG"></g>
+          <g id="worldViewport">  
+              <g id="worldG">     
+                  <!-- (grid, ticks, lines, etc.) -->
+              </g>
           </g>
-        </svg>
+      
+          <g id="fixedOverlay">  
+              <!-- (Depicted Year, Release Year) -->
+          </g>
+      </svg>
+      
+          <!-- <div class="axis-title">Depicted Year</div> -->
+          <!-- <div class="axis-years" id="depictedYears"></div> -->
+      </div>
+      
+          <div class="axis-title">Release Year</div>
+          <div class="axis-years" id="releaseYears"></div>
+      </div>
+      
       </div>
       
       

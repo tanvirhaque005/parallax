@@ -52,8 +52,8 @@ const W = window.innerWidth;
 const H = window.innerHeight;
 
 // Vertical placement
-const yTop = 100;
-const yBot = H - 160;
+const yTop = 240;
+const yBot = H - 220;
 
 
 // -----------------------------
@@ -176,7 +176,118 @@ function buildGrid() {
         worldG.appendChild(line);
     }
 }
+// -----------------------------
+//  WHITE HORIZONTAL AXIS LINES
+// -----------------------------
+function buildAxisLines() {
+    // Top horizontal axis
+    const lineTop = S("line");
+    lineTop.setAttribute("x1", 0);
+    lineTop.setAttribute("x2", WORLD_WIDTH);
+    lineTop.setAttribute("y1", yTop);
+    lineTop.setAttribute("y2", yTop);
+    lineTop.setAttribute("stroke", "white");
+    lineTop.setAttribute("stroke-width", 2);
+    lineTop.setAttribute("stroke-opacity", 0.9);
+    worldG.appendChild(lineTop);
 
+    // Bottom horizontal axis
+    const lineBot = S("line");
+    lineBot.setAttribute("x1", 0);
+    lineBot.setAttribute("x2", WORLD_WIDTH);
+    lineBot.setAttribute("y1", yBot);
+    lineBot.setAttribute("y2", yBot);
+    lineBot.setAttribute("stroke", "white");
+    lineBot.setAttribute("stroke-width", 2);
+    lineBot.setAttribute("stroke-opacity", 0.9);
+    worldG.appendChild(lineBot);
+
+    // -------- AXIS LABELS --------
+    const labelStyle = {
+        fill: "white",
+        "font-size": 16,
+        "font-family": "Inter, sans-serif",
+        "font-weight": 600,
+        "letter-spacing": "1px",
+    };
+
+    // Depicted Year label
+    const topLabel = S("text");
+    topLabel.textContent = "Depicted Year";
+    topLabel.setAttribute("x", 40);                  // left side offset
+    topLabel.setAttribute("y", yTop - 16);           // slightly above top axis
+    for (const [k,v] of Object.entries(labelStyle)) topLabel.setAttribute(k, v);
+    worldG.appendChild(topLabel);
+
+    // Release Year label
+    const bottomLabel = S("text");
+    bottomLabel.textContent = "Release Year";
+    bottomLabel.setAttribute("x", 40);               // same offset
+    bottomLabel.setAttribute("y", yBot - 10);        // slightly above bottom axis
+    for (const [k,v] of Object.entries(labelStyle)) bottomLabel.setAttribute(k, v);
+    worldG.appendChild(bottomLabel);
+}
+
+// For the Release Year / Depicted Year labels
+function buildFixedAxisLabels() {
+    const overlay = document.getElementById("fixedOverlay");
+
+    // Clear old
+    while (overlay.firstChild) overlay.removeChild(overlay.firstChild);
+
+    // --- SVG FILTER: GLOW EFFECT ---
+    const defs = S("defs");
+    const filter = S("filter");
+    filter.setAttribute("id", "axisGlow");
+    filter.setAttribute("x", "-20%");
+    filter.setAttribute("y", "-20%");
+    filter.setAttribute("width", "200%");
+    filter.setAttribute("height", "200%");
+
+    const gaussian = S("feGaussianBlur");
+    gaussian.setAttribute("stdDeviation", "2.5");
+    gaussian.setAttribute("result", "blur");
+    filter.appendChild(gaussian);
+
+    const merge = S("feMerge");
+    const m1 = S("feMergeNode");
+    m1.setAttribute("in", "blur");
+    const m2 = S("feMergeNode");
+    m2.setAttribute("in", "SourceGraphic");
+    merge.appendChild(m1);
+    merge.appendChild(m2);
+
+    filter.appendChild(merge);
+    defs.appendChild(filter);
+    overlay.appendChild(defs);
+
+    // --- Common style for both labels ---
+    const labelStyle = {
+        fill: "white",
+        "font-size": 34,                   // Larger text
+        "font-family": "Inter, sans-serif",
+        "font-weight": 300,                // bolder for clarity
+        "letter-spacing": "1.5px",
+        "pointer-events": "none",
+        filter: "url(#axisGlow)"           // glow applied here
+    };
+
+    // DEPicted Year (top axis)
+    const topLabel = S("text");
+    topLabel.textContent = "DEPICTED YEAR";
+    topLabel.setAttribute("x", 40);
+    topLabel.setAttribute("y", yTop - 35);   // slightly above the axis
+    for (const [k, v] of Object.entries(labelStyle)) topLabel.setAttribute(k, v);
+    overlay.appendChild(topLabel);
+
+    // RELEASE Year (bottom axis)
+    const bottomLabel = S("text");
+    bottomLabel.textContent = "RELEASE YEAR";
+    bottomLabel.setAttribute("x", 40);
+    bottomLabel.setAttribute("y", yBot + 64);
+    for (const [k, v] of Object.entries(labelStyle)) bottomLabel.setAttribute(k, v);
+    overlay.appendChild(bottomLabel);
+}
 
 
 // -----------------------------
@@ -301,6 +412,7 @@ function buildWorld() {
 
     buildGrid();
     buildTicks();
+    buildAxisLines();  // <-- white horizontal axes
     buildMovieLines();
 
     // events + interactive bars handled in later chunks
@@ -473,6 +585,7 @@ function buildEvents() {
 // -----------------------------
 //  Modify buildWorld to include events
 // -----------------------------
+
 const __originalBuildWorld = buildWorld;
 buildWorld = function() {
     __originalBuildWorld();
@@ -482,6 +595,12 @@ buildWorld = function() {
 };
 
 buildWorld();  // rebuild world including events
+buildFixedAxisLabels(); // builds fixed labels
+
+window.addEventListener("resize", () => {
+    positionFixedAxisLabels(); // if needed
+    buildFixedAxisLabels();    // recreate at new yTop/yBot
+});
 
 
 /* ================================================================
