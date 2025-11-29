@@ -558,17 +558,34 @@ function updateWindowHighlight() {
 
     halos.forEach(h => {
         const d = data.find(m => m.id == h.dataset.id);
-        const highlighted = isInWindow(d);
-        h.setAttribute("stroke-opacity", highlighted ? 0.18 : 0.03);
+        const inRange = isInWindow(d);
+
+        if (!inRange) {
+            // completely hide outside-window lines + halos
+            h.setAttribute("stroke-opacity", 0);
+        } else {
+            // subtle halo for in-window lines
+            h.setAttribute("stroke", "rgba(255,255,255,0.25)");
+            h.setAttribute("stroke-opacity", 0.25);
+        }
     });
 
     lines.forEach(l => {
         const d = data.find(m => m.id == l.dataset.id);
-        const highlighted = isInWindow(d);
-        l.setAttribute("stroke-opacity", highlighted ? 1.0 : 0.0);
-    });
+        const inRange = isInWindow(d);
 
-    // updateWindowLabel();
+        if (!inRange) {
+            // fully invisible
+            l.setAttribute("stroke-opacity", 0);
+            l.style.pointerEvents = "none"; // DO NOT ALLOW HOVER
+        } else {
+            // default neutral appearance until hover
+            l.setAttribute("stroke", "rgba(255,255,255,0.65)");
+            l.setAttribute("stroke-width", 2.3);
+            l.setAttribute("stroke-opacity", 1);
+            l.style.pointerEvents = "stroke"; // enable hover
+        }
+    });
 }
 
 
@@ -1215,7 +1232,6 @@ function hideHoverCard() {
 function enableMovieHover() {
     const halos = worldG.querySelectorAll(".movieHalo");
     const lines = worldG.querySelectorAll(".movieLine");
-
     const all = [...halos, ...lines];
 
     all.forEach(el => {
@@ -1223,10 +1239,41 @@ function enableMovieHover() {
             const d = data.find(m => m.id == el.dataset.id);
             if (!d) return;
 
+            // Ignore hover for invisible (out-of-window) lines
+            if (el.getAttribute("stroke-opacity") === "0") return;
+
+            // ===== Change line color on hover =====
+            const paired = worldG.querySelector(`.movieLine[data-id="${d.id}"]`);
+            if (paired) {
+                paired.setAttribute("stroke", "#4ab2ff");   // glowing blue
+                paired.setAttribute("stroke-width", 3.8);
+
+                // Light halo pulse on hover
+                const h = worldG.querySelector(`.movieHalo[data-id="${d.id}"]`);
+                if (h) h.setAttribute("stroke-opacity", 0.4);
+            }
+
             showHoverCard(d, e.clientX, e.clientY);
         });
 
-        el.addEventListener("mouseleave", hideHoverCard);
+        el.addEventListener("mouseleave", () => {
+            const d = data.find(m => m.id == el.dataset.id);
+            if (!d) return;
+
+            // revert to neutral
+            const paired = worldG.querySelector(`.movieLine[data-id="${d.id}"]`);
+            if (paired && isInWindow(d)) {
+                paired.setAttribute("stroke", "rgba(255,255,255,0.65)");
+                paired.setAttribute("stroke-width", 2.3);
+            }
+
+            const h = worldG.querySelector(`.movieHalo[data-id="${d.id}"]`);
+            if (h && isInWindow(d)) {
+                h.setAttribute("stroke-opacity", 0.25);
+            }
+
+            hideHoverCard();
+        });
     });
 }
 
