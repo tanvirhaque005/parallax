@@ -37,7 +37,7 @@ cursor: grab;
   
   /* TEXT */
   .arrow-button-text {
-    font-family: 'Courier New', monospace;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-size: 20px;
     letter-spacing: 2px;
     color: white;
