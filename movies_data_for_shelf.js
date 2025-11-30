@@ -9,8 +9,8 @@ let data = [
         "Free Will",
         "Transcendence"
       ],
-      "filmingLocation": "Berlin, Germany",
-      "depictedLocation": "Moon",
+      "filmingLocation": "UFA studios, Neubabelsberg (near Berlin), Germany",
+      "depictedLocation": "The Moon (via rocket launch from Earth)",
       "id": 1000
     },
     {
@@ -23,8 +23,8 @@ let data = [
         "Class struggle",
         "Survival against nature"
       ],
-      "filmingLocation": "New York City, USA",
-      "depictedLocation": "London, England",
+      "filmingLocation": "Biograph Studios, Bronx, New York, USA",
+      "depictedLocation": "A remote prehistoric plateau (fictional South American jungle) + London / River Thames (return) / England",
       "id": 1
     },
     {
@@ -37,8 +37,8 @@ let data = [
         "Robotics",
         "Consciousness"
       ],
-      "filmingLocation": "Potsdam, Germany",
-      "depictedLocation": "Metropolis (fictional futuristic city)",
+      "filmingLocation": "Studio Babelsberg (Potsdam, Germany), plus Berlin & Vienna for some sequences",
+      "depictedLocation": "Futuristic city \u2018Metropolis\u2019 (fictional dystopian megalopolis)",
       "id": 2
     },
     {
@@ -51,8 +51,8 @@ let data = [
         "Class struggle",
         "Free Will"
       ],
-      "filmingLocation": "London, England",
-      "depictedLocation": "London, England",
+      "filmingLocation": "UK (London / British studios)",
+      "depictedLocation": "Global super-powers / Europe & Atlantic States \u2014 primarily imagined London / Europe / transatlantic conflict zones",
       "id": 3
     },
     {
@@ -65,7 +65,7 @@ let data = [
         "Consciousness",
         "Free Will"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
+      "filmingLocation": "Universal Studios, Hollywood, California, USA",
       "depictedLocation": "Central Europe (fictional village based on Bavaria / Swiss Alps)",
       "id": 4
     },
@@ -79,8 +79,8 @@ let data = [
         "Surveillance",
         "Class struggle"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
-      "depictedLocation": "Mars",
+      "filmingLocation": "Fox Studios, Hollywood, California, USA",
+      "depictedLocation": "Futuristic New York City (Earth) + Mars",
       "id": 5
     },
     {
@@ -93,7 +93,7 @@ let data = [
         "Surveillance",
         "Consciousness"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
+      "filmingLocation": "Universal Studios, Hollywood, California, USA",
       "depictedLocation": "Rural England (fictional Iping village)",
       "id": 6
     },
@@ -107,8 +107,8 @@ let data = [
         "Survival against nature",
         "Free Will"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
-      "depictedLocation": "New York City, USA",
+      "filmingLocation": "RKO-Path\u00e9 Studios, Culver City, California, USA",
+      "depictedLocation": "New York City (flooded / post-disaster Earth)",
       "id": 7
     },
     {
@@ -120,7 +120,7 @@ let data = [
         "Consciousness",
         "Free Will"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
+      "filmingLocation": "Universal Studios, Hollywood, California, USA",
       "depictedLocation": "Central Europe (fictional village based on Bavaria / Swiss Alps)",
       "id": 8
     },
@@ -134,8 +134,8 @@ let data = [
         "Surveillance",
         "Class struggle"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
-      "depictedLocation": "Mars",
+      "filmingLocation": "Fox Studios, Hollywood, California, USA",
+      "depictedLocation": "Futuristic New York City (Earth) + Mars",
       "id": 9
     },
     {
@@ -147,7 +147,7 @@ let data = [
         "Surveillance",
         "Consciousness"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
+      "filmingLocation": "Universal Studios, Hollywood, California, USA",
       "depictedLocation": "Rural England (fictional Iping village)",
       "id": 10
     },
@@ -161,8 +161,8 @@ let data = [
         "Survival against nature",
         "Free Will"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
-      "depictedLocation": "New York City, USA",
+      "filmingLocation": "RKO-Path\u00e9 Studios, Culver City, California, USA",
+      "depictedLocation": "New York City (flooded / post-disaster Earth)",
       "id": 11
     },
     {
@@ -174,7 +174,7 @@ let data = [
         "Free Will",
         "Social Control"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
+      "filmingLocation": "Universal Studios, Hollywood, California, USA",
       "depictedLocation": "Central Europe (fictional villages modeled on Bavaria / Swiss Alps)",
       "id": 12
     },
@@ -187,8 +187,8 @@ let data = [
         "Class struggle",
         "Robotics"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
-      "depictedLocation": "Mars",
+      "filmingLocation": "Universal Studios, Hollywood, California, USA",
+      "depictedLocation": "Mars (primary) + Mongo",
       "id": 13
     },
     {
@@ -200,8 +200,8 @@ let data = [
         "Transcendence",
         "Robotics"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
-      "depictedLocation": "Outer space locations",
+      "filmingLocation": "Universal Studios, Hollywood, California, USA",
+      "depictedLocation": "Future Earth (New Chicago) + Outer space locations",
       "id": 14
     },
     {
@@ -214,8 +214,8 @@ let data = [
         "Surveillance",
         "Transcendence"
       ],
-      "filmingLocation": "Buckinghamshire, England",
-      "depictedLocation": "Everytown (fictional British city)",
+      "filmingLocation": "Denham Film Studios, Buckinghamshire, England (primary)",
+      "depictedLocation": "Everytown (fictional British city) + global future Earth",
       "id": 15
     },
     {
@@ -227,7 +227,7 @@ let data = [
         "Class struggle",
         "Robotics"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
+      "filmingLocation": "Universal Studios, Hollywood, California, USA",
       "depictedLocation": "Planet Mongo (extraterrestrial)",
       "id": 16
     },
@@ -241,8 +241,8 @@ let data = [
         "Free Will",
         "Consciousness"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
-      "depictedLocation": "Germany",
+      "filmingLocation": "Universal Studios, Hollywood, California, USA",
+      "depictedLocation": "World War II Europe (primarily Germany)",
       "id": 17
     },
     {
@@ -255,7 +255,7 @@ let data = [
         "Free Will",
         "Science ethics"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
+      "filmingLocation": "Universal Studios, Hollywood, California, USA",
       "depictedLocation": "Rural England",
       "id": 18
     },
@@ -267,8 +267,8 @@ let data = [
         "Social Control",
         "Free Will"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
-      "depictedLocation": "Los Alamos, New Mexico, USA",
+      "filmingLocation": "Metro-Goldwyn-Mayer Studios, Culver City, California, USA",
+      "depictedLocation": "Los Alamos, New Mexico (USA) + Hiroshima & Nagasaki (depicted historically)",
       "id": 19
     },
     {
@@ -280,8 +280,8 @@ let data = [
         "Robotics",
         "Free Will"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
-      "depictedLocation": "Moon",
+      "filmingLocation": "Los Angeles, California, USA (Eagle-Lion Studios)",
+      "depictedLocation": "The Moon (primary) + Earth launch sites (USA)",
       "id": 20
     },
     {
@@ -294,7 +294,7 @@ let data = [
         "Free Will",
         "Surveillance"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
+      "filmingLocation": "20th Century Fox Studios, Los Angeles, California, USA",
       "depictedLocation": "Washington, D.C., USA",
       "id": 21
     },
@@ -308,8 +308,8 @@ let data = [
         "Class struggle",
         "Artificial intelligence"
       ],
-      "filmingLocation": "Los Angeles, California, USA",
-      "depictedLocation": "Los Angeles, California, USA",
+      "filmingLocation": "Paramount Studios + various California locations (USA)",
+      "depictedLocation": "Southern California (primarily Los Angeles and surrounding areas)",
       "id": 22
     },
     {
@@ -320,7 +320,7 @@ let data = [
         "Transcendence",
         "Survival against nature"
       ],
-      "filmingLocation": "Tokyo, Japan",
+      "filmingLocation": "Toho Studios, Tokyo, Japan",
       "depictedLocation": "Tokyo, Japan",
       "id": 23
     },
@@ -333,7 +333,7 @@ let data = [
         "Space-travel",
         "Transcendence"
       ],
-      "filmingLocation": "Culver City, California, USA",
+      "filmingLocation": "Metro-Goldwyn-Mayer Studios, Culver City, California, USA",
       "depictedLocation": "Planet Altair IV (extraterrestrial)",
       "id": 24
     },
@@ -2244,7 +2244,8 @@ let data = [
         "depicted": 2020,
         "tropes": ["Robotics", "Artificial intelligence", "Consciousness", "Social Control"],
         "filmingLocation": "Cape Town, South Africa; Prague, Czech Republic",
-        "depictedLocation": "Multiple urban locations (global, near-future setting)"
+        "depictedLocation": "Multiple urban locations (global, near-future setting)",
+        "id": 162
       },
       {
         "title": "Spider-Man: No Way Home",
@@ -2252,7 +2253,8 @@ let data = [
         "depicted": 2021,
         "tropes": ["Evolution", "Consciousness", "Free Will", "Social Control"],
         "filmingLocation": "Atlanta, Georgia; Los Angeles; New York City",
-        "depictedLocation": "New York City + multiverse crossover settings"
+        "depictedLocation": "New York City + multiverse crossover settings",
+        "id": 163
       },
       {
         "title": "Deadpool & Wolverine",
@@ -2260,8 +2262,63 @@ let data = [
         "depicted": 2024,
         "tropes": ["Evolution", "Class struggle", "Consciousness", "Free Will"],
         "filmingLocation": "London, UK; Buckinghamshire; Pinewood Studios",
-        "depictedLocation": "Multiple timelines/universes (Marvel multiverse)"
-      }
+        "depictedLocation": "Multiple timelines/universes (Marvel multiverse)",
+        "id": 164
+      },
+    {
+        "title": "Black Widow",
+        "year": 2021,
+        "depicted": 2016,
+        "tropes": [],
+        "filmingLocation": "??",
+        "depictedLocation": "??",
+        "id": 165
+      },
+   {
+        "title": "The Matrix Resurrections",
+        "year": 2021,
+        "depicted": 2200,
+        "tropes": [],
+        "filmingLocation": "??",
+        "depictedLocation": "??",
+        "id": 166
+      },
+    {
+        "title": "Spiderman: Across the Spiderverse",
+        "year": 2023,
+        "depicted": 2023,
+        "tropes": [],
+        "filmingLocation": "??",
+        "depictedLocation": "??",
+        "id": 167
+      }, 
+    {
+        "title": "Furiosa: A Mad Max Saga",
+        "year": 2024,
+        "depicted": 2030,
+        "tropes": [],
+        "filmingLocation": "??",
+        "depictedLocation": "??",
+        "id": 168
+      },
+    {
+        "title": "Looper",
+        "year": 2012,
+        "depicted": 2044,
+        "tropes": [],
+        "filmingLocation": "??",
+        "depictedLocation": "??",
+        "id": 169
+      },
+    {
+        "title": "10 Cloverfield Lane",
+        "year": 2016,
+        "depicted": 2016,
+        "tropes": [],
+        "filmingLocation": "??",
+        "depictedLocation": "??",
+        "id": 170
+      },
     ]
   
   
