@@ -13,7 +13,7 @@
       margin: 0;
       font-family: 'IBM Plex Sans', sans-serif;
       overflow: hidden;
-      background: #0a1628;
+      background: #000000;
       cursor: none !important;
     }
 
@@ -358,6 +358,7 @@
   border: 2px solid rgba(255, 255, 255, 0.15);
   font-family: 'Inter', sans-serif;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  display: none; /* Hide the middle counter */
 }
 
 /* TRACK — now a visible flat dark bar */
@@ -709,6 +710,24 @@
          z-index: 200;
     }
 
+.page-footer {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    padding: 0 40px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+
+    z-index: 99999;
+}
+
   </style>
   <link rel="stylesheet" href="mapIntroMessage.css">
 </head>
@@ -740,7 +759,7 @@
     <!-- Map Page (Page 2) -->
     <div class="page-slide next map-page" id="mapPage">
       <!-- Map Intro Message Container -->
-      <div id="mapIntroContainer" data-text="Scroll to zoom between local, global, and cosmic scales."></div>
+      <div id="mapIntroContainer" data-text="Hover paths to reveal film details. Scroll to travel through worlds."></div>
       <script src="mapIntroMessage.js" defer></script>
 
  
@@ -810,7 +829,7 @@
   <link rel="stylesheet" href="arrowButton.css">
   <script src="arrowButton.js"></script>
   <div data-arrow-button
-  text="textF"
+  text="CLOSING"
   href="reflectionPage.html"
   delay="3">
   </div>
@@ -1028,23 +1047,6 @@
     </p>
   </div>
 
-  <!-- World Zoom Text -->
-  <div class="zoom-text" data-zoom="WORLD">
-    <h1 class="main-title">Global Filming Network</h1>
-    <p class="description">
-      Now let's explore where these futures were actually built—and how far
-      stories traveled beyond real filming locations. Scroll to travel through time.
-    </p>
-  </div>
-
-  <!-- Solar System Zoom Text -->
-  <div class="zoom-text" data-zoom="SOLAR">
-    <h1 class="main-title">Beyond Earth</h1>
-    <p class="description">
-      Science fiction doesn't stop at our planet. From the Moon to fictional
-      locations beyond our solar system, stories venture into the cosmos.
-    </p>
-  </div>
 </div>
     </div> <!-- End map-page -->
   </div> <!-- End page-container -->
@@ -1186,7 +1188,7 @@
 
     // Initialize
     updatePages();
-    
+
     // Initialize decade display to "All Years" if on map page
     setTimeout(() => {
       if (currentPage === 1 && window.updateDecadeDisplay) {
@@ -1194,5 +1196,11 @@
       }
     }, 100);
   </script>
+
+  <div class="page-footer">
+    <div>Published 2025</div>
+    <div>Created by Michael, Audrey, Tanvir, Sydney</div>
+  </div>
+
 </body>
 </html>

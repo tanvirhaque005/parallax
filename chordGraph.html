@@ -423,36 +423,27 @@
 					return;
 				}
 
-				// Get movie from URL parameter or use default
-				const params = new URLSearchParams(window.location.search);
-				const movieParam = params.get('movie');
-				const movieTitles = cg.getMovieTitles();
-				const movieToRender = movieParam || movieTitles[0];
+				// Render all themes (no specific movie required)
+				try {
+					cg.render(null, {
+						width: Math.min(1400, window.innerWidth - 100),
+						height: Math.min(1000, window.innerHeight - 100)
+					});
 
-				if (movieToRender) {
-					try {
-						cg.render(movieToRender, {
-							width: Math.min(1400, window.innerWidth - 100),
-							height: Math.min(1000, window.innerHeight - 100)
-						});
+					// Center the visualization
+					setTimeout(() => {
+						try {
+							const svgEl = d3.select('#' + containerId + ' svg');
+							svgEl.attr('preserveAspectRatio', 'xMidYMid meet')
+								.style('display', 'block')
+								.style('margin', '0 auto');
 
-						
-
-						// Center the visualization
-						setTimeout(() => {
-							try {
-								const svgEl = d3.select('#' + containerId + ' svg');
-								svgEl.attr('preserveAspectRatio', 'xMidYMid meet')
-									.style('display', 'block')
-									.style('margin', '0 auto');
-
-								// initialize decade visuals (show All)
-								if (cg && typeof cg.setDecade === 'function') cg.setDecade(null);
-							} catch(e) {}
-						}, 100);
-					} catch(e) {
-						console.error('Render error:', e);
-					}
+							// initialize decade visuals (show All)
+							if (cg && typeof cg.setDecade === 'function') cg.setDecade(null);
+						} catch(e) {}
+					}, 100);
+				} catch(e) {
+					console.error('Render error:', e);
 				}
 
 				// Timeline functionality (5-year windows)

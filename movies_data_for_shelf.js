@@ -9,8 +9,8 @@ let data = [
         "Free Will",
         "Transcendence"
       ],
-      "filmingLocation": "UFA studios, Neubabelsberg (near Berlin), Germany",
-      "depictedLocation": "The Moon (via rocket launch from Earth)",
+      "filmingLocation": "Berlin, Germany",
+      "depictedLocation": "Moon",
       "id": 1000
     },
     {
@@ -23,8 +23,8 @@ let data = [
         "Class struggle",
         "Survival against nature"
       ],
-      "filmingLocation": "Biograph Studios, Bronx, New York, USA",
-      "depictedLocation": "A remote prehistoric plateau (fictional South American jungle) + London / River Thames (return) / England",
+      "filmingLocation": "New York City, USA",
+      "depictedLocation": "London, England",
       "id": 1
     },
     {
@@ -37,8 +37,8 @@ let data = [
         "Robotics",
         "Consciousness"
       ],
-      "filmingLocation": "Studio Babelsberg (Potsdam, Germany), plus Berlin & Vienna for some sequences",
-      "depictedLocation": "Futuristic city \u2018Metropolis\u2019 (fictional dystopian megalopolis)",
+      "filmingLocation": "Potsdam, Germany",
+      "depictedLocation": "Metropolis (fictional futuristic city)",
       "id": 2
     },
     {
@@ -51,8 +51,8 @@ let data = [
         "Class struggle",
         "Free Will"
       ],
-      "filmingLocation": "UK (London / British studios)",
-      "depictedLocation": "Global super-powers / Europe & Atlantic States \u2014 primarily imagined London / Europe / transatlantic conflict zones",
+      "filmingLocation": "London, England",
+      "depictedLocation": "London, England",
       "id": 3
     },
     {
@@ -65,7 +65,7 @@ let data = [
         "Consciousness",
         "Free Will"
       ],
-      "filmingLocation": "Universal Studios, Hollywood, California, USA",
+      "filmingLocation": "Los Angeles, California, USA",
       "depictedLocation": "Central Europe (fictional village based on Bavaria / Swiss Alps)",
       "id": 4
     },
@@ -79,8 +79,8 @@ let data = [
         "Surveillance",
         "Class struggle"
       ],
-      "filmingLocation": "Fox Studios, Hollywood, California, USA",
-      "depictedLocation": "Futuristic New York City (Earth) + Mars",
+      "filmingLocation": "Los Angeles, California, USA",
+      "depictedLocation": "Mars",
       "id": 5
     },
     {
@@ -93,7 +93,7 @@ let data = [
         "Surveillance",
         "Consciousness"
       ],
-      "filmingLocation": "Universal Studios, Hollywood, California, USA",
+      "filmingLocation": "Los Angeles, California, USA",
       "depictedLocation": "Rural England (fictional Iping village)",
       "id": 6
     },
@@ -107,8 +107,8 @@ let data = [
         "Survival against nature",
         "Free Will"
       ],
-      "filmingLocation": "RKO-Path\u00e9 Studios, Culver City, California, USA",
-      "depictedLocation": "New York City (flooded / post-disaster Earth)",
+      "filmingLocation": "Los Angeles, California, USA",
+      "depictedLocation": "New York City, USA",
       "id": 7
     },
     {
@@ -120,7 +120,7 @@ let data = [
         "Consciousness",
         "Free Will"
       ],
-      "filmingLocation": "Universal Studios, Hollywood, California, USA",
+      "filmingLocation": "Los Angeles, California, USA",
       "depictedLocation": "Central Europe (fictional village based on Bavaria / Swiss Alps)",
       "id": 8
     },
@@ -134,8 +134,8 @@ let data = [
         "Surveillance",
         "Class struggle"
       ],
-      "filmingLocation": "Fox Studios, Hollywood, California, USA",
-      "depictedLocation": "Futuristic New York City (Earth) + Mars",
+      "filmingLocation": "Los Angeles, California, USA",
+      "depictedLocation": "Mars",
       "id": 9
     },
     {
@@ -147,7 +147,7 @@ let data = [
         "Surveillance",
         "Consciousness"
       ],
-      "filmingLocation": "Universal Studios, Hollywood, California, USA",
+      "filmingLocation": "Los Angeles, California, USA",
       "depictedLocation": "Rural England (fictional Iping village)",
       "id": 10
     },
@@ -161,8 +161,8 @@ let data = [
         "Survival against nature",
         "Free Will"
       ],
-      "filmingLocation": "RKO-Path\u00e9 Studios, Culver City, California, USA",
-      "depictedLocation": "New York City (flooded / post-disaster Earth)",
+      "filmingLocation": "Los Angeles, California, USA",
+      "depictedLocation": "New York City, USA",
       "id": 11
     },
     {
@@ -174,7 +174,7 @@ let data = [
         "Free Will",
         "Social Control"
       ],
-      "filmingLocation": "Universal Studios, Hollywood, California, USA",
+      "filmingLocation": "Los Angeles, California, USA",
       "depictedLocation": "Central Europe (fictional villages modeled on Bavaria / Swiss Alps)",
       "id": 12
     },
@@ -187,8 +187,8 @@ let data = [
         "Class struggle",
         "Robotics"
       ],
-      "filmingLocation": "Universal Studios, Hollywood, California, USA",
-      "depictedLocation": "Mars (primary) + Mongo",
+      "filmingLocation": "Los Angeles, California, USA",
+      "depictedLocation": "Mars",
       "id": 13
     },
     {
@@ -200,8 +200,8 @@ let data = [
         "Transcendence",
         "Robotics"
       ],
-      "filmingLocation": "Universal Studios, Hollywood, California, USA",
-      "depictedLocation": "Future Earth (New Chicago) + Outer space locations",
+      "filmingLocation": "Los Angeles, California, USA",
+      "depictedLocation": "Outer space locations",
       "id": 14
     },
     {
@@ -214,8 +214,8 @@ let data = [
         "Surveillance",
         "Transcendence"
       ],
-      "filmingLocation": "Denham Film Studios, Buckinghamshire, England (primary)",
-      "depictedLocation": "Everytown (fictional British city) + global future Earth",
+      "filmingLocation": "Buckinghamshire, England",
+      "depictedLocation": "Everytown (fictional British city)",
       "id": 15
     },
     {
@@ -227,7 +227,7 @@ let data = [
         "Class struggle",
         "Robotics"
       ],
-      "filmingLocation": "Universal Studios, Hollywood, California, USA",
+      "filmingLocation": "Los Angeles, California, USA",
       "depictedLocation": "Planet Mongo (extraterrestrial)",
       "id": 16
     },
@@ -241,8 +241,8 @@ let data = [
         "Free Will",
         "Consciousness"
       ],
-      "filmingLocation": "Universal Studios, Hollywood, California, USA",
-      "depictedLocation": "World War II Europe (primarily Germany)",
+      "filmingLocation": "Los Angeles, California, USA",
+      "depictedLocation": "Germany",
       "id": 17
     },
     {
@@ -255,7 +255,7 @@ let data = [
         "Free Will",
         "Science ethics"
       ],
-      "filmingLocation": "Universal Studios, Hollywood, California, USA",
+      "filmingLocation": "Los Angeles, California, USA",
       "depictedLocation": "Rural England",
       "id": 18
     },
@@ -267,8 +267,8 @@ let data = [
         "Social Control",
         "Free Will"
       ],
-      "filmingLocation": "Metro-Goldwyn-Mayer Studios, Culver City, California, USA",
-      "depictedLocation": "Los Alamos, New Mexico (USA) + Hiroshima & Nagasaki (depicted historically)",
+      "filmingLocation": "Los Angeles, California, USA",
+      "depictedLocation": "Los Alamos, New Mexico, USA",
       "id": 19
     },
     {
@@ -280,8 +280,8 @@ let data = [
         "Robotics",
         "Free Will"
       ],
-      "filmingLocation": "Los Angeles, California, USA (Eagle-Lion Studios)",
-      "depictedLocation": "The Moon (primary) + Earth launch sites (USA)",
+      "filmingLocation": "Los Angeles, California, USA",
+      "depictedLocation": "Moon",
       "id": 20
     },
     {
@@ -294,7 +294,7 @@ let data = [
         "Free Will",
         "Surveillance"
       ],
-      "filmingLocation": "20th Century Fox Studios, Los Angeles, California, USA",
+      "filmingLocation": "Los Angeles, California, USA",
       "depictedLocation": "Washington, D.C., USA",
       "id": 21
     },
@@ -308,8 +308,8 @@ let data = [
         "Class struggle",
         "Artificial intelligence"
       ],
-      "filmingLocation": "Paramount Studios + various California locations (USA)",
-      "depictedLocation": "Southern California (primarily Los Angeles and surrounding areas)",
+      "filmingLocation": "Los Angeles, California, USA",
+      "depictedLocation": "Los Angeles, California, USA",
       "id": 22
     },
     {
@@ -320,7 +320,7 @@ let data = [
         "Transcendence",
         "Survival against nature"
       ],
-      "filmingLocation": "Toho Studios, Tokyo, Japan",
+      "filmingLocation": "Tokyo, Japan",
       "depictedLocation": "Tokyo, Japan",
       "id": 23
     },
@@ -333,7 +333,7 @@ let data = [
         "Space-travel",
         "Transcendence"
       ],
-      "filmingLocation": "Metro-Goldwyn-Mayer Studios, Culver City, California, USA",
+      "filmingLocation": "Culver City, California, USA",
       "depictedLocation": "Planet Altair IV (extraterrestrial)",
       "id": 24
     },

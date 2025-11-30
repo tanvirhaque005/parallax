@@ -88,23 +88,45 @@ class ChordGraph {
   async loadData(csvPath) {
     const data = await d3.csv(csvPath);
 
-    // Parse movies and extract themes
-    this.movies = data.map(d => {
+    // Define allowed themes - only these will be included in the chord graph
+    // Note: Using exact theme names as they appear in the CSV
+    const allowedThemes = new Set([
+      'AI',
+      'Consciousness',
+      'Free Will',
+      'Social Control',
+      'Evolution/Genetic Engineering',
+      'Space', // CSV uses 'Space' instead of 'Space Travel'
+      'Interstellar Travel', // Also including this space-related theme
+      'Transcendence',
+      'Surveillance',
+      'Robotics'
+      // Note: 'Class Struggle' does not exist in the CSV data
+    ]);
+
+    // Parse movies and extract only allowed themes
+    const allMovies = data.map(d => {
       const themesStr = d['Sci-fi Categories'] || '';
-      const themes = themesStr
+      const allThemes = themesStr
         .split(',')
         .map(t => t.trim())
         .filter(t => t.length > 0);
 
+      // Filter to only include allowed themes
+      const filteredThemes = allThemes.filter(t => allowedThemes.has(t));
+
       return {
         title: d['Movie / TV Show Name'],
         year: d['Year'],
-        themes: themes,
+        themes: filteredThemes,
         rating: d['Rating']
       };
     });
 
-    // Collect all unique themes
+    // Only keep movies that have at least one of the allowed themes
+    this.movies = allMovies.filter(movie => movie.themes.length > 0);
+
+    // Collect all unique themes (will only be the allowed themes)
     this.movies.forEach(movie => {
       movie.themes.forEach(theme => this.themes.add(theme));
     });
@@ -113,6 +135,7 @@ class ChordGraph {
     this.calculateCooccurrences();
 
     console.log(`Loaded ${this.movies.length} movies with ${this.themes.size} unique themes`);
+    console.log(`Filtered to movies containing: ${Array.from(this.themes).join(', ')}`);
   }
 
   /**
@@ -257,8 +280,9 @@ class ChordGraph {
 
   /**
    * Render the circular network graph with smooth transitions
+   * Now shows ALL filtered themes and their connections across all movies
    */
-  render(movieTitle, options = {}) {
+  render(movieTitle = null, options = {}) {
     const {
       width = 1200,
       height = 900
@@ -268,21 +292,15 @@ class ChordGraph {
     if (!this.svg || !this.svg.node()) {
       this.initializeSVG(options);
     }
-    
+
     // Ensure SVG is ready before proceeding
     if (!this.svg || !this.svg.node()) {
       console.error('SVG initialization failed');
       return null;
     }
 
-    const movie = this.movies.find(m => m.title === movieTitle);
-    if (!movie) {
-      console.error(`Movie "${movieTitle}" not found`);
-      return null;
-    }
-
-    this.currentMovie = movie;
-    const movieThemes = movie.themes;
+    // Use ALL themes from the filtered dataset instead of just one movie's themes
+    const allThemes = Array.from(this.themes).sort();
 
     // Recalculate co-occurrences with current decade filter
     this.calculateCooccurrences(this.currentDecade);
@@ -292,8 +310,8 @@ class ChordGraph {
     const centerY = this.height / 2;
     const radius = Math.min(this.width, this.height) / 2 - 150;
 
-    const nodes = movieThemes.map((theme, i) => {
-      const angle = (i / movieThemes.length) * 2 * Math.PI - Math.PI / 2;
+    const nodes = allThemes.map((theme, i) => {
+      const angle = (i / allThemes.length) * 2 * Math.PI - Math.PI / 2;
       return {
         id: theme,
         label: theme,
@@ -308,18 +326,18 @@ class ChordGraph {
     const links = [];
     const relatedMoviesSet = new Set();
 
-    for (let i = 0; i < movieThemes.length; i++) {
-      for (let j = i + 1; j < movieThemes.length; j++) {
-        const weight = this.themeCooccurrence[movieThemes[i]][movieThemes[j]] || 0;
+    for (let i = 0; i < allThemes.length; i++) {
+      for (let j = i + 1; j < allThemes.length; j++) {
+        const weight = this.themeCooccurrence[allThemes[i]][allThemes[j]] || 0;
         if (weight > 0) {
-          const moviesWithBoth = this.themeMovies[movieThemes[i]][movieThemes[j]] || [];
+          const moviesWithBoth = this.themeMovies[allThemes[i]][allThemes[j]] || [];
           links.push({
             source: i,
             target: j,
             value: weight,
             movies: moviesWithBoth,
-            sourceTheme: movieThemes[i],
-            targetTheme: movieThemes[j]
+            sourceTheme: allThemes[i],
+            targetTheme: allThemes[j]
           });
 
           // Collect related movies

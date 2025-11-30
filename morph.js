@@ -5,44 +5,58 @@ import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 
 // ==========================================================
-// TEXT OVERLAY CONTENT - 20-YEAR PERIODS
+// TEXT OVERLAY CONTENT - 5-YEAR PERIODS
 // ==========================================================
-// Text changes every 20 years, while filtering bars stay at 5-year intervals
 const periodTexts = {
   'All': {
-    title: '1950-2020',
     description: 'Most sci-fi futures originate from the same real cities—Los Angeles, Vancouver, London. Real landscapes anchor imagined ones.'
   },
   1950: {
-    title: '1950-1970',
-    description: 'The golden age of science fiction. Early films establish Los Angeles and London as primary filming hubs. Cold War anxieties and space race ambitions shape narratives, while the space age accelerates and cultural revolution meets cosmic speculation.'
+    description: 'Many futures were shot in the same hubs—LA, Vancouver, London—using familiar landscapes to anchor imagined ones.' // ADD YOUR DESCRIPTION HERE
+  },
+  1955: {
+    description: 'Many futures were shot in the same hubs—LA, Vancouver, London—using familiar landscapes to anchor imagined ones.' // ADD YOUR DESCRIPTION HERE
+  },
+  1960: {
+    description: 'Many futures were shot in the same hubs—LA, Vancouver, London—using familiar landscapes to anchor imagined ones.' // ADD YOUR DESCRIPTION HERE
+  },
+  1965: {
+    description: 'Many futures were shot in the same hubs—LA, Vancouver, London—using familiar landscapes to anchor imagined ones.' // ADD YOUR DESCRIPTION HERE
   },
   1970: {
-    title: '1970-1990',
-    description: 'Dystopian futures and blockbuster spectacle. Environmental and social concerns reshape imagined tomorrows. Star Wars transforms science fiction into mainstream entertainment. Cyberpunk aesthetics emerge, and digital effects begin supplementing practical filmmaking.'
+    description: 'Many futures were shot in the same hubs—LA, Vancouver, London—using familiar landscapes to anchor imagined ones.' // ADD YOUR DESCRIPTION HERE
+  },
+  1975: {
+    description: 'As sci-fi globalized, stories turned to Tokyo, Mexico City, and Seoul. Global cities symbolized the future, reshaping identity and technology through diverse cultural lenses.' // ADD YOUR DESCRIPTION HERE
+  },
+  1980: {
+    description: 'As sci-fi globalized, stories turned to Tokyo, Mexico City, and Seoul. Global cities symbolized the future, reshaping identity and technology through diverse cultural lenses.' // ADD YOUR DESCRIPTION HERE
+  },
+  1985: {
+    description: 'As sci-fi globalized, stories turned to Tokyo, Mexico City, and Seoul. Global cities symbolized the future, reshaping identity and technology through diverse cultural lenses.' // ADD YOUR DESCRIPTION HERE
   },
   1990: {
-    title: '1990-2010',
-    description: 'Virtual reality and digital transformation. Films explore digital worlds as production techniques globalize. Millennium anxieties and internet culture reshape technological futures. Post-9/11 narratives grapple with surveillance and security, while climate crisis enters the frame.'
+    description: 'As sci-fi globalized, stories turned to Tokyo, Mexico City, and Seoul. Global cities symbolized the future, reshaping identity and technology through diverse cultural lenses.' // ADD YOUR DESCRIPTION HERE
+  },
+  1995: {
+    description: 'As sci-fi globalized, stories turned to Tokyo, Mexico City, and Seoul. Global cities symbolized the future, reshaping identity and technology through diverse cultural lenses.' // ADD YOUR DESCRIPTION HERE
+  },
+  2000: {
+    description: 'As sci-fi globalized, stories turned to Tokyo, Mexico City, and Seoul. Global cities symbolized the future, reshaping identity and technology through diverse cultural lenses.' // ADD YOUR DESCRIPTION HERE
+  },
+  2005: {
+    description: 'World-building breaks from Earth entirely. Alien planets, alternate timelines, and deep-space environments reimagine physics, biology, and society on a cosmic scale.' // ADD YOUR DESCRIPTION HERE
   },
   2010: {
-    title: '2010-2030',
-    description: 'Marvel universe expansion and streaming revolution. Interconnected narratives and superhero science fiction dominate global box offices. Streaming platforms transform production, with international co-productions multiplying. Pandemic impacts reshape storytelling with themes of isolation and contagion.'
+    description: 'World-building breaks from Earth entirely. Alien planets, alternate timelines, and deep-space environments reimagine physics, biology, and society on a cosmic scale.' // ADD YOUR DESCRIPTION HERE
+  },
+  2015: {
+    description: 'World-building breaks from Earth entirely. Alien planets, alternate timelines, and deep-space environments reimagine physics, biology, and society on a cosmic scale.' // ADD YOUR DESCRIPTION HERE
+  },
+  2020: {
+    description: 'World-building breaks from Earth entirely. Alien planets, alternate timelines, and deep-space environments reimagine physics, biology, and society on a cosmic scale.' // ADD YOUR DESCRIPTION HERE
   }
 };
-
-// Map 5-year periods to 20-year periods for text display
-function getPeriodForDecade(decade) {
-  if (decade === null) return 'All';
-  
-  // Map each 5-year period to its 20-year period
-  if (decade >= 1950 && decade < 1970) return 1950;
-  if (decade >= 1970 && decade < 1990) return 1970;
-  if (decade >= 1990 && decade < 2010) return 1990;
-  if (decade >= 2010) return 2010;
-  
-  return 'All';
-}
 
 // ==========================================================
 // TEXT OVERLAY UPDATE FUNCTION
@@ -51,12 +65,20 @@ function updateTextOverlay() {
   const textElement = document.querySelector('.zoom-text[data-zoom="US"]');
 
   if (textElement) {
-    // Map current 5-year decade to 20-year period for text display
-    const period = getPeriodForDecade(currentDecade);
-    const textData = periodTexts[period] || periodTexts['All'];
+    let title, description;
 
-    textElement.querySelector('.main-title').textContent = textData.title;
-    textElement.querySelector('.description').textContent = textData.description;
+    if (currentDecade === null) {
+      title = '1950-2020';
+      description = periodTexts['All'].description;
+    } else {
+      title = `${currentDecade}–${currentDecade + WINDOW_STEP - 1}`;
+      // Get description for the specific 5-year period
+      const textData = periodTexts[currentDecade];
+      description = textData ? textData.description : '';
+    }
+
+    textElement.querySelector('.main-title').textContent = title;
+    textElement.querySelector('.description').textContent = description;
     textElement.classList.add('active');
   }
 }
@@ -66,7 +88,7 @@ function updateTextOverlay() {
 // ==========================================================
 const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene"), antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor("#0a1628"); // Deep navy background
+renderer.setClearColor("#000000"); // Black background
 
 // CSS2D Renderer for labels
 const labelRenderer = new CSS2DRenderer();
@@ -277,6 +299,8 @@ async function loadPaths(){
         year: yearInt,
         from: c.from,
         to: c.to,
+        originalFrom: c.originalFrom || c.from,
+        originalTo: c.originalTo || c.to,
         isSameLocation: true
       };
 
@@ -334,7 +358,9 @@ async function loadPaths(){
       movie: c.movie,
       year: yearInt,
       from: c.from,
-      to: c.to
+      to: c.to,
+      originalFrom: c.originalFrom || c.from,
+      originalTo: c.originalTo || c.to
     };
 
     // Check if both locations are in the US
@@ -719,14 +745,14 @@ const starGroup = new THREE.Group();
 starGroup.visible = false;
 scene.add(starGroup);
 
-// Load NASA Hubble space image as background
+// Load solar system image as background
 const textureLoader = new THREE.TextureLoader();
-textureLoader.load('./map_photos/nasa-hubble-space-telescope-o1byzQYzMZA-unsplash.jpeg', (texture) => {
-  // Preserve original image quality without smoothing/blurring
-  texture.anisotropy = 1; // Minimal filtering for sharper appearance
-  texture.minFilter = THREE.LinearMipmapLinearFilter; // Sharper at distance
-  texture.magFilter = THREE.NearestFilter; // Crisp, no smoothing when close
-  texture.generateMipmaps = true; // Generate mipmaps for better quality at distance
+textureLoader.load('./map_photos/solar_system.jpeg', (texture) => {
+  // Maximize image quality and reduce blurriness
+  texture.anisotropy = renderer.capabilities.getMaxAnisotropy(); // Maximum anisotropic filtering for sharpest quality
+  texture.minFilter = THREE.LinearMipmapLinearFilter; // Smooth filtering at distance
+  texture.magFilter = THREE.LinearFilter; // Smooth filtering when close (reduces pixelation)
+  texture.generateMipmaps = true; // Generate mipmaps for better quality at all distances
   texture.colorSpace = THREE.SRGBColorSpace; // Correct color space for accurate colors
 
   // Create a large sphere that surrounds the entire scene
@@ -741,9 +767,9 @@ textureLoader.load('./map_photos/nasa-hubble-space-telescope-o1byzQYzMZA-unsplas
   const spaceSphere = new THREE.Mesh(spaceGeometry, spaceMaterial);
   starGroup.add(spaceSphere);
 
-  console.log('✅ NASA Hubble space background loaded');
+  console.log('✅ Solar system background loaded');
 }, undefined, (error) => {
-  console.error('❌ Failed to load NASA Hubble image:', error);
+  console.error('❌ Failed to load solar system image:', error);
 
   // Fallback: Create simple starfield if image fails to load
   const starGeometry = new THREE.BufferGeometry();
@@ -1005,7 +1031,9 @@ async function loadSolarFlightPaths(){
           movie: c.movie,
           year: c.year,
           from: c.from,
-          to: fictionalLocationMap[c.movie] || "Fictional Locations"
+          to: c.originalTo || fictionalLocationMap[c.movie] || "Fictional Locations",
+          originalFrom: c.originalFrom || c.from,
+          originalTo: c.originalTo || fictionalLocationMap[c.movie] || "Fictional Locations"
         }))
       };
 
@@ -1134,7 +1162,9 @@ async function loadSolarFlightPaths(){
         movie: conn.movie,
         year: yearInt,
         from: 'Earth',
-        to: matchedLocation
+        to: matchedLocation,
+        originalFrom: conn.originalFrom || conn.from,
+        originalTo: conn.originalTo || conn.to
       };
 
       solarFlightPathsGroup.add(line);
@@ -1824,8 +1854,12 @@ function showMovieHoverCard(movies, x, y) {
       detailsHTML += `<strong>${movie.movie} (${movie.year})</strong><br><br>`;
     }
 
-    detailsHTML += `<strong>Production:</strong> ${movie.from}<br><br>`;
-    detailsHTML += `<strong>Depicted:</strong> ${movie.to}`;
+    // Use original location names for display if available
+    const displayFrom = movie.originalFrom || movie.from;
+    const displayTo = movie.originalTo || movie.to;
+
+    detailsHTML += `<strong>Production:</strong> ${displayFrom}<br><br>`;
+    detailsHTML += `<strong>Depicted:</strong> ${displayTo}`;
 
     if (movie.isSameLocation) {
       detailsHTML += ` (same location)`;
