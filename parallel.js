@@ -9,7 +9,7 @@
 
 // ACTUAL WORLD SCROLL LIMITS (editable)
 const WORLD_START = 0;
-const WORLD_END   = 9999;
+const WORLD_END   = 3000;
 let hoverShifted = false;
 let hoverOriginalTop = "";
 let currentlyHoveredID = null;
@@ -21,7 +21,7 @@ let hoveredLineID = null;
 const START_YEAR = 1925;
 const END_YEAR   = 2020;
 
-
+ 
 
 const PX_PER_YEAR   = 60;        // → 60 px per year (Option C)
 const LEFT_PADDING  = 300;       // → safe visual padding
@@ -614,7 +614,7 @@ function updateWindowHighlight() {
 // -----------------------------
 const leftCardContent = {
     1925: {
-      title: "1925–1930s",
+      title: "1925–1929",
       tags: [
         "10–30 YEAR SLOPE",
         "CONSERVATIVE FUTURES",
@@ -622,8 +622,44 @@ const leftCardContent = {
       ],
       desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
     },
+    1930: {
+        title: "1930-1934",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      1935: {
+        title: "1935-1939",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      1940: {
+        title: "1940-1944",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
     1945: {
-        title: "1940–1950s",
+        title: "1945-1949",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      1950: {
+        title: "1950-1954",
         tags: [
           "10–30 YEAR SLOPE",
           "CONSERVATIVE FUTURES",
@@ -632,7 +668,124 @@ const leftCardContent = {
         desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
       },
       1955: {
-        title: "1955–1960s",
+        title: "1955–1959",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      1960: {
+        title: "1960-1964",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      1965: {
+        title: "1965-1969",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      1970: {
+        title: "1970-1974",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      1975: {
+        title: "1975-1979",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      1980: {
+        title: "1980-1984",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      1985: {
+        title: "1985-1989",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      1990: {
+        title: "1990-1994",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      1995: {
+        title: "1995-1999",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      2000: {
+        title: "2000-2004",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      2005: {
+        title: "2005-2009",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      2010: {
+        title: "2010-2014",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      2015: {
+        title: "2015-2019",
+        tags: [
+          "10–30 YEAR SLOPE",
+          "CONSERVATIVE FUTURES",
+          "POSTWAR UNCERTAINTY"
+        ],
+        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      },
+      2020: {
+        title: "2020-2024",
         tags: [
           "10–30 YEAR SLOPE",
           "CONSERVATIVE FUTURES",
@@ -1158,8 +1311,8 @@ let hoverFadeTimer = null;
 function computeLeap(d) {
     const leap = d.startYear - d.endYear;  // depicted - release
 
-    if (d.startYear === 9999) {
-        return `>${9999 - d.endYear} years in the future`;
+    if (d.startYear === 3000) {
+        return `>${3000 - d.endYear} years in the future`;
     }
     if (d.startYear === 0) {
         return `>${d.endYear} years in the past`;
@@ -1181,8 +1334,8 @@ function showHoverCard(d, x, y) {
     let settingYear = d.startYear
     if (settingYear == 0) {
         settingYear = "<0"
-    } else if (settingYear == 9999) {
-        settingYear = ">9999"
+    } else if (settingYear == 3000) {
+        settingYear = ">3000"
     }
     hoverInfo.innerHTML =
         `Depicted Year: ${settingYear}<br><br>` +

@@ -1,4 +1,4 @@
-let data = [
+[
     {
       "title": "Woman in the Moon",
       "year": 1929,
@@ -11,7 +11,7 @@ let data = [
       ],
       "filmingLocation": "UFA studios, Neubabelsberg (near Berlin), Germany",
       "depictedLocation": "The Moon (via rocket launch from Earth)",
-      "id": 1000
+      "id": 0
     },
     {
       "title": "The Lost World",
@@ -436,7 +436,7 @@ let data = [
     {
       "title": "The Time Machine",
       "year": 1960,
-      "depicted": 3000,
+      "depicted": 9999,
       "tropes": [
         "Evolution",
         "Social Control",
@@ -604,7 +604,7 @@ let data = [
     {
       "title": "Planet of the Apes",
       "year": 1968,
-      "depicted": 3000,
+      "depicted": 3978,
       "tropes": [
         "Evolution",
         "Class struggle",
@@ -646,7 +646,7 @@ let data = [
     {
       "title": "Beneath the Planet of the Apes",
       "year": 1970,
-      "depicted": 3000,
+      "depicted": 3955,
       "tropes": [
         "Evolution",
         "Class struggle",
@@ -814,7 +814,7 @@ let data = [
     {
       "title": "Star Wars",
       "year": 1977,
-      "depicted": 1000,
+      "depicted": 0,
       "tropes": [
         "Space-travel",
         "Class struggle",
@@ -912,7 +912,7 @@ let data = [
     {
       "title": "Dune",
       "year": 1984,
-      "depicted": 3000,
+      "depicted": 9999,
       "tropes": [
         "Evolution",
         "Class struggle",
@@ -926,7 +926,7 @@ let data = [
     {
       "title": "The Empire Strikes Back",
       "year": 1980,
-      "depicted": 1000,
+      "depicted": 0,
       "tropes": [
         "Space-travel",
         "Class struggle",
@@ -968,7 +968,7 @@ let data = [
     {
       "title": "Return of the Jedi",
       "year": 1983,
-      "depicted": 1000,
+      "depicted": 0,
       "tropes": [
         "Space-travel",
         "Class struggle",
@@ -1276,7 +1276,7 @@ let data = [
     {
       "title": "Star Wars: Episode I \u2013 The Phantom Menace",
       "year": 1999,
-      "depicted": 1000,
+      "depicted": 0,
       "tropes": [
         "Space-travel",
         "Class struggle",
@@ -1430,7 +1430,7 @@ let data = [
     {
       "title": "Star Wars: Episode II \u2013 Attack of the Clones",
       "year": 2002,
-      "depicted": 1000,
+      "depicted": 0,
       "tropes": [
         "Space-travel",
         "Artificial intelligence",
@@ -1444,7 +1444,7 @@ let data = [
     {
       "title": "Dune",
       "year": 2000,
-      "depicted": 3000,
+      "depicted": 9999,
       "tropes": [
         "Evolution",
         "Class struggle",
@@ -1584,7 +1584,7 @@ let data = [
     {
       "title": "Star Wars: Episode III \u2013 Revenge of the Sith",
       "year": 2005,
-      "depicted": 1000,
+      "depicted": 0,
       "tropes": [
         "Space-travel",
         "Artificial intelligence",
@@ -2074,7 +2074,7 @@ let data = [
     {
       "title": "Star Wars: Episode IX \u2013 The Rise of Skywalker",
       "year": 2019,
-      "depicted": 1000,
+      "depicted": 0,
       "tropes": [
         "Space-travel",
         "Artificial intelligence",
@@ -2102,7 +2102,7 @@ let data = [
     {
       "title": "Dune: Part Two",
       "year": 2024,
-      "depicted": 3000,
+      "depicted": 9999,
       "tropes": [
         "Evolution",
         "Class struggle",
@@ -2210,61 +2210,6 @@ let data = [
       "filmingLocation": "Simi Valley & San Fernando Valley, California",
       "depictedLocation": "Multiverse (various timelines/universes)",
       "id": 158
-    },
-    {
-        "title": "King of the Rocket Men",
-        "year": 1949,
-        "depicted": 1949,
-        "tropes": ["Robotics", "Artificial intelligence", "Class struggle", "Surveillance"],
-        "filmingLocation": "Republic Pictures Studios, Hollywood, California, USA",
-        "depictedLocation": "United States (various urban/scientific sites)",
-        "id": 159
-      },
-      {
-        "title": "Krakatit",
-        "year": 1948,
-        "depicted": 1948,
-        "tropes": ["Science ethics", "Social Control", "Consciousness", "Free Will"],
-        "filmingLocation": "Barrandov Studios, Prague, Czechoslovakia",
-        "depictedLocation": "Czechoslovakia (postwar scientific/industrial environments)",
-        "id": 160
-      },
-      {
-        "title": "The Jungle Captive",
-        "year": 1945,
-        "depicted": 1945,
-        "tropes": ["Consciousness", "Evolution", "Science ethics", "Social Control"],
-        "filmingLocation": "Universal Studios, Hollywood, California, USA",
-        "depictedLocation": "United States (laboratories + forests/jungle-like areas)",
-        "id": 161
-      },
-      {
-        "title": "Bloodshot",
-        "year": 2020,
-        "depicted": 2020,
-        "tropes": ["Robotics", "Artificial intelligence", "Consciousness", "Social Control"],
-        "filmingLocation": "Cape Town, South Africa; Prague, Czech Republic",
-        "depictedLocation": "Multiple urban locations (global, near-future setting)"
-      },
-      {
-        "title": "Spider-Man: No Way Home",
-        "year": 2021,
-        "depicted": 2021,
-        "tropes": ["Evolution", "Consciousness", "Free Will", "Social Control"],
-        "filmingLocation": "Atlanta, Georgia; Los Angeles; New York City",
-        "depictedLocation": "New York City + multiverse crossover settings"
-      },
-      {
-        "title": "Deadpool & Wolverine",
-        "year": 2024,
-        "depicted": 2024,
-        "tropes": ["Evolution", "Class struggle", "Consciousness", "Free Will"],
-        "filmingLocation": "London, UK; Buckinghamshire; Pinewood Studios",
-        "depictedLocation": "Multiple timelines/universes (Marvel multiverse)"
-      }
-    ]
+    }
+  ]
   
-  
-data.sort((a, b) => a.year - b.year);
-
-export default data
