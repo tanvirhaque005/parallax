@@ -169,14 +169,13 @@
 			/* Chord Graph Overrides - allow JS to animate colors dynamically while scrolling */
 			#chordContainer .link {
 				/* default faint link color; JS will override stroke/stroke-width/opacity during setDecade */
-				stroke: #3b82f6;
-				opacity: 0.4;
+				/* Removed default stroke to allow JS color scale to work */
+				opacity: 0.8;
 				transition: stroke 180ms ease, opacity 180ms ease, stroke-width 180ms ease;
 			}
 
 			#chordContainer .link:hover {
-				stroke: #60a5fa;
-				opacity: 0.9;
+				opacity: 1.0;
 			}
 
 			#chordContainer .node circle {

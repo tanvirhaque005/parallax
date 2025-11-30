@@ -19,11 +19,13 @@ class ChordGraph {
     this.nodeGroup = null;
     this.tooltip = null;
     this.showLabels = true;
-    this.zoom = null;
+    this.zoom = null; // Zoom disabled - graph is fixed in place
     this.currentDecade = null; // null means "All"
     this.transitionDuration = 200; // milliseconds - fast for responsive dragging
     this.width = 1200;
     this.height = 900;
+    this.originalColorScale = null; // Store original color scale for "All" view
+    this.originalLinks = null; // Store original links data
   }
 
   /**
@@ -178,25 +180,34 @@ class ChordGraph {
       .style('max-width', '100%')
       .style('height', 'auto');
 
-    // Add zoom behavior
-    this.zoom = d3.zoom()
-      .scaleExtent([0.5, 3])
-      // Prevent the built-in zoom handler from reacting to wheel events so we can
-      // control wheel behavior separately (mouse wheel will be used for year scrub).
-      .filter(function(event) {
-        if (!event) return true;
-        if (event.type === 'wheel') return false;
-        return true;
-      })
-      .on('zoom', (event) => {
-        this.g.attr('transform', event.transform);
-      });
+    // Zoom behavior disabled - graph stays in place and cannot be dragged
+    // Removed zoom/pan functionality to keep graph fixed in position
 
-    this.svg.call(this.zoom);
+    // Create SVG filter for white glow effect
+    const defs = this.svg.append('defs');
+    const glowFilter = defs.append('filter')
+      .attr('id', 'whiteGlow')
+      .attr('x', '-50%')
+      .attr('y', '-50%')
+      .attr('width', '200%')
+      .attr('height', '200%');
+    
+    glowFilter.append('feGaussianBlur')
+      .attr('stdDeviation', '4')
+      .attr('result', 'coloredBlur');
+    
+    const feMerge = glowFilter.append('feMerge');
+    feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+    feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+
+    // Gradient will be created dynamically in createCircleBorder with proper sizing
 
     this.g = this.svg.append('g');
     this.linkGroup = this.g.append('g').attr('class', 'links');
     this.nodeGroup = this.g.append('g').attr('class', 'nodes');
+    
+    // Create a group for the circle border (will be populated in render)
+    this.circleGroup = this.g.append('g').attr('class', 'circle-border');
 
     // Create tooltip
     this.tooltip = this.container
@@ -254,8 +265,14 @@ class ChordGraph {
     } = options;
 
     // Initialize SVG if not already created
-    if (!this.svg) {
+    if (!this.svg || !this.svg.node()) {
       this.initializeSVG(options);
+    }
+    
+    // Ensure SVG is ready before proceeding
+    if (!this.svg || !this.svg.node()) {
+      console.error('SVG initialization failed');
+      return null;
     }
 
     const movie = this.movies.find(m => m.title === movieTitle);
@@ -311,7 +328,7 @@ class ChordGraph {
       }
     }
 
-    // Create curved path generator
+    // Create curved path generator that curves inward toward center
     const linkPath = (d) => {
       const sourceNode = nodes[d.source];
       const targetNode = nodes[d.target];
@@ -319,13 +336,51 @@ class ChordGraph {
       const dy = targetNode.y - sourceNode.y;
       const dr = Math.sqrt(dx * dx + dy * dy);
 
-      // Create a curved path
-      return `M${sourceNode.x},${sourceNode.y}A${dr},${dr} 0 0,1 ${targetNode.x},${targetNode.y}`;
+      // Calculate center point
+      const centerX = this.width / 2;
+      const centerY = this.height / 2;
+      
+      // Calculate midpoint between source and target
+      const midX = (sourceNode.x + targetNode.x) / 2;
+      const midY = (sourceNode.y + targetNode.y) / 2;
+      
+      // Calculate direction from center to midpoint
+      const toCenterX = centerX - midX;
+      const toCenterY = centerY - midY;
+      const toCenterDist = Math.sqrt(toCenterX * toCenterX + toCenterY * toCenterY);
+      
+      // Pull the curve inward by moving the control point toward the center
+      const pullFactor = 0.5; // Increased pull factor to curve more inward
+      const controlX = midX + (toCenterX / toCenterDist) * dr * pullFactor;
+      const controlY = midY + (toCenterY / toCenterDist) * dr * pullFactor;
+      
+      // Create a quadratic bezier curve that curves inward
+      return `M${sourceNode.x},${sourceNode.y}Q${controlX},${controlY} ${targetNode.x},${targetNode.y}`;
     };
+
+    // Create color scale: darker blue = more connections, lighter blue = fewer connections
+    const maxValue = d3.max(links, d => d.value) || 1;
+    const minValue = d3.min(links, d => d.value) || 1;
+    
+    // Use a more sensitive color scale with better distribution
+    // Use a custom interpolation that emphasizes differences better
+    const colorScale = (value) => {
+      // Normalize value to 0-1 range
+      const t = (value - minValue) / (maxValue - minValue);
+      // Use a square root curve to make differences more visible
+      // This ensures that links with 16 vs 37 connections have clearly different shades
+      const adjustedT = Math.pow(t, 0.4); // More aggressive curve
+      // Use a wider color range for better differentiation
+      return d3.interpolateRgb('#bfdbfe', '#030712')(adjustedT); // Lighter start, much darker end
+    };
+
+    // Store original color scale and links for "All" view
+    this.originalColorScale = colorScale;
+    this.originalLinks = links;
 
     const tooltip = this.tooltip;
 
-    // Draw links (curved paths) with transitions - DARK THEME
+    // Draw links (curved paths) with color gradient based on connection count
     const link = this.linkGroup
       .selectAll('path.link')
       .data(links, d => `${d.sourceTheme}-${d.targetTheme}`)
@@ -333,19 +388,25 @@ class ChordGraph {
         enter => enter.append('path')
           .attr('class', 'link')
           .attr('d', linkPath)
-          .attr('stroke', '#3b82f6')
-          .attr('stroke-width', d => Math.max(1, Math.sqrt(d.value) * 1.5))
+          .attr('stroke', d => colorScale(d.value))
+          .attr('stroke-width', d => Math.max(1.5, Math.sqrt(d.value) * 2)) // Increased base thickness
           .attr('fill', 'none')
-          .attr('opacity', 0)
+          .attr('opacity', 0.9) // Increased opacity for better visibility
+          .style('stroke', d => colorScale(d.value)) // Use style to override CSS
+          .style('stroke-width', d => Math.max(1.5, Math.sqrt(d.value) * 2)) // Also set via style
           .call(enter => enter.transition()
             .duration(this.transitionDuration)
-            .attr('opacity', 0.4)
+            .attr('opacity', 0.9)
           ),
         update => update
           .call(update => update.transition()
             .duration(this.transitionDuration)
             .attr('d', linkPath)
-            .attr('stroke-width', d => Math.max(1, Math.sqrt(d.value) * 1.5))
+            .attr('stroke', d => colorScale(d.value))
+            .style('stroke', d => colorScale(d.value)) // Use style to override CSS
+            .attr('stroke-width', d => Math.max(1.5, Math.sqrt(d.value) * 2)) // Increased base thickness
+            .style('stroke-width', d => Math.max(1.5, Math.sqrt(d.value) * 2)) // Also set via style
+            .attr('opacity', 0.9) // Increased opacity for better visibility
           ),
         exit => exit
           .call(exit => exit.transition()
@@ -355,11 +416,9 @@ class ChordGraph {
           )
       )
       .on('mouseover', function(event, d) {
-        // Highlight the hovered chord
+        // Highlight the hovered chord (only color change, no width change)
         d3.select(this)
-          .attr('stroke', '#60a5fa')
           .attr('opacity', 1)
-          .attr('stroke-width', d => Math.max(3, Math.sqrt(d.value) * 2))
           .raise();
 
         // Highlight connected nodes
@@ -387,11 +446,9 @@ class ChordGraph {
           .style('opacity', 1);
       })
       .on('mouseout', function(event, d) {
-        // Reset chord color
+        // Reset chord opacity (keep color and width based on value)
         d3.select(this)
-          .attr('stroke', '#3b82f6')
-          .attr('opacity', 0.4)
-          .attr('stroke-width', d => Math.max(1, Math.sqrt(d.value) * 1.5));
+          .attr('opacity', 0.9);
 
         // Reset node colors
         d3.selectAll('.node')
@@ -528,6 +585,18 @@ class ChordGraph {
       this.hideMoviePopup();
     });
 
+    // Create color gradient legend (only if SVG is ready)
+    if (this.svg && links.length > 0) {
+      try {
+        this.createColorLegend(maxValue, minValue, colorScale);
+      } catch(e) {
+        console.warn('Legend creation failed:', e);
+      }
+    }
+
+    // Create circle border with white glow effect
+    this.createCircleBorder(centerX, centerY, radius);
+
     // Return stats for display
     return {
       themeCount: nodes.length,
@@ -537,14 +606,202 @@ class ChordGraph {
   }
 
   /**
-   * Reset zoom to default view
+   * Create a circle border around the chord graph with white glow effect
+   */
+  createCircleBorder(centerX, centerY, radius) {
+    // Remove existing circle if present
+    if (this.circleGroup) {
+      this.circleGroup.selectAll('circle').remove();
+    } else {
+      // Create circle group if it doesn't exist
+      this.circleGroup = this.g.append('g').attr('class', 'circle-border');
+    }
+
+    // Calculate circle radius to be in the center of the nodes
+    const circleRadius = radius - 0; // At node radius
+
+    // Create outer gradient circle that fades away from the edge outward (small, subtle effect)
+    const gradientRadius = circleRadius + 30; // Small extension outward for subtle fade
+    
+    // Create a unique gradient for this circle instance (properly sized)
+    const gradientId = `whiteRadialGradient_${Date.now()}`;
+    const defs = this.svg.select('defs');
+    
+    // Create radial gradient using userSpaceOnUse with focal radius (fr) to start at circle edge
+    const radialGradient = defs.append('radialGradient')
+      .attr('id', gradientId)
+      .attr('gradientUnits', 'userSpaceOnUse')
+      .attr('cx', centerX)
+      .attr('cy', centerY)
+      .attr('r', gradientRadius)
+      .attr('fx', centerX)
+      .attr('fy', centerY)
+      .attr('fr', circleRadius); // Focal radius starts at circle edge - this makes it work!
+    
+    // Gradient starts dark (more opaque) at the edge and gets lighter (more transparent) as it goes outward
+    // Offset 0% = circle edge (fr), 100% = outer edge (r)
+    radialGradient.append('stop')
+      .attr('offset', '0%')
+      .attr('stop-color', '#ffffff')
+      .attr('stop-opacity', '0.6'); // Darker/more opaque white at edge
+    
+    radialGradient.append('stop')
+      .attr('offset', '20%')
+      .attr('stop-color', '#ffffff')
+      .attr('stop-opacity', '0.4');
+    
+    radialGradient.append('stop')
+      .attr('offset', '40%')
+      .attr('stop-color', '#ffffff')
+      .attr('stop-opacity', '0.25');
+    
+    radialGradient.append('stop')
+      .attr('offset', '60%')
+      .attr('stop-color', '#ffffff')
+      .attr('stop-opacity', '0.12');
+    
+    radialGradient.append('stop')
+      .attr('offset', '80%')
+      .attr('stop-color', '#ffffff')
+      .attr('stop-opacity', '0.05');
+    
+    radialGradient.append('stop')
+      .attr('offset', '100%')
+      .attr('stop-color', '#ffffff')
+      .attr('stop-opacity', '0'); // Lighter/fully transparent at outer edge
+    
+    // Create a unique mask for this circle instance
+    const maskId = `circleMask_${Date.now()}`;
+    
+    // Create mask to clip gradient so it only shows OUTSIDE the main circle
+    // In SVG masks: white = visible, black = hidden
+    const mask = defs.append('mask')
+      .attr('id', maskId);
+    
+    // White rectangle (shows everything initially)
+    mask.append('rect')
+      .attr('x', centerX - gradientRadius)
+      .attr('y', centerY - gradientRadius)
+      .attr('width', gradientRadius * 2)
+      .attr('height', gradientRadius * 2)
+      .attr('fill', 'white');
+    
+    // Black circle (hides the inside) - this creates the "hole" to hide inside
+    mask.append('circle')
+      .attr('cx', centerX)
+      .attr('cy', centerY)
+      .attr('r', circleRadius)
+      .attr('fill', 'black'); // Black hides, so inside circle is hidden
+    
+    // Create gradient circle with mask (only shows outside the main circle) - subtle effect
+    this.circleGroup.append('circle')
+      .attr('cx', centerX)
+      .attr('cy', centerY)
+      .attr('r', gradientRadius)
+      .attr('fill', `url(#${gradientId})`)
+      .attr('mask', `url(#${maskId})`)
+      .attr('opacity', '1') // Full opacity, gradient handles the fade
+      .style('pointer-events', 'none'); // Don't interfere with interactions
+    
+    // Create the main circle with background color (blends in)
+    this.circleGroup.append('circle')
+      .attr('cx', centerX)
+      .attr('cy', centerY)
+      .attr('r', circleRadius)
+      .attr('fill', 'none')
+      .attr('stroke', '#1a1a1a') // Same as background color
+      .attr('stroke-width', '2')
+      .attr('opacity', '1')
+      .style('pointer-events', 'none'); // Don't interfere with interactions
+  }
+
+  /**
+   * Create a color gradient legend showing connection count scale
+   */
+  createColorLegend(maxValue, minValue, colorScale) {
+    // Safety check: ensure SVG exists
+    if (!this.svg || !this.svg.node()) {
+      return;
+    }
+
+    // Remove existing legend and gradient if present
+    d3.select('#chordColorLegend').remove();
+    d3.select('#chordGradient').remove();
+
+    const legendWidth = 200;
+    const legendHeight = 20;
+    const legendMargin = { top: 20, right: 20, bottom: 40, left: 20 };
+    const legendX = this.width - legendWidth - legendMargin.right;
+    const legendY = this.height - legendHeight - legendMargin.bottom;
+
+    // Ensure defs exists
+    let defs = this.svg.select('defs');
+    if (defs.empty()) {
+      defs = this.svg.append('defs');
+    }
+
+    // Create gradient definition
+    const gradientId = 'chordGradient';
+    const gradient = defs.append('linearGradient')
+      .attr('id', gradientId)
+      .attr('x1', '0%')
+      .attr('x2', '100%');
+
+    // Add gradient stops
+    const numStops = 10;
+    for (let i = 0; i <= numStops; i++) {
+      const value = minValue + (maxValue - minValue) * (i / numStops);
+      const color = typeof colorScale === 'function' ? colorScale(value) : colorScale(value);
+      gradient.append('stop')
+        .attr('offset', `${(i / numStops) * 100}%`)
+        .attr('stop-color', color);
+    }
+
+    // Create legend group
+    const legendGroup = this.svg.append('g')
+      .attr('id', 'chordColorLegend')
+      .attr('transform', `translate(${legendX}, ${legendY})`);
+
+    // Draw gradient rectangle
+    legendGroup.append('rect')
+      .attr('width', legendWidth)
+      .attr('height', legendHeight)
+      .attr('fill', `url(#${gradientId})`)
+      .attr('stroke', '#666666')
+      .attr('stroke-width', 1);
+
+    // Add labels
+    legendGroup.append('text')
+      .attr('x', 0)
+      .attr('y', -5)
+      .attr('font-family', "'Courier New', monospace")
+      .attr('font-size', '11px')
+      .attr('fill', '#cccccc')
+      .text('Connections');
+
+    legendGroup.append('text')
+      .attr('x', 0)
+      .attr('y', legendHeight + 20)
+      .attr('font-family', "'Courier New', monospace")
+      .attr('font-size', '10px')
+      .attr('fill', '#999999')
+      .text(`${Math.round(minValue)}`);
+
+    legendGroup.append('text')
+      .attr('x', legendWidth)
+      .attr('y', legendHeight + 20)
+      .attr('text-anchor', 'end')
+      .attr('font-family', "'Courier New', monospace")
+      .attr('font-size', '10px')
+      .attr('fill', '#999999')
+      .text(`${Math.round(maxValue)}`);
+  }
+
+  /**
+   * Reset zoom to default view (disabled - graph is fixed in place)
    */
   resetZoom() {
-    if (this.svg && this.zoom) {
-      this.svg.transition()
-        .duration(750)
-        .call(this.zoom.transform, d3.zoomIdentity);
-    }
+    // Zoom/pan functionality disabled - graph stays in fixed position
   }
 
   /**
@@ -574,16 +831,44 @@ class ChordGraph {
 
     // If null, reset to default visuals based on overall cooccurrence
     if (!decade) {
-      // reset links
-      d3.selectAll('.link').each(function(d){
-        try {
-          d3.select(this)
-            .transition().duration(300)
-            .attr('stroke', '#e0f2fe')
-            .attr('stroke-width', d => Math.max(1, Math.sqrt(d.value) * 1.5))
-            .style('opacity', 0.6);
-        } catch(e){}
-      });
+      // Use stored original color scale if available
+      if (this.originalColorScale && this.originalLinks) {
+        const allMaxValue = d3.max(this.originalLinks, d => d.value) || 1;
+        const allMinValue = d3.min(this.originalLinks, d => d.value) || 1;
+        const allColorScale = (value) => {
+          const t = (value - allMinValue) / (allMaxValue - allMinValue);
+          const adjustedT = Math.pow(t, 0.4); // More aggressive curve
+          return d3.interpolateRgb('#bfdbfe', '#030712')(adjustedT);
+        };
+
+        // reset links with color gradient and thickness
+        d3.selectAll('.link').each(function(d){
+          try {
+            if (d && d.value !== undefined) {
+              const strokeColor = allColorScale(d.value);
+              const strokeWidth = Math.max(1.5, Math.sqrt(d.value) * 2); // Increased base thickness
+              d3.select(this)
+                .transition().duration(300)
+                .attr('stroke', strokeColor)
+                .style('stroke', strokeColor) // Use style to override CSS
+                .attr('stroke-width', strokeWidth)
+                .style('stroke-width', strokeWidth) // Also set via style
+                .style('opacity', 0.9); // Increased opacity for better visibility
+            }
+          } catch(e){}
+        });
+        
+        // Update legend for "All" view (only if SVG is ready)
+        if (this.svg && this.svg.node()) {
+          try {
+            const allMaxValue = d3.max(this.originalLinks, d => d.value) || 1;
+            const allMinValue = d3.min(this.originalLinks, d => d.value) || 1;
+            this.createColorLegend(allMaxValue, allMinValue, allColorScale);
+          } catch(e) {
+            console.warn('Legend update failed:', e);
+          }
+        }
+      }
       // reset nodes
       d3.selectAll('.node').each(function(d){
         try {
@@ -622,25 +907,52 @@ class ChordGraph {
       }
     });
 
-    // compute max weight
+    // compute max weight for color scale
     let maxW = 0;
     Object.keys(windowCo).forEach(a => {
       Object.keys(windowCo[a]||{}).forEach(b => { maxW = Math.max(maxW, windowCo[a][b] || 0); });
     });
 
-    // update links
+    // Create color scale for this decade window
+    const minWindowValue = 1;
+    const maxWindowValue = maxW || 1;
+    const windowColorScale = (value) => {
+      const t = (value - minWindowValue) / (maxWindowValue - minWindowValue);
+      const adjustedT = Math.pow(t, 0.4); // More aggressive curve for better differentiation
+      // Use a wider color range - lighter start to very dark end
+      return d3.interpolateRgb('#bfdbfe', '#030712')(adjustedT);
+    };
+
+    // Update legend for this decade (only if SVG is ready)
+    if (maxW > 0 && this.svg && this.svg.node()) {
+      try {
+        this.createColorLegend(maxW, minWindowValue, windowColorScale);
+      } catch(e) {
+        console.warn('Legend update failed:', e);
+      }
+    }
+
+    // update links with color gradient and thickness based on connection count
     d3.selectAll('.link').each(function(d){
       try {
         const a = d.sourceTheme || (d.source && d.source.label) || d.source;
         const b = d.targetTheme || (d.target && d.target.label) || d.target;
         const weight = (windowCo[a] && windowCo[a][b]) ? windowCo[a][b] : 0;
-        const opacity = weight > 0 ? 0.95 : 0.08;
-        const strokeW = weight > 0 ? Math.max(1, Math.sqrt(weight) * 1.6) : 1;
-  d3.select(this).transition().duration(300).attr('stroke-width', strokeW).style('opacity', opacity).attr('stroke', weight>0 ? '#93c5fd' : '#e0f2fe');
+        const opacity = weight > 0 ? 0.9 : 0.08; // Increased opacity for better visibility
+        const strokeW = weight > 0 ? Math.max(1.5, Math.sqrt(weight) * 2) : 1; // Increased base thickness
+        const strokeColor = weight > 0 ? windowColorScale(weight) : '#e0f2fe';
+        
+        // Apply both color and thickness consistently
+        d3.select(this).transition().duration(300)
+          .attr('stroke', strokeColor)
+          .style('stroke', strokeColor) // Use style to override CSS
+          .attr('stroke-width', strokeW)
+          .style('stroke-width', strokeW) // Also set via style for consistency
+          .style('opacity', opacity);
       } catch(e){}
     });
 
-    // update nodes
+    // update nodes - remove blue outline if no connections
     d3.selectAll('.node').each(function(d){
       try {
         const theme = d && d.label ? d.label : (d.id || d);
@@ -651,9 +963,23 @@ class ChordGraph {
         const g = d3.select(this);
         const circle = g.select('circle');
         if (has) {
-          circle.transition().duration(300).attr('r',24).attr('stroke','#93c5fd').attr('stroke-width',5).style('opacity',1);
+          // Node has connections - show blue outline
+          circle.transition().duration(300)
+            .attr('r', 24)
+            .attr('stroke', '#93c5fd')
+            .style('stroke', '#93c5fd')
+            .attr('stroke-width', 5)
+            .style('stroke-width', 5)
+            .style('opacity', 1);
         } else {
-          circle.transition().duration(300).attr('r',20).attr('stroke','#60a5fa').attr('stroke-width',4).style('opacity',0.9);
+          // Node has no connections - remove blue outline (no stroke)
+          circle.transition().duration(300)
+            .attr('r', 20)
+            .attr('stroke', 'none')
+            .style('stroke', 'none')
+            .attr('stroke-width', 0)
+            .style('stroke-width', 0)
+            .style('opacity', 0.5);
         }
       } catch(e){}
     });
