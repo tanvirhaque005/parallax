@@ -33,5 +33,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }, delay * 1000);
       }
     });
+  
+        // ADD A SEPARATE RED SQUARE (not clickable)
+        const redSquare = document.createElement("div");
+        redSquare.classList.add("floating-red-square");
+        document.body.appendChild(redSquare);
+    
   });
   
