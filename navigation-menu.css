@@ -39,6 +39,7 @@
               opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   opacity: 1;
   transform: translateX(0);
+  will-change: transform, opacity;
 }
 
 /* Blue square indicator on the line */
@@ -66,9 +67,10 @@
   opacity: 1;
   transform: translateX(0);
   width: auto;
-  transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-              transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-              width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: opacity, transform;
 }
 
 /* Collapsed state - hide menu items */
@@ -104,6 +106,7 @@
   transform: translateX(0);
   transition: opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
               transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: opacity, transform;
 }
 
 /* Only animate items in when they're being expanded from collapsed state */
@@ -147,8 +150,8 @@
   color: #4a9eff;
 }
 
-/* Hover state - only apply when NOT animating via JS */
-.navigation-menu:hover:not(.animating) .nav-menu-items {
+/* Hover state - only apply when NOT animating via JS and collapsed */
+.navigation-menu:hover:not(.animating).collapsed .nav-menu-items {
   opacity: 1;
   transform: translateX(0);
   pointer-events: auto;
@@ -156,12 +159,12 @@
   overflow: visible;
 }
 
-.navigation-menu:hover:not(.animating) .nav-progress-line {
+.navigation-menu:hover:not(.animating).collapsed .nav-progress-line {
   transform: translateX(0);
   opacity: 1;
 }
 
-.navigation-menu:hover:not(.animating) .nav-menu-item {
+.navigation-menu:hover:not(.animating).collapsed .nav-menu-item {
   opacity: 1;
   transform: translateX(0);
   pointer-events: auto;

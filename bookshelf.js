@@ -147,6 +147,10 @@ function switchView(view) {
     const introMessage = document.getElementById('introMessageDefault');
     if (introMessage) introMessage.style.display = 'none';
     
+    // Hide scroll buttons in grid view
+    if (scrollLeftBtn) scrollLeftBtn.style.display = 'none';
+    if (scrollRightBtn) scrollRightBtn.style.display = 'none';
+    
     // Show grid view and enable scrolling
     if (gridView) {
       gridView.style.display = 'block';
@@ -215,6 +219,9 @@ function switchView(view) {
     // Hide grid view and restore body scroll
     if (gridView) gridView.style.display = 'none';
     document.body.style.overflow = 'hidden'; // Keep body scroll hidden for 3D view
+    
+    // Show scroll buttons in list view (but hide if overlay is open)
+    updateScrollButtons();
     
     // Update button states
     if (listViewBtn) listViewBtn.classList.add('active');
@@ -497,37 +504,79 @@ const scrollLeftBtn = document.getElementById('scrollLeft');
 const scrollRightBtn = document.getElementById('scrollRight');
 
 function updateScrollButtons() {
-  // Scroll buttons removed - function kept for compatibility but does nothing
-  if (scrollRightBtn) {
-    scrollRightBtn.style.display = 'block';
-  }
-  if (scrollLeftBtn) {
-    scrollLeftBtn.style.display = 'block';
+  // Only show buttons if in list view and overlay is not open
+  const bookinfo = document.getElementById('bookinfo');
+  const gridView = document.getElementById('gridView');
+  const isOverlayOpen = bookinfo && bookinfo.classList.contains('open');
+  const isGridView = gridView && gridView.style.display === 'block';
+  
+  if (!isOverlayOpen && !isGridView && currentView !== 'grid') {
+    if (scrollRightBtn) {
+      scrollRightBtn.style.display = 'block';
+    }
+    if (scrollLeftBtn) {
+      scrollLeftBtn.style.display = 'block';
+    }
+  } else {
+    // Hide buttons when overlay is open or in grid view
+    if (scrollRightBtn) {
+      scrollRightBtn.style.display = 'none';
+    }
+    if (scrollLeftBtn) {
+      scrollLeftBtn.style.display = 'none';
+    }
   }
 }
 
+// Show buttons on page load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    updateScrollButtons();
+  });
+} else {
+  updateScrollButtons();
+}
+
 if (scrollLeftBtn) {
-  scrollLeftBtn.addEventListener('click', () => {
+  scrollLeftBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation(); // Prevent mousedown handler from interfering
+    console.log('Left button clicked, current offset:', targetShelfOffset); // Debug
     if (!introDismissed) {
       dismissIntroPanel();
     }
     if (targetShelfOffset < MAX_SCROLL_LEFT) {
       targetShelfOffset += 2.5;
+      console.log('New offset:', targetShelfOffset); // Debug
       updateScrollButtons();
     }
-  });
+  }, true); // Use capture phase to ensure it fires
+  
+  // Also add mousedown handler to ensure it works
+  scrollLeftBtn.addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+  }, true);
 }
 
 if (scrollRightBtn) {
-  scrollRightBtn.addEventListener('click', () => {
+  scrollRightBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation(); // Prevent mousedown handler from interfering
+    console.log('Right button clicked, current offset:', targetShelfOffset); // Debug
     if (!introDismissed) {
       dismissIntroPanel();
     }
     if (targetShelfOffset > MAX_SCROLL_RIGHT) {
       targetShelfOffset -= 2.5;
+      console.log('New offset:', targetShelfOffset); // Debug
       updateScrollButtons();
     }
-  });
+  }, true); // Use capture phase to ensure it fires
+  
+  // Also add mousedown handler to ensure it works
+  scrollRightBtn.addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+  }, true);
 }
 
 window.addEventListener("wheel", (e) => {
@@ -681,6 +730,10 @@ function openOverlayForIndex(i) {
 
   // 🚫 Disable header
   document.querySelector(".page-header")?.classList.add("disabled");
+  
+  // Hide scroll buttons when overlay is open
+  if (scrollLeftBtn) scrollLeftBtn.style.display = 'none';
+  if (scrollRightBtn) scrollRightBtn.style.display = 'none';
 }
 
 
@@ -694,6 +747,9 @@ function closeOverlay() {
 
   const footer = document.getElementById('footer');
   if (footer) footer.style.display = 'flex';
+  
+  // Show scroll buttons when overlay is closed (if in list view)
+  updateScrollButtons();
 
   if (overlayBook) overlayScene.remove(overlayBook);
 
@@ -1066,6 +1122,16 @@ window.addEventListener("mousedown", (e) => {
   const navigationMenu = document.getElementById('navigationMenu');
   const menuOpen = navigationMenu && !navigationMenu.classList.contains('collapsed');
 
+  // Allow arrow buttons to work even when menu is open - check first before anything else
+  if (scrollLeftBtn && (e.target === scrollLeftBtn || scrollLeftBtn.contains(e.target))) {
+    e.stopPropagation(); // Stop event from propagating
+    return; // Let the click handler handle it
+  }
+  if (scrollRightBtn && (e.target === scrollRightBtn || scrollRightBtn.contains(e.target))) {
+    e.stopPropagation(); // Stop event from propagating
+    return; // Let the click handler handle it
+  }
+
   // 🔥 NEW — overlay click arrow
   if (bookinfo.classList.contains("open")) {
     if (cursor.classList.contains("arrow-right")) {
@@ -1076,14 +1142,47 @@ window.addEventListener("mousedown", (e) => {
     return;  
   }
 
-  // (existing non-overlay logic below)
-  // Only block if hovering bars, not if menu is open
-  if (hoveringBars) return;
-
   // Don't scroll if clicking on navigation menu
   if (navigationMenu && navigationMenu.contains(e.target)) return;
 
-  if (!introDismissed) return; // 🚫 prevent arrow triggers before intro
+  // Only block if hovering bars, not if menu is open
+  if (hoveringBars) return;
+
+  if (!introDismissed) {
+    dismissIntroPanel();
+    // Don't return - allow edge clicks to work after dismissing intro
+  }
+
+  // Edge-click scrolling - check if clicking near edges
+  const x = e.clientX;
+  const w = window.innerWidth;
+  const gridView = document.getElementById('gridView');
+  const gridViewActive = gridView && gridView.style.display === 'block';
+  
+  // Don't do edge scrolling in grid view
+  if (gridViewActive) return;
+  
+  // Check if clicking in left edge zone
+  if (x < EDGE_ZONE) {
+    const canScrollLeft = targetShelfOffset < MAX_SCROLL_LEFT;
+    if (canScrollLeft) {
+      targetShelfOffset += 2.5;
+      updateScrollButtons();
+      e.preventDefault();
+      return;
+    }
+  }
+  
+  // Check if clicking in right edge zone
+  if (x > w - EDGE_ZONE) {
+    const canScrollRight = targetShelfOffset > MAX_SCROLL_RIGHT;
+    if (canScrollRight) {
+      targetShelfOffset -= 2.5;
+      updateScrollButtons();
+      e.preventDefault();
+      return;
+    }
+  }
 
 });
 

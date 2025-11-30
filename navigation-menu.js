@@ -44,6 +44,11 @@
     const progressDot = document.createElement('div');
     progressDot.className = 'nav-progress-dot';
     progressDot.dataset.currentIndex = currentIndex;
+    
+    // Hide dot initially to prevent flicker, will be positioned and shown by updateLineHeightAndDot
+    progressDot.style.opacity = '0';
+    progressDot.style.visibility = 'hidden';
+    
     progressLine.appendChild(progressDot);
     
     // Create menu items
@@ -109,57 +114,80 @@
     // Update line height and dot position to match menu items after layout
     function updateLineHeightAndDot() {
       if (menuItemsList && progressLine && progressDot) {
+        // Use double requestAnimationFrame to ensure layout is complete
         requestAnimationFrame(() => {
-          const itemsHeight = menuItemsList.offsetHeight;
-          if (itemsHeight > 0) {
-            progressLine.style.height = `${itemsHeight}px`;
-          }
-          
-          // Position blue dot based on active menu item's blue bar position
-          const currentIdx = parseInt(progressDot.dataset.currentIndex) || 0;
-          const items = menuItemsList.querySelectorAll('.nav-menu-item');
-          
-          if (items.length > 0 && currentIdx >= 0 && currentIdx < items.length) {
-            const activeItem = items[currentIdx];
-            const activeLink = activeItem.querySelector('a');
-            
-            // Get the position of the blue bar (::before element)
-            // The blue bar is at left: 0, so we need the center Y of the link element
-            const activeLinkRect = activeLink.getBoundingClientRect();
-            const progressLineRect = progressLine.getBoundingClientRect();
-            
-            // Calculate position relative to the progress line
-            // The blue bar is centered vertically on the link, so use link center
-            // Move it slightly lower by using a smaller offset
-            const offsetPixels = 2; // Smaller value (was 4) moves dot slightly lower
-            const linkCenterY = activeLinkRect.top + activeLinkRect.height / 2;
-            const adjustedY = linkCenterY - offsetPixels;
-            const lineTop = progressLineRect.top;
-            const lineHeight = progressLineRect.height || itemsHeight;
-            
-            // Position dot to align with the center of the active menu item's link
-            const relativePosition = ((adjustedY - lineTop) / lineHeight) * 100;
-            const clampedPosition = Math.max(0, Math.min(100, relativePosition));
-            progressDot.style.top = `${clampedPosition}%`;
-          } else if (items.length > 0) {
-            // Fallback: use percentage calculation with slight downward offset
-            const totalItems = items.length;
-            if (totalItems > 1) {
-              const basePosition = (currentIdx / (totalItems - 1)) * 100;
-              // Move down by about 1% to make it slightly lower
-              const adjustedPosition = Math.max(0, basePosition - 1.5);
-              progressDot.style.top = `${adjustedPosition}%`;
-            } else {
-              progressDot.style.top = '49%'; // Slightly lower than center
+          requestAnimationFrame(() => {
+            const itemsHeight = menuItemsList.offsetHeight;
+            if (itemsHeight > 0) {
+              progressLine.style.height = `${itemsHeight}px`;
             }
-          }
+            
+            // Position blue dot based on active menu item's blue bar position
+            const currentIdx = parseInt(progressDot.dataset.currentIndex) || 0;
+            const items = menuItemsList.querySelectorAll('.nav-menu-item');
+            
+            if (items.length > 0 && currentIdx >= 0 && currentIdx < items.length) {
+              const activeItem = items[currentIdx];
+              const activeLink = activeItem.querySelector('a');
+              
+              if (activeLink) {
+                // Get the position of the blue bar (::before element)
+                // The blue bar is at left: 0, so we need the center Y of the link element
+                const activeLinkRect = activeLink.getBoundingClientRect();
+                const progressLineRect = progressLine.getBoundingClientRect();
+                
+                // Ensure we have valid rects
+                if (activeLinkRect.height > 0 && progressLineRect.height > 0) {
+                  // Calculate position relative to the progress line
+                  // The blue bar is centered vertically on the link, so use link center
+                  // Move it slightly higher by using a positive offset
+                  const offsetPixels = 3; // Positive value moves dot higher
+                  const linkCenterY = activeLinkRect.top + activeLinkRect.height / 2;
+                  const adjustedY = linkCenterY - offsetPixels;
+                  const lineTop = progressLineRect.top;
+                  const lineHeight = progressLineRect.height || itemsHeight;
+                  
+                  // Position dot to align with the center of the active menu item's link
+                  const relativePosition = ((adjustedY - lineTop) / lineHeight) * 100;
+                  const clampedPosition = Math.max(0, Math.min(100, relativePosition));
+                  
+                  // Set position and show dot at the same time to prevent flicker
+                  progressDot.style.top = `${clampedPosition}%`;
+                  progressDot.style.opacity = '1';
+                  progressDot.style.visibility = 'visible';
+                  return; // Successfully positioned, exit early
+                }
+              }
+            }
+            
+            // Fallback: use percentage calculation with slight upward offset
+            if (items.length > 0) {
+              const totalItems = items.length;
+              if (totalItems > 1) {
+                const basePosition = (currentIdx / (totalItems - 1)) * 100;
+                // Move up by about 2% to make it slightly higher
+                const adjustedPosition = Math.max(0, basePosition - 3);
+                progressDot.style.top = `${adjustedPosition}%`;
+                // Show dot once positioned
+                progressDot.style.opacity = '1';
+                progressDot.style.visibility = 'visible';
+              } else {
+                progressDot.style.top = '47%'; // Slightly higher than center
+                progressDot.style.opacity = '1';
+                progressDot.style.visibility = 'visible';
+              }
+            }
+          });
         });
       }
     }
     
     // Update line height and dot position after items are rendered
+    // Multiple timeouts to ensure it works even if menu is collapsed/expanded
+    setTimeout(updateLineHeightAndDot, 100);
     setTimeout(updateLineHeightAndDot, 300);
     setTimeout(updateLineHeightAndDot, 600);
+    setTimeout(updateLineHeightAndDot, 1000);
     window.addEventListener('resize', updateLineHeightAndDot);
     
     // Store update function for use when menu expands
@@ -181,6 +209,21 @@
       const menuItemsEl = menuContainer.querySelector('.nav-menu-items');
       const progressLineEl = menuContainer.querySelector('.nav-progress-line');
       
+      // Ensure menu items container is visible first (before any animations)
+      if (menuItemsEl) {
+        menuItemsEl.style.width = 'auto';
+        menuItemsEl.style.overflow = 'visible';
+        // Don't reset opacity/transform if already visible to prevent flicker
+        const currentOpacity = window.getComputedStyle(menuItemsEl).opacity;
+        const currentTransform = window.getComputedStyle(menuItemsEl).transform;
+        if (currentOpacity !== '1' || currentTransform !== 'none' && currentTransform !== 'matrix(1, 0, 0, 1, 0, 0)') {
+          menuItemsEl.style.transition = 'opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          void menuItemsEl.offsetHeight;
+          menuItemsEl.style.opacity = '1';
+          menuItemsEl.style.transform = 'translateX(0)';
+        }
+      }
+      
       // Animate progress line sliding left at the same pace as menu items
       if (progressLineEl) {
         // Start line animation at the same time as first item (50ms delay)
@@ -192,27 +235,26 @@
         }, 50);
       }
       
-      // Ensure menu items container is visible
-      if (menuItemsEl) {
-        menuItemsEl.style.width = 'auto';
-        menuItemsEl.style.overflow = 'visible';
-        menuItemsEl.style.transition = 'opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        void menuItemsEl.offsetHeight;
-        menuItemsEl.style.opacity = '1';
-        menuItemsEl.style.transform = 'translateX(0)';
-      }
-      
       // Animate items sliding out one by one with smooth stagger
+      // Only animate items that are not already visible to prevent flicker
       items.forEach((item, index) => {
-        item.style.transition = 'opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        item.style.opacity = '0';
-        item.style.transform = 'translateX(20px)';
+        const currentOpacity = window.getComputedStyle(item).opacity;
+        const currentTransform = window.getComputedStyle(item).transform;
+        const isAlreadyVisible = currentOpacity === '1' && 
+          (currentTransform === 'none' || currentTransform === 'matrix(1, 0, 0, 1, 0, 0)');
         
-        setTimeout(() => {
-          void item.offsetHeight;
-          item.style.opacity = '1';
-          item.style.transform = 'translateX(0)';
-        }, 50 + index * 40);
+        if (!isAlreadyVisible) {
+          item.style.transition = 'opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          // Start from current state, not reset to 0
+          item.style.opacity = currentOpacity || '0';
+          item.style.transform = currentTransform || 'translateX(20px)';
+          
+          setTimeout(() => {
+            void item.offsetHeight;
+            item.style.opacity = '1';
+            item.style.transform = 'translateX(0)';
+          }, 50 + index * 40);
+        }
       });
       
       // Remove animating class after animation completes and update dot position
@@ -220,8 +262,12 @@
         menuContainer.classList.remove('animating');
         isAnimating = false;
         // Update dot position after menu expands to ensure alignment
+        // Use multiple attempts to ensure it works
         if (menuContainer.updateLineHeightAndDot) {
           menuContainer.updateLineHeightAndDot();
+          setTimeout(() => {
+            menuContainer.updateLineHeightAndDot();
+          }, 100);
         }
       }, 50 + items.length * 40 + 400);
     }
@@ -333,10 +379,15 @@
         }
         // Reset animation state and expand
         isAnimating = false;
-        expandMenu();
+        // Use requestAnimationFrame to ensure smooth transition
+        requestAnimationFrame(() => {
+          expandMenu();
+        });
       } else if (menuContainer.classList.contains('collapsed') && !isAnimating) {
         // Menu is already collapsed, expand it
-        expandMenu();
+        requestAnimationFrame(() => {
+          expandMenu();
+        });
       }
     });
     

@@ -85,18 +85,24 @@ html, body {
   position: fixed;
   left: 2rem;
   top: 50%;
+  transform: translateY(-50%);
   display: none;
+  z-index: 10001 !important; /* Higher than navigation menu (10000) */
+  pointer-events: auto !important;
 }
 
 #scrollRight {
   position: fixed;
   right: 2rem;
   top: 50%;
+  transform: translateY(-50%);
   display: none;
+  z-index: 10001 !important; /* Higher than navigation menu (10000) */
+  pointer-events: auto !important;
 }
 
 #controls button {
-  pointer-events: all;
+  pointer-events: auto !important;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #cccccc;
@@ -107,6 +113,7 @@ html, body {
   transition: all 0.2s ease;
   backdrop-filter: blur(4px);
   font-family: 'IBM Plex Sans', monospace;
+  z-index: 10001 !important; /* Higher than navigation menu */
 }
 
 #controls button:hover {
