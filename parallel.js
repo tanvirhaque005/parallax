@@ -1226,11 +1226,25 @@ const cursorCircle = document.getElementById("cursorCircle");
 
 window.addEventListener("mousemove", (e) => {
 
+    // 1. Disable arrows when hovering bars
     if (hoveringBars) {
         cursorCircle.classList.remove("arrow-left","arrow-right");
         return;
     }
 
+    // 2. Disable arrows when hovering ANY SVG movie/grid line
+    const tgt = e.target;
+    if (
+        tgt.tagName === "line" ||   // catches gridlines too
+        tgt.classList.contains("movieHit") ||
+        tgt.classList.contains("movieLine") ||
+        tgt.classList.contains("movieHalo")
+    ) {
+        cursorCircle.classList.remove("arrow-left","arrow-right");
+        return;
+    }
+
+    // 3. Normal arrow-zone logic
     const x = e.clientX;
     const w = window.innerWidth;
     const zone = 800; // editable
