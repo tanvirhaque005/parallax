@@ -620,7 +620,7 @@ const leftCardContent = {
         "CONSERVATIVE FUTURES",
         "POSTWAR UNCERTAINTY"
       ],
-      desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+      desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution;"
     },
     1930: {
         title: "1930-1934",
@@ -795,18 +795,43 @@ const leftCardContent = {
       },
   }
   
+  // Converts polar → SVG arc
+  function describeArc(cx, cy, r, startAngle, endAngle) {
+    const start = polarPoint(cx, cy, r, endAngle);
+    const end = polarPoint(cx, cy, r, startAngle);
 
-  function updateLeftCard() {
+    const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+    return `
+        M ${start.x} ${start.y}
+        A ${r} ${r} 0 ${largeArcFlag} 0 ${end.x} ${end.y}
+    `;
+}
+
+function polarPoint(cx, cy, r, angleInDegrees) {
+    const rad = (angleInDegrees - 90) * Math.PI / 180;
+    return {
+        x: cx + r * Math.cos(rad),
+        y: cy + r * Math.sin(rad)
+    };
+}
+
+
+function updateLeftCard() {
     const card = document.querySelector(".left-card");
     if (!card) return;
 
     const content = leftCardContent[currentWindowStart];
     if (!content) return;
 
-    // Title
+    // ----------------------------
+    // TITLE
+    // ----------------------------
     document.getElementById("leftCardTitle").textContent = content.title;
 
-    // Tags
+    // ----------------------------
+    // TAGS
+    // ----------------------------
     const tagRow = document.getElementById("leftCardTags");
     tagRow.innerHTML = "";
     if (content.tags) {
@@ -818,9 +843,135 @@ const leftCardContent = {
         });
     }
 
-    // Description
+    // ----------------------------
+    // DESCRIPTION
+    // ----------------------------
     document.getElementById("leftCardDesc").textContent = content.desc;
+
+
+    // ============================================================
+    //  TRUE GEOMETRIC AVERAGE SLOPE + DIAL UPDATE
+    // ============================================================
+    (function updateAvgSlopeDial() {
+
+        const dialValue = document.getElementById("dialValue");
+        const dialLabel = document.getElementById("dialLabel");
+        const needle    = document.getElementById("dialNeedle");
+        const arc       = document.getElementById("dialArc");
+
+        // If dial elements aren't present yet, skip safely
+        if (!dialValue || !dialLabel || !needle || !arc) {
+            console.warn("Dial is not in DOM yet.");
+            return;
+        }
+
+        const start = currentWindowStart;
+        const end   = currentWindowStart + WINDOW_SIZE;
+
+        // Movies inside the 5-year window (by release year)
+        const windowMovies = data.filter(d =>
+            d.endYear >= start && d.endYear < end
+        );
+
+        if (!windowMovies.length) {
+            dialValue.textContent = "—";
+            dialLabel.textContent = "";
+            return;
+        }
+
+        // Compute absolute leaps
+        const leaps = windowMovies.map(d =>
+            Math.abs(d.startYear - d.endYear)
+        );
+
+// Median leap (years)
+const sorted = leaps.slice().sort((a, b) => a - b);
+const mid = Math.floor(sorted.length / 2);
+
+let median;
+if (sorted.length % 2 === 0) {
+    median = (sorted[mid - 1] + sorted[mid]) / 2;
+} else {
+    median = sorted[mid];
 }
+
+const rounded = Math.round(median);
+
+        // --------------------------------------------------------
+        // DIAL TEXT
+        // --------------------------------------------------------
+        dialValue.textContent = `${rounded} Years`;
+
+        let qualitative;
+        if (median < 25) qualitative = "Low";
+        else if (median < 80) qualitative = "Medium";
+        else qualitative = "High";
+
+        dialLabel.textContent = qualitative;
+
+
+        // --------------------------------------------------------
+        // TRUE GEOMETRIC SLOPE (based on chart geometry)
+        // --------------------------------------------------------
+
+       // --------------------------------------------------------
+// SAFE: READ AXIS POSITIONS DIRECTLY FROM GLOBALS
+// (yTop and yBot are guaranteed defined by now)
+// --------------------------------------------------------
+// const risePx = (typeof yBot !== "undefined" && typeof yTop !== "undefined")
+// ? (yBot - yTop)
+// : (H - 380);   // fallback if somehow early
+// --------------------------------------------------------
+//  TRUE CHART SLOPE → HORIZONTAL DIAL ANGLE
+// --------------------------------------------------------
+
+const runPx  = median * PX_PER_YEAR;   // horizontal
+const risePx = yBot - yTop;         // vertical
+
+// real slope angle measured from vertical axis
+const angleRealRad = Math.atan(runPx / risePx);
+const angleRealDeg = angleRealRad * 180 / Math.PI;
+
+// convert to dial's horizontal angle
+// (dial's 0° = vertical up)
+const angleDialDeg = 90 - angleRealDeg;
+const angle = angleDialDeg * Math.PI / 180;
+
+// --------------------------------------------------------
+//  Draw needle using horizontal dial geometry
+// --------------------------------------------------------
+console.log("ANGLE", angle)
+const length = 55;
+const cx = 90;
+const cy = 40;
+
+// top of needle
+const xTop = cx;
+const yTopPos = cy;
+
+// bottom of needle (horizontal dial)
+const xBot = cx + Math.cos(angle) * length;
+const yBotPos = cy + Math.sin(angle) * length;
+
+console.log(`(${xTop},${yTopPos}) (${xBot},${yBotPos})`)
+const yBotPosAdjusted = yTopPos - (yBotPos-yTopPos)
+needle.setAttribute("x1", xTop);
+needle.setAttribute("y1", yTopPos);
+needle.setAttribute("x2", xBot);
+needle.setAttribute("y2", yBotPosAdjusted);
+
+        // --------------------------------------------------------
+        // ARC (semi-circle)
+        // --------------------------------------------------------
+        if (typeof describeArc === "function") {
+            const arcPath = describeArc(90, 120, 60, -90, 90);
+            arc.setAttribute("d", arcPath);
+        }
+
+    })(); // end updateAvgSlopeDial()
+
+}
+
 
 
 // -----------------------------
