@@ -473,6 +473,11 @@ function updateFlightPathVisibility() {
   if (fictionalPathsCount > 0) {
     console.log(`✨ Fictional Location paths visible: ${fictionalPathsCount}`);
   }
+
+  // Update pie chart to reflect new counts
+  if (typeof updatePieChart !== 'undefined') {
+    updatePieChart();
+  }
 }
 
 function updateDecadeDisplay(decade) {
@@ -873,6 +878,7 @@ solarDirectionalLight.position.set(5, 5, 5);
 solarSystemLights.add(solarDirectionalLight);
 
 let planetZoomInProgress = false;
+let hasReachedSolarView = false; // Track if user has reached solar system view
 
 // ==========================================================
 // SOLAR SYSTEM FLIGHT PATHS
@@ -1182,6 +1188,182 @@ async function loadSolarFlightPaths(){
 }
 
 loadSolarFlightPaths();
+
+// ==========================================================
+// PIE CHART - MOVIE DISTRIBUTION BY VIEW
+// ==========================================================
+function updatePieChart() {
+  // Count movies in each category based on current decade filter
+  let usCount = 0;
+  let worldCount = 0;
+  let solarCount = 0;
+
+  // Count US movies (both locations in US)
+  usFlightPathGroup.children.forEach(path => {
+    if (!currentDecade) {
+      usCount++;
+    } else {
+      const year = path.userData.year;
+      if (year >= currentDecade && year < currentDecade + WINDOW_STEP) {
+        usCount++;
+      }
+    }
+  });
+
+  // Count World movies (international paths on Earth)
+  flightPathGroup.children.forEach(path => {
+    if (!currentDecade) {
+      worldCount++;
+    } else {
+      const year = path.userData.year;
+      if (year >= currentDecade && year < currentDecade + WINDOW_STEP) {
+        worldCount++;
+      }
+    }
+  });
+
+  // Count Solar System movies (space/fictional destinations)
+  solarFlightPathsGroup.children.forEach(path => {
+    // Special handling for Fictional Locations arc
+    if (path.userData.isFictionalLocations) {
+      if (!currentDecade) {
+        // Count all movies in the fictional locations arc
+        solarCount += path.userData.movies.length;
+      } else {
+        // Count movies that match the current time period
+        const matchingMovies = path.userData.movies.filter(m => {
+          const year = parseInt(m.year);
+          return year >= currentDecade && year < currentDecade + WINDOW_STEP;
+        });
+        solarCount += matchingMovies.length;
+      }
+    } else if (!currentDecade) {
+      solarCount++;
+    } else {
+      const year = path.userData.year;
+      if (year >= currentDecade && year < currentDecade + WINDOW_STEP) {
+        solarCount++;
+      }
+    }
+  });
+
+  // Prepare data for pie chart
+  const data = [
+    { label: 'US', count: usCount, color: '#9747FF' },
+    { label: 'World', count: worldCount, color: '#46AACB' },
+    { label: 'Solar', count: solarCount, color: '#9b59b6' }
+  ];
+
+  // Only show non-zero segments
+  const filteredData = data.filter(d => d.count > 0);
+
+  // Draw pie chart using D3
+  const width = 200;
+  const height = 200;
+  const radius = Math.min(width, height) / 2 - 20;
+
+  const svg = d3.select('#pieChart');
+  svg.selectAll('*').remove(); // Clear previous chart
+
+  const g = svg.append('g')
+    .attr('transform', `translate(${width / 2}, ${height / 2})`);
+
+  const pie = d3.pie()
+    .value(d => d.count)
+    .sort(null);
+
+  const arc = d3.arc()
+    .innerRadius(radius * 0.5) // Donut chart
+    .outerRadius(radius);
+
+  const arcs = g.selectAll('arc')
+    .data(pie(filteredData))
+    .enter()
+    .append('g');
+
+  // Draw slices
+  arcs.append('path')
+    .attr('d', arc)
+    .attr('fill', d => d.data.color)
+    .attr('stroke', 'white')
+    .attr('stroke-width', 2)
+    .style('opacity', 0.85);
+
+  // Add labels
+  arcs.append('text')
+    .attr('transform', d => {
+      const pos = arc.centroid(d);
+      return `translate(${pos[0]}, ${pos[1]})`;
+    })
+    .attr('text-anchor', 'middle')
+    .attr('font-family', 'IBM Plex Sans, sans-serif')
+    .attr('font-size', '12px')
+    .attr('font-weight', '600')
+    .attr('fill', 'white')
+    .style('text-shadow', '0 0 3px rgba(0,0,0,0.8)')
+    .text(d => d.data.count > 0 ? d.data.count : '');
+
+  // Add center label showing total
+  const total = usCount + worldCount + solarCount;
+  g.append('text')
+    .attr('text-anchor', 'middle')
+    .attr('dy', '-0.2em')
+    .attr('font-family', 'IBM Plex Sans, sans-serif')
+    .attr('font-size', '24px')
+    .attr('font-weight', '700')
+    .attr('fill', 'white')
+    .style('text-shadow', '0 0 4px rgba(0,0,0,0.8)')
+    .text(total);
+
+  g.append('text')
+    .attr('text-anchor', 'middle')
+    .attr('dy', '1.2em')
+    .attr('font-family', 'IBM Plex Sans, sans-serif')
+    .attr('font-size', '10px')
+    .attr('font-weight', '400')
+    .attr('fill', 'rgba(255,255,255,0.75)')
+    .style('text-shadow', '0 0 3px rgba(0,0,0,0.8)')
+    .text('MOVIES');
+
+  // Add legend below the pie chart
+  const legend = svg.append('g')
+    .attr('transform', `translate(10, ${height - 50})`);
+
+  const legendData = [
+    { label: 'US', color: '#9747FF' },
+    { label: 'World', color: '#46AACB' },
+    { label: 'Solar', color: '#9b59b6' }
+  ];
+
+  legendData.forEach((item, i) => {
+    const legendRow = legend.append('g')
+      .attr('transform', `translate(0, ${i * 16})`);
+
+    // Color square
+    legendRow.append('rect')
+      .attr('width', 10)
+      .attr('height', 10)
+      .attr('fill', item.color)
+      .attr('rx', 2);
+
+    // Label text
+    legendRow.append('text')
+      .attr('x', 16)
+      .attr('y', 9)
+      .attr('font-family', 'IBM Plex Sans, sans-serif')
+      .attr('font-size', '10px')
+      .attr('font-weight', '500')
+      .attr('fill', 'rgba(255,255,255,0.85)')
+      .style('text-shadow', '0 0 3px rgba(0,0,0,0.8)')
+      .text(item.label);
+  });
+}
+
+// Initialize pie chart after a delay to ensure data is loaded
+setTimeout(() => {
+  updatePieChart();
+}, 1000);
+
 // ==========================================================
 // EARTH MORPH
 // ==========================================================
@@ -1486,6 +1668,21 @@ function animate(){
     console.log(`📊 Solar paths visibility set to: ${solarFlightPathsGroup.visible}, children: ${solarFlightPathsGroup.children.length}`);
     starGroup.visible = true;
     planetZoomInProgress = true;
+
+    // Show the CLOSING arrow button once user reaches solar view for the first time
+    if (!hasReachedSolarView) {
+      hasReachedSolarView = true;
+      console.log('🎯 User reached solar view - showing CLOSING button');
+      setTimeout(() => {
+        const wrapper = document.querySelector('.arrow-button-wrapper');
+        if (wrapper) {
+          wrapper.style.opacity = '1';
+          wrapper.style.pointerEvents = 'auto';
+          wrapper.style.transition = 'opacity 0.6s ease';
+          console.log('✅ CLOSING button is now visible');
+        }
+      }, 500); // Small delay for smooth appearance
+    }
 
     // Keep all planet and moon labels hidden by default
     // They will be shown on hover in the mousemove handler
@@ -1894,6 +2091,53 @@ function showMovieHoverCard(movies, x, y) {
     cardY = y - cardRect.height - 20;
   }
 
+  // Check for sun overlap in solar system view
+  if (currentZoomState === ZOOM_STATES.SOLAR && planetGroup.visible) {
+    // Find the sun object
+    const sunMesh = planetGroup.children.find(child => child.userData.name === 'sun');
+    if (sunMesh) {
+      // Project sun's 3D position to 2D screen coordinates
+      const sunScreenPos = sunMesh.position.clone().project(camera);
+      const sunScreenX = (sunScreenPos.x * 0.5 + 0.5) * screenW;
+      const sunScreenY = (-sunScreenPos.y * 0.5 + 0.5) * screenH;
+
+      // Define sun's radius on screen (approximate, with extra padding for glow)
+      const sunRadiusOnScreen = 200; // Larger to account for glow layers
+
+      // Check if hover card would overlap with sun
+      const cardRight = cardX + cardRect.width;
+      const cardBottom = cardY + cardRect.height;
+
+      // Check for overlap using bounding box intersection
+      const overlapX = cardX < sunScreenX + sunRadiusOnScreen && cardRight > sunScreenX - sunRadiusOnScreen;
+      const overlapY = cardY < sunScreenY + sunRadiusOnScreen && cardBottom > sunScreenY - sunRadiusOnScreen;
+
+      if (overlapX && overlapY) {
+        // Move card away from sun
+        // Determine which direction has more space
+        const leftSpace = sunScreenX - sunRadiusOnScreen;
+        const rightSpace = screenW - (sunScreenX + sunRadiusOnScreen);
+        const topSpace = sunScreenY - sunRadiusOnScreen;
+        const bottomSpace = screenH - (sunScreenY + sunRadiusOnScreen);
+
+        // Try to position on the side with most space
+        if (rightSpace > leftSpace && rightSpace > cardRect.width + 20) {
+          // Position to the right of sun
+          cardX = sunScreenX + sunRadiusOnScreen + 20;
+        } else if (leftSpace > cardRect.width + 20) {
+          // Position to the left of sun
+          cardX = sunScreenX - sunRadiusOnScreen - cardRect.width - 20;
+        } else if (bottomSpace > topSpace && bottomSpace > cardRect.height + 20) {
+          // Position below sun
+          cardY = sunScreenY + sunRadiusOnScreen + 20;
+        } else if (topSpace > cardRect.height + 20) {
+          // Position above sun
+          cardY = sunScreenY - sunRadiusOnScreen - cardRect.height - 20;
+        }
+      }
+    }
+  }
+
   // Clamp positions
   cardX = Math.max(10, Math.min(cardX, screenW - cardRect.width - 10));
   cardY = Math.max(10, Math.min(cardY, screenH - cardRect.height - 10));
@@ -2092,8 +2336,8 @@ window.addEventListener("mousemove", (evt) => {
         cursorElement.classList.add("arrow-left");
         cursorElement.classList.remove("arrow-right");
         // Set size directly with !important to override hover handlers
-        cursorElement.style.setProperty('width', '80px', 'important');
-        cursorElement.style.setProperty('height', '80px', 'important');
+        cursorElement.style.setProperty('width', '60px', 'important');
+        cursorElement.style.setProperty('height', '60px', 'important');
         cursorElement.style.setProperty('background', 'rgba(255, 255, 255, 0.18)', 'important');
         cursorElement.style.setProperty('opacity', '1', 'important');
       } else if (x > w - EDGE_ZONE) {
@@ -2101,8 +2345,8 @@ window.addEventListener("mousemove", (evt) => {
         cursorElement.classList.add("arrow-right");
         cursorElement.classList.remove("arrow-left");
         // Set size directly with !important to override hover handlers
-        cursorElement.style.setProperty('width', '80px', 'important');
-        cursorElement.style.setProperty('height', '80px', 'important');
+        cursorElement.style.setProperty('width', '60px', 'important');
+        cursorElement.style.setProperty('height', '60px', 'important');
         cursorElement.style.setProperty('background', 'rgba(255, 255, 255, 0.18)', 'important');
         cursorElement.style.setProperty('opacity', '1', 'important');
       } else {
