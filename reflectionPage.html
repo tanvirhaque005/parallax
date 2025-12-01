@@ -95,12 +95,22 @@
 
         .intro-main-title {
             font-size: 72px;
-            font-weight: bold;
+            font-weight: 400;
             color: #ffffff;
             letter-spacing: 4px;
             margin-bottom: 40px;
             line-height: 1.2;
             max-width: 900px;
+        }
+
+        .intro-paragraph {
+            font-size: 18px;
+            color: #ffffff;
+            line-height: 1.6;
+            letter-spacing: 0.2px;
+            margin-bottom: 40px;
+            max-width: 800px;
+            font-weight: 400;
         }
 
         .explored-section {
@@ -120,11 +130,11 @@
         }
 
         .explored-title {
-            font-size: 13px;
+            font-size: 24px;
             color: #ffffff;
             letter-spacing: 1px;
-            text-transform: uppercase;
             margin-bottom: 20px;
+            font-weight: 400;
         }
 
         .explored-list {
@@ -132,11 +142,13 @@
         }
 
         .explored-list li {
-            font-size: 16px;
+            font-size: 18px;
             color: #ffffff;
+            line-height: 1.6;
             letter-spacing: 0.2px;
             margin-bottom: 12px;
             padding-left: 0;
+            font-weight: 400;
         }
 
         /* Second Page Styles */
@@ -146,7 +158,7 @@
 
         .reflection-main-title {
             font-size: 56px;
-            font-weight: bold;
+            font-weight: 400;
             color: #ffffff;
             letter-spacing: 2px;
             margin-bottom: 60px;
@@ -165,16 +177,34 @@
             height: 350px;
             padding: 50px;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
             transition: all 0.3s ease;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: flex-start;
         }
 
         .reflection-box:hover {
             border-color: rgba(255, 255, 255, 0.5);
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .reflection-box-number {
+            font-size: 72px;
+            font-weight: 400;
+            color: #ffffff;
+            margin-bottom: 20px;
+            line-height: 1;
+        }
+
+        .reflection-box-category {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
         }
 
         .reflection-box p {
@@ -182,7 +212,8 @@
             color: #ffffff;
             line-height: 1.6;
             letter-spacing: 0.2px;
-            text-align: center;
+            text-align: left;
+            margin: 0;
         }
 
         /* Footer */
@@ -349,17 +380,15 @@
                 <span class="intro-text" id="introPageTitle"></span>
             </div>
             
-            <h1 class="intro-main-title">What 100 Years of Imagination Reveals</h1>
+            <h1 class="intro-main-title">100 Years of Imagination</h1>
+            
+            <p class="intro-paragraph">Together, these patterns reveal how imagination responds to the world—war, technology, globalization, and climate change. When the world feels uncertain, futures shrink. When optimism rises, stories leap further ahead.</p>
             
             <div class="explored-section">
                 <div class="explored-line"></div>
                 <div class="explored-content">
-                    <div class="explored-title">You explored</div>
-                    <ul class="explored-list">
-                        <li>A century of films</li>
-                        <li>How far each film looked into the future</li>
-                        <li>How directors build worlds beyond reality</li>
-                    </ul>
+                    <div class="explored-title">Why this matters</div>
+                    <p class="intro-paragraph" style="margin-bottom: 0;">Science fiction does more than predict the future. It primes it. The technologies we build—AI, robotics, interfaces, cities, and companion machines—often follow blueprints first imagined on screen.</p>
                 </div>
             </div>
 
@@ -374,19 +403,25 @@
             <div>
                 <div class="page-header">
                     <div class="intro-icon"></div>
-                    <span class="intro-text" id="reflectionPageTitle">REFLECTION</span>
+                    <span class="intro-text" id="reflectionPageTitle">Closing</span>
                 </div>
 
                 <h1 class="reflection-main-title">Reflection</h1>
                 
                 <div class="reflection-boxes">
                     <div class="reflection-box">
-                        <p>Are we dreaming bigger or smaller futures today?</p>
+                        <div class="reflection-box-number">01</div>
+                        <div class="reflection-box-category">AMBITION</div>
+                        <p>Are we imagining bigger or smaller futures today?</p>
                     </div>
                     <div class="reflection-box">
-                        <p>What shapes our visions—fear or creativity?</p>
+                        <div class="reflection-box-number">02</div>
+                        <div class="reflection-box-category">DRIVERS</div>
+                        <p>What shapes the stories we tell...fear, curiosity, or hope?</p>
                     </div>
                     <div class="reflection-box">
+                        <div class="reflection-box-number">03</div>
+                        <div class="reflection-box-category">PERSONAL</div>
                         <p>What future would you imagine next?</p>
                     </div>
                 </div>
@@ -395,9 +430,10 @@
             <div class="page-footer">
                 <div class="credits-section">
                     <div class="credits-title">CREDITS</div>
-                    <p>Created by: Michael, Audrey, Tanvir, Sydney</p>
-                    <p>Course: CS1710 Data Visualization with Professor Hans</p>
+                    <p>Harvard University, CS1710 Data Visualization | Advised by Prof. Hans Pfister</p>
                     <p>Data Sources: Film metadata databases, scholarly archives, and structured research collected across the project.</p>
+                    <p>Published 2025</p>
+                    <p>Created by Audrey Yang, Michael Cai, Tanvir Haque, Sydney Nguyen</p>
                 </div>
             </div>
             
@@ -442,7 +478,7 @@
                             
                             // Trigger typing animation after box appears
                             setTimeout(() => {
-                                const introText = "Let's reflect on what 100 years of sci-fi reveals about us—and about our own imagination.";
+                                const introText = "Closing";
                                 console.log('About to type:', introText, 'on element:', headerTitle);
                                 typeText(headerTitle, introText, 30);
                             }, 650);
@@ -462,7 +498,7 @@
                             }, 10);
                             // Trigger typing animation after box appears
                             setTimeout(() => {
-                                typeText(headerTitle, 'REFLECTION', 30);
+                                typeText(headerTitle, 'Closing', 30);
                             }, 600);
                         }
                         // Don't show intro message on reflection page - we have our own header text
@@ -542,7 +578,7 @@
                     
                     // Trigger typing animation after box appears
                     setTimeout(() => {
-                        const introText = "Let's reflect on what 100 years of sci-fi reveals about us—and about our own imagination.";
+                        const introText = "Closing";
                         typeText(headerTitle, introText, 30);
                     }, 650);
                 }
