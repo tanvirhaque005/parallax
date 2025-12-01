@@ -1382,10 +1382,10 @@ window.addEventListener("mousemove", (e) => {
         return;
     }
 
-    // 2. Disable arrows when hovering ANY SVG movie/grid line
+    // 2. Disable arrows when hovering movie/grid lines
     const tgt = e.target;
     if (
-        tgt.tagName === "line" ||   // catches gridlines too
+        tgt.tagName === "line" ||
         tgt.classList.contains("movieHit") ||
         tgt.classList.contains("movieLine") ||
         tgt.classList.contains("movieHalo")
@@ -1394,24 +1394,27 @@ window.addEventListener("mousemove", (e) => {
         return;
     }
 
-    // 3. Normal arrow-zone logic
-    const x = e.clientX;
+    // 3. Percent-based logic
     const w = window.innerWidth;
-    const zone = 800; // editable
+    const x = e.clientX;
+    const pct = x / w;   // 0 ←–––––→ 1
+
+    const leftZone  = 0.50; // left 50%
+    const rightZone = 0.50; // right 50%
 
     const atFirst = currentWindowStart <= windowStarts[0];
     const atLast  = currentWindowStart >= windowStarts[windowStarts.length - 1];
 
-    if (x < zone && !atFirst) {
+    if (pct < leftZone && !atFirst) {
         cursorCircle.classList.add("arrow-left");
         cursorCircle.classList.remove("arrow-right");
     }
-    else if (x > w - zone && !atLast) {
+    else if (pct > rightZone && !atLast) {
         cursorCircle.classList.add("arrow-right");
         cursorCircle.classList.remove("arrow-left");
     }
     else {
-        cursorCircle.classList.remove("arrow-left", "arrow-right");
+        cursorCircle.classList.remove("arrow-left","arrow-right");
     }
 });
 
