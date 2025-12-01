@@ -7,21 +7,29 @@
     <link rel="stylesheet" href="navigation-menu.css">
     <link rel="stylesheet" href="introMessage.css">
     <link rel="stylesheet" href="cursor.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+
         }
 
         body {
             background-color: #0a0a0a;
             color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            font-family: 'IBM Plex Sans', sans-serif !important;
             overflow: hidden;
             height: 100vh;
             position: relative;
         }
+
+        :root, body, body * {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+}
 
         /* Page Container */
         .page-container {
@@ -100,17 +108,17 @@
             text-transform: uppercase;
             margin-bottom: 20px;
             opacity: 0.9;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif; */
         }
 
         .cover-main-title {
             font-size: 72px;
-            font-weight: bold;
+            /* font-weight: bold; */
             color: #ffffff;
             letter-spacing: 4px;
             margin-bottom: 30px;
             line-height: 1.1;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif; */
         }
 
         .cover-description {
@@ -195,7 +203,7 @@
 
         .about-main-title {
             font-size: 56px;
-            font-weight: bold;
+            /* font-weight: bold; */
             color: #ffffff;
             letter-spacing: 2px;
             margin-bottom: 30px;
@@ -212,40 +220,49 @@
         }
 
         .explore-section {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+    margin: 40px 0;
+    position: relative;
+}
 
-        .explore-line {
-            width: 2px;
-            background-color: #ffffff;
-            flex-shrink: 0;
-        }
+.explore-line {
+    width: 2px;
+    min-height: 115px;      /* ✔ forces the line to appear */
+    background-color: #ffffff;
+    opacity: 0.9;
+    flex-shrink: 0;
+    margin-top: 4px;        /* aligns visually with text */
+}
 
-        .explore-content {
-            flex: 1;
-        }
+.explore-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
 
-        .explore-title {
-            font-size: 13px;
-            color: #ffffff;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
+.explore-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #ffffff;
+    opacity: 0.95;
+}
 
-        .explore-list {
-            list-style: none;
-        }
+.explore-list {
+    list-style: disc;      /* default round bullets (matching screenshot) */
+    margin-left: 20px;     /* indent exactly like screenshot */
+    padding-left: 0;
+}
 
-        .explore-list li {
-            font-size: 15px;
-            color: #ffffff;
-            line-height: 2;
-            margin-bottom: 12px;
-            opacity: 0.9;
-        }
+.explore-list li {
+    font-size: 15px;
+    color: #ffffff;
+    opacity: 0.9;
+    line-height: 1.6;
+    margin-bottom: 6px;
+}
+
 
         /* CTA Button */
         .cta-button {
@@ -334,7 +351,7 @@
                 
                 <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding-left: 0;">
                     <div class="cover-subtitle">A CENTURY OF SCI-FI IMAGINATION</div>
-                    <h1 class="cover-main-title">Library of Futures</h1>
+                    <div class="cover-main-title">Library of Futures</div>
                     <p class="cover-description-text">Discover how stories have predicted, warned, and dreamed about our futures time and worlds.</p>
                 </div>
 
@@ -353,21 +370,24 @@
                     <span class="intro-text" id="aboutPageTitle"></span>
                 </div>
 
-                <h1 class="about-main-title">100 Years of Sci Fi Stories</h1>
+                <div class="about-main-title">100 Years of Sci-Fi Stories</div>
                 
-                <p class="about-intro">This interactive journey blends data visualization, film history, and narrative design to reveal how our stories imagine the future. You'll move through films, tropes, timelines, and worlds—seeing how cultural moments shape the way we dream, fear, and build tomorrow.</p>
+                <p class="about-intro">This visualization uses data from culturally significant sci-fi films across each decade. Combined with thematic research on world-building and technology in cinema, it reveals how sci-fi mirrors the world and how those visions evolve over time.</p>
 
                 <div class="explore-section">
                     <div class="explore-line"></div>
+                
                     <div class="explore-content">
-                        <div class="explore-title">What you're about to explore</div>
+                        <div class="explore-title">You’ll explore:</div>
+                
                         <ul class="explore-list">
-                            <li>Patterns of sci-fi tropes across decades</li>
-                            <li>How far each film looked into the future</li>
-                            <li>The worlds we imagine vs. the worlds we film in</li>
+                            <li>How sci-fi tropes shift across decades</li>
+                            <li>How far each film looks into the future</li>
+                            <li>Where films were made vs. where they imagine</li>
                         </ul>
                     </div>
                 </div>
+                
             </div>
 
             <div class="page-footer">
