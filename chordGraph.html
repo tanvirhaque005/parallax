@@ -1423,38 +1423,73 @@ function positionLabelOverBar(labelEl, barEl, text) {
 			
 			<script>
 				// Typing animation for chord intro message
+				// Store typing timeout to allow cancellation
+				let chordTypingTimeout = null;
+				let chordTypingIndex = 0;
+				let chordTypingText = '';
+				let chordTypingElement = null;
+
 				function typeText(element, text, speed = 30) {
+					// Cancel any existing typing animation
+					if (chordTypingTimeout) {
+						clearTimeout(chordTypingTimeout);
+						chordTypingTimeout = null;
+					}
+					
+					// Reset state
 					element.textContent = '';
+					element.innerHTML = '';
 					element.classList.add('typing');
 					
-					let i = 0;
+					// Store current typing state
+					chordTypingElement = element;
+					chordTypingText = text;
+					chordTypingIndex = 0;
+					
 					function type() {
-						if (i < text.length) {
-							element.textContent += text.charAt(i);
-							i++;
-							setTimeout(type, speed);
+						if (chordTypingIndex < chordTypingText.length && chordTypingElement === element) {
+							element.textContent = chordTypingText.substring(0, chordTypingIndex + 1);
+							chordTypingIndex++;
+							chordTypingTimeout = setTimeout(type, speed);
 						} else {
-							element.classList.remove('typing');
+							if (chordTypingElement === element) {
+								element.classList.remove('typing');
+								chordTypingTimeout = null;
+								chordTypingElement = null;
+							}
 						}
 					}
 					type();
 				}
+
+				// Track if intro message has been shown to prevent multiple calls
+				let chordIntroMessageShown = false;
 
 				// Show intro message with typing animation
 				function showChordIntroMessage() {
 					const introMessage = document.getElementById('chordIntroMessage');
 					const introText = document.getElementById('chordIntroText');
 					
-					if (introMessage && introText) {
+					if (introMessage && introText && !chordIntroMessageShown) {
+						chordIntroMessageShown = true;
+						
+						// Cancel any existing typing
+						if (chordTypingTimeout) {
+							clearTimeout(chordTypingTimeout);
+							chordTypingTimeout = null;
+						}
+						
 						// Show the message container
 						introMessage.style.display = 'flex';
 						
 						// Wait for box animation, then start typing
 						setTimeout(() => {
 							introMessage.classList.add('show-text');
-							const text = "Scroll to travel through time. Hover over paths to reveal shared themes.";
+							// Correct order: Hover first, then Scroll
+							const text = "Hover over paths to reveal shared themes. Scroll to travel through time.";
 							// Clear any existing text first
 							introText.textContent = '';
+							introText.innerHTML = '';
 							typeText(introText, text, 30);
 						}, 650);
 					}

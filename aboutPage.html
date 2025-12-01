@@ -167,7 +167,7 @@
         }
 
         /* Background Gradient Effect - bottom left with text */
-        /* Globe/semi-circle size */
+        /* Globe/semi-circle size - fixed pixel positioning */
         .cover-gradient {
             position: fixed;
             bottom: -400px;
@@ -178,7 +178,7 @@
             max-width: 1400px;
             min-height: 1400px;
             max-height: 1400px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 25%, rgba(255, 255, 255, 0.08) 45%, rgba(255, 255, 255, 0.03) 65%, transparent 85%);
+            background: radial-gradient(circle, transparent 0%, rgba(255, 255, 255, 0.02) 15%, rgba(255, 255, 255, 0.06) 35%, rgba(255, 255, 255, 0.10) 55%, rgba(255, 255, 255, 0.15) 75%, rgba(255, 255, 255, 0.18) 100%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
@@ -186,7 +186,13 @@
             box-shadow: 0 0 150px 80px rgba(255, 255, 255, 0.2),
                         0 0 250px 120px rgba(255, 255, 255, 0.1),
                         0 0 350px 160px rgba(255, 255, 255, 0.05);
-            transform: translate(0, 0);
+            transform: scale(1);
+            transform-origin: center center;
+            -webkit-transform: scale(1);
+            -moz-transform: scale(1);
+            -ms-transform: scale(1);
+            -o-transform: scale(1);
+            box-sizing: border-box;
         }
 
         .cover-description-text {
