@@ -169,7 +169,7 @@ function switchView(view) {
           }, 10);
           // Start typing animation
           setTimeout(() => {
-            typeTextForGrid(headerTitle, 'Click on any movie cover to step inside its world.', 80);
+            typeTextForGrid(headerTitle, 'Click any movie cover to step inside its world.', 30);
           }, 600);
         }
       }, 100);

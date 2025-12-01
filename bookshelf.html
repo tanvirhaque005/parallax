@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="navigation-menu.css">
     <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="introMessage.css">
+    <style>
+      #gridViewHeader {
+        top: 30px;
+      }
+    </style>
   </head>
 
   <body>
@@ -26,14 +31,14 @@
     <!-- Intro Panel (shown initially, hidden on scroll) -->
     <div id="introPanel" class="intro-panel">
       <h1 class="intro-title">Explore the Library of Futures</h1>
-      <p class="intro-description">These are the films that make up our dataset—sorted chronologically from early sci-fi to modern futurism. You can browse by decade (a chronological sweep through sci-fi history) or subgenre (cyberpunk, space opera, climate fiction, biotech dystopias, etc.) 
+      <p class="intro-description">Browse the films in our dataset. Move through decades to see how sci-fi storytelling changes over time. Select a film to step into its world. 
         </p>
         <br/><br/>
         <p class="intro-description">Scroll to move through time, watching how storytelling evolves across generations.</p>
     </div>
     
     <!-- ONLY SEE WHEN NOT IN OVERLAY -->
-    <div id="introMessageDefault" data-text="Scroll through a century of sci-fi films. Click on any movie cover to step inside its world (these are the movies that make up our data)."></div>
+    <div id="introMessageDefault" data-text="Click any movie cover to step inside its world. Scroll to navigate through the timeline of movies! "></div>
     <script src="introMessage.js" defer></script>
   
     <div id="bookBars"></div>
@@ -74,7 +79,7 @@
 
         <!-- <div class="breadcrumb">Library > Film</div> -->
         <!-- ONLY SEE WHEN IN OVERLAY -->
-        <div id="introMessageOverlay" data-text="Click on a theme to reveal how this story fits into the broader network of recurring sci-fi ideas."></div>
+        <div id="introMessageOverlay" data-text="Click a theme to see how this film connects to recurring sci-fi ideas across time."></div>
         <script src="introMessage.js" defer></script>
     
         <button id="closeInfo" class="btn close">✕</button>
@@ -103,7 +108,7 @@
 
           <div class="motifs-section">
             <h2 class="motifs-title">Technological Motifs</h2>
-            <p class="motifs-desc">Click a motif to explore its connection to other films.</p>
+            <!-- <p class="motifs-desc">Click a motif to explore its connection to other films.</p> -->
             <div class="motifs-container" id="motifsContainer"></div>
           </div>
 
@@ -120,7 +125,7 @@
     <!-- Grid View Container -->
     <div id="gridView" class="grid-view-container" style="display: none;">
       <div class="grid-header">
-        <button class="back-button" id="backToListView">← BACK</button>
+        <!-- <button class="back-button" id="backToListView">← BACK</button> -->
         <div class="page-header" id="gridViewHeader">
           <div class="intro-icon"></div>
           <span class="intro-text" id="gridViewTitle"></span>
