@@ -1630,7 +1630,7 @@ class ChordGraph {
             cursorEl.classList.add('hover');
             cursorEl.style.setProperty('width', '45px', 'important');
             cursorEl.style.setProperty('height', '45px', 'important');
-            cursorEl.style.setProperty('opacity', '0.5', 'important');
+            cursorEl.style.setProperty('opacity', '0.7', 'important');
             cursorEl.style.setProperty('background', 'white', 'important');
           }
           this.handleNodeHover(d, event);
@@ -1644,7 +1644,7 @@ class ChordGraph {
             cursorEl.style.setProperty('width', '18px', 'important');
             cursorEl.style.setProperty('height', '18px', 'important');
             cursorEl.style.setProperty('opacity', '1', 'important');
-            cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+            cursorEl.style.setProperty('background', 'rgba(200, 200, 200, 0.5)', 'important');
           }
           this.handleNodeHoverOut(d, event);
         });
@@ -1693,7 +1693,7 @@ class ChordGraph {
             cursorEl.classList.add('hover');
             cursorEl.style.setProperty('width', '45px', 'important');
             cursorEl.style.setProperty('height', '45px', 'important');
-            cursorEl.style.setProperty('opacity', '0.5', 'important');
+            cursorEl.style.setProperty('opacity', '0.7', 'important');
             cursorEl.style.setProperty('background', 'white', 'important');
           }
           this.handleNodeHover(d, event);
@@ -1706,7 +1706,7 @@ class ChordGraph {
             cursorEl.style.setProperty('width', '18px', 'important');
             cursorEl.style.setProperty('height', '18px', 'important');
             cursorEl.style.setProperty('opacity', '1', 'important');
-            cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+            cursorEl.style.setProperty('background', 'rgba(200, 200, 200, 0.5)', 'important');
           }
           this.handleNodeHoverOut(d, event);
         });
