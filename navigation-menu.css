@@ -8,7 +8,7 @@
   top: 40px;
   right: 40px;
   z-index: 10000;
-  font-family: 'Courier New', monospace;
+  font-family: 'IBM Plex Sans', sans-serif;
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -30,13 +30,14 @@
 /* White vertical progress line */
 .nav-progress-line {
   width: 2px;
-  height: 150px;
+  height: 150px; /* Default fallback, will be set by JS */
+  min-height: 150px; /* Ensure minimum size */
   background-color: #ffffff;
   position: relative;
   flex-shrink: 0;
-  transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
               opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Removed height from transition to prevent glitches */
   opacity: 1;
   transform: translateX(0);
   will-change: transform, opacity;
@@ -128,17 +129,9 @@
   padding-left: 12px;
 }
 
-/* Blue vertical bar indicator for active item */
+/* Blue vertical bar indicator for active item - REMOVED */
 .nav-menu-item.active a::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background-color: #4a9eff;
-  opacity: 1;
-  transition: opacity 0.3s ease;
+  display: none;
 }
 
 /* Active/current page */

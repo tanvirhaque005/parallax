@@ -67,9 +67,28 @@ class ChordGraph {
    */
   showMoviePopup(movies, startYear, theme, nodeX, nodeY) {
     try {
-      if (!this.moviePopup) {
-        console.error('Movie popup not initialized!');
-        return;
+      // Ensure popup exists, create if missing
+      if (!this.moviePopup || !this.moviePopup.node()) {
+        console.warn('Popup not found, creating new one');
+        this.moviePopup = d3.select('body')
+          .append('div')
+          .attr('class', 'movie-popup')
+          .attr('id', 'chordGraphPopup')
+          .style('position', 'fixed')
+          .style('min-width', '400px')
+          .style('max-width', '500px')
+          .style('background', 'rgba(0, 0, 0, 0.85)')
+          .style('color', '#ffffff')
+          .style('border-radius', '8px')
+          .style('padding', '32px')
+          .style('z-index', '99999')
+          .style('font-family', "'IBM Plex Sans', sans-serif")
+          .style('font-size', '13px')
+          .style('max-height', '600px')
+          .style('overflow-y', 'auto')
+          .style('backdrop-filter', 'blur(4px)')
+          .style('box-shadow', '0 8px 32px rgba(0, 0, 0, 0.8)')
+          .style('border', '1px solid rgba(255, 255, 255, 0.2)');
       }
       
       console.log('showMoviePopup called', {
@@ -94,25 +113,47 @@ class ChordGraph {
       }) : ['No movies found for this time period'];
       
       const html = `
-        <div style="font-weight:700; margin-bottom:12px; color:#ffffff; font-size:18px;">${themeName}</div>
-        <div style="font-size:13px; color:#ffffff; line-height:1.6; margin-bottom:16px; opacity:0.95;">
+        <div style="font-weight:700; margin-bottom:16px; color:#ffffff; font-size:20px; letter-spacing:0.5px;">${themeName}</div>
+        <div style="font-size:13px; color:#ffffff; line-height:1.7; margin-bottom:20px; opacity:0.9;">
           ${description}
         </div>
-        <div style="font-size:12px; color:#ffffff; line-height:1.8; margin-top:12px;">
-          ${formattedMovies.map(m => `<div style="padding:4px 0;">${m}</div>`).join('')}
+        <div style="font-size:12px; color:#ffffff; line-height:2; margin-top:16px;">
+          ${formattedMovies.map(m => `<div style="padding:3px 0;">${m}</div>`).join('')}
         </div>
       `;
 
       // Show the popup - make absolutely sure it's visible
+      const popupNode = this.moviePopup.node();
+      if (!popupNode) {
+        console.error('Popup node is null!');
+        return;
+      }
+      
+      // Set HTML content first
+      this.moviePopup.html(html);
+      
+      // Make it visible immediately - use setProperty for !important
+      const popupEl = this.moviePopup.node();
+      popupEl.style.setProperty('display', 'block', 'important');
+      popupEl.style.setProperty('visibility', 'visible', 'important');
+      popupEl.style.setProperty('opacity', '1', 'important');
+      popupEl.style.setProperty('pointer-events', 'auto', 'important');
+      popupEl.style.setProperty('z-index', '99999', 'important');
+      
+      // Also set via d3 for consistency
       this.moviePopup
-        .html(html)
         .style('display', 'block')
         .style('visibility', 'visible')
-        .style('opacity', 1)
+        .style('opacity', '1')
         .style('pointer-events', 'auto')
-        .style('z-index', '99999'); // Extremely high z-index
+        .style('z-index', '99999');
+      
+      // Force a reflow to ensure styles are applied
+      void popupEl.offsetHeight;
+      
+      console.log('Popup HTML set and made visible');
 
-      // Position the popup to the right of the node
+      // Position the popup in the top right corner of the screen
       try {
         // First, make sure popup is visible to get accurate dimensions
         this.moviePopup
@@ -125,57 +166,52 @@ class ChordGraph {
         
         const popupRect = this.moviePopup.node().getBoundingClientRect();
         
-        // Convert SVG coordinates to screen coordinates
-        const svgPoint = this.svg.node().createSVGPoint();
-        svgPoint.x = nodeX;
-        svgPoint.y = nodeY;
-        const svgMatrix = this.svg.node().getScreenCTM();
-        const screenPoint = svgPoint.matrixTransform(svgMatrix);
+        // Position in top right corner with some padding
+        const padding = 40;
+        const right = padding;
+        const top = padding;
         
-        const offsetX = 60; // Distance from node
-        const offsetY = -popupRect.height / 2; // Center vertically with node
+        // Set position and make fully visible - use setProperty for !important
+        const popupEl = this.moviePopup.node();
+        popupEl.style.setProperty('right', `${right}px`, 'important');
+        popupEl.style.setProperty('top', `${top}px`, 'important');
+        popupEl.style.setProperty('left', 'auto', 'important');
+        popupEl.style.setProperty('position', 'fixed', 'important');
+        popupEl.style.setProperty('opacity', '1', 'important');
+        popupEl.style.setProperty('display', 'block', 'important');
+        popupEl.style.setProperty('visibility', 'visible', 'important');
+        popupEl.style.setProperty('z-index', '99999', 'important');
+        popupEl.style.setProperty('pointer-events', 'auto', 'important');
         
-        // Use screen coordinates directly since popup is fixed
-        let left = Math.round(screenPoint.x + offsetX);
-        let top = Math.round(screenPoint.y + offsetY);
-        
-        // Keep popup within viewport bounds
-        if (left + popupRect.width > window.innerWidth - 20) {
-          left = Math.round(screenPoint.x - popupRect.width - offsetX); // Show to the left instead
-        }
-        if (left < 20) left = 20;
-        if (top < 20) top = 20;
-        if (top + popupRect.height > window.innerHeight - 20) {
-          top = Math.round(window.innerHeight - popupRect.height - 20);
-        }
-        
-        // Set position and make fully visible
+        // Also set via d3 for consistency
         this.moviePopup
-          .style('left', `${left}px`)
+          .style('right', `${right}px`)
           .style('top', `${top}px`)
+          .style('left', 'auto')
           .style('position', 'fixed')
-          .style('opacity', 1)
+          .style('opacity', '1')
           .style('display', 'block')
           .style('visibility', 'visible')
-          .style('z-index', '99999'); // Extremely high z-index
+          .style('z-index', '99999')
+          .style('pointer-events', 'auto');
         
-        // Draw connecting line from node to popup
-        if (this.popupLine && this.svg) {
-          // Node position is in SVG coordinates (relative to SVG)
-          const nodeSvgX = nodeX;
-          const nodeSvgY = nodeY;
-          
-          // Popup position is in screen coordinates, need to convert to SVG coordinates
-          const svgRect = this.svg.node().getBoundingClientRect();
-          const popupCenterX = left + popupRect.width / 2 - svgRect.left;
-          const popupCenterY = top + popupRect.height / 2 - svgRect.top;
-          
-          this.popupLine
-            .attr('x1', nodeSvgX)
-            .attr('y1', nodeSvgY)
-            .attr('x2', popupCenterX)
-            .attr('y2', popupCenterY)
-            .attr('opacity', 1);
+        // Force another reflow to ensure visibility
+        void popupEl.offsetHeight;
+        
+        // Double-check it's visible
+        const finalStyles = window.getComputedStyle(popupEl);
+        console.log('Popup positioned at top-right:', { right, top, width: popupRect.width, height: popupRect.height, finalDisplay: finalStyles.display, finalOpacity: finalStyles.opacity });
+        
+        if (finalStyles.display === 'none' || finalStyles.visibility === 'hidden' || parseFloat(finalStyles.opacity) < 0.1) {
+          console.warn('Popup still hidden after positioning, forcing visibility with !important');
+          popupEl.style.setProperty('display', 'block', 'important');
+          popupEl.style.setProperty('visibility', 'visible', 'important');
+          popupEl.style.setProperty('opacity', '1', 'important');
+        }
+        
+        // Hide connecting line since popup is in top-right corner
+        if (this.popupLine) {
+          this.popupLine.attr('opacity', 0);
         }
       } catch(e) {
         // fallback
@@ -421,7 +457,7 @@ class ChordGraph {
       .style('pointer-events', 'none')
       .style('opacity', '0')
       .style('transition', 'opacity 0.2s')
-      .style('font-family', "'Courier New', monospace")
+      .style('font-family', "'IBM Plex Sans', sans-serif")
       .style('font-size', '12px')
       .style('font-weight', '400')
       .style('max-width', '500px')
@@ -433,30 +469,47 @@ class ChordGraph {
       .style('transform', 'translateX(-50%)')
       .style('bottom', '20px');
 
-      // Create a semi-transparent gray movie popup (matches the attached image) — hidden by default
-      // Append to body instead of container to avoid positioning issues
+      // Create a black transparent popup on top of chord graph
+      // Append to the container so it's positioned relative to the graph
       this.moviePopup = d3.select('body')
         .append('div')
         .attr('class', 'movie-popup')
-        .style('position', 'fixed') // Fixed positioning for viewport-relative placement
-        .style('min-width', '320px')
-        .style('max-width', '420px')
-        .style('background', 'rgba(140, 140, 140, 0.9)') // Semi-transparent light gray (matches image)
+        .attr('id', 'chordGraphPopup')
+        .style('position', 'fixed')
+        .style('min-width', '400px')
+        .style('max-width', '500px')
+        .style('background', 'rgba(0, 0, 0, 0.85)') // Black and transparent
         .style('color', '#ffffff')
         .style('border-radius', '8px')
-        .style('padding', '24px')
-        .style('opacity', 0)
+        .style('padding', '32px')
+        .style('opacity', '0')
         .style('pointer-events', 'none')
         .style('display', 'none')
-        .style('z-index', '99999') // Extremely high z-index to ensure it's on top
-        .style('font-family', "'Courier New', monospace")
+        .style('z-index', '99999')
+        .style('font-family', "'IBM Plex Sans', sans-serif")
         .style('font-size', '13px')
         .style('max-height', '600px')
         .style('overflow-y', 'auto')
-        .style('backdrop-filter', 'blur(2px)')
-        .style('box-shadow', '0 8px 32px rgba(0, 0, 0, 0.4)');
+        .style('backdrop-filter', 'blur(4px)')
+        .style('box-shadow', '0 8px 32px rgba(0, 0, 0, 0.8)')
+        .style('border', '1px solid rgba(255, 255, 255, 0.2)');
       
       console.log('Popup created:', this.moviePopup.node());
+      
+      // Test that popup can be shown
+      if (this.moviePopup && this.moviePopup.node()) {
+        console.log('Popup element exists and is ready');
+        // Test visibility
+        const testNode = this.moviePopup.node();
+        console.log('Popup initial styles:', {
+          display: window.getComputedStyle(testNode).display,
+          visibility: window.getComputedStyle(testNode).visibility,
+          opacity: window.getComputedStyle(testNode).opacity,
+          zIndex: window.getComputedStyle(testNode).zIndex
+        });
+      } else {
+        console.error('Popup creation failed!');
+      }
       
       // Create SVG line connector (will be positioned dynamically)
       this.popupLine = this.svg.append('line')
@@ -494,6 +547,16 @@ class ChordGraph {
     // Recalculate co-occurrences with current decade filter
     this.calculateCooccurrences(this.currentDecade);
 
+    // Ensure width and height match the viewBox (which is the coordinate system)
+    // The viewBox defines the coordinate system, so we should use those dimensions
+    const svgNode = this.svg.node();
+    if (svgNode && svgNode.viewBox && svgNode.viewBox.baseVal) {
+      const viewBox = svgNode.viewBox.baseVal;
+      // Use viewBox dimensions as they define the coordinate system
+      if (viewBox.width > 0) this.width = viewBox.width;
+      if (viewBox.height > 0) this.height = viewBox.height;
+    }
+
     // Create nodes (themes) positioned in a circle
     const centerX = this.width / 2;
     const centerY = this.height / 2;
@@ -520,22 +583,42 @@ class ChordGraph {
 
     for (let i = 0; i < allThemes.length; i++) {
       for (let j = i + 1; j < allThemes.length; j++) {
-        const weight = this.themeCooccurrence[allThemes[i]][allThemes[j]] || 0;
-        if (weight > 0) {
-          const moviesWithBoth = this.themeMovies[allThemes[i]][allThemes[j]] || [];
-          links.push({
-            source: i,
-            target: j,
-            value: weight,
-            movies: moviesWithBoth,
-            sourceTheme: allThemes[i],
-            targetTheme: allThemes[j]
-          });
+        // Validate that both themes exist in the cooccurrence data
+        const theme1 = allThemes[i];
+        const theme2 = allThemes[j];
+        
+        // Ensure both themes have cooccurrence data (initialize if missing)
+        if (!this.themeCooccurrence[theme1]) {
+          this.themeCooccurrence[theme1] = {};
+        }
+        if (!this.themeCooccurrence[theme2]) {
+          this.themeCooccurrence[theme2] = {};
+        }
+        
+        // Get weight (0 if no connection)
+        const weight = (this.themeCooccurrence[theme1][theme2] || 0);
+        
+        // Validate that nodes exist for both indices
+        if (i >= nodes.length || j >= nodes.length || !nodes[i] || !nodes[j]) {
+          console.warn(`Skipping invalid link: ${theme1} -> ${theme2} (node indices: ${i}, ${j}, nodes length: ${nodes.length})`);
+          continue;
+        }
+        
+        // Create link for ALL pairs, regardless of weight (weight 0 = no connection = gray)
+        const moviesWithBoth = (this.themeMovies[theme1] && this.themeMovies[theme1][theme2]) ? this.themeMovies[theme1][theme2] : [];
+        links.push({
+          source: i,
+          target: j,
+          value: weight, // Can be 0 for no connections
+          movies: moviesWithBoth,
+          sourceTheme: theme1,
+          targetTheme: theme2
+        });
 
-          // Mark both nodes as having connections
+        // Mark both nodes as having connections only if weight > 0
+        if (weight > 0) {
           nodesWithConnections.add(i);
           nodesWithConnections.add(j);
-
           // Collect related movies
           moviesWithBoth.forEach(m => relatedMoviesSet.add(m));
         }
@@ -548,6 +631,7 @@ class ChordGraph {
       if (typeof d.source !== 'number' || typeof d.target !== 'number' ||
           d.source < 0 || d.source >= nodes.length ||
           d.target < 0 || d.target >= nodes.length) {
+        console.warn('Invalid link indices:', d.source, d.target, 'nodes length:', nodes.length);
         return `M0,0L0,0`; // Return a minimal valid path for invalid links
       }
       
@@ -555,12 +639,39 @@ class ChordGraph {
       const targetNode = nodes[d.target];
       
       // Safety check: ensure nodes exist and have valid coordinates
-      if (!sourceNode || !targetNode || 
-          typeof sourceNode.x !== 'number' || typeof sourceNode.y !== 'number' ||
+      if (!sourceNode || !targetNode) {
+        console.warn('Missing node:', { source: sourceNode, target: targetNode });
+        return `M0,0L0,0`; // Return a minimal valid path
+      }
+      
+      // Validate coordinates are numbers and within reasonable bounds
+      if (typeof sourceNode.x !== 'number' || typeof sourceNode.y !== 'number' ||
           typeof targetNode.x !== 'number' || typeof targetNode.y !== 'number' ||
           isNaN(sourceNode.x) || isNaN(sourceNode.y) ||
           isNaN(targetNode.x) || isNaN(targetNode.y)) {
+        console.warn('Invalid node coordinates:', {
+          source: { x: sourceNode.x, y: sourceNode.y },
+          target: { x: targetNode.x, y: targetNode.y },
+          sourceTheme: d.sourceTheme,
+          targetTheme: d.targetTheme
+        });
         return `M0,0L0,0`; // Return a minimal valid path
+      }
+      
+      // Check if coordinates are within SVG bounds (with some margin for safety)
+      const margin = 100;
+      if (sourceNode.x < -margin || sourceNode.x > this.width + margin ||
+          sourceNode.y < -margin || sourceNode.y > this.height + margin ||
+          targetNode.x < -margin || targetNode.x > this.width + margin ||
+          targetNode.y < -margin || targetNode.y > this.height + margin) {
+        console.warn('Node coordinates out of bounds:', {
+          source: { x: sourceNode.x, y: sourceNode.y },
+          target: { x: targetNode.x, y: targetNode.y },
+          svgSize: { width: this.width, height: this.height },
+          sourceTheme: d.sourceTheme,
+          targetTheme: d.targetTheme
+        });
+        // Still draw the line, but log a warning
       }
       
       const dx = targetNode.x - sourceNode.x;
@@ -608,8 +719,9 @@ class ChordGraph {
       return `M${sourceNode.x},${sourceNode.y}Q${controlX},${controlY} ${targetNode.x},${targetNode.y}`;
     };
 
-    // Fixed color for all links - no gradient
+    // Color for links: blue for connections, gray for no connections
     const linkColor = '#46AACB';
+    const noConnectionColor = '#535353';
     
     // Calculate max value for thickness scaling
     const maxValue = d3.max(links, d => d.value) || 1;
@@ -621,11 +733,38 @@ class ChordGraph {
     const tooltip = this.tooltip;
 
     // Filter out invalid links (where source or target index is out of bounds)
+    // Also ensure both sourceTheme and targetTheme exist in allThemes
     const validLinks = links.filter(link => {
-      return typeof link.source === 'number' && typeof link.target === 'number' &&
-             link.source >= 0 && link.source < nodes.length &&
-             link.target >= 0 && link.target < nodes.length &&
-             nodes[link.source] && nodes[link.target];
+      // Check indices are valid
+      if (typeof link.source !== 'number' || typeof link.target !== 'number' ||
+          link.source < 0 || link.source >= nodes.length ||
+          link.target < 0 || link.target >= nodes.length) {
+        return false;
+      }
+      
+      // Check nodes exist
+      if (!nodes[link.source] || !nodes[link.target]) {
+        return false;
+      }
+      
+      // Check that both themes exist in allThemes array
+      if (!allThemes.includes(link.sourceTheme) || !allThemes.includes(link.targetTheme)) {
+        console.warn(`Filtering out link with missing theme: ${link.sourceTheme} -> ${link.targetTheme}`);
+        return false;
+      }
+      
+      // Check that node coordinates are valid
+      const sourceNode = nodes[link.source];
+      const targetNode = nodes[link.target];
+      if (!sourceNode || !targetNode ||
+          typeof sourceNode.x !== 'number' || typeof sourceNode.y !== 'number' ||
+          typeof targetNode.x !== 'number' || typeof targetNode.y !== 'number' ||
+          isNaN(sourceNode.x) || isNaN(sourceNode.y) ||
+          isNaN(targetNode.x) || isNaN(targetNode.y)) {
+        return false;
+      }
+      
+      return true;
     });
     
     // Draw links (curved paths) with thickness based on connection count, fixed color
@@ -645,25 +784,25 @@ class ChordGraph {
         enter => enter.append('path')
           .attr('class', 'link')
           .attr('d', linkPath)
-          .attr('stroke', linkColor)
+          .attr('stroke', d => d.value > 0 ? linkColor : noConnectionColor)
           .attr('stroke-width', d => thicknessScale(d.value))
           .attr('fill', 'none')
-          .attr('opacity', 0.9)
-          .style('stroke', linkColor)
+          .attr('opacity', d => d.value > 0 ? 0.9 : 0.3)
+          .style('stroke', d => d.value > 0 ? linkColor : noConnectionColor)
           .style('stroke-width', d => thicknessScale(d.value))
           .call(enter => enter.transition()
             .duration(this.transitionDuration)
-            .attr('opacity', 0.9)
+            .attr('opacity', d => d.value > 0 ? 0.9 : 0.3)
           ),
         update => update
           .call(update => update.transition()
             .duration(this.transitionDuration)
             .attr('d', linkPath)
-            .attr('stroke', linkColor)
-            .style('stroke', linkColor)
+            .attr('stroke', d => d.value > 0 ? linkColor : noConnectionColor)
+            .style('stroke', d => d.value > 0 ? linkColor : noConnectionColor)
             .attr('stroke-width', d => thicknessScale(d.value))
             .style('stroke-width', d => thicknessScale(d.value))
-            .attr('opacity', 0.9)
+            .attr('opacity', d => d.value > 0 ? 0.9 : 0.3)
           ),
         exit => exit
           .call(exit => exit.transition()
@@ -782,8 +921,8 @@ class ChordGraph {
               
               // Add circle for hover/click interactions (invisible but functional)
               // Make it larger to cover the whole image area, including hover scale-up
-              const hoverSize = 75; // Match the hover size
-              nodeGroup.append('circle')
+              const hoverSize = 90; // Increased to ensure full coverage
+              const hoverCircle = nodeGroup.append('circle')
                 .attr('r', hoverSize / 2) // Larger radius to cover entire image area
                 .attr('cx', 0) // Center at origin
                 .attr('cy', 0) // Center at origin
@@ -791,41 +930,30 @@ class ChordGraph {
                 .attr('stroke', 'none')
                 .style('cursor', 'pointer')
                 .style('pointer-events', 'auto')
-                .raise(); // Ensure it's on top for event handling
+                .attr('class', 'hover-area'); // Add class for debugging
+              
+              // Ensure hover circle is on top
+              hoverCircle.raise();
             });
 
           const labelGroup = nodeEnter.append('g')
             .attr('class', 'label-group')
             .style('pointer-events', 'none'); // Don't block events from image area
 
-          labelGroup.append('rect')
-            .attr('class', 'node-label-bg')
-            .attr('rx', 3)
-            .attr('fill', '#1a1a1a')
-            .attr('stroke', '#333333')
-            .attr('stroke-width', 1)
-            .attr('opacity', 0.9)
-            .style('pointer-events', 'none'); // Don't block events
+          // Remove the box/rectangle - only show text
+          // labelGroup.append('rect') - REMOVED
 
           labelGroup.append('text')
             .attr('class', 'node-text')
             .attr('dy', 40)
             .attr('text-anchor', 'middle')
-            .style('font-family', "'Courier New', monospace")
+            .style('font-family', "'IBM Plex Sans', sans-serif")
             .style('font-size', '12px')
             .style('font-weight', '400')
-            .style('fill', '#cccccc')
+            .style('fill', '#FFFFFF') // White color
             .style('letter-spacing', '0.5px')
             .style('pointer-events', 'none')
-            .text(d => d.label)
-            .each(function() {
-              const bbox = this.getBBox();
-              d3.select(this.parentNode).select('rect')
-                .attr('x', bbox.x - 4)
-                .attr('y', bbox.y - 2)
-                .attr('width', bbox.width + 8)
-                .attr('height', bbox.height + 4);
-            });
+            .text(d => d.label);
 
           return nodeEnter.call(enter => enter.transition()
             .duration(this.transitionDuration)
@@ -846,12 +974,20 @@ class ChordGraph {
       );
 
     // Node hover interactions — show movie popup for movies in this theme and window
-    // Use mouseenter instead of mouseover for more reliable triggering
+    // Attach to both the node group and hover circle for better coverage
     node.on('mouseenter', (event, d) => {
       event.stopPropagation();
-      console.log('Mouseenter on node:', d.label, 'Popup exists:', !!this.moviePopup);
+      console.log('Mouseenter on node:', d.label, 'Popup exists:', !!this.moviePopup, 'Target:', event.target);
+      
+      // Ensure popup is initialized
       if (!this.moviePopup) {
-        console.error('Popup not initialized!');
+        console.error('Popup not initialized! Reinitializing...');
+        // Try to reinitialize if missing
+        this.initializeSVG({ width: this.width, height: this.height });
+      }
+      
+      if (!this.moviePopup || !this.moviePopup.node()) {
+        console.error('Popup still not available after reinit');
         return;
       }
       const nodeGroup = d3.select(event.currentTarget);
@@ -868,12 +1004,19 @@ class ChordGraph {
           .attr('y', -hoverSize / 2);
       }
 
-        // Highlight connected chords
+        // Highlight connected chords (only blue ones, not gray)
         d3.selectAll('.link')
           .filter((l) => l.source === d.index || l.target === d.index)
-          .attr('stroke', '#46AACB')
-          .attr('opacity', 1)
-          .raise();
+          .each(function(linkData) {
+            const currentStroke = d3.select(this).attr('stroke');
+            // Only highlight if it's a blue link (has connections), not gray
+            if (currentStroke === '#46AACB' || linkData.value > 0) {
+              d3.select(this)
+                .attr('stroke', '#46AACB')
+                .attr('opacity', 1)
+                .raise();
+            }
+          });
 
       // Find movies in the current window that have this theme
       const theme = d.label;
@@ -904,21 +1047,73 @@ class ChordGraph {
       const nodeY = d.y;
       
       // Always show popup when hovering, even if no movies (show theme info)
-      this.showMoviePopup(moviesForTheme, startYear, theme, nodeX, nodeY);
+      console.log('Calling showMoviePopup with:', { theme, moviesCount: moviesForTheme.length, nodeX, nodeY });
+      console.log('Popup before call:', {
+        exists: !!this.moviePopup,
+        nodeExists: !!(this.moviePopup && this.moviePopup.node()),
+        currentDisplay: this.moviePopup ? window.getComputedStyle(this.moviePopup.node()).display : 'N/A'
+      });
+      
+      // Force show the popup
+      try {
+        this.showMoviePopup(moviesForTheme, startYear, theme, nodeX, nodeY);
+        
+        // Immediately check and force visibility
+        setTimeout(() => {
+          if (this.moviePopup && this.moviePopup.node()) {
+            const popup = this.moviePopup.node();
+            const styles = window.getComputedStyle(popup);
+            console.log('Popup styles after show:', {
+              display: styles.display,
+              visibility: styles.visibility,
+              opacity: styles.opacity,
+              zIndex: styles.zIndex,
+              left: styles.left,
+              top: styles.top,
+              position: styles.position
+            });
+            
+            // Force show if still hidden - use !important via setProperty
+            if (styles.display === 'none' || styles.visibility === 'hidden' || parseFloat(styles.opacity) < 0.1) {
+              console.warn('Popup is still hidden, forcing visibility with !important');
+              popup.style.setProperty('display', 'block', 'important');
+              popup.style.setProperty('visibility', 'visible', 'important');
+              popup.style.setProperty('opacity', '1', 'important');
+              popup.style.setProperty('z-index', '99999', 'important');
+            }
+          } else {
+            console.error('Popup node is null in timeout check');
+          }
+        }, 10);
+      } catch (error) {
+        console.error('Error showing popup:', error, error.stack);
+      }
     })
     .on('mouseout', (event, d) => {
       const nodeGroup = d3.select(event.currentTarget);
-      nodeGroup.select('circle')
-        .transition()
-        .duration(200)
-        .attr('r', 20)
-        .attr('stroke', '#46AACB')
-        .attr('stroke-width', 2);
+      const image = nodeGroup.select('image');
+      const baseSize = 60; // Base size for the image
 
-      // Reset chord colors
+      if (!image.empty()) {
+        image
+          .transition()
+          .duration(200)
+          .attr('width', baseSize)
+          .attr('height', baseSize)
+          .attr('x', -baseSize / 2)
+          .attr('y', -baseSize / 2);
+      }
+
+      // Reset chord colors (restore original colors: blue for connections, gray for no connections)
       d3.selectAll('.link')
-        .attr('stroke', '#46AACB')
-        .attr('opacity', 0.4);
+        .each(function(linkData) {
+          const weight = linkData.value || 0;
+          const strokeColor = weight > 0 ? '#46AACB' : '#535353';
+          const opacity = weight > 0 ? 0.9 : 0.3;
+          d3.select(this)
+            .attr('stroke', strokeColor)
+            .attr('opacity', opacity);
+        });
 
       this.hideMoviePopup();
     });
@@ -1102,7 +1297,7 @@ class ChordGraph {
     legendGroup.append('text')
       .attr('x', 0)
       .attr('y', -5)
-      .attr('font-family', "'Courier New', monospace")
+      .attr('font-family', "'IBM Plex Sans', sans-serif")
       .attr('font-size', '11px')
       .attr('fill', '#cccccc')
       .text('Connections');
@@ -1110,7 +1305,7 @@ class ChordGraph {
     legendGroup.append('text')
       .attr('x', 0)
       .attr('y', legendHeight + 20)
-      .attr('font-family', "'Courier New', monospace")
+      .attr('font-family', "'IBM Plex Sans', sans-serif")
       .attr('font-size', '10px')
       .attr('fill', '#999999')
       .text(`${Math.round(minValue)}`);
@@ -1119,7 +1314,7 @@ class ChordGraph {
       .attr('x', legendWidth)
       .attr('y', legendHeight + 20)
       .attr('text-anchor', 'end')
-      .attr('font-family', "'Courier New', monospace")
+      .attr('font-family', "'IBM Plex Sans', sans-serif")
       .attr('font-size', '10px')
       .attr('fill', '#999999')
       .text(`${Math.round(maxValue)}`);
@@ -1157,8 +1352,9 @@ class ChordGraph {
       return 0;
     }
 
-    // Fixed color for all links
+    // Color constants for links
     const linkColor = '#46AACB';
+    const noConnectionColor = '#535353';
     
     // If null, reset to default visuals based on overall cooccurrence
     if (!decade) {
@@ -1263,26 +1459,29 @@ class ChordGraph {
         const a = d.sourceTheme || (d.source && d.source.label) || d.source;
         const b = d.targetTheme || (d.target && d.target.label) || d.target;
         const weight = (windowCo[a] && windowCo[a][b]) ? windowCo[a][b] : 0;
-        const opacity = weight > 0 ? 0.9 : 0.08;
+        const opacity = weight > 0 ? 0.9 : 0.3;
         const strokeW = weight > 0 ? thicknessScale(weight) : 1;
+        const strokeColor = weight > 0 ? linkColor : noConnectionColor; // Blue for connections, gray for no connections
         
         // Only update if both themes exist in the current window
-        if (!a || !b || (!windowCo[a] && !windowCo[b])) {
-          // Hide links that don't have valid connections
+        if (!a || !b) {
+          // Show links in gray even if themes don't exist in current window
           d3.select(this).transition().duration(300)
-            .style('opacity', 0)
-            .style('display', 'none');
+            .attr('stroke', noConnectionColor)
+            .style('stroke', noConnectionColor)
+            .style('opacity', 0.3)
+            .style('display', 'block');
           return;
         }
         
-        // Apply fixed color and thickness based on connections
+        // Apply color: blue for connections, gray for no connections
         d3.select(this).transition().duration(300)
-          .attr('stroke', linkColor)
-          .style('stroke', linkColor)
+          .attr('stroke', strokeColor)
+          .style('stroke', strokeColor)
           .attr('stroke-width', strokeW)
           .style('stroke-width', strokeW)
           .style('opacity', opacity)
-          .style('display', weight > 0 ? 'block' : 'none');
+          .style('display', 'block'); // Always show, regardless of weight
       } catch(e){}
     });
 

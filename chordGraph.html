@@ -203,13 +203,20 @@
 			#chordContainer .node-text {
 				fill: #cccccc !important;
 				font-size: 12px !important;
+				font-family: 'IBM Plex Sans', sans-serif !important;
 			}
 			
+			/* Label background removed - no box around text */
 			#chordContainer .node-label-bg {
-				fill: #1a1a1a !important;
-				opacity: 0.9 !important;
-				stroke: #333333 !important;
-				stroke-width: 1px !important;
+				display: none !important;
+				opacity: 0 !important;
+				visibility: hidden !important;
+			}
+			
+			/* Text color set to white */
+			#chordContainer .node-text {
+				fill: #FFFFFF !important;
+				font-family: 'IBM Plex Sans', sans-serif !important;
 			}
 
 			/* remove default cursor on chord graph nodes */
@@ -217,25 +224,25 @@
     cursor: none !important;
 }
 
-			/* Movie popup styling */
-			.movie-popup {
+			/* Movie popup styling - black and transparent overlay */
+			.movie-popup,
+			#chordGraphPopup {
 				position: fixed !important;
 				z-index: 99999 !important;
-				background: rgba(140, 140, 140, 0.9) !important;
+				background: rgba(0, 0, 0, 0.85) !important;
 				color: #ffffff !important;
 				border-radius: 8px !important;
-				padding: 24px !important;
-				min-width: 320px !important;
-				max-width: 420px !important;
-				font-family: 'Courier New', monospace !important;
+				padding: 32px !important;
+				min-width: 400px !important;
+				max-width: 500px !important;
+				font-family: 'IBM Plex Sans', sans-serif !important;
 				font-size: 13px !important;
 				max-height: 600px !important;
 				overflow-y: auto !important;
-				backdrop-filter: blur(2px) !important;
-				box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+				backdrop-filter: blur(4px) !important;
+				box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8) !important;
+				border: 1px solid rgba(255, 255, 255, 0.2) !important;
 				pointer-events: auto !important;
-				display: block !important;
-				visibility: visible !important;
 			}
 
 			
@@ -248,27 +255,6 @@
 			/* Timeline Filter */
 			.timeline-container {
 				margin-top: 40px;
-			}
-
-			.timeline-header {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				margin-bottom: 16px;
-			}
-
-			.timeline-filter-label {
-				font-size: 11px;
-				color: #888888;
-				letter-spacing: 1.5px;
-				text-transform: uppercase;
-			}
-
-			.decade-value {
-				font-size: 16px;
-				font-weight: bold;
-				color: #ffffff;
-				letter-spacing: 1px;
 			}
 
 			.timeline-track {
@@ -408,10 +394,6 @@
 			
 			<!-- Timeline Filter -->
 			<div class="timeline-container">
-				<div class="timeline-header">
-					<span class="timeline-filter-label">Filter by Year Window:</span>
-					<span class="decade-value" id="decadeValue">All</span>
-				</div>
 				<!-- <div class="timeline-track" id="timelineTrack">
 					<div class="timeline-handle" id="timelineHandle"></div>
 				</div> -->
@@ -452,12 +434,18 @@
 					return;
 				}
 
+				// Function to get current dimensions
+				const getDimensions = () => {
+					return {
+						width: Math.min(1400, window.innerWidth - 100),
+						height: Math.min(1000, window.innerHeight - 100)
+					};
+				};
+				
 				// Render all themes (no specific movie required)
 				try {
-					cg.render(null, {
-							width: Math.min(1400, window.innerWidth - 100),
-							height: Math.min(1000, window.innerHeight - 100)
-						});
+					const dims = getDimensions();
+					cg.render(null, dims);
 
 						// Center the visualization
 						setTimeout(() => {
@@ -469,6 +457,19 @@
 
 								// initialize decade visuals (show All)
 								if (cg && typeof cg.setDecade === 'function') cg.setDecade(null);
+								
+								// Handle window resize - re-render with new dimensions
+								let resizeTimeout;
+								window.addEventListener('resize', () => {
+									clearTimeout(resizeTimeout);
+									resizeTimeout = setTimeout(() => {
+										const newDims = getDimensions();
+										cg.render(null, newDims);
+										if (cg && typeof cg.setDecade === 'function') {
+											cg.setDecade(cg.currentDecade);
+										}
+									}, 250);
+								});
 							} catch(e) {}
 						}, 100);
 					} catch(e) {
@@ -528,16 +529,13 @@
 				};
 
 				function updateDecadeDisplay(startYear, skipAnimation = false) {
-					const decadeValue = document.getElementById('decadeValue');
 					const decadeTitle = document.getElementById('decadeTitle');
 					const sidebarText = document.getElementById('sidebarText');
 
 					let content = null;
 					if (!startYear) {
-						decadeValue.textContent = 'All';
 						content = decadeContent[null];
 					} else {
-						decadeValue.textContent = `${startYear}-${startYear + yearStep - 1}`;
 						// try to reuse the nearest decade description (e.g., 1960s) if available
 						const decadeKey = Math.floor(startYear / 10) * 10;
 						content = decadeContent[decadeKey] || decadeContent[null];

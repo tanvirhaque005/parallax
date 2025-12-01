@@ -85,6 +85,7 @@
       menuItemsEl.style.transform = 'translateX(0)';
       menuItemsEl.style.width = 'auto';
       menuItemsEl.style.overflow = 'visible';
+      menuItemsEl.style.pointerEvents = 'auto';
     }
     
     // Set items to visible state immediately
@@ -92,13 +93,56 @@
       item.style.opacity = '1';
       item.style.transform = 'translateX(0)';
       item.style.transition = 'none'; // No transition on initial load
+      item.style.pointerEvents = 'auto';
     });
     
-    // Set line to visible state
-    if (progressLine) {
+    // Set line to visible state and ensure correct height IMMEDIATELY
+    // Calculate height synchronously after items are in DOM
+    if (progressLine && menuItemsList) {
+      // Ensure items are fully visible and laid out
+      menuItemsList.style.opacity = '1';
+      menuItemsList.style.transform = 'translateX(0)';
+      menuItemsList.style.width = 'auto';
+      menuItemsList.style.overflow = 'visible';
+      menuItemsList.style.pointerEvents = 'auto';
+      
+      // Force reflow to ensure layout
+      void menuItemsList.offsetHeight;
+      
+      // Calculate height immediately
+      let itemsHeight = menuItemsList.offsetHeight;
+      
+      // If height is still 0 or too small, calculate from individual items
+      if (itemsHeight <= 0 || itemsHeight < 100) {
+        let totalHeight = 0;
+        items.forEach((item) => {
+          const itemRect = item.getBoundingClientRect();
+          totalHeight += itemRect.height;
+        });
+        // Add gap between items (6px per gap, n-1 gaps for n items)
+        const gap = 6;
+        totalHeight += (items.length - 1) * gap;
+        if (totalHeight > 0) {
+          itemsHeight = totalHeight;
+        }
+      }
+      
+      // Set height immediately without transition
+      if (itemsHeight > 0) {
+        progressLine.style.transition = 'none';
+        progressLine.style.height = `${itemsHeight}px`;
+        // Force reflow
+        void progressLine.offsetHeight;
+      }
+      
       progressLine.style.transform = 'translateX(0)';
       progressLine.style.opacity = '1';
       progressLine.style.transition = 'none'; // No transition on initial load
+      
+      // Re-enable transition after a delay to prevent glitches
+      setTimeout(() => {
+        progressLine.style.transition = '';
+      }, 300);
     }
     
     // Re-enable transitions after a brief delay
@@ -117,10 +161,45 @@
         // Use double requestAnimationFrame to ensure layout is complete
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
+            // Force menu items to be visible to get accurate height measurement
+            const wasCollapsed = menuContainer.classList.contains('collapsed');
+            const originalOpacity = menuItemsList.style.opacity;
+            const originalTransform = menuItemsList.style.transform;
+            const originalWidth = menuItemsList.style.width;
+            const originalOverflow = menuItemsList.style.overflow;
+            const originalPointerEvents = menuItemsList.style.pointerEvents;
+            
+            // Temporarily make items fully visible to measure accurately
+            menuItemsList.style.opacity = '1';
+            menuItemsList.style.transform = 'translateX(0)';
+            menuItemsList.style.width = 'auto';
+            menuItemsList.style.overflow = 'visible';
+            menuItemsList.style.pointerEvents = 'auto';
+            
+            // Force a reflow to ensure accurate measurement
+            void menuItemsList.offsetHeight;
+            
             const itemsHeight = menuItemsList.offsetHeight;
             if (itemsHeight > 0) {
+              // Set height without transition to prevent glitches
+              const currentTransition = progressLine.style.transition;
+              progressLine.style.transition = 'none';
               progressLine.style.height = `${itemsHeight}px`;
+              // Force a reflow
+              void progressLine.offsetHeight;
+              // Restore transition after height is set
+              progressLine.style.transition = currentTransition || '';
             }
+            
+            // Restore original styles
+            if (wasCollapsed) {
+              menuContainer.classList.add('collapsed');
+            }
+            menuItemsList.style.opacity = originalOpacity;
+            menuItemsList.style.transform = originalTransform;
+            menuItemsList.style.width = originalWidth;
+            menuItemsList.style.overflow = originalOverflow;
+            menuItemsList.style.pointerEvents = originalPointerEvents;
             
             // Position blue dot based on active menu item's blue bar position
             const currentIdx = parseInt(progressDot.dataset.currentIndex) || 0;
