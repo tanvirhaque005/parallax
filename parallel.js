@@ -338,7 +338,7 @@ function buildFixedAxisLabels() {
     makeLabel("RELEASE YEAR", 40, yBot + 26);
 }
 
-function buildSlopeExamples() {
+/* function buildSlopeExamples() {
 
     const SLOPE_SCALE = 0.55;   // << master size control (0.5 = half size, 1 = original)
 
@@ -394,7 +394,7 @@ function buildSlopeExamples() {
 
 
 
-buildSlopeExamples();
+buildSlopeExamples(); */
 
 
 // -----------------------------

@@ -151,12 +151,40 @@
 
     .intro-description {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 1rem;
+      font-size: 1.5rem;
       color: #ffffff;
       line-height: 1.6;
       margin: 0 0 40px 0;
       max-width: 600px;
       font-weight: 300;
+    }
+
+    /* Slope Example Legend */
+    .slope-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 24px 0 32px 0;
+    }
+
+    .slope-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slope-line {
+      flex-shrink: 0;
+      width: 32px;
+      height: 16px;
+    }
+
+    .slope-legend-text {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 300;
+      letter-spacing: 0.2px;
     }
 
 
@@ -748,15 +776,29 @@
     <!-- Intro Page (Page 1) -->
     <div class="page-slide active intro-page" id="introPage">
       <div class="intro-panel">
-        <div class="intro-category">FICTION VS REALITY TIMELINE</div>
-        <h1 class="intro-title">How far into the future did they dare to look?</h1>
+        <div class="intro-category">DEPICTED YEAR VS REALITY TIMELINE</div>
+        <h1 class="intro-title">How far into the future did<br>they dare to look?</h1>
         <p class="intro-description">
-          This timeline compares a film’s release year with the future year it imagines. The “slope” between those two points reflects ambition: Short slope → cautious, near-future realism, Long slope → bold speculation, far-future world-building. These slopes reveal how cultural optimism, anxiety, and tech progress shaped our willingness to imagine the unknown.
+          This timeline compares a film's release year with the future year it imagines. Scroll to see how ambition rises and falls across decades.
           </p>
-          <p class="intro-description">
-          Each slope shows the distance between a film's release year and the future it imagines. Short slopes = near futures Long slopes = bold leaps across centuries. Now that you've seen how motifs evolve, let's explore how far films leap into the future.</p>
+          <!-- <p class="intro-description"> -->
+          <!-- Each slope shows the distance between a film's release year and the future it imagines. Short slopes = near futures Long slopes = bold leaps across centuries. Now that you've seen how motifs evolve, let's explore how far films leap into the future.</p> -->
         
-        
+        <!-- Slope Example Legend -->
+        <div class="slope-legend">
+          <div class="slope-legend-item">
+            <svg class="slope-line" width="32" height="16" viewBox="0 0 32 16">
+              <line x1="12" y1="14" x2="18" y2="3" stroke="#7EC3E3" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+            <span class="slope-legend-text">Steeper = Small Time Leap</span>
+          </div>
+          <div class="slope-legend-item">
+            <svg class="slope-line" width="32" height="16" viewBox="0 0 32 16">
+              <line x1="4" y1="13" x2="26" y2="9" stroke="#7EC3E3" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+            <span class="slope-legend-text">Flatter = Big Time Leap</span>
+          </div>
+        </div>
 
         <div class="first-decade-button" id="firstDecadeBtn">
           <span>BEGIN</span>
