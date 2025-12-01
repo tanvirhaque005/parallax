@@ -343,7 +343,7 @@ function buildSlopeExamples() {
     const slopeGroup = S("g");
     slopeGroup.setAttribute(
         "transform",
-        `translate(500,80) scale(${SLOPE_SCALE})`
+        `translate(480,135) scale(${SLOPE_SCALE})`
     );
     slopeGroup.setAttribute("id", "svgSlopeExamples");
 
@@ -616,182 +616,181 @@ const leftCardContent = {
     1925: {
       title: "1925–1929",
       tags: [
-        "10–30 YEAR SLOPE",
-        "CONSERVATIVE FUTURES",
-        "POSTWAR UNCERTAINTY"
+        "ROARING 20'S",
+        "INVENTION OF THE FUEL ROCKET",
+        "TRANSATLANTIC PHONE CALLS"
       ],
-      desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution;"
+      desc: "With the rise of pulp magazines in the roaring 20's, notions of exploration and technology inherent to science fiction began to gain traction, as shown in the few sci-fi films that existed at the time."
     },
     1930: {
         title: "1930-1934",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "GREAT DEPRESSION",
+          "PLUTO DISCOVERED",
+          "PROHIBITION ENDS"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "The early 30's was shaped by the Great Depression, contributing to the consumption of more cheap escapist entertainment. Sci-fi continued to fluorish under radio, sound-cinema, and pulp comics."
       },
       1935: {
         title: "1935-1939",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "GREAT DEPRESSION",
+          "GLOBAL TENSIONS RISE",
+          "WW2 BEGINS"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "Anxieties from the depression and ongoing global tensions contribute to the continued flourishing of sci fi and other escapist media. These tensions culminate in World War II in 1939."
       },
       1940: {
         title: "1940-1944",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "WW2 ROARS ON",
+          "PEARL HARBOR ATTACK",
+          "FALL OF FRANCE"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "With the fall of France and the Pearl Harbor Attack inciting American intervention, WWII develops into a truly global conflict. With resources and labor redirected to the war effort, less is dedicated to sci fi entertainment."
       },
     1945: {
         title: "1945-1949",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "WW2 ENDS",
+          "ATOMIC BOMBS DROPPED",
+          "COLD WAR BEGINS"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "Fewer sci fi media is produced, as during the mid-to-late 40's most resources were dedicated to the war effort. Sci fi media produced tends to serve as commentary to contemporary issues."
       },
       1950: {
         title: "1950-1954",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "COLD WAR",
+          "KOREAN WAR",
+          "COLORED TV INVENTED"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "As nuclear fear grows and the Cold War rages in the form of proxy conflicts, stories mix caution and curiosity. Sci fi is overall less speculative and more reflective of contemporary concerns."
       },
       1955: {
         title: "1955–1959",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
-        ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+          "COLD WAR","SPACE RACE",
+          "VIETNAM WAR BEGINS"
+                ],
+        desc: "The Space Race popularized all forms of sci fi, including those with larger time leaps. With newer technologies from the decade, directors are encouraged to be more ambitious."
       },
       1960: {
         title: "1960-1964",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "COLD WAR",
+          "LASERS INVENTED",
+          "CUBAN MISSILE CRISIS"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "Like in the late 50's, competition between US and Russia propelled technological innovation. These contributed to the popularization of sci fi, and technologies themselves enabled directors to be more ambitious."
       },
       1965: {
         title: "1965-1969",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "COLD WAR",
+          "MOON LANDING",
+          "VIETNAM WAR ESCALATES"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "The late 60's was characterized by concerns from the Vietnam War as well as scientific inspiration from the moon landings. Both propelled the production and consumption of ambitious sci fi."
       },
       1970: {
         title: "1970-1974",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+            "COLD WAR",
+          "ENVIRONMENTAL MOVEMENT",
+          "EMAIL INVENTED",
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "Scientific and technological innovation booms, while environmental concerns also rise. Both contribute to the production and consumption of speculative sci fi."
       },
       1975: {
         title: "1975-1979",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "COLD WAR",
+          "APPLE COMPUTER INVENTED",
+          "THREE MILE ISLAND NUCLEAR DISASTER"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "Like in the first half of the decade, scientific and technological innovation booms, while environmental/nuclear concerns also rise. Both contribute to the production and consumption of speculative sci fi."
       },
       1980: {
         title: "1980-1984",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+            "COLD WAR",
+          "REAGAN ELECTED",
+          "CD FORMAT LAUNCHED"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "Like in past decades, sientific anxieties and discoveries propel production of speculative sci fi ficiton."
       },
       1985: {
         title: "1985-1989",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "COLD WAR",
+          "STOCK MARKET BOOMS",
+          "CHERNOBYL DISASTER"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "A booming economy, paried with continued sientific anxieties and discoveries, propel production of speculative sci fi ficiton."
       },
       1990: {
         title: "1990-1994",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "COLD WAR ENDS",
+          "INTERNET COMMERCIALIZATION",
+          "US DOMINANCE"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "With the fall of the Soviet Union and the end of the Cold War, America is positioned in economic dominance. This, paired with the spread of scientific breakthroughs like the internet, further popularize ambitious sci fi."
       },
       1995: {
         title: "1995-1999",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "DOT COM BOOM",
+          "WINDOWS 95 LAUNCHES",
+          "GOOGLE FOUNDED"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "The creation and spread of advanced technological innovations facilitate the production and spread of more ambitious forms of media, including sci fi entertainment."
       },
       2000: {
         title: "2000-2004",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "DOT COM CRASH",
+          "9/11 ATTACKS",
+          "HUMAN GENOME COMPLETED"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "As scientific breakthroughs continued and sci fi continued to fluorish, terrorism and geopolitical tensions began to rise once again."
       },
       2005: {
         title: "2005-2009",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "GREAT RECESSION",
+          "iPHONE INTRODUCED",
+          "HURRICANE KATRINA"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "Economic recession, global conflict, and envrionmental disasters accompanied scientific innovation. Sci fi continued to boom, but directors began turning inwards to contemporary  anxieties."
       },
       2010: {
         title: "2010-2014",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "Edward Snowden leaks",
+          "SYRIAN WAR",
+          "CRISPR BREAKTHROUGH"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "Rising anxieties about geopolitics, new inventions like CRISPR, and government surveillance prompt many directors to look even more to contemporary issues as opposed to those from other time periods."
       },
       2015: {
         title: "2015-2019",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "Brexit",
+          "#METOO MOVEMENT",
+          "Paris Climate Accord"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "Geopolitical volatility, rising nationalism, and environmental urgency define the period. These compounding issues prompt many directors to look to contemporary anxieties. "
       },
       2020: {
         title: "2020-2024",
         tags: [
-          "10–30 YEAR SLOPE",
-          "CONSERVATIVE FUTURES",
-          "POSTWAR UNCERTAINTY"
+          "Covid pandemic",
+          "invasion of Ukraine",
+          "AI boom"
         ],
-        desc: "After WWII, filmmakers projected futures only a few years ahead—reflecting global anxiety, nuclear fear, and uncertain political stability. The Space Race added curiosity but also caution; imagination wasn’t yet ready to leap centuries forward. Futures feel like slightly altered versions of the present and technologies are incremental, not radical."
+        desc: "Anxieties from the pandemic, geopolitical conflicts, and misuse of powerful technologies like A.I. feed more into scientific and technological anxieties about contemporary periods. Many directors focus on these modern issues instead of fantastical ones."
       },
   }
   
