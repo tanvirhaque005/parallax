@@ -123,8 +123,8 @@
 			.sidebar {
 				position: fixed;
 				left: 40px;
-				top: 120px;
-				width: 320px;
+				top: 200px;
+				width: 480px;
 				z-index: 50;
 			}
 			
@@ -138,7 +138,7 @@
 			
 			.decade-title {
 				font-size: 56px;
-				font-weight: bold;
+				font-weight: 400;
 				margin: 0 0 24px 0;
 				color: #ffffff;
 				letter-spacing: 2px;
@@ -146,12 +146,35 @@
 			}
 
 			.sidebar-text {
-				font-size: 15px;
+				font-size: 18px;
 				line-height: 1.8;
-				color: #aaaaaa;
+				color: #ffffff;
 				margin-bottom: 40px;
-				max-width: 280px;
+				max-width: 440px;
 				transition: opacity 0.2s ease;
+			}
+
+			/* Pill tags style (from parallel.html) */
+			.sidebar-pills {
+				display: flex;
+				gap: 12px;
+				flex-wrap: wrap;
+				margin-bottom: 16px;
+				transition: opacity 0.2s ease;
+			}
+
+			.sidebar-pill {
+				padding: 6px 16px;
+				border-radius: 999px;
+				font-size: 10px;
+				font-weight: 500;
+				letter-spacing: 1px;
+				border: 1px solid rgba(255,255,255,0.45);
+				color: rgba(255,255,255,0.90);
+				background: rgba(255,255,255,0.03);
+				backdrop-filter: blur(4px);
+				text-transform: uppercase;
+				display: inline-block;
 			}
 			
 			/* Timeline Bar */
@@ -275,8 +298,8 @@
 			}
 			
 			#chordContainer .node-text {
-				fill: #cccccc !important;
-				font-size: 12px !important;
+				fill: #FFFFFF !important;
+				font-size: 18px !important;
 				font-family: 'IBM Plex Sans', sans-serif !important;
 			}
 			
@@ -285,12 +308,6 @@
 				display: none !important;
 				opacity: 0 !important;
 				visibility: hidden !important;
-			}
-			
-			/* Text color set to white */
-			#chordContainer .node-text {
-				fill: #FFFFFF !important;
-				font-family: 'IBM Plex Sans', sans-serif !important;
 			}
 
 			/* remove default cursor on chord graph nodes */
@@ -504,7 +521,7 @@
 				padding: 10px 20px;
 				border-radius: 999px;
 				font-size: 14px;
-				font-weight: 600;
+				font-weight: 400;
 				letter-spacing: 1.6px;
 				border: 1px solid rgba(255,255,255,0.45);
 				color: rgba(255,255,255,0.90);
@@ -827,8 +844,8 @@
 
 				<!-- Sidebar Content -->
 		<div class="sidebar">
-			<div class="sidebar-label">Motifs</div>
 			<h1 class="decade-title" id="decadeTitle">All 5-Year Windows</h1>
+			<div class="sidebar-pills" id="sidebarPills"></div>
 			<p class="sidebar-text" id="sidebarText">
 				Drag the timeline below to filter movies by decade and see how technological themes evolve across eras.
 			</p>
@@ -960,67 +977,137 @@
 				const decadeContent = {
 					null: {
 						title: 'All Decades',
-						text: 'Drag the timeline below to filter movies by decade and see how technological themes evolve across eras.'
+						text: 'Drag the timeline below to filter movies by decade and see how technological themes evolve across eras.',
+						pills: []
 					},
 					1950: {
 						title: '1950s',
-						text: 'The dawn of the atomic age. Cold War anxieties manifest in tales of alien invasions and nuclear mutations. Science fiction emerges as a serious literary genre.'
+						text: 'The dawn of the atomic age. Cold War anxieties manifest in tales of alien invasions and nuclear mutations. Science fiction emerges as a serious literary genre.',
+						pills: ['ATOMIC', 'COLDWAR']
+					},
+					1955: {
+						title: '1955-1959',
+						text: 'The dawn of the atomic age. Cold War anxieties manifest in tales of alien invasions and nuclear mutations. Science fiction emerges as a serious literary genre.',
+						pills: ['SPUTNIK', 'SPACE']
 					},
 					1960: {
 						title: '1960s',
-						text: 'Space race optimism meets counterculture rebellion. From lunar landings to dystopian warnings, the decade explores both the promise and peril of progress.'
+						text: 'Space race optimism meets counterculture rebellion. From lunar landings to dystopian warnings, the decade explores both the promise and peril of progress.',
+						pills: ['MOON', 'REBELLION']
+					},
+					1965: {
+						title: '1965-1969',
+						text: 'Space race optimism meets counterculture rebellion. From lunar landings to dystopian warnings, the decade explores both the promise and peril of progress.',
+						pills: ['APOLLO', 'COUNTERCULTURE']
 					},
 					1970: {
 						title: '1970s',
-						text: 'Post-apocalyptic visions and ecological collapse. Growing environmental consciousness and economic uncertainty reshape sci-fi into darker, more cynical narratives.'
+						text: 'Post-apocalyptic visions and ecological collapse. Growing environmental consciousness and economic uncertainty reshape sci-fi into darker, more cynical narratives.',
+						pills: ['ECOLOGY', 'OIL']
+					},
+					1975: {
+						title: '1975-1979',
+						text: 'Post-apocalyptic visions and ecological collapse. Growing environmental consciousness and economic uncertainty reshape sci-fi into darker, more cynical narratives.',
+						pills: ['STAGFLATION', 'APOCALYPSE']
 					},
 					1980: {
 						title: '1980s',
-						text: 'Cyberpunk emerges as computers enter homes. Corporate dystopias, virtual realities, and the merger of human and machine define a new technological anxiety.'
+						text: 'Cyberpunk emerges as computers enter homes. Corporate dystopias, virtual realities, and the merger of human and machine define a new technological anxiety.',
+						pills: ['COMPUTERS', 'CORPORATE']
+					},
+					1985: {
+						title: '1985-1989',
+						text: 'Cyberpunk emerges as computers enter homes. Corporate dystopias, virtual realities, and the merger of human and machine define a new technological anxiety.',
+						pills: ['CYBERPUNK', 'VIRTUAL']
 					},
 					1990: {
 						title: '1990s',
-						text: 'The internet revolution begins. Virtual worlds, digital consciousness, and questioning reality itself become central themes as the millennium approaches.'
+						text: 'The internet revolution begins. Virtual worlds, digital consciousness, and questioning reality itself become central themes as the millennium approaches.',
+						pills: ['INTERNET', 'DIGITAL']
+					},
+					1995: {
+						title: '1995-1999',
+						text: 'The internet revolution begins. Virtual worlds, digital consciousness, and questioning reality itself become central themes as the millennium approaches.',
+						pills: ['Y2K', 'MATRIX']
 					},
 					2000: {
 						title: '2000s',
-						text: 'Post-9/11 surveillance states and the war on terror. Superhero narratives dominate as society grapples with security, privacy, and global connectivity.'
+						text: 'Post-9/11 surveillance states and the war on terror. Superhero narratives dominate as society grapples with security, privacy, and global connectivity.',
+						pills: ['9/11', 'SURVEILLANCE']
+					},
+					2005: {
+						title: '2005-2009',
+						text: 'Post-9/11 surveillance states and the war on terror. Superhero narratives dominate as society grapples with security, privacy, and global connectivity.',
+						pills: ['SUPERHERO', 'TERROR']
 					},
 					2010: {
 						title: '2010s',
-						text: 'AI awakening and climate crisis. Automation anxiety, social media dystopias, and existential questions about humanity\'s future in an age of machine intelligence.'
+						text: 'AI awakening and climate crisis. Automation anxiety, social media dystopias, and existential questions about humanity\'s future in an age of machine intelligence.',
+						pills: ['AI', 'CLIMATE']
+					},
+					2015: {
+						title: '2015-2019',
+						text: 'AI awakening and climate crisis. Automation anxiety, social media dystopias, and existential questions about humanity\'s future in an age of machine intelligence.',
+						pills: ['SOCIAL', 'AUTOMATION']
 					},
 					2020: {
 						title: '2020s',
-						text: 'Pandemic futures and multiverse theory. Reality becomes increasingly fluid as science fiction and present-day concerns blur into one another.'
+						text: 'Pandemic futures and multiverse theory. Reality becomes increasingly fluid as science fiction and present-day concerns blur into one another.',
+						pills: ['PANDEMIC', 'MULTIVERSE']
 					}
 				};
 
 				function updateDecadeDisplay(startYear, skipAnimation = false) {
 					const decadeTitle = document.getElementById('decadeTitle');
 					const sidebarText = document.getElementById('sidebarText');
+					const sidebarPills = document.getElementById('sidebarPills');
 
 					let content = null;
+					let displayTitle = '';
+					
 					if (!startYear) {
 						content = decadeContent[null];
+						displayTitle = content.title;
 					} else {
-						// try to reuse the nearest decade description (e.g., 1960s) if available
-						const decadeKey = Math.floor(startYear / 10) * 10;
-						content = decadeContent[decadeKey] || decadeContent[null];
+						// Generate 5-year range title (e.g., "1950-1954", "1955-1959")
+						const endYear = startYear + 4;
+						displayTitle = `${startYear}-${endYear}`;
+						
+						// Try to find exact match first, then nearest decade description
+						content = decadeContent[startYear];
+						if (!content) {
+							const decadeKey = Math.floor(startYear / 10) * 10;
+							content = decadeContent[decadeKey] || decadeContent[null];
+						}
 					}
 
 					if (content) {
+						// Update pills
+						if (sidebarPills) {
+							sidebarPills.innerHTML = '';
+							if (content.pills && content.pills.length > 0) {
+								content.pills.forEach(pillText => {
+									const pill = document.createElement('span');
+									pill.className = 'sidebar-pill';
+									pill.textContent = pillText;
+									sidebarPills.appendChild(pill);
+								});
+							}
+						}
+
 						if (skipAnimation) {
-							decadeTitle.textContent = content.title;
+							decadeTitle.textContent = displayTitle;
 							sidebarText.textContent = content.text;
 						} else {
 							decadeTitle.style.opacity = '0';
 							sidebarText.style.opacity = '0';
+							if (sidebarPills) sidebarPills.style.opacity = '0';
 							setTimeout(() => {
-								decadeTitle.textContent = content.title;
+								decadeTitle.textContent = displayTitle;
 								sidebarText.textContent = content.text;
 								decadeTitle.style.opacity = '1';
 								sidebarText.style.opacity = '1';
+								if (sidebarPills) sidebarPills.style.opacity = '1';
 							}, 100);
 						}
 					}
@@ -1366,7 +1453,7 @@ function positionLabelOverBar(labelEl, barEl, text) {
 						// Wait for box animation, then start typing
 						setTimeout(() => {
 							introMessage.classList.add('show-text');
-							const text = "Hover paths to reveal shared themes. Scroll to travel through time.";
+							const text = "Hover over paths to reveal shared themes. Scroll to travel through time.";
 							// Clear any existing text first
 							introText.textContent = '';
 							typeText(introText, text, 30);

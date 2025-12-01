@@ -262,7 +262,7 @@ class ChordGraph {
    * Load and parse the CSV data
    */
   async loadData(csvPath) {
-    const data = await d3.csv(csvPath);
+    const csvData = await d3.csv(csvPath);
 
     // Define allowed themes - only these will be included in the chord graph
     // Note: Using exact theme names as they appear in the CSV
@@ -280,8 +280,34 @@ class ChordGraph {
       // Note: 'Class Struggle' does not exist in the CSV data
     ]);
 
-    // Parse movies and extract only allowed themes
-    const allMovies = data.map(d => {
+    // Map tropes from movies_data_for_shelf.js to allowed themes
+    // Handle various naming variations
+    const tropeToThemeMap = {
+      'AI': 'AI',
+      'Artificial intelligence': 'AI',
+      'Artificial Intelligence': 'AI',
+      'Consciousness': 'Consciousness',
+      'Free Will': 'Free Will',
+      'Free will': 'Free Will',
+      'Social Control': 'Social Control',
+      'Social control': 'Social Control',
+      'Evolution': 'Evolution/Genetic Engineering',
+      'Evolution/Genetic Engineering': 'Evolution/Genetic Engineering',
+      'Evolution & Genetic Engineering': 'Evolution/Genetic Engineering',
+      'Space': 'Space',
+      'Space-travel': 'Space',
+      'Space Travel': 'Space',
+      'Space travel': 'Space',
+      'Interstellar Travel': 'Interstellar Travel',
+      'Interstellar travel': 'Interstellar Travel',
+      'Transcendence': 'Transcendence',
+      'Surveillance': 'Surveillance',
+      'Robotics': 'Robotics',
+      'Robotics': 'Robotics'
+    };
+
+    // Parse movies from CSV and extract only allowed themes
+    const csvMovies = csvData.map(d => {
       const themesStr = d['Sci-fi Categories'] || '';
       const allThemes = themesStr
         .split(',')
@@ -293,14 +319,76 @@ class ChordGraph {
 
       return {
         title: d['Movie / TV Show Name'],
-        year: d['Year'],
+        year: parseInt(d['Year']) || 0,
         themes: filteredThemes,
         rating: d['Rating']
       };
     });
 
-    // Only keep movies that have at least one of the allowed themes
-    this.movies = allMovies.filter(movie => movie.themes.length > 0);
+    // Load additional movies from movies_data_for_shelf.js
+    let additionalMovies = [];
+    try {
+      // Try to import the data from movies_data_for_shelf.js
+      let shelfData = [];
+      
+      // Try ES module import
+      const shelfDataModule = await import('./movies_data_for_shelf.js');
+      shelfData = shelfDataModule.default || shelfDataModule || [];
+      
+      if (shelfData && shelfData.length > 0) {
+        // Convert tropes to themes for movies that have tropes
+        additionalMovies = shelfData
+          .filter(movie => movie.tropes && Array.isArray(movie.tropes) && movie.tropes.length > 0)
+          .map(movie => {
+            // Map tropes to allowed themes
+            const themes = movie.tropes
+              .map(trope => {
+                // Normalize trope name (handle variations)
+                const normalizedTrope = String(trope).trim();
+                return tropeToThemeMap[normalizedTrope] || null;
+              })
+              .filter(theme => theme !== null && allowedThemes.has(theme));
+
+            return {
+              title: movie.title,
+              year: parseInt(movie.year) || 0,
+              themes: themes,
+              rating: null // Shelf data doesn't have ratings
+            };
+          })
+          .filter(movie => movie.themes.length > 0); // Only keep movies with valid themes
+        
+        console.log(`Loaded ${additionalMovies.length} additional movies from movies_data_for_shelf.js`);
+      }
+    } catch (error) {
+      console.warn('Could not load movies_data_for_shelf.js:', error);
+    }
+
+    // Merge CSV movies and additional movies, avoiding duplicates by title
+    const movieMap = new Map();
+    
+    // Add CSV movies first
+    csvMovies.forEach(movie => {
+      if (movie.themes.length > 0) {
+        movieMap.set(movie.title.toLowerCase(), movie);
+      }
+    });
+    
+    // Add additional movies (will overwrite CSV if duplicate title, or add new ones)
+    additionalMovies.forEach(movie => {
+      const key = movie.title.toLowerCase();
+      if (!movieMap.has(key)) {
+        movieMap.set(key, movie);
+      } else {
+        // If duplicate, merge themes (keep unique themes from both)
+        const existing = movieMap.get(key);
+        const combinedThemes = [...new Set([...existing.themes, ...movie.themes])];
+        existing.themes = combinedThemes;
+      }
+    });
+
+    // Convert map back to array
+    this.movies = Array.from(movieMap.values());
 
     // Collect all unique themes (will only be the allowed themes)
     this.movies.forEach(movie => {
@@ -310,7 +398,7 @@ class ChordGraph {
     // Pre-calculate co-occurrences for all theme pairs
     this.calculateCooccurrences();
 
-    console.log(`Loaded ${this.movies.length} movies with ${this.themes.size} unique themes`);
+    console.log(`Loaded ${this.movies.length} movies (${csvMovies.length} from CSV, ${additionalMovies.length} from shelf data) with ${this.themes.size} unique themes`);
     console.log(`Filtered to movies containing: ${Array.from(this.themes).join(', ')}`);
   }
 
@@ -961,7 +1049,7 @@ class ChordGraph {
             .attr('dy', 40)
             .attr('text-anchor', 'middle')
             .style('font-family', "'IBM Plex Sans', sans-serif")
-            .style('font-size', '12px')
+            .style('font-size', '18px')
             .style('font-weight', '400')
             .style('fill', '#FFFFFF') // White color
             .style('letter-spacing', '0.5px')
