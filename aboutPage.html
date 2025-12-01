@@ -78,6 +78,17 @@
             display: none;
         }
 
+        /* White square in top left corner */
+        .cover-page .top-left-box {
+            position: fixed;
+            top: 60px;
+            left: 60px;
+            width: 16px;
+            height: 16px;
+            background-color: #ffffff;
+            z-index: 10;
+        }
+
         .header-number {
             font-size: 11px;
             color: #888888;
@@ -92,7 +103,7 @@
         /* Cover Page Styles */
         .cover-page {
             justify-content: flex-start;
-            padding-top: 50vh;
+            padding: 0;
             position: relative;
         }
 
@@ -108,17 +119,17 @@
             text-transform: uppercase;
             margin-bottom: 20px;
             opacity: 0.9;
-            /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif; */
+            font-family: 'IBM Plex Sans', sans-serif !important;
         }
 
         .cover-main-title {
             font-size: 72px;
-            /* font-weight: bold; */
+            font-weight: 400;
             color: #ffffff;
             letter-spacing: 4px;
             margin-bottom: 30px;
             line-height: 1.1;
-            /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif; */
+            font-family: 'IBM Plex Sans', sans-serif !important;
         }
         
         /* Ensure text doesn't scale with screen size */
@@ -156,17 +167,17 @@
         }
 
         /* Background Gradient Effect - bottom left with text */
-        /* Fixed size - always the same regardless of screen size */
+        /* Globe/semi-circle size */
         .cover-gradient {
             position: fixed;
             bottom: -400px;
             left: -400px;
-            width: 1200px;
-            height: 1200px;
-            min-width: 1200px;
-            max-width: 1200px;
-            min-height: 1200px;
-            max-height: 1200px;
+            width: 1400px;
+            height: 1400px;
+            min-width: 1400px;
+            max-width: 1400px;
+            min-height: 1400px;
+            max-height: 1400px;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 25%, rgba(255, 255, 255, 0.08) 45%, rgba(255, 255, 255, 0.03) 65%, transparent 85%);
             border-radius: 50%;
             pointer-events: none;
@@ -186,7 +197,7 @@
             max-width: 500px;
             line-height: 1.75;
             font-weight: 400;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            font-family: 'IBM Plex Sans', sans-serif !important;
             margin-top: 20px;
         }
         
@@ -206,20 +217,36 @@
         .cover-content {
             position: relative;
             z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Position text on the semi-circle */
+        .cover-page .cover-text-container {
+            position: fixed;
+            left: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+            padding-left: 0;
         }
 
         /* About Page Styles */
         .about-page {
-            justify-content: space-between;
+            justify-content: flex-start;
+            padding-top: 80px;
         }
 
         .about-main-title {
             font-size: 56px;
-            /* font-weight: bold; */
+            font-weight: 400;
             color: #ffffff;
             letter-spacing: 2px;
             margin-bottom: 30px;
+            margin-top: 120px;
             line-height: 1.2;
+            font-family: 'IBM Plex Sans', sans-serif !important;
         }
 
         .about-intro {
@@ -229,6 +256,7 @@
             max-width: 700px;
             margin-bottom: 60px;
             opacity: 0.9;
+            font-family: 'IBM Plex Sans', sans-serif !important;
         }
 
         .explore-section {
@@ -255,10 +283,11 @@
 }
 
 .explore-title {
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 500;
     color: #ffffff;
     opacity: 0.95;
+    font-family: 'IBM Plex Sans', sans-serif !important;
 }
 
 .explore-list {
@@ -273,10 +302,29 @@
     opacity: 0.9;
     line-height: 1.6;
     margin-bottom: 6px;
+    font-family: 'IBM Plex Sans', sans-serif !important;
 }
 
 
-        /* CTA Button */
+        /* CTA Button - positioned on right side, vertically centered */
+        .cover-page .cta-button {
+            position: fixed;
+            top: 50%;
+            right: 60px;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+        }
+        
         .cta-button {
             position: absolute;
             bottom: 120px;
@@ -291,6 +339,7 @@
             text-transform: uppercase;
             transition: opacity 0.3s ease;
             z-index: 10;
+            font-family: 'IBM Plex Sans', sans-serif !important;
         }
 
         .cta-button:hover {
@@ -338,6 +387,24 @@
             font-size: 11px;
             color: #888888;
             letter-spacing: 0.5px;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+        }
+
+        /* Cover page footer - bottom left and right */
+        .cover-page .cover-footer {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 60px;
+            font-size: 11px;
+            color: #888888;
+            letter-spacing: 0.5px;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+            z-index: 10;
         }
 
     </style>
@@ -356,12 +423,9 @@
         <!-- Cover Page (Page 1) -->
         <div class="page-slide cover-page active" id="coverPage">
             <div class="cover-gradient"></div>
+            <div class="top-left-box"></div>
             <div class="cover-content">
-                <div class="page-header">
-                    <div class="intro-icon"></div>
-                </div>
-                
-                <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding-left: 0;">
+                <div class="cover-text-container">
                     <div class="cover-subtitle">A CENTURY OF SCI-FI IMAGINATION</div>
                     <div class="cover-main-title">Library of Futures</div>
                     <p class="cover-description-text">Discover how stories have predicted, warned, and dreamed about our futures time and worlds.</p>
@@ -371,6 +435,10 @@
                     <span>BEGIN EXPLORATION</span>
                     <div class="cta-arrow"></div>
                 </a>
+            </div>
+            <div class="cover-footer">
+                <div>Published 2025</div>
+                <div>Created by Audrey Yang, Michael Cai, Tanvir Haque, Sydney Nguyen</div>
             </div>
         </div>
 

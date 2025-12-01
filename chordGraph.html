@@ -483,6 +483,8 @@
 				display: flex;
 				flex-direction: column;
 				padding: 60px;
+				overflow: visible;
+				min-height: 100vh;
 			}
 
 			.intro-panel {
@@ -493,6 +495,8 @@
 				flex-direction: column;
 				justify-content: space-between;
 				padding-top: 200px;
+				overflow: visible;
+				min-height: 100vh;
 			}
 
 			.intro-category {
@@ -559,7 +563,7 @@
 
 			/* Arrow Button - Same style as fiction vs reality page */
 			.intro-arrow-button {
-				display: flex;
+				display: flex !important;
 				align-items: center;
 				gap: 18px;
 				color: #ffffff;
@@ -576,6 +580,22 @@
 				background: transparent;
 				border: none;
 				padding: 0;
+				position: relative;
+				visibility: visible !important;
+				opacity: 1 !important;
+			}
+			
+			/* Ensure button is visible on smaller screens */
+			@media (max-height: 800px) {
+				.intro-arrow-button {
+					margin-top: 60px;
+				}
+			}
+			
+			@media (max-height: 600px) {
+				.intro-arrow-button {
+					margin-top: 40px;
+				}
 			}
 
 			.intro-arrow-button,
@@ -694,6 +714,37 @@
 			}
 			
 			#chordContainer svg {
+				z-index: 1 !important;
+			}
+			
+			/* Hide EXPLORE TIMELINE button on intro page, show only on main page */
+			.intro-page.active ~ * .arrow-button-wrapper[href*="parallel.html"],
+			.intro-page.active .arrow-button-wrapper[href*="parallel.html"],
+			body:has(.intro-page.active) .arrow-button-wrapper[href*="parallel.html"] {
+				opacity: 0 !important;
+				pointer-events: none !important;
+				visibility: hidden !important;
+				display: none !important;
+			}
+			
+			/* Show button only on main chord page - use very high z-index to be above nodes */
+			.chord-page.active ~ * .arrow-button-wrapper[href*="parallel.html"],
+			.chord-page.active .arrow-button-wrapper[href*="parallel.html"],
+			body:has(.chord-page.active) .arrow-button-wrapper[href*="parallel.html"],
+			.arrow-button-wrapper[href*="parallel.html"].show-on-main-page {
+				opacity: 1 !important;
+				pointer-events: auto !important;
+				visibility: visible !important;
+				display: inline-flex !important;
+				z-index: 99999 !important;
+				position: fixed !important;
+			}
+			
+			/* Ensure nothing blocks the button - nodes should be below */
+			#chordContainer,
+			#chordContainer svg,
+			#chordContainer .node,
+			#chordContainer .node-hover-div {
 				z-index: 1 !important;
 			}
 
@@ -1340,37 +1391,23 @@ function positionLabelOverBar(labelEl, barEl, text) {
 			<script src="cursor.js" defer></script>
 			
 			<script>
-				// Ensure cursor hover works for EXPLORE TIMELINE button after it's created
-				function setupExploreTimelineCursorHover() {
-					const wrapper = document.querySelector('.arrow-button-wrapper[href*="parallel.html"]');
-					const cursorEl = document.getElementById('cursorCircle');
+				// Initially hide EXPLORE TIMELINE button on page load
+				document.addEventListener('DOMContentLoaded', () => {
+					const hideExploreButton = () => {
+						const wrappers = document.querySelectorAll('.arrow-button-wrapper[href*="parallel.html"]');
+						wrappers.forEach(wrapper => {
+							wrapper.style.opacity = "0";
+							wrapper.style.pointerEvents = "none";
+							wrapper.style.visibility = "hidden";
+						});
+					};
 					
-					if (wrapper && cursorEl && !wrapper.dataset.cursorHoverSetup) {
-						// Mark as set up to avoid duplicate listeners
-						wrapper.dataset.cursorHoverSetup = 'true';
-						
-						wrapper.addEventListener('mouseenter', () => {
-							cursorEl.classList.add('hover');
-							cursorEl.style.setProperty('width', '45px', 'important');
-							cursorEl.style.setProperty('height', '45px', 'important');
-							cursorEl.style.setProperty('opacity', '0.7', 'important');
-							cursorEl.style.setProperty('background', 'white', 'important');
-						});
-						
-						wrapper.addEventListener('mouseleave', () => {
-							cursorEl.classList.remove('hover');
-							cursorEl.style.setProperty('width', '18px', 'important');
-							cursorEl.style.setProperty('height', '18px', 'important');
-							cursorEl.style.setProperty('opacity', '1', 'important');
-							cursorEl.style.setProperty('background', 'rgba(200, 200, 200, 0.5)', 'important');
-						});
-					}
-				}
-				
-				// Try to set up cursor hover after arrowButton.js creates the wrapper
-				setTimeout(setupExploreTimelineCursorHover, 100);
-				setTimeout(setupExploreTimelineCursorHover, 500);
-				setTimeout(setupExploreTimelineCursorHover, 1000);
+					// Hide immediately and keep checking
+					hideExploreButton();
+					setTimeout(hideExploreButton, 100);
+					setTimeout(hideExploreButton, 500);
+					setTimeout(hideExploreButton, 1000);
+				});
 			</script>
 
 		<script>
@@ -1388,6 +1425,16 @@ function positionLabelOverBar(labelEl, barEl, text) {
 						page.classList.add('active');
 						// Navigation menu always visible
 						if (navMenu) navMenu.style.display = '';
+						
+						if (index === 0) {
+							// Hide EXPLORE TIMELINE button on intro page
+							const exploreButtons = document.querySelectorAll('.arrow-button-wrapper[href*="parallel.html"]');
+							exploreButtons.forEach(btn => {
+								btn.style.opacity = "0";
+								btn.style.pointerEvents = "none";
+								btn.style.visibility = "hidden";
+							});
+						}
 						
 						if (index === 1) {
 							// Hide BEGIN button when on main page
@@ -1423,6 +1470,88 @@ function positionLabelOverBar(labelEl, barEl, text) {
 								introContainer.style.opacity = '0';
 								introContainer.style.display = 'none';
 							}
+							
+							// Show EXPLORE TIMELINE button on main page
+							const showExploreButton = () => {
+								const arrowWrappers = document.querySelectorAll('.arrow-button-wrapper');
+								arrowWrappers.forEach(wrapper => {
+									if (wrapper.href && (wrapper.href.includes('parallel.html') || wrapper.getAttribute('href') === 'parallel.html')) {
+										// Add class to trigger CSS
+										wrapper.classList.add('show-on-main-page');
+										
+										// Show and enable the button with very high z-index
+										wrapper.style.opacity = "1";
+										wrapper.style.pointerEvents = "auto";
+										wrapper.style.visibility = "visible";
+										wrapper.style.zIndex = "99999";
+										wrapper.style.position = "fixed";
+										wrapper.style.display = "inline-flex";
+										wrapper.style.top = "50%";
+										wrapper.style.right = "40px";
+										wrapper.style.transform = "translateY(-50%)";
+										
+										// Ensure it's clickable
+										wrapper.setAttribute('tabindex', '0');
+										
+										// Ensure the href is set correctly
+										if (!wrapper.href || !wrapper.href.includes('parallel.html')) {
+											wrapper.href = 'parallel.html';
+										}
+										
+										// Ensure the link works
+										wrapper.onclick = (e) => {
+											window.location.href = wrapper.href;
+										};
+										
+										// Add cursor hover effect
+										const cursorEl = document.getElementById('cursorCircle');
+										if (cursorEl && !wrapper.dataset.cursorHoverSetup) {
+											wrapper.dataset.cursorHoverSetup = 'true';
+											wrapper.addEventListener('mouseenter', () => {
+												cursorEl.classList.add('hover');
+												cursorEl.style.setProperty('width', '45px', 'important');
+												cursorEl.style.setProperty('height', '45px', 'important');
+												cursorEl.style.setProperty('opacity', '0.7', 'important');
+												cursorEl.style.setProperty('background', 'white', 'important');
+											});
+											wrapper.addEventListener('mouseleave', () => {
+												cursorEl.classList.remove('hover');
+												cursorEl.style.setProperty('width', '18px', 'important');
+												cursorEl.style.setProperty('height', '18px', 'important');
+												cursorEl.style.setProperty('opacity', '1', 'important');
+												cursorEl.style.setProperty('background', 'rgba(200, 200, 200, 0.5)', 'important');
+											});
+										}
+										
+										console.log('EXPLORE TIMELINE button enabled:', wrapper);
+									}
+								});
+							};
+							
+							// Try multiple times to catch the button - also check if button exists
+							const checkAndShow = () => {
+								const button = document.querySelector('[data-arrow-button][href*="parallel.html"], [data-arrow-button][id="text3ArrowButton"]');
+								const wrapper = document.querySelector('.arrow-button-wrapper[href*="parallel.html"]');
+								
+								if (button) {
+									console.log('Button placeholder found, waiting for arrowButton.js to create wrapper...');
+								}
+								if (wrapper) {
+									console.log('Button wrapper found, enabling...');
+									showExploreButton();
+								} else {
+									console.log('Button wrapper not found yet, will retry...');
+								}
+							};
+							
+							// Try immediately and multiple times
+							checkAndShow();
+							setTimeout(checkAndShow, 100);
+							setTimeout(checkAndShow, 500);
+							setTimeout(checkAndShow, 1000);
+							setTimeout(checkAndShow, 2000);
+							setTimeout(checkAndShow, 3000);
+							
 							// Show intro message text after chord graph is revealed
 							setTimeout(() => {
 								if (typeof showChordIntroMessage === 'function') {
@@ -1515,18 +1644,48 @@ function positionLabelOverBar(labelEl, barEl, text) {
 						}
 						currentPage++;
 						updatePages();
-						// Show text3 arrow button after transitioning to main page
-						setTimeout(() => {
+						// Show EXPLORE TIMELINE button after transitioning to main page
+						// Use multiple timeouts to ensure it works in Chrome
+						const enableExploreTimelineButton = () => {
 							// The arrowButton.js replaces the div with a wrapper, find it by href
 							const arrowWrappers = document.querySelectorAll('.arrow-button-wrapper');
 							arrowWrappers.forEach(wrapper => {
-								if (wrapper.href && wrapper.href.includes('parallel.html')) {
+								if (wrapper.href && (wrapper.href.includes('parallel.html') || wrapper.getAttribute('href') === 'parallel.html')) {
+									// Add class to trigger CSS
+									wrapper.classList.add('show-on-main-page');
+									
+									// Show and enable the button with very high z-index
 									wrapper.style.opacity = "1";
 									wrapper.style.pointerEvents = "auto";
+									wrapper.style.visibility = "visible";
+									wrapper.style.zIndex = "99999";
+									wrapper.style.position = "fixed";
+									wrapper.style.display = "inline-flex";
+									wrapper.style.top = "50%";
+									wrapper.style.right = "40px";
+									wrapper.style.transform = "translateY(-50%)";
+									
+									// Ensure it's clickable
+									wrapper.setAttribute('tabindex', '0');
+									
+									// Ensure the href is set correctly
+									if (!wrapper.href || !wrapper.href.includes('parallel.html')) {
+										wrapper.href = 'parallel.html';
+									}
+									
+									// Remove any click handlers that might prevent navigation
+									const newClickHandler = (e) => {
+										// Allow default navigation
+										window.location.href = wrapper.href;
+									};
+									
+									// Remove old listeners and add new one
+									wrapper.onclick = newClickHandler;
 									
 									// Add cursor hover effect
 									const cursorEl = document.getElementById('cursorCircle');
-									if (cursorEl) {
+									if (cursorEl && !wrapper.dataset.cursorHoverSetup) {
+										wrapper.dataset.cursorHoverSetup = 'true';
 										wrapper.addEventListener('mouseenter', () => {
 											cursorEl.classList.add('hover');
 											cursorEl.style.setProperty('width', '45px', 'important');
@@ -1544,7 +1703,13 @@ function positionLabelOverBar(labelEl, barEl, text) {
 									}
 								}
 							});
-						}, 500);
+						};
+						
+						// Try multiple times to catch the button at different creation times
+						setTimeout(enableExploreTimelineButton, 100);
+						setTimeout(enableExploreTimelineButton, 500);
+						setTimeout(enableExploreTimelineButton, 1000);
+						setTimeout(enableExploreTimelineButton, 2000);
 					}
 				});
 			}
