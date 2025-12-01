@@ -55,8 +55,8 @@ const W = window.innerWidth;
 const H = window.innerHeight;
 
 // Vertical placement
-const yTop = 190;
-const yBot = H - 190;
+const yTop = 220;
+const yBot = H - 180;
 
 
 // -----------------------------
@@ -853,7 +853,7 @@ function updateLeftCard() {
     // ============================================================
     //  TRUE GEOMETRIC AVERAGE SLOPE + DIAL UPDATE
     // ============================================================
-    (function updateAvgSlopeDial() {
+    /* (function updateAvgSlopeDial() {
 
         const dialValue = document.getElementById("dialValue");
         const dialLabel = document.getElementById("dialLabel");
@@ -969,7 +969,7 @@ needle.setAttribute("y2", yBotPosAdjusted);
             arc.setAttribute("d", arcPath);
         }
 
-    })(); // end updateAvgSlopeDial()
+    })(); // end updateAvgSlopeDial() */
 
 }
 
