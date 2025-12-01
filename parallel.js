@@ -1308,10 +1308,8 @@ let currentPage = 0;
         page.classList.remove('active', 'next', 'prev');
         if (index === currentPage) {
           page.classList.add('active');
-          // Show navigation menu only on chart page
+          // Show intro message text after chart is revealed (on chart page)
           if (index === 1) {
-            if (navMenu) navMenu.style.display = '';
-            // Show intro message text after chart is revealed
             setTimeout(() => {
               if (typeof showDefaultIntro === 'function') {
                 showDefaultIntro(true);
@@ -1325,8 +1323,6 @@ let currentPage = 0;
                 arrowButton.style.pointerEvents = "auto";
               }
             }, 3000);
-          } else {
-            if (navMenu) navMenu.style.display = 'none';
           }
         } else if (index > currentPage) {
           page.classList.add('next');

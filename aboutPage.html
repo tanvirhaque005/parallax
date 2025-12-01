@@ -107,10 +107,10 @@
             position: relative;
         }
 
-        /* Hide navigation menu on cover page */
+        /* Hide navigation menu on cover page
         .cover-page.active ~ * .navigation-menu {
             display: none !important;
-        }
+        } */
 
         .cover-subtitle {
             font-size: 12px;
@@ -514,14 +514,16 @@
                 if (index === currentPage) {
                     page.classList.add('active');
                     // Show/hide navigation menu based on page
-                    if (index === 0) {
-                        // Hide menu on cover page
-                        if (navMenu) navMenu.style.display = 'none';
-                    } else {
-                        // Show menu on other pages
-                        if (navMenu) navMenu.style.display = '';
-                    }
+                    // if (index === 0) {
+                    //     // Hide menu on cover page
+                    //     if (navMenu) navMenu.style.display = 'none';
+                    // } else {
+                    //     // Show menu on other pages
+                    //     if (navMenu) navMenu.style.display = '';
+                    // }
                     // Trigger animations when about page becomes active
+                    if (navMenu) navMenu.style.display = '';
+
                     if (index === 1) {
                         const headerIcon = page.querySelector('.intro-icon');
                         const headerTitle = page.querySelector('.intro-text');

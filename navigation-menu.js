@@ -30,6 +30,7 @@
   // Initialize menu when DOM is ready
   function initNavigationMenu() {
     const menuContainer = document.getElementById('navigationMenu');
+
     if (!menuContainer) return;
 
     // Get current page
@@ -68,11 +69,42 @@
       link.textContent = item.text;
       listItem.appendChild(link);
       menuItemsList.appendChild(listItem);
+
+
     });
+
     
     // Append to container
     menuContainer.appendChild(progressLine);
     menuContainer.appendChild(menuItemsList);
+    requestAnimationFrame(() => menuContainer.updateLineHeightAndDot());
+setTimeout(() => menuContainer.updateLineHeightAndDot(), 200);
+
+
+    // Initial positioning (frame 1)
+requestAnimationFrame(() => {
+  menuContainer.updateLineHeightAndDot();
+});
+
+// Frame 2 (after layout settles)
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    menuContainer.updateLineHeightAndDot();
+  });
+});
+
+// Extra safety for pages with heavy JS layout shifts (parallel/morph)
+setTimeout(() => menuContainer.updateLineHeightAndDot(), 300);
+setTimeout(() => menuContainer.updateLineHeightAndDot(), 800);
+
+
+    requestAnimationFrame(() => {
+      menuContainer.updateLineHeightAndDot();
+    });
+    setTimeout(() => {
+      menuContainer.updateLineHeightAndDot();
+    }, 50);
+    
     
     // Set initial state - menu should be visible on page load
     menuContainer.classList.remove('collapsed');
@@ -98,64 +130,64 @@
     
     // Set line height IMMEDIATELY - calculate and set synchronously before first paint
     // Calculate height synchronously after items are in DOM
-    if (progressLine && menuItemsList) {
-      // Disable transitions FIRST to prevent any animation
-      progressLine.style.transition = 'none';
+    // if (progressLine && menuItemsList) {
+    //   // Disable transitions FIRST to prevent any animation
+    //   progressLine.style.transition = 'none';
       
-      // Ensure items are fully visible and laid out
-      menuItemsList.style.opacity = '1';
-      menuItemsList.style.transform = 'translateX(0)';
-      menuItemsList.style.width = 'auto';
-      menuItemsList.style.overflow = 'visible';
-      menuItemsList.style.pointerEvents = 'auto';
+    //   // Ensure items are fully visible and laid out
+    //   menuItemsList.style.opacity = '1';
+    //   menuItemsList.style.transform = 'translateX(0)';
+    //   menuItemsList.style.width = 'auto';
+    //   menuItemsList.style.overflow = 'visible';
+    //   menuItemsList.style.pointerEvents = 'auto';
       
-      // Force reflow to ensure layout is calculated
-      void menuItemsList.offsetHeight;
+    //   // Force reflow to ensure layout is calculated
+    //   void menuItemsList.offsetHeight;
       
-      // Calculate height immediately in one synchronous operation
-      let itemsHeight = menuItemsList.offsetHeight;
+    //   // Calculate height immediately in one synchronous operation
+    //   let itemsHeight = menuItemsList.offsetHeight;
       
-      // If height is still 0 or too small, calculate from individual items
-      if (itemsHeight <= 0 || itemsHeight < 100) {
-        let totalHeight = 0;
-        items.forEach((item) => {
-          const itemRect = item.getBoundingClientRect();
-          totalHeight += itemRect.height;
-        });
-        // Add gap between items (6px per gap, n-1 gaps for n items)
-        const gap = 6;
-        totalHeight += (items.length - 1) * gap;
-        if (totalHeight > 0) {
-          itemsHeight = totalHeight;
-        }
-      }
+    //   // If height is still 0 or too small, calculate from individual items
+    //   if (itemsHeight <= 0 || itemsHeight < 100) {
+    //     let totalHeight = 0;
+    //     items.forEach((item) => {
+    //       const itemRect = item.getBoundingClientRect();
+    //       totalHeight += itemRect.height;
+    //     });
+    //     // Add gap between items (6px per gap, n-1 gaps for n items)
+    //     const gap = 6;
+    //     totalHeight += (items.length - 1) * gap;
+    //     if (totalHeight > 0) {
+    //       itemsHeight = totalHeight;
+    //     }
+    //   }
       
-      // Set height IMMEDIATELY to calculated value - all in one operation
-      // This ensures the line is always at full size from the very first render
-      if (itemsHeight > 0) {
-        // Set height with !important to override any CSS
-        progressLine.style.setProperty('height', `${itemsHeight}px`, 'important');
-        progressLine.style.setProperty('min-height', `${itemsHeight}px`, 'important');
-        // Also set it as a regular style property
-        progressLine.style.height = `${itemsHeight}px`;
-        progressLine.style.minHeight = `${itemsHeight}px`;
-        // Force multiple reflows to ensure it's applied before paint
-        void progressLine.offsetHeight;
-        void progressLine.offsetWidth;
-        void progressLine.offsetHeight;
-        // Store the height so we can reference it later
-        progressLine.dataset.fullHeight = `${itemsHeight}px`;
-      }
+    //   // Set height IMMEDIATELY to calculated value - all in one operation
+    //   // This ensures the line is always at full size from the very first render
+    //   if (itemsHeight > 0) {
+    //     // Set height with !important to override any CSS
+    //     progressLine.style.setProperty('height', `${itemsHeight}px`, 'important');
+    //     progressLine.style.setProperty('min-height', `${itemsHeight}px`, 'important');
+    //     // Also set it as a regular style property
+    //     progressLine.style.height = `${itemsHeight}px`;
+    //     progressLine.style.minHeight = `${itemsHeight}px`;
+    //     // Force multiple reflows to ensure it's applied before paint
+    //     void progressLine.offsetHeight;
+    //     void progressLine.offsetWidth;
+    //     void progressLine.offsetHeight;
+    //     // Store the height so we can reference it later
+    //     progressLine.dataset.fullHeight = `${itemsHeight}px`;
+    //   }
       
-      progressLine.style.transform = 'translateX(0)';
-      progressLine.style.opacity = '1';
-      progressLine.style.transition = 'none'; // No transition on initial load
+    //   progressLine.style.transform = 'translateX(0)';
+    //   progressLine.style.opacity = '1';
+    //   progressLine.style.transition = 'none'; // No transition on initial load
       
-      // Re-enable transition after a delay to prevent glitches
-      setTimeout(() => {
-        progressLine.style.transition = '';
-      }, 300);
-    }
+    //   // Re-enable transition after a delay to prevent glitches
+    //   setTimeout(() => {
+    //     progressLine.style.transition = '';
+    //   }, 300);
+    // }
     
     // Re-enable transitions after a brief delay
     setTimeout(() => {
@@ -285,14 +317,43 @@
     
     // Update line height and dot position after items are rendered
     // Multiple timeouts to ensure it works even if menu is collapsed/expanded
-    setTimeout(updateLineHeightAndDot, 100);
-    setTimeout(updateLineHeightAndDot, 300);
-    setTimeout(updateLineHeightAndDot, 600);
-    setTimeout(updateLineHeightAndDot, 1000);
-    window.addEventListener('resize', updateLineHeightAndDot);
+    // setTimeout(updateLineHeightAndDot, 100);
+    // setTimeout(updateLineHeightAndDot, 300);
+    // setTimeout(updateLineHeightAndDot, 600);
+    // setTimeout(updateLineHeightAndDot, 1000);
+    // window.addEventListener('resize', updateLineHeightAndDot);
+    window.addEventListener('load', () => {
+  menuContainer.updateLineHeightAndDot();
+});
+
     
     // Store update function for use when menu expands
-    menuContainer.updateLineHeightAndDot = updateLineHeightAndDot;
+    // menuContainer.updateLineHeightAndDot = updateLineHeightAndDot;
+    // Disable all dynamic height calculations
+// menuContainer.updateLineHeightAndDot = function () {};
+// Keep static height but allow dot placement
+// Correct dot positioning (keeps static 150px height)
+menuContainer.updateLineHeightAndDot = function () {
+  const active = menuContainer.querySelector('.nav-menu-item.active');
+  const dot = menuContainer.querySelector('.nav-progress-dot');
+  const line = menuContainer.querySelector('.nav-progress-line');
+
+  if (!active || !dot || !line) return;
+
+  const link = active.querySelector('a');
+  const rect = link.getBoundingClientRect();
+  const lineRect = line.getBoundingClientRect();
+
+  // vertical center of active item
+  const linkCenterY = rect.top + rect.height / 2;
+  const relative = ((linkCenterY - lineRect.top) / lineRect.height) * 100;
+
+  dot.style.top = `${relative}%`;
+  dot.style.opacity = '1';
+  dot.style.visibility = 'visible';
+};
+
+
     
     // Auto-collapse after 5 seconds
     let collapseTimer;
@@ -310,43 +371,53 @@
       const menuItemsEl = menuContainer.querySelector('.nav-menu-items');
       const progressLineEl = menuContainer.querySelector('.nav-progress-line');
       
+      // Calculate timing: line slides in first, then text appears
+      const lineSlideDuration = 1000; // 1s for line to slide smoothly
+      const textFadeDuration = 600; // 0.6s for text to fade in
+      const textStaggerDelay = 50; // Small stagger between items
+      const textStartDelay = lineSlideDuration * 0.3; // Start text animation partway through line slide
+      
       // Ensure menu items container is visible first (before any animations)
       if (menuItemsEl) {
+        // Reset width override and ensure it's auto
         menuItemsEl.style.width = 'auto';
+        menuItemsEl.style.removeProperty('width');
+        menuItemsEl.style.setProperty('width', 'auto', 'important');
         menuItemsEl.style.overflow = 'visible';
+        menuItemsEl.style.pointerEvents = 'auto';
         // Don't reset opacity/transform if already visible to prevent flicker
         const currentOpacity = window.getComputedStyle(menuItemsEl).opacity;
         const currentTransform = window.getComputedStyle(menuItemsEl).transform;
         if (currentOpacity !== '1' || currentTransform !== 'none' && currentTransform !== 'matrix(1, 0, 0, 1, 0, 0)') {
-          menuItemsEl.style.transition = 'opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          menuItemsEl.style.transition = `opacity ${textFadeDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1), transform ${textFadeDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
           void menuItemsEl.offsetHeight;
           menuItemsEl.style.opacity = '1';
           menuItemsEl.style.transform = 'translateX(0)';
         }
       }
       
-      // Animate progress line sliding left at the same pace as menu items
+      // Animate progress line sliding left first - slower and smoother
       if (progressLineEl) {
         // Preserve the full height - use stored value or current calculated height
         const storedHeight = progressLineEl.dataset.fullHeight;
         const currentHeight = storedHeight || progressLineEl.style.height || getComputedStyle(progressLineEl).height;
         if (currentHeight && currentHeight !== '150px') {
-          progressLineEl.style.setProperty('height', currentHeight, 'important');
-          progressLineEl.style.setProperty('min-height', currentHeight, 'important');
-          progressLineEl.style.height = currentHeight;
-          progressLineEl.style.minHeight = currentHeight;
+          // progressLineEl.style.setProperty('height', currentHeight, 'important');
+          // progressLineEl.style.setProperty('min-height', currentHeight, 'important');
+          // progressLineEl.style.height = currentHeight;
+          // progressLineEl.style.minHeight = currentHeight;
         }
         
-        // Start line animation at the same time as first item (50ms delay)
+        // Start line animation first
         setTimeout(() => {
-          // Only transition transform and opacity - NEVER height
-          progressLineEl.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+          // Use slower, smoother easing for line slide
+          progressLineEl.style.transition = `transform ${lineSlideDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1), opacity ${lineSlideDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
           // Ensure height is preserved with !important - ALWAYS maintain full height
           if (currentHeight && currentHeight !== '150px') {
-            progressLineEl.style.setProperty('height', currentHeight, 'important');
-            progressLineEl.style.setProperty('min-height', currentHeight, 'important');
-            progressLineEl.style.height = currentHeight;
-            progressLineEl.style.minHeight = currentHeight;
+            // progressLineEl.style.setProperty('height', currentHeight, 'important');
+            // progressLineEl.style.setProperty('min-height', currentHeight, 'important');
+            // progressLineEl.style.height = currentHeight;
+            // progressLineEl.style.minHeight = currentHeight;
           }
           void progressLineEl.offsetHeight;
           progressLineEl.style.transform = 'translateX(0)';
@@ -354,7 +425,7 @@
         }, 50);
       }
       
-      // Animate items sliding out one by one with smooth stagger
+      // Animate items (text) sliding out one by one AFTER line starts moving - slower and smoother
       // Only animate items that are not already visible to prevent flicker
       items.forEach((item, index) => {
         const currentOpacity = window.getComputedStyle(item).opacity;
@@ -363,7 +434,8 @@
           (currentTransform === 'none' || currentTransform === 'matrix(1, 0, 0, 1, 0, 0)');
         
         if (!isAlreadyVisible) {
-          item.style.transition = 'opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          // Use slower, smoother easing for text fade
+          item.style.transition = `opacity ${textFadeDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1), transform ${textFadeDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
           // Start from current state, not reset to 0
           item.style.opacity = currentOpacity || '0';
           item.style.transform = currentTransform || 'translateX(20px)';
@@ -372,23 +444,32 @@
             void item.offsetHeight;
             item.style.opacity = '1';
             item.style.transform = 'translateX(0)';
-          }, 50 + index * 40);
+          }, textStartDelay + index * textStaggerDelay);
         }
       });
       
       // Remove animating class after animation completes and update dot position
+      const totalAnimationTime = textStartDelay + items.length * textStaggerDelay + textFadeDuration;
       setTimeout(() => {
         menuContainer.classList.remove('animating');
         isAnimating = false;
+      
         // Update dot position after menu expands to ensure alignment
-        // Use multiple attempts to ensure it works
         if (menuContainer.updateLineHeightAndDot) {
           menuContainer.updateLineHeightAndDot();
+      
+          // Frame 2 fix
           setTimeout(() => {
             menuContainer.updateLineHeightAndDot();
           }, 100);
+      
+          // Frame 3 fix (for heavy pages like parallel.html & morph.html)
+          setTimeout(() => {
+            menuContainer.updateLineHeightAndDot();
+          }, 300);   // <<<<< ADD THIS RIGHT HERE
         }
-      }, 50 + items.length * 40 + 400);
+      }, totalAnimationTime + 50);
+      
     }
     
     function collapseMenu() {
@@ -407,10 +488,17 @@
       const menuItemsEl = menuContainer.querySelector('.nav-menu-items');
       const progressLineEl = menuContainer.querySelector('.nav-progress-line');
       
-      // Animate items sliding back in reverse order (last item first) with same smooth timing as expand
+      // Calculate timing: text disappears first, then line slides
+      const textFadeDuration = 600; // 0.6s for text to fade out
+      const textStaggerDelay = 50; // Small stagger between items
+      const lineSlideDuration = 1000; // 1s for line to slide smoothly
+      const lineSlideDelay = textFadeDuration + 100; // Start line animation after text is gone
+      
+      // Animate items (text) disappearing first - slower and smoother
       items.forEach((item, index) => {
         const reverseIndex = items.length - 1 - index;
-        item.style.transition = 'opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        // Use slower, smoother easing for text fade
+        item.style.transition = `opacity ${textFadeDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1), transform ${textFadeDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
         
         setTimeout(() => {
           // Check if user hovered - cancel collapse if so
@@ -423,23 +511,54 @@
           void item.offsetHeight;
           item.style.opacity = '0';
           item.style.transform = 'translateX(20px)';
-        }, 50 + reverseIndex * 40); // Same timing as expand but in reverse
+        }, reverseIndex * textStaggerDelay);
       });
       
-      // Animate progress line sliding right with same smooth glide as expand
+      // Animate menu items container - only fade opacity, don't collapse width yet (to keep line in place)
+      if (menuItemsEl) {
+        // Only animate opacity during text fade - don't change width or transform yet
+        menuItemsEl.style.transition = `opacity ${textFadeDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
+        // Start opacity fade with text
+        setTimeout(() => {
+          if (!isHovering) {
+            void menuItemsEl.offsetHeight;
+            menuItemsEl.style.opacity = '0';
+            // Don't change width or transform yet - keep line in place
+          }
+        }, 0);
+      }
+      
+      // Animate progress line sliding right AFTER text has disappeared - slower and smoother
       if (progressLineEl) {
         // Preserve the full height - use stored value or current calculated height
         const storedHeight = progressLineEl.dataset.fullHeight;
         const currentHeight = storedHeight || progressLineEl.style.height || getComputedStyle(progressLineEl).height;
         if (currentHeight && currentHeight !== '150px') {
-          progressLineEl.style.setProperty('height', currentHeight, 'important');
-          progressLineEl.style.setProperty('min-height', currentHeight, 'important');
-          progressLineEl.style.height = currentHeight;
-          progressLineEl.style.minHeight = currentHeight;
+          // progressLineEl.style.setProperty('height', currentHeight, 'important');
+          // progressLineEl.style.setProperty('min-height', currentHeight, 'important');
+          // progressLineEl.style.height = currentHeight;
+          // progressLineEl.style.minHeight = currentHeight;
         }
         
-        // Start line animation at the same time as the first item to collapse (last item)
-        // This creates the same smooth glide effect as expand
+        // Calculate distance to move line to right edge of screen with padding
+        // Navigation menu is at right: 40px, so we need to move by:
+        // menu items width + gap (12px) + (40px - rightPadding) to leave padding from edge
+        let distanceToRightEdge = 0;
+        const rightPadding = 20; // Padding from right edge of screen
+        if (menuItemsEl) {
+          // Get the actual width of the menu items container before it fades
+          const menuItemsRect = menuItemsEl.getBoundingClientRect();
+          const menuItemsWidth = menuItemsRect.width;
+          const gap = 12; // CSS gap between line and menu items
+          const menuRightOffset = 40; // Navigation menu is positioned at right: 40px
+          // Move to right edge minus padding
+          distanceToRightEdge = menuItemsWidth + gap + (menuRightOffset - rightPadding);
+        } else {
+          // Fallback if menu items container not found
+          distanceToRightEdge = 180; // Approximate fallback (200 - 20 padding)
+        }
+        
+        // Start line animation AFTER text has finished disappearing
         setTimeout(() => {
           // Check if user hovered - cancel collapse if so
           if (isHovering) {
@@ -448,36 +567,66 @@
             expandMenu();
             return;
           }
-          // Only transition transform and opacity - NEVER height
-          progressLineEl.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+          // Use slower, smoother easing for line slide
+          progressLineEl.style.transition = `transform ${lineSlideDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1), opacity ${lineSlideDuration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
           // Ensure height is preserved
           if (currentHeight && currentHeight !== '150px') {
-            progressLineEl.style.height = currentHeight;
-            progressLineEl.style.minHeight = currentHeight;
+            // progressLineEl.style.height = currentHeight;
+            // progressLineEl.style.minHeight = currentHeight;
           }
           void progressLineEl.offsetHeight;
-          progressLineEl.style.transform = 'translateX(20px)';
+          // Move line to right edge of screen
+          progressLineEl.style.transform = `translateX(${distanceToRightEdge}px)`;
           progressLineEl.style.opacity = '0.8';
-        }, 50); // Start at same time as first collapsing item
+        }, lineSlideDelay);
       }
       
+      // Wait for both text fade and line slide to complete
+      const totalAnimationTime = lineSlideDelay + lineSlideDuration;
       setTimeout(() => {
         // Check if user hovered during collapse - if so, don't mark as collapsed
         if (!isHovering) {
-          menuContainer.classList.add('collapsed');
+          // Don't collapse width - keep it to maintain line position
+          // Override CSS collapsed state width: 0 to keep line in place
           if (menuItemsEl) {
-            menuItemsEl.style.width = '0';
+            menuItemsEl.style.opacity = '0';
+            menuItemsEl.style.pointerEvents = 'none';
             menuItemsEl.style.overflow = 'hidden';
+            // Override CSS width: 0 to keep line position stable
+            menuItemsEl.style.width = 'auto';
+            menuItemsEl.style.setProperty('width', 'auto', 'important');
           }
-          menuContainer.classList.remove('animating');
-          isAnimating = false;
+          if (progressLineEl) {
+            // Calculate final position (same as during animation)
+            let distanceToRightEdge = 0;
+            const rightPadding = 20; // Padding from right edge of screen
+            if (menuItemsEl) {
+              // Get stored width or calculate
+              const menuItemsRect = menuItemsEl.getBoundingClientRect();
+              const menuItemsWidth = menuItemsRect.width || 0;
+              const gap = 12;
+              const menuRightOffset = 40;
+              // Move to right edge minus padding
+              distanceToRightEdge = menuItemsWidth + gap + (menuRightOffset - rightPadding);
+            } else {
+              distanceToRightEdge = 180; // Fallback (200 - 20 padding)
+            }
+            progressLineEl.style.transform = `translateX(${distanceToRightEdge}px)`;
+            progressLineEl.style.opacity = '0.8';
+          }
+          // Small delay to ensure styles are applied before class change
+          requestAnimationFrame(() => {
+            menuContainer.classList.add('collapsed');
+            menuContainer.classList.remove('animating');
+            isAnimating = false;
+          });
         } else {
           // User hovered, cancel collapse and expand
           isAnimating = false;
           menuContainer.classList.remove('animating');
           expandMenu();
         }
-      }, 50 + items.length * 40 + 400);
+      }, totalAnimationTime + 50);
     }
     
     function scheduleCollapse() {

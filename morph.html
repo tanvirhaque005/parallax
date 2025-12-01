@@ -801,9 +801,6 @@
     <a href="reflectionPage.html" class="nav-btn" id="nextBtn">Next →</a>
   </div> -->
 
-  <!-- Navigation Menu -->
-  <div class="navigation-menu" id="navigationMenu"></div>
-
   <div id="flightPathTooltip"></div>
 
   <!-- Movie Hover Card -->
@@ -1080,6 +1077,9 @@
     </div> <!-- End map-page -->
   </div> <!-- End page-container -->
 
+  <!-- Navigation Menu - outside page slides so always visible -->
+  <div class="navigation-menu" id="navigationMenu"></div>
+
   <!-- Canvases - outside page slides so always visible -->
   <canvas id="mapCanvas" style="display:none;"></canvas>
   <canvas id="scene"></canvas>
@@ -1093,7 +1093,16 @@
     let currentPage = 0;
     const pages = document.querySelectorAll('.page-slide');
     const enterMapBtn = document.getElementById('enterMapBtn');
-    const navMenu = document.getElementById('navigationMenu');
+    // const navMenu = document.getElementById('navigationMenu');
+    
+
+// const styles = window.getComputedStyle(navMenu);
+
+// console.log(styles);
+// console.log(styles.backgroundColor);
+// console.log(styles.fontSize);
+
+
 
     function updatePages() {
       pages.forEach((page, index) => {
@@ -1102,7 +1111,7 @@
           page.classList.add('active');
           // Show navigation menu only on map page
           if (index === 1) {
-            if (navMenu) navMenu.style.display = '';
+            // if (navMenu) navMenu.style.display = '';
             // Show pie chart on map page
             const pieChartContainer = document.getElementById('pieChartContainer');
             if (pieChartContainer) pieChartContainer.style.opacity = '1';
@@ -1116,7 +1125,7 @@
 
       // Hide navigation menu and pie chart on intro page
       if (currentPage === 0) {
-        if (navMenu) navMenu.style.display = 'none';
+        // if (navMenu) navMenu.style.display = 'none';
         const pieChartContainer = document.getElementById('pieChartContainer');
         if (pieChartContainer) pieChartContainer.style.opacity = '0';
       }
