@@ -1342,6 +1342,40 @@ function positionLabelOverBar(labelEl, barEl, text) {
 		    <div id="cursorCircle"></div>
 			<link rel="stylesheet" href="cursor.css">
 			<script src="cursor.js" defer></script>
+			
+			<script>
+				// Ensure cursor hover works for EXPLORE TIMELINE button after it's created
+				function setupExploreTimelineCursorHover() {
+					const wrapper = document.querySelector('.arrow-button-wrapper[href*="parallel.html"]');
+					const cursorEl = document.getElementById('cursorCircle');
+					
+					if (wrapper && cursorEl && !wrapper.dataset.cursorHoverSetup) {
+						// Mark as set up to avoid duplicate listeners
+						wrapper.dataset.cursorHoverSetup = 'true';
+						
+						wrapper.addEventListener('mouseenter', () => {
+							cursorEl.classList.add('hover');
+							cursorEl.style.setProperty('width', '45px', 'important');
+							cursorEl.style.setProperty('height', '45px', 'important');
+							cursorEl.style.setProperty('opacity', '0.7', 'important');
+							cursorEl.style.setProperty('background', 'white', 'important');
+						});
+						
+						wrapper.addEventListener('mouseleave', () => {
+							cursorEl.classList.remove('hover');
+							cursorEl.style.setProperty('width', '18px', 'important');
+							cursorEl.style.setProperty('height', '18px', 'important');
+							cursorEl.style.setProperty('opacity', '1', 'important');
+							cursorEl.style.setProperty('background', 'rgba(200, 200, 200, 0.5)', 'important');
+						});
+					}
+				}
+				
+				// Try to set up cursor hover after arrowButton.js creates the wrapper
+				setTimeout(setupExploreTimelineCursorHover, 100);
+				setTimeout(setupExploreTimelineCursorHover, 500);
+				setTimeout(setupExploreTimelineCursorHover, 1000);
+			</script>
 
 		<script>
 			// Page navigation
@@ -1472,6 +1506,25 @@ function positionLabelOverBar(labelEl, barEl, text) {
 								if (wrapper.href && wrapper.href.includes('parallel.html')) {
 									wrapper.style.opacity = "1";
 									wrapper.style.pointerEvents = "auto";
+									
+									// Add cursor hover effect
+									const cursorEl = document.getElementById('cursorCircle');
+									if (cursorEl) {
+										wrapper.addEventListener('mouseenter', () => {
+											cursorEl.classList.add('hover');
+											cursorEl.style.setProperty('width', '45px', 'important');
+											cursorEl.style.setProperty('height', '45px', 'important');
+											cursorEl.style.setProperty('opacity', '0.7', 'important');
+											cursorEl.style.setProperty('background', 'white', 'important');
+										});
+										wrapper.addEventListener('mouseleave', () => {
+											cursorEl.classList.remove('hover');
+											cursorEl.style.setProperty('width', '18px', 'important');
+											cursorEl.style.setProperty('height', '18px', 'important');
+											cursorEl.style.setProperty('opacity', '1', 'important');
+											cursorEl.style.setProperty('background', 'rgba(200, 200, 200, 0.5)', 'important');
+										});
+									}
 								}
 							});
 						}, 500);
