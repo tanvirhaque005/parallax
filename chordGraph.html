@@ -557,33 +557,30 @@
 				font-family: 'IBM Plex Sans', sans-serif;
 			}
 
-			/* Arrow Button */
+			/* Arrow Button - Same style as fiction vs reality page */
 			.intro-arrow-button {
-				position: fixed !important;
-				top: 50% !important;
-				right: 40px !important;
-				transform: translateY(-50%) !important;
 				display: flex;
 				align-items: center;
-				justify-content: center;
-				gap: 14px;
+				gap: 18px;
 				color: #ffffff;
 				text-decoration: none;
-				font-size: 20px;
-				letter-spacing: 2px;
+				font-size: 16px;
+				letter-spacing: 3px;
 				text-transform: uppercase;
-				opacity: 1;
-				z-index: 9998;
+				transition: opacity 0.3s ease;
+				z-index: 10001;
 				font-family: 'IBM Plex Sans', sans-serif;
 				pointer-events: auto;
-				cursor: pointer;
-				background: transparent !important;
-				border: none !important;
-				padding: 0 !important;
-				margin: 0 !important;
-				visibility: visible;
-				width: auto !important;
-				height: auto !important;
+				cursor: none !important;
+				margin-top: 200px;
+				background: transparent;
+				border: none;
+				padding: 0;
+			}
+
+			.intro-arrow-button,
+			.intro-arrow-button * {
+				cursor: none !important;
 			}
 
 			.intro-arrow-button.hidden {
@@ -594,34 +591,33 @@
 				z-index: -1 !important;
 			}
 
+			.intro-arrow-button:hover {
+				opacity: 0.7;
+			}
 
 			.intro-arrow-circle {
-				width: 56px;
-				height: 56px;
-				border: 2px solid rgba(255,255,255,1);
+				width: 60px;
+				height: 60px;
+				border: 1px solid #ffffff;
 				border-radius: 50%;
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				transition: border 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-				box-shadow: 0 0 20px rgba(255,255,255,0.6), 0 0 40px rgba(255,255,255,0.4);
-			}
-
-			.intro-arrow-circle span {
-				font-size: 26px;
-				color: rgba(255,255,255,1);
-				transition: transform 0.25s ease;
-				text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5);
+				transition: transform 0.3s ease;
 			}
 
 			.intro-arrow-button:hover .intro-arrow-circle {
-				border-color: white;
-				background: rgba(255,255,255,0.15);
-				box-shadow: 0 0 30px rgba(255,255,255,0.8), 0 0 60px rgba(255,255,255,0.6);
+				transform: translateX(3px);
 			}
 
-			.intro-arrow-button:hover .intro-arrow-circle span {
-				transform: translateX(4px);
+			.intro-arrow-circle::after {
+				content: '→';
+				font-size: 24px;
+				color: #ffffff;
+			}
+
+			.intro-arrow-circle span {
+				display: none;
 			}
 
 			/* Main Chord Graph Page */
@@ -707,12 +703,6 @@
 		<!-- Navigation Menu -->
 		<div class="navigation-menu" id="navigationMenu"></div>
 
-		<!-- Arrow Button - Outside page container for always visible -->
-		<button class="intro-arrow-button" id="beginChordBtn">
-			<div class="intro-arrow-circle">
-				<span>→</span>
-			</div>
-		</button>
 
 		<!-- Page Container -->
 		<div class="page-container">
@@ -736,6 +726,12 @@
 						<p class="intro-description">
 							This chord diagram shows how sci-fi films from different eras reuse and reinterpret the same motifs. Each line connects films that share a trope and how those connection reflect culture.
 						</p>
+
+						<!-- BEGIN Button - Same style as fiction vs reality page -->
+						<button class="intro-arrow-button" id="beginChordBtn">
+							<span>BEGIN</span>
+							<div class="intro-arrow-circle"></div>
+						</button>
 					</div>
 
 					<div>
@@ -1455,6 +1451,27 @@ function positionLabelOverBar(labelEl, barEl, text) {
 
 			// Arrow button click handler
 			if (beginBtn) {
+				// Add cursor hover effects
+				const cursorEl = document.getElementById('cursorCircle');
+				if (cursorEl) {
+					beginBtn.addEventListener('mouseenter', () => {
+						cursorEl.classList.add('hover');
+						cursorEl.style.setProperty('width', '45px', 'important');
+						cursorEl.style.setProperty('height', '45px', 'important');
+						cursorEl.style.setProperty('opacity', '0.7', 'important');
+						cursorEl.style.setProperty('background', 'white', 'important');
+						document.body.style.cursor = 'none'; // Hide default cursor
+					});
+					beginBtn.addEventListener('mouseleave', () => {
+						cursorEl.classList.remove('hover');
+						cursorEl.style.setProperty('width', '18px', 'important');
+						cursorEl.style.setProperty('height', '18px', 'important');
+						cursorEl.style.setProperty('opacity', '1', 'important');
+						cursorEl.style.setProperty('background', 'rgba(200, 200, 200, 0.5)', 'important');
+						document.body.style.cursor = 'auto'; // Restore default cursor
+					});
+				}
+
 				beginBtn.addEventListener('click', (e) => {
 					e.preventDefault();
 					if (currentPage < pages.length - 1) {

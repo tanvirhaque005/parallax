@@ -730,8 +730,13 @@ class ChordGraph {
     };
 
     // Color for links: blue for connections, gray for no connections
+    // When showing all years (currentDecade is null), make all lines gray
     const linkColor = '#46AACB';
     const noConnectionColor = '#535353';
+    const allYearsColor = '#535353'; // Gray for all lines when showing all years
+    
+    // Determine if we're showing all years
+    const isAllYears = this.currentDecade === null;
     
     // Calculate max value for thickness scaling
     const maxValue = d3.max(links, d => d.value) || 1;
@@ -794,11 +799,11 @@ class ChordGraph {
         enter => enter.append('path')
           .attr('class', 'link')
           .attr('d', linkPath)
-          .attr('stroke', d => d.value > 0 ? linkColor : noConnectionColor)
+          .attr('stroke', d => isAllYears ? allYearsColor : (d.value > 0 ? linkColor : noConnectionColor))
           .attr('stroke-width', d => thicknessScale(d.value))
           .attr('fill', 'none')
           .attr('opacity', d => d.value > 0 ? 0.9 : 0.3)
-          .style('stroke', d => d.value > 0 ? linkColor : noConnectionColor)
+          .style('stroke', d => isAllYears ? allYearsColor : (d.value > 0 ? linkColor : noConnectionColor))
           .style('stroke-width', d => thicknessScale(d.value))
           .call(enter => enter.transition()
             .duration(this.transitionDuration)
@@ -808,8 +813,8 @@ class ChordGraph {
           .call(update => update.transition()
             .duration(this.transitionDuration)
             .attr('d', linkPath)
-            .attr('stroke', d => d.value > 0 ? linkColor : noConnectionColor)
-            .style('stroke', d => d.value > 0 ? linkColor : noConnectionColor)
+            .attr('stroke', d => isAllYears ? allYearsColor : (d.value > 0 ? linkColor : noConnectionColor))
+            .style('stroke', d => isAllYears ? allYearsColor : (d.value > 0 ? linkColor : noConnectionColor))
             .attr('stroke-width', d => thicknessScale(d.value))
             .style('stroke-width', d => thicknessScale(d.value))
             .attr('opacity', d => d.value > 0 ? 0.9 : 0.3)
@@ -1423,14 +1428,17 @@ class ChordGraph {
         };
 
         // reset links with fixed color and thickness based on connections
+        // When showing all years, make all lines gray instead of blue
         d3.selectAll('.link').each(function(d){
           try {
             if (d && d.value !== undefined) {
               const strokeWidth = thicknessScale(d.value);
+              // Use gray color for all links when showing all years
+              const allYearsColor = '#535353';
               d3.select(this)
                 .transition().duration(300)
-                .attr('stroke', linkColor)
-                .style('stroke', linkColor)
+                .attr('stroke', allYearsColor)
+                .style('stroke', allYearsColor)
                 .attr('stroke-width', strokeWidth)
                 .style('stroke-width', strokeWidth)
                 .style('opacity', 0.9);

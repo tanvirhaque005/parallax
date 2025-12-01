@@ -120,6 +120,19 @@
             line-height: 1.1;
             /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif; */
         }
+        
+        /* Ensure text doesn't scale with screen size */
+        @media (max-width: 1600px) {
+            .cover-main-title {
+                font-size: 72px;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .cover-main-title {
+                font-size: 72px;
+            }
+        }
 
         .cover-description {
             font-size: 16px;
@@ -128,14 +141,32 @@
             max-width: 500px;
             opacity: 0.9;
         }
+        
+        /* Ensure description text doesn't scale */
+        @media (max-width: 1600px) {
+            .cover-description {
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .cover-description {
+                font-size: 16px;
+            }
+        }
 
         /* Background Gradient Effect - bottom left with text */
+        /* Fixed size - always the same regardless of screen size */
         .cover-gradient {
             position: fixed;
-            bottom: -29.17vh;
-            left: -20.83vw;
+            bottom: -400px;
+            left: -400px;
             width: 1200px;
             height: 1200px;
+            min-width: 1200px;
+            max-width: 1200px;
+            min-height: 1200px;
+            max-height: 1200px;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 25%, rgba(255, 255, 255, 0.08) 45%, rgba(255, 255, 255, 0.03) 65%, transparent 85%);
             border-radius: 50%;
             pointer-events: none;
@@ -145,38 +176,6 @@
                         0 0 250px 120px rgba(255, 255, 255, 0.1),
                         0 0 350px 160px rgba(255, 255, 255, 0.05);
             transform: translate(0, 0);
-        }
-        
-        /* Scale the gradient proportionally on smaller screens */
-        @media (max-width: 1600px) {
-            .cover-gradient {
-                width: 75vw;
-                height: 75vw;
-                min-width: 800px;
-                min-height: 800px;
-                bottom: -25vh;
-                left: -15vw;
-            }
-        }
-        
-        @media (max-width: 1200px) {
-            .cover-gradient {
-                width: 100vw;
-                height: 100vw;
-                min-width: 600px;
-                min-height: 600px;
-                bottom: -20vh;
-                left: -10vw;
-            }
-        }
-        
-        @media (max-height: 900px) {
-            .cover-gradient {
-                width: 100vh;
-                height: 100vh;
-                bottom: -25vh;
-                left: -15vw;
-            }
         }
 
         .cover-description-text {
@@ -189,6 +188,19 @@
             font-weight: 400;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
             margin-top: 20px;
+        }
+        
+        /* Ensure description text doesn't scale with screen size */
+        @media (max-width: 1600px) {
+            .cover-description-text {
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .cover-description-text {
+                font-size: 16px;
+            }
         }
 
         .cover-content {
