@@ -11,6 +11,21 @@ const periodTexts = {
   'All': {
     description: 'Most sci-fi futures originate from the same real cities—Los Angeles, Vancouver, London. Real landscapes anchor imagined ones.'
   },
+  1925: {
+    description: 'The earliest sci-fi films emerged in the silent era, pioneering visual effects and imaginative world-building.' // ADD YOUR DESCRIPTION HERE
+  },
+  1930: {
+    description: 'Early sound era sci-fi explored new storytelling possibilities with emerging technologies.' // ADD YOUR DESCRIPTION HERE
+  },
+  1935: {
+    description: 'Early sound era sci-fi explored new storytelling possibilities with emerging technologies.' // ADD YOUR DESCRIPTION HERE
+  },
+  1940: {
+    description: 'Wartime sci-fi reflected anxieties and aspirations of the era through speculative fiction.' // ADD YOUR DESCRIPTION HERE
+  },
+  1945: {
+    description: 'Wartime sci-fi reflected anxieties and aspirations of the era through speculative fiction.' // ADD YOUR DESCRIPTION HERE
+  },
   1950: {
     description: 'Many futures were shot in the same hubs—LA, Vancouver, London—using familiar landscapes to anchor imagined ones.' // ADD YOUR DESCRIPTION HERE
   },
@@ -68,7 +83,7 @@ function updateTextOverlay() {
     let title, description;
 
     if (currentDecade === null) {
-      title = '1950-2020';
+      title = '1925-2020';
       description = periodTexts['All'].description;
     } else {
       title = `${currentDecade}–${currentDecade + WINDOW_STEP - 1}`;
@@ -382,7 +397,7 @@ loadPaths();
 // ==========================================================
 // TIMELINE DECADE FILTER
 // ==========================================================
-const minYear = 1950;
+const minYear = 1925;
 const maxYear = 2020;
 
 const WINDOW_STEP = 5;
