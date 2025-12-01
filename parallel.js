@@ -273,11 +273,13 @@ function buildFixedAxisLabels() {
 
     const stop1 = S("stop");
     stop1.setAttribute("offset", "0%");
-    stop1.setAttribute("stop-color", "rgba(0,0,0,1)");
+    stop1.setAttribute("stop-color", "var(--bg)");
+    stop1.setAttribute("stop-opacity", "0.7");
 
     const stop2 = S("stop");
     stop2.setAttribute("offset", "100%");
-    stop2.setAttribute("stop-color", "rgba(0,0,0,0.3)");
+    stop2.setAttribute("stop-color", "var(--bg)");
+    stop2.setAttribute("stop-opacity", "0.7");
 
     
     grad.appendChild(stop1);
