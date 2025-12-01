@@ -315,13 +315,14 @@
     cursor: none !important;
 }
 
-			/* Movie popup styling - black and transparent overlay */
+			/* Movie popup styling - copied from parallel.html tooltip */
 			.movie-popup,
 			#chordGraphPopup {
 				position: fixed !important;
 				z-index: 99999 !important;
-				background: rgba(0, 0, 0, 0.6) !important;
-				color: #ffffff !important;
+				background: rgba(255, 255, 255, 0.3) !important;
+				color: white !important;
+				border: 1px solid #555 !important;
 				border-radius: 8px !important;
 				padding: 20px !important;
 				min-width: 280px !important;
@@ -330,9 +331,7 @@
 				font-size: 12px !important;
 				max-height: 400px !important;
 				overflow-y: auto !important;
-				backdrop-filter: blur(4px) !important;
 				box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8) !important;
-				border: 1px solid rgba(255, 255, 255, 0.2) !important;
 				pointer-events: auto !important;
 			}
 
@@ -1453,7 +1452,7 @@ function positionLabelOverBar(labelEl, barEl, text) {
 						// Wait for box animation, then start typing
 						setTimeout(() => {
 							introMessage.classList.add('show-text');
-							const text = "Hover over paths to reveal shared themes. Scroll to travel through time.";
+							const text = "Scroll to travel through time. Hover over paths to reveal shared themes.";
 							// Clear any existing text first
 							introText.textContent = '';
 							typeText(introText, text, 30);
