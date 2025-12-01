@@ -399,64 +399,51 @@ class ChordGraph {
     feMerge.append('feMergeNode').attr('in', 'coloredBlur');
     feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
     
-    // Create SVG filter to make images completely solid black
-    const solidBlackFilter = defs.append('filter')
-      .attr('id', 'solidBlack')
+    // Create SVG filter to convert images to grayscale (visible, not black)
+    const grayscaleFilter = defs.append('filter')
+      .attr('id', 'grayscale')
       .attr('x', '-50%')
       .attr('y', '-50%')
       .attr('width', '200%')
       .attr('height', '200%');
     
-    // Convert to grayscale first
-    solidBlackFilter.append('feColorMatrix')
+    // Convert to grayscale - keeps images visible
+    grayscaleFilter.append('feColorMatrix')
+      .attr('type', 'saturate')
+      .attr('values', '0');
+    
+    // Create a darker grayscale filter for better visibility
+    const darkGrayscaleFilter = defs.append('filter')
+      .attr('id', 'darkGrayscale')
+      .attr('x', '-50%')
+      .attr('y', '-50%')
+      .attr('width', '200%')
+      .attr('height', '200%');
+    
+    // Convert to grayscale and darken slightly
+    darkGrayscaleFilter.append('feColorMatrix')
       .attr('type', 'saturate')
       .attr('values', '0')
       .attr('result', 'grayscale');
     
-    // Make it completely black using component transfer
-    const blackTransfer = solidBlackFilter.append('feComponentTransfer')
-      .attr('in', 'grayscale')
-      .attr('result', 'black');
+    // Darken the grayscale image slightly
+    const darkenTransfer = darkGrayscaleFilter.append('feComponentTransfer')
+      .attr('in', 'grayscale');
     
-    blackTransfer.append('feFuncR')
+    darkenTransfer.append('feFuncR')
       .attr('type', 'linear')
-      .attr('slope', '0')
+      .attr('slope', '0.8')
       .attr('intercept', '0');
     
-    blackTransfer.append('feFuncG')
+    darkenTransfer.append('feFuncG')
       .attr('type', 'linear')
-      .attr('slope', '0')
+      .attr('slope', '0.8')
       .attr('intercept', '0');
     
-    blackTransfer.append('feFuncB')
+    darkenTransfer.append('feFuncB')
       .attr('type', 'linear')
-      .attr('slope', '0')
+      .attr('slope', '0.8')
       .attr('intercept', '0');
-    
-    // Apply threshold to make it completely solid - convert any visible pixel to pure black
-    const thresholdTransfer = solidBlackFilter.append('feComponentTransfer')
-      .attr('in', 'black')
-      .attr('result', 'threshold');
-    
-    // Use discrete transfer to force all non-transparent pixels to be pure black
-    thresholdTransfer.append('feFuncR')
-      .attr('type', 'discrete')
-      .attr('tableValues', '0');
-    
-    thresholdTransfer.append('feFuncG')
-      .attr('type', 'discrete')
-      .attr('tableValues', '0');
-    
-    thresholdTransfer.append('feFuncB')
-      .attr('type', 'discrete')
-      .attr('tableValues', '0');
-    
-    thresholdTransfer.append('feFuncA')
-      .attr('type', 'discrete')
-      .attr('tableValues', '1');
-    
-    const solidMerge = solidBlackFilter.append('feMerge');
-    solidMerge.append('feMergeNode').attr('in', 'threshold');
 
     // Gradient will be created dynamically in createCircleBorder with proper sizing
 
@@ -932,11 +919,9 @@ class ChordGraph {
                   .attr('href', imagePath)
                   .attr('preserveAspectRatio', 'xMidYMid meet')
                   .style('pointer-events', 'none')
-                  .style('opacity', hasConnections ? '1' : '0.2')
                   .style('opacity', hasConnections ? 1 : 0.2)
-                  .attr('filter', 'url(#solidBlack)') // Use SVG filter to make completely solid black
+                  .attr('filter', 'url(#darkGrayscale)') // Use grayscale filter to keep images visible
                   .style('mix-blend-mode', 'normal')
-                  .style('filter', 'url(#solidBlack) brightness(0) contrast(3)') // Make darker and more solid
                   .attr('data-has-connections', hasConnections ? 'true' : 'false');
               } else {
                 console.warn('No image path found for theme:', d.label);
@@ -1574,10 +1559,8 @@ class ChordGraph {
           // Update image opacity: COMPLETELY opaque (opacity 1, NO transparency) if has connections, transparent if not
           if (hasConnections) {
             image.transition().duration(300)
-              .style('opacity', '1')
               .style('opacity', 1)
-              .attr('filter', 'url(#solidBlack)')
-              .style('filter', 'url(#solidBlack) brightness(0) contrast(2)') // Make darker
+              .attr('filter', 'url(#darkGrayscale)')
               .attr('data-has-connections', 'true');
             
             // Update background circle
@@ -1587,10 +1570,8 @@ class ChordGraph {
             }
           } else {
             image.transition().duration(300)
-              .style('opacity', '0.2')
               .style('opacity', 0.2)
-              .attr('filter', 'url(#solidBlack)')
-              .style('filter', 'url(#solidBlack) brightness(0) contrast(2)')
+              .attr('filter', 'url(#darkGrayscale)')
               .attr('data-has-connections', 'false');
             
             // Update background circle
@@ -1632,7 +1613,7 @@ class ChordGraph {
         .style('height', hoverSize)
         .style('background', 'transparent')
         .style('pointer-events', 'auto')
-        .style('cursor', 'pointer')
+        .style('cursor', 'none')
         .style('z-index', zIndex)
         .style('opacity', '0')
         .datum(nodeData);
@@ -1643,10 +1624,28 @@ class ChordGraph {
       hoverDiv
         .on('mouseenter', (event, d) => {
           event.stopPropagation();
+          // Add cursor hover effect
+          const cursorEl = document.getElementById('cursorCircle');
+          if (cursorEl) {
+            cursorEl.classList.add('hover');
+            cursorEl.style.setProperty('width', '45px', 'important');
+            cursorEl.style.setProperty('height', '45px', 'important');
+            cursorEl.style.setProperty('opacity', '0.5', 'important');
+            cursorEl.style.setProperty('background', 'white', 'important');
+          }
           this.handleNodeHover(d, event);
         })
         .on('mouseleave', (event, d) => {
           event.stopPropagation();
+          // Remove cursor hover effect
+          const cursorEl = document.getElementById('cursorCircle');
+          if (cursorEl) {
+            cursorEl.classList.remove('hover');
+            cursorEl.style.setProperty('width', '18px', 'important');
+            cursorEl.style.setProperty('height', '18px', 'important');
+            cursorEl.style.setProperty('opacity', '1', 'important');
+            cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+          }
           this.handleNodeHoverOut(d, event);
         });
     });
@@ -1681,16 +1680,34 @@ class ChordGraph {
         .style('height', hoverSize)
         .style('background', 'transparent')
         .style('pointer-events', 'auto')
-        .style('cursor', 'pointer')
+        .style('cursor', 'none')
         .style('z-index', zIndex)
         .style('opacity', '0')
         .datum(nodes[this.nodeHoverDivs.length]);
       
       hoverDiv
         .on('mouseenter', (event, d) => {
+          // Add cursor hover effect
+          const cursorEl = document.getElementById('cursorCircle');
+          if (cursorEl) {
+            cursorEl.classList.add('hover');
+            cursorEl.style.setProperty('width', '45px', 'important');
+            cursorEl.style.setProperty('height', '45px', 'important');
+            cursorEl.style.setProperty('opacity', '0.5', 'important');
+            cursorEl.style.setProperty('background', 'white', 'important');
+          }
           this.handleNodeHover(d, event);
         })
         .on('mouseleave', (event, d) => {
+          // Remove cursor hover effect
+          const cursorEl = document.getElementById('cursorCircle');
+          if (cursorEl) {
+            cursorEl.classList.remove('hover');
+            cursorEl.style.setProperty('width', '18px', 'important');
+            cursorEl.style.setProperty('height', '18px', 'important');
+            cursorEl.style.setProperty('opacity', '1', 'important');
+            cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+          }
           this.handleNodeHoverOut(d, event);
         });
       

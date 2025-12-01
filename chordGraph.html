@@ -257,14 +257,17 @@
 			
 			#chordContainer .node image {
 				pointer-events: none;
-				filter: grayscale(100%) brightness(0) contrast(1000) !important;
 				mix-blend-mode: normal !important;
 				transition: opacity 0.3s ease;
 			}
 			
+			/* Hide default cursor on node hover divs */
+			.node-hover-div {
+				cursor: none !important;
+			}
+			
 			#chordContainer .node image[data-has-connections="true"] {
 				opacity: 1 !important;
-				filter: grayscale(100%) brightness(0) contrast(1000) !important;
 			}
 			
 			#chordContainer .node image[data-has-connections="false"] {
