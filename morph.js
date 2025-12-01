@@ -1249,24 +1249,25 @@ function updatePieChart() {
 
   // Prepare data for pie chart
   const data = [
-    { label: 'US', count: usCount, color: '#9747FF' },
+    { label: 'US', count: usCount, color: '#2e4046' },
     { label: 'World', count: worldCount, color: '#46AACB' },
-    { label: 'Solar', count: solarCount, color: '#9b59b6' }
+    { label: 'Galaxy', count: solarCount, color: '#73d1f0' }
   ];
 
   // Only show non-zero segments
   const filteredData = data.filter(d => d.count > 0);
 
   // Draw pie chart using D3
-  const width = 200;
-  const height = 200;
-  const radius = Math.min(width, height) / 2 - 20;
+  const width = 260; // Total SVG width to accommodate legend
+  const height = 180;
+  const pieSize = 150; // Pie chart area
+  const radius = Math.min(pieSize, height) / 2 - 15;
 
   const svg = d3.select('#pieChart');
   svg.selectAll('*').remove(); // Clear previous chart
 
   const g = svg.append('g')
-    .attr('transform', `translate(${width / 2}, ${height / 2})`);
+    .attr('transform', `translate(${pieSize / 2}, ${height / 2})`);
 
   const pie = d3.pie()
     .value(d => d.count)
@@ -1309,7 +1310,7 @@ function updatePieChart() {
     .attr('text-anchor', 'middle')
     .attr('dy', '-0.2em')
     .attr('font-family', 'IBM Plex Sans, sans-serif')
-    .attr('font-size', '24px')
+    .attr('font-size', '22px')
     .attr('font-weight', '700')
     .attr('fill', 'white')
     .style('text-shadow', '0 0 4px rgba(0,0,0,0.8)')
@@ -1325,33 +1326,35 @@ function updatePieChart() {
     .style('text-shadow', '0 0 3px rgba(0,0,0,0.8)')
     .text('MOVIES');
 
-  // Add legend below the pie chart
-  const legend = svg.append('g')
-    .attr('transform', `translate(10, ${height - 50})`);
-
+  // Add legend to the right of the pie chart
   const legendData = [
-    { label: 'US', color: '#9747FF' },
+    { label: 'US', color: '#2e4046' },
     { label: 'World', color: '#46AACB' },
-    { label: 'Solar', color: '#9b59b6' }
+    { label: 'Galaxy', color: '#73d1f0' }
   ];
+
+  const legendSpacing = 32; // Spacing between legend items
+  const legendHeight = legendData.length * legendSpacing;
+  const legend = svg.append('g')
+    .attr('transform', `translate(${pieSize + 15}, ${height / 2 - legendHeight / 2})`);
 
   legendData.forEach((item, i) => {
     const legendRow = legend.append('g')
-      .attr('transform', `translate(0, ${i * 16})`);
+      .attr('transform', `translate(0, ${i * legendSpacing})`);
 
-    // Color square
-    legendRow.append('rect')
-      .attr('width', 10)
-      .attr('height', 10)
-      .attr('fill', item.color)
-      .attr('rx', 2);
+    // Color circle (larger)
+    legendRow.append('circle')
+      .attr('cx', 8)
+      .attr('cy', 8)
+      .attr('r', 8)
+      .attr('fill', item.color);
 
-    // Label text
+    // Label text (larger)
     legendRow.append('text')
-      .attr('x', 16)
-      .attr('y', 9)
+      .attr('x', 22)
+      .attr('y', 13)
       .attr('font-family', 'IBM Plex Sans, sans-serif')
-      .attr('font-size', '10px')
+      .attr('font-size', '14px')
       .attr('font-weight', '500')
       .attr('fill', 'rgba(255,255,255,0.85)')
       .style('text-shadow', '0 0 3px rgba(0,0,0,0.8)')
@@ -1412,11 +1415,21 @@ Object.defineProperty(window, 'targetCameraZ', {
   set: (value) => { targetCameraZ = value; }
 });
 
+// Function to update intro slide transition based on current page
+window.updateIntroSlideTransition = function(onIntroPage) {
+  targetIntroSlideProgress = onIntroPage ? 0 : 1;
+};
+
 let scaleStart = 1.0;
 let scaleEnd = 0.4;
 let worldScale = 3.8; // Fullscreen scale for world view
 
 let autoZoomingOut = false;
+
+// Intro page sliding transition
+let introSlideProgress = 0; // 0 = intro page (left US visible on right), 1 = map page (centered US)
+let targetIntroSlideProgress = 0;
+const introSlideSpeed = 0.08; // Smooth transition speed
 
 // NEW: second-click collapse flag
 let secondZoomOut = false;
@@ -1517,6 +1530,14 @@ function animate(){
     }
   }
 
+  // SMOOTH INTRO SLIDE TRANSITION
+  const introDiff = Math.abs(introSlideProgress - targetIntroSlideProgress);
+  if (introDiff > 0.001) {
+    introSlideProgress += (targetIntroSlideProgress - introSlideProgress) * introSlideSpeed;
+  } else {
+    introSlideProgress = targetIntroSlideProgress;
+  }
+
   // ZOOM OUT (legacy auto-zoom)
   if(autoZoomingOut){
     camera.position.z += 0.4;
@@ -1545,8 +1566,11 @@ function animate(){
     // Interpolate scale: 5.5x at zoomMin, worldScale at usToWorldZoom
     const currentScale = THREE.MathUtils.lerp(usZoomScale, worldScale, mapTransitionProgress);
 
+    // Intro page slide offset: shifts map left to show left US on right side of screen
+    const introOffset = THREE.MathUtils.lerp(0.2, 0, introSlideProgress);
+
     // Interpolate position: centered on US at zoomMin, centered at origin at usToWorldZoom
-    const currentOffsetX = THREE.MathUtils.lerp(-usCenter.x, 0, mapTransitionProgress);
+    const currentOffsetX = THREE.MathUtils.lerp(-usCenter.x + introOffset, 0, mapTransitionProgress);
     const currentOffsetY = THREE.MathUtils.lerp(-usCenter.y, 0, mapTransitionProgress);
 
     // Apply scale (but don't override morph scale)
@@ -1569,15 +1593,18 @@ function animate(){
   }
 
   // Update flight path group visibility and transformations
-  // US paths visible when in US zoom state
-  usFlightPathGroup.visible = currentZoomState === ZOOM_STATES.US;
+  // US paths visible when in US zoom state AND not on intro page
+  usFlightPathGroup.visible = currentZoomState === ZOOM_STATES.US && (typeof currentPage === 'undefined' || currentPage !== 0);
 
   // Match US flight paths to map transformation
   if (currentZoomState === ZOOM_STATES.US) {
     const usCenter = { x: -0.65, y: 0.15 };
     const usZoomScale = 3.0;
     const currentScale = THREE.MathUtils.lerp(usZoomScale, worldScale, mapTransitionProgress);
-    const currentOffsetX = THREE.MathUtils.lerp(-usCenter.x, 0, mapTransitionProgress);
+
+    // Apply same intro offset to flight paths
+    const introOffset = THREE.MathUtils.lerp(0.2, 0, introSlideProgress);
+    const currentOffsetX = THREE.MathUtils.lerp(-usCenter.x + introOffset, 0, mapTransitionProgress);
     const currentOffsetY = THREE.MathUtils.lerp(-usCenter.y, 0, mapTransitionProgress);
 
     // Apply same transformation to US flight paths
@@ -1601,8 +1628,8 @@ function animate(){
     });
   }
 
-  // International paths visible when in WORLD state
-  flightPathGroup.visible = currentZoomState === ZOOM_STATES.WORLD;
+  // International paths visible when in WORLD state AND not on intro page
+  flightPathGroup.visible = currentZoomState === ZOOM_STATES.WORLD && (typeof currentPage === 'undefined' || currentPage !== 0);
 
   // Scale international flight paths to match fullscreen world map
   if (currentZoomState === ZOOM_STATES.WORLD) {
@@ -2321,14 +2348,33 @@ window.addEventListener("mousemove", (evt) => {
   // ==========================================================
   // ARROW CURSOR LOGIC (LEFT/RIGHT EDGE NAVIGATION)
   // ==========================================================
-  // Only show arrow cursors when on the map page (page 1)
-  if (typeof currentPage !== 'undefined' && currentPage === 1) {
-    const x = evt.clientX;
-    const w = window.innerWidth;
+  const x = evt.clientX;
+  const w = window.innerWidth;
+  const cursorElement = document.getElementById("cursorCircle") || window.cursorElement;
 
-    // Get cursor element (in case it wasn't available at script load time)
-    const cursorElement = document.getElementById("cursorCircle") || window.cursorElement;
-
+  // INTRO PAGE (page 0) - Show right arrow on right side only
+  if (typeof currentPage !== 'undefined' && currentPage === 0) {
+    if (cursorElement && !cursorElement.classList.contains("hover")) {
+      if (x > w / 2) {
+        // Right half - show right arrow
+        cursorElement.classList.add("arrow-right");
+        cursorElement.classList.remove("arrow-left");
+        cursorElement.style.setProperty('width', '60px', 'important');
+        cursorElement.style.setProperty('height', '60px', 'important');
+        cursorElement.style.setProperty('background', 'rgba(255, 255, 255, 0.18)', 'important');
+        cursorElement.style.setProperty('opacity', '1', 'important');
+      } else {
+        // Left half - reset to default
+        cursorElement.classList.remove("arrow-left", "arrow-right");
+        cursorElement.style.setProperty('width', '18px', 'important');
+        cursorElement.style.setProperty('height', '18px', 'important');
+        cursorElement.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+        cursorElement.style.setProperty('opacity', '1', 'important');
+      }
+    }
+  }
+  // MAP PAGE (page 1) - Show arrow cursors on left/right edges
+  else if (typeof currentPage !== 'undefined' && currentPage === 1) {
     // Don't show arrows if hovering over interactive elements or timeline bars
     if (cursorElement && !cursorElement.classList.contains("hover") && !hoveringBars) {
       if (x < EDGE_ZONE) {
@@ -2368,14 +2414,25 @@ window.addEventListener("mousemove", (evt) => {
 // ARROW CURSOR CLICK HANDLER
 // ==========================================================
 window.addEventListener("mousedown", (e) => {
-  // Only handle arrow clicks when on the map page (page 1)
-  if (typeof currentPage !== 'undefined' && currentPage !== 1) {
-    return;
-  }
-
   // Get cursor element
   const cursorElement = document.getElementById("cursorCircle") || window.cursorElement;
   if (!cursorElement) return;
+
+  // INTRO PAGE (page 0) - Right arrow transitions to map page
+  if (typeof currentPage !== 'undefined' && currentPage === 0) {
+    if (cursorElement.classList.contains("arrow-right")) {
+      // Call the goToMapPage function defined in the HTML
+      if (typeof goToMapPage === 'function') {
+        goToMapPage();
+      }
+    }
+    return;
+  }
+
+  // MAP PAGE (page 1) - Arrow navigation for timeline
+  if (typeof currentPage !== 'undefined' && currentPage !== 1) {
+    return;
+  }
 
   if (cursorElement.classList.contains("arrow-right")) {
     // Navigate forward in time
