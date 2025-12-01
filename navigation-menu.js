@@ -96,9 +96,12 @@
       item.style.pointerEvents = 'auto';
     });
     
-    // Set line to visible state and ensure correct height IMMEDIATELY
+    // Set line height IMMEDIATELY - calculate and set synchronously before first paint
     // Calculate height synchronously after items are in DOM
     if (progressLine && menuItemsList) {
+      // Disable transitions FIRST to prevent any animation
+      progressLine.style.transition = 'none';
+      
       // Ensure items are fully visible and laid out
       menuItemsList.style.opacity = '1';
       menuItemsList.style.transform = 'translateX(0)';
@@ -106,10 +109,10 @@
       menuItemsList.style.overflow = 'visible';
       menuItemsList.style.pointerEvents = 'auto';
       
-      // Force reflow to ensure layout
+      // Force reflow to ensure layout is calculated
       void menuItemsList.offsetHeight;
       
-      // Calculate height immediately
+      // Calculate height immediately in one synchronous operation
       let itemsHeight = menuItemsList.offsetHeight;
       
       // If height is still 0 or too small, calculate from individual items
@@ -127,12 +130,21 @@
         }
       }
       
-      // Set height immediately without transition
+      // Set height IMMEDIATELY to calculated value - all in one operation
+      // This ensures the line is always at full size from the very first render
       if (itemsHeight > 0) {
-        progressLine.style.transition = 'none';
+        // Set height with !important to override any CSS
+        progressLine.style.setProperty('height', `${itemsHeight}px`, 'important');
+        progressLine.style.setProperty('min-height', `${itemsHeight}px`, 'important');
+        // Also set it as a regular style property
         progressLine.style.height = `${itemsHeight}px`;
-        // Force reflow
+        progressLine.style.minHeight = `${itemsHeight}px`;
+        // Force multiple reflows to ensure it's applied before paint
         void progressLine.offsetHeight;
+        void progressLine.offsetWidth;
+        void progressLine.offsetHeight;
+        // Store the height so we can reference it later
+        progressLine.dataset.fullHeight = `${itemsHeight}px`;
       }
       
       progressLine.style.transform = 'translateX(0)';
@@ -181,14 +193,24 @@
             
             const itemsHeight = menuItemsList.offsetHeight;
             if (itemsHeight > 0) {
-              // Set height without transition to prevent glitches
-              const currentTransition = progressLine.style.transition;
-              progressLine.style.transition = 'none';
-              progressLine.style.height = `${itemsHeight}px`;
-              // Force a reflow
-              void progressLine.offsetHeight;
-              // Restore transition after height is set
-              progressLine.style.transition = currentTransition || '';
+              // Get current height to check if it needs updating
+              const currentHeight = progressLine.style.height || getComputedStyle(progressLine).height;
+              const currentHeightNum = parseInt(currentHeight) || 0;
+              const newHeightNum = parseInt(itemsHeight) || 0;
+              
+              // Only update if the height is significantly different (more than 10px)
+              // This prevents the line from shrinking if it's already at the correct size
+              if (Math.abs(currentHeightNum - newHeightNum) > 10 || currentHeightNum < 200) {
+                // Set height without transition to prevent glitches
+                const currentTransition = progressLine.style.transition;
+                progressLine.style.transition = 'none';
+                progressLine.style.height = `${itemsHeight}px`;
+                progressLine.style.minHeight = `${itemsHeight}px`;
+                // Force a reflow
+                void progressLine.offsetHeight;
+                // Restore transition after height is set
+                progressLine.style.transition = currentTransition || '';
+              }
             }
             
             // Restore original styles
@@ -305,9 +327,27 @@
       
       // Animate progress line sliding left at the same pace as menu items
       if (progressLineEl) {
+        // Preserve the full height - use stored value or current calculated height
+        const storedHeight = progressLineEl.dataset.fullHeight;
+        const currentHeight = storedHeight || progressLineEl.style.height || getComputedStyle(progressLineEl).height;
+        if (currentHeight && currentHeight !== '150px') {
+          progressLineEl.style.setProperty('height', currentHeight, 'important');
+          progressLineEl.style.setProperty('min-height', currentHeight, 'important');
+          progressLineEl.style.height = currentHeight;
+          progressLineEl.style.minHeight = currentHeight;
+        }
+        
         // Start line animation at the same time as first item (50ms delay)
         setTimeout(() => {
+          // Only transition transform and opacity - NEVER height
           progressLineEl.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+          // Ensure height is preserved with !important - ALWAYS maintain full height
+          if (currentHeight && currentHeight !== '150px') {
+            progressLineEl.style.setProperty('height', currentHeight, 'important');
+            progressLineEl.style.setProperty('min-height', currentHeight, 'important');
+            progressLineEl.style.height = currentHeight;
+            progressLineEl.style.minHeight = currentHeight;
+          }
           void progressLineEl.offsetHeight;
           progressLineEl.style.transform = 'translateX(0)';
           progressLineEl.style.opacity = '1';
@@ -388,6 +428,16 @@
       
       // Animate progress line sliding right with same smooth glide as expand
       if (progressLineEl) {
+        // Preserve the full height - use stored value or current calculated height
+        const storedHeight = progressLineEl.dataset.fullHeight;
+        const currentHeight = storedHeight || progressLineEl.style.height || getComputedStyle(progressLineEl).height;
+        if (currentHeight && currentHeight !== '150px') {
+          progressLineEl.style.setProperty('height', currentHeight, 'important');
+          progressLineEl.style.setProperty('min-height', currentHeight, 'important');
+          progressLineEl.style.height = currentHeight;
+          progressLineEl.style.minHeight = currentHeight;
+        }
+        
         // Start line animation at the same time as the first item to collapse (last item)
         // This creates the same smooth glide effect as expand
         setTimeout(() => {
@@ -398,7 +448,13 @@
             expandMenu();
             return;
           }
+          // Only transition transform and opacity - NEVER height
           progressLineEl.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+          // Ensure height is preserved
+          if (currentHeight && currentHeight !== '150px') {
+            progressLineEl.style.height = currentHeight;
+            progressLineEl.style.minHeight = currentHeight;
+          }
           void progressLineEl.offsetHeight;
           progressLineEl.style.transform = 'translateX(20px)';
           progressLineEl.style.opacity = '0.8';

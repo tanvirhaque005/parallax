@@ -1185,14 +1185,14 @@ let hoveredIndex = null;
 let hoveringBars = false;
 
 bookBarsContainer.addEventListener("mousemove", (e) => {
-    const bars = Array.from(document.querySelectorAll(".book-bar"));
+  const bars = Array.from(document.querySelectorAll(".book-bar"));
     const rect = bookBarsContainer.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
+  const mouseX = e.clientX - rect.left;
 
     // find nearest bar
     let best = 0;
     let bestDist = Infinity;
-    bars.forEach((bar, i) => {
+  bars.forEach((bar, i) => {
         const b = bar.getBoundingClientRect();
         const center = b.left - rect.left + b.width / 2;
         const d = Math.abs(mouseX - center);
@@ -1270,14 +1270,14 @@ function slideToWindow(yr) {
 //  Handle bar click to jump to window
 // ------------------------------------------------------------
 bookBarsContainer.addEventListener("click", (e) => {
-    const bars = Array.from(document.querySelectorAll(".book-bar"));
+  const bars = Array.from(document.querySelectorAll(".book-bar"));
     const containerRect = bookBarsContainer.getBoundingClientRect();
-    const mouseX = e.clientX - containerRect.left;
+  const mouseX = e.clientX - containerRect.left;
 
     // find nearest bar
     let best = 0;
     let bestDist = Infinity;
-    bars.forEach((bar, i) => {
+  bars.forEach((bar, i) => {
         const b = bar.getBoundingClientRect();
         const center = b.left - containerRect.left + b.width / 2;
         const d = Math.abs(mouseX - center);

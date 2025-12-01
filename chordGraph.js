@@ -26,6 +26,7 @@ class ChordGraph {
     this.height = 900;
     this.originalColorScale = null; // Store original color scale for "All" view
     this.originalLinks = null; // Store original links data
+    this.nodeHoverDivs = []; // Store invisible hover divs above nodes
     
     // Theme to image mapping
     this.themeImages = {
@@ -75,16 +76,16 @@ class ChordGraph {
           .attr('class', 'movie-popup')
           .attr('id', 'chordGraphPopup')
           .style('position', 'fixed')
-          .style('min-width', '400px')
-          .style('max-width', '500px')
-          .style('background', 'rgba(0, 0, 0, 0.85)')
+          .style('min-width', '280px')
+          .style('max-width', '320px')
+          .style('background', 'rgba(0, 0, 0, 0.6)')
           .style('color', '#ffffff')
           .style('border-radius', '8px')
-          .style('padding', '32px')
+          .style('padding', '20px')
           .style('z-index', '99999')
           .style('font-family', "'IBM Plex Sans', sans-serif")
-          .style('font-size', '13px')
-          .style('max-height', '600px')
+          .style('font-size', '12px')
+          .style('max-height', '400px')
           .style('overflow-y', 'auto')
           .style('backdrop-filter', 'blur(4px)')
           .style('box-shadow', '0 8px 32px rgba(0, 0, 0, 0.8)')
@@ -113,12 +114,13 @@ class ChordGraph {
       }) : ['No movies found for this time period'];
       
       const html = `
-        <div style="font-weight:700; margin-bottom:16px; color:#ffffff; font-size:20px; letter-spacing:0.5px;">${themeName}</div>
-        <div style="font-size:13px; color:#ffffff; line-height:1.7; margin-bottom:20px; opacity:0.9;">
+        <div style="font-weight:700; margin-bottom:12px; color:#ffffff; font-size:16px; letter-spacing:0.5px;">${themeName}</div>
+        <div style="font-size:11px; color:#ffffff; line-height:1.6; margin-bottom:12px; opacity:0.9;">
           ${description}
         </div>
-        <div style="font-size:12px; color:#ffffff; line-height:2; margin-top:16px;">
-          ${formattedMovies.map(m => `<div style="padding:3px 0;">${m}</div>`).join('')}
+        <div style="width:100%; height:1px; background-color:rgba(255,255,255,0.3); margin-bottom:12px;"></div>
+        <div style="font-size:11px; color:#ffffff; line-height:1.8; margin-top:12px;">
+          ${formattedMovies.map(m => `<div style="padding:2px 0;">${m}</div>`).join('')}
         </div>
       `;
 
@@ -153,7 +155,7 @@ class ChordGraph {
       
       console.log('Popup HTML set and made visible');
 
-      // Position the popup in the top right corner of the screen
+      // Position the popup next to the node
       try {
         // First, make sure popup is visible to get accurate dimensions
         this.moviePopup
@@ -166,16 +168,37 @@ class ChordGraph {
         
         const popupRect = this.moviePopup.node().getBoundingClientRect();
         
-        // Position in top right corner with some padding
-        const padding = 40;
-        const right = padding;
-        const top = padding;
+        // Convert SVG coordinates to screen coordinates
+        const svgPoint = this.svg.node().createSVGPoint();
+        svgPoint.x = nodeX;
+        svgPoint.y = nodeY;
+        const svgMatrix = this.svg.node().getScreenCTM();
+        if (!svgMatrix) return;
+        
+        const screenPoint = svgPoint.matrixTransform(svgMatrix);
+        
+        const offsetX = 60; // Distance from node to popup
+        const offsetY = -popupRect.height / 2; // Center vertically with node
+        
+        // Use screen coordinates directly since popup is fixed
+        let left = Math.round(screenPoint.x + offsetX);
+        let top = Math.round(screenPoint.y + offsetY);
+        
+        // Keep popup within viewport bounds
+        if (left + popupRect.width > window.innerWidth - 20) {
+          left = Math.round(screenPoint.x - popupRect.width - offsetX); // Show to the left instead
+        }
+        if (left < 20) left = 20;
+        if (top < 20) top = 20;
+        if (top + popupRect.height > window.innerHeight - 20) {
+          top = Math.round(window.innerHeight - popupRect.height - 20);
+        }
         
         // Set position and make fully visible - use setProperty for !important
         const popupEl = this.moviePopup.node();
-        popupEl.style.setProperty('right', `${right}px`, 'important');
+        popupEl.style.setProperty('left', `${left}px`, 'important');
         popupEl.style.setProperty('top', `${top}px`, 'important');
-        popupEl.style.setProperty('left', 'auto', 'important');
+        popupEl.style.setProperty('right', 'auto', 'important');
         popupEl.style.setProperty('position', 'fixed', 'important');
         popupEl.style.setProperty('opacity', '1', 'important');
         popupEl.style.setProperty('display', 'block', 'important');
@@ -185,9 +208,9 @@ class ChordGraph {
         
         // Also set via d3 for consistency
         this.moviePopup
-          .style('right', `${right}px`)
+          .style('left', `${left}px`)
           .style('top', `${top}px`)
-          .style('left', 'auto')
+          .style('right', 'auto')
           .style('position', 'fixed')
           .style('opacity', '1')
           .style('display', 'block')
@@ -200,7 +223,7 @@ class ChordGraph {
         
         // Double-check it's visible
         const finalStyles = window.getComputedStyle(popupEl);
-        console.log('Popup positioned at top-right:', { right, top, width: popupRect.width, height: popupRect.height, finalDisplay: finalStyles.display, finalOpacity: finalStyles.opacity });
+        console.log('Popup positioned next to node:', { left, top, width: popupRect.width, height: popupRect.height, finalDisplay: finalStyles.display, finalOpacity: finalStyles.opacity });
         
         if (finalStyles.display === 'none' || finalStyles.visibility === 'hidden' || parseFloat(finalStyles.opacity) < 0.1) {
           console.warn('Popup still hidden after positioning, forcing visibility with !important');
@@ -209,7 +232,7 @@ class ChordGraph {
           popupEl.style.setProperty('opacity', '1', 'important');
         }
         
-        // Hide connecting line since popup is in top-right corner
+        // Hide connecting line since popup is next to node
         if (this.popupLine) {
           this.popupLine.attr('opacity', 0);
         }
@@ -476,19 +499,19 @@ class ChordGraph {
         .attr('class', 'movie-popup')
         .attr('id', 'chordGraphPopup')
         .style('position', 'fixed')
-        .style('min-width', '400px')
-        .style('max-width', '500px')
-        .style('background', 'rgba(0, 0, 0, 0.85)') // Black and transparent
+        .style('min-width', '280px')
+        .style('max-width', '320px')
+        .style('background', 'rgba(0, 0, 0, 0.6)') // Black and transparent
         .style('color', '#ffffff')
         .style('border-radius', '8px')
-        .style('padding', '32px')
+        .style('padding', '20px')
         .style('opacity', '0')
         .style('pointer-events', 'none')
         .style('display', 'none')
         .style('z-index', '99999')
         .style('font-family', "'IBM Plex Sans', sans-serif")
-        .style('font-size', '13px')
-        .style('max-height', '600px')
+        .style('font-size', '12px')
+        .style('max-height', '400px')
         .style('overflow-y', 'auto')
         .style('backdrop-filter', 'blur(4px)')
         .style('box-shadow', '0 8px 32px rgba(0, 0, 0, 0.8)')
@@ -1123,6 +1146,48 @@ class ChordGraph {
     // Create circle border with white glow effect (but hide it behind nodes)
     this.createCircleBorder(centerX, centerY, radius);
     
+    // Create invisible divs above each node for hover interactions
+    setTimeout(() => {
+      // Always create/update hover divs for this graph instance
+      if (!this.nodeHoverDivs || this.nodeHoverDivs.length === 0 || this.nodeHoverDivs.length !== nodes.length) {
+        this.createNodeHoverDivs(nodes);
+      }
+      this.updateNodeHoverDivs(nodes);
+      
+      // For main graph, continuously update hover divs to keep them in sync
+      if (this.containerId === 'chordContainer') {
+        // Clear any existing update interval
+        if (this.hoverUpdateInterval) {
+          clearInterval(this.hoverUpdateInterval);
+        }
+        // Store nodes reference for continuous updates
+        this.currentNodes = nodes;
+        // Update hover divs every 100ms to keep them in sync with node positions
+        this.hoverUpdateInterval = setInterval(() => {
+          if (this.currentNodes && this.currentNodes.length > 0 && this.svg && this.svg.node()) {
+            // Get current node positions from DOM
+            const nodeElements = this.nodeGroup.selectAll('g.node');
+            if (!nodeElements.empty()) {
+              nodeElements.each(function(d) {
+                if (d) {
+                  // Update node position from transform attribute
+                  const transform = d3.select(this).attr('transform');
+                  if (transform) {
+                    const match = transform.match(/translate\(([^,]+),\s*([^)]+)\)/);
+                    if (match) {
+                      d.x = parseFloat(match[1]);
+                      d.y = parseFloat(match[2]);
+                    }
+                  }
+                }
+              });
+              this.updateNodeHoverDivs(this.currentNodes);
+            }
+          }
+        }, 100);
+      }
+    }, 200);
+    
     // Hide the circle border behind nodes by lowering it
     if (this.circleGroup) {
       this.circleGroup.lower(); // Put circle behind nodes
@@ -1539,10 +1604,257 @@ class ChordGraph {
     });
 
     // Remove automatic popup on scroll — only show on node hover now
-    try { this.hideMoviePopup(); } catch(e){}
+      try { this.hideMoviePopup(); } catch(e){}
+    }
+
+  /**
+   * Create invisible divs above each node for hover interactions
+   */
+  createNodeHoverDivs(nodes) {
+    // Remove only hover divs for this specific container
+    d3.selectAll(`.node-hover-div[data-container="${this.containerId}"]`).remove();
+    
+    // Store reference to nodes for positioning
+    this.nodeHoverDivs = [];
+    
+    nodes.forEach((nodeData, index) => {
+      // Use lower z-index than navigation menu (menu is 10000) to prevent blocking
+      // Reduce hover size to prevent interference with navigation menu area
+      const zIndex = this.containerId === 'chordContainer' ? '9999' : '10000';
+      const hoverSize = this.containerId === 'chordContainer' ? '140px' : '180px';
+      
+      const hoverDiv = d3.select('body')
+        .append('div')
+        .attr('class', 'node-hover-div')
+        .attr('data-container', this.containerId)
+        .style('position', 'fixed')
+        .style('width', hoverSize)
+        .style('height', hoverSize)
+        .style('background', 'transparent')
+        .style('pointer-events', 'auto')
+        .style('cursor', 'pointer')
+        .style('z-index', zIndex)
+        .style('opacity', '0')
+        .datum(nodeData);
+      
+      this.nodeHoverDivs.push(hoverDiv);
+      
+      // Attach hover events
+      hoverDiv
+        .on('mouseenter', (event, d) => {
+          event.stopPropagation();
+          this.handleNodeHover(d, event);
+        })
+        .on('mouseleave', (event, d) => {
+          event.stopPropagation();
+          this.handleNodeHoverOut(d, event);
+        });
+    });
   }
 
   /**
+   * Update positions of invisible hover divs based on node positions
+   */
+  updateNodeHoverDivs(nodes) {
+    if (!this.nodeHoverDivs || !this.svg || !this.svg.node()) {
+      if (nodes && nodes.length > 0) {
+        this.createNodeHoverDivs(nodes);
+      }
+      return;
+    }
+    
+    if (!nodes || nodes.length === 0) return;
+    
+    // Ensure we have enough hover divs
+    while (this.nodeHoverDivs.length < nodes.length) {
+      // Use lower z-index than navigation menu (menu is 10000) to prevent blocking
+      // Reduce hover size to prevent interference with navigation menu area
+      const zIndex = this.containerId === 'chordContainer' ? '9999' : '10000';
+      const hoverSize = this.containerId === 'chordContainer' ? '140px' : '180px';
+      
+      const hoverDiv = d3.select('body')
+        .append('div')
+        .attr('class', 'node-hover-div')
+        .attr('data-container', this.containerId)
+        .style('position', 'fixed')
+        .style('width', hoverSize)
+        .style('height', hoverSize)
+        .style('background', 'transparent')
+        .style('pointer-events', 'auto')
+        .style('cursor', 'pointer')
+        .style('z-index', zIndex)
+        .style('opacity', '0')
+        .datum(nodes[this.nodeHoverDivs.length]);
+      
+      hoverDiv
+        .on('mouseenter', (event, d) => {
+          this.handleNodeHover(d, event);
+        })
+        .on('mouseleave', (event, d) => {
+          this.handleNodeHoverOut(d, event);
+        });
+      
+      this.nodeHoverDivs.push(hoverDiv);
+    }
+    
+    nodes.forEach((nodeData, index) => {
+      if (!this.nodeHoverDivs[index]) return;
+      
+      // Update datum
+      this.nodeHoverDivs[index].datum(nodeData);
+      
+      // Convert SVG coordinates to screen coordinates
+      const svgPoint = this.svg.node().createSVGPoint();
+      svgPoint.x = nodeData.x;
+      svgPoint.y = nodeData.y;
+      const svgMatrix = this.svg.node().getScreenCTM();
+      if (!svgMatrix) return;
+      
+      const screenPoint = svgPoint.matrixTransform(svgMatrix);
+      
+      // Position div above the node
+      // Reduced hover area to prevent interference with navigation menu
+      const divSize = this.containerId === 'chordContainer' ? 140 : 180;
+      const offsetY = -60;
+      
+      // Calculate hover div position
+      let left = screenPoint.x - divSize / 2;
+      let top = screenPoint.y - divSize / 2 + offsetY;
+      
+      // Navigation menu area: top-right corner (approximately 40px from top and right)
+      // Disable pointer events if hover div overlaps with menu area
+      const menuAreaRight = window.innerWidth - 40;
+      const menuAreaTop = 40;
+      const menuAreaWidth = 200; // Approximate menu width
+      const menuAreaHeight = 300; // Approximate menu height
+      
+      const hoverRight = left + divSize;
+      const hoverBottom = top + divSize;
+      const hoverTop = top;
+      const hoverLeft = left;
+      
+      // Check if hover div overlaps with navigation menu area
+      const overlapsMenu = hoverRight > menuAreaRight - menuAreaWidth && 
+                          hoverTop < menuAreaTop + menuAreaHeight &&
+                          hoverLeft < menuAreaRight;
+      
+      this.nodeHoverDivs[index]
+        .style('left', `${left}px`)
+        .style('top', `${top}px`)
+        .style('display', 'block')
+        .style('visibility', 'visible')
+        .style('pointer-events', overlapsMenu ? 'none' : 'auto') // Disable if overlaps menu
+        .style('opacity', '0');
+    });
+  }
+
+  /**
+   * Handle node hover - show popup
+   */
+  handleNodeHover(d, event) {
+    event.stopPropagation();
+    
+    if (!this.moviePopup || !this.moviePopup.node()) {
+      if (!this.svg || !this.svg.node()) {
+        this.initializeSVG({ width: this.width, height: this.height });
+      }
+    }
+    
+    if (!this.moviePopup || !this.moviePopup.node()) {
+      return;
+    }
+    
+    const theme = d.label;
+    let startYear = null;
+    if (this.currentDecade) startYear = +this.currentDecade;
+    let endYear = startYear ? startYear + 4 : null;
+    
+    function parseYearField(y){
+      if (!y && y !== 0) return 0;
+      const s = String(y);
+      const m = s.match(/(\d{4})/);
+      if (m) return +m[1];
+      return 0;
+    }
+    
+    const moviesForTheme = this.movies.filter(m => {
+      if (!m.themes || !m.themes.includes(theme)) return false;
+      if (startYear !== null) {
+        const y = parseYearField(m.year);
+        if (!y || y < startYear || y > endYear) return false;
+      }
+      return true;
+    }).map(m => m.title + (m.year ? ` (${m.year})` : ''));
+    
+    moviesForTheme.sort((a,b)=> a.localeCompare(b));
+    
+    const nodeX = d.x;
+    const nodeY = d.y;
+    
+    this.showMoviePopup(moviesForTheme, startYear, theme, nodeX, nodeY);
+    
+    const nodeGroup = this.nodeGroup.selectAll('g.node')
+      .filter(node => node.id === d.id);
+    
+    const hoverSize = 75;
+    const image = nodeGroup.select('image');
+    if (!image.empty()) {
+      image
+        .transition()
+        .duration(200)
+        .attr('width', hoverSize)
+        .attr('height', hoverSize)
+        .attr('x', -hoverSize / 2)
+        .attr('y', -hoverSize / 2);
+    }
+    
+    d3.selectAll('.link')
+      .filter((l) => l.source === d.index || l.target === d.index)
+      .each(function(linkData) {
+        const currentStroke = d3.select(this).attr('stroke');
+        if (currentStroke === '#46AACB' || linkData.value > 0) {
+          d3.select(this)
+            .attr('stroke', '#46AACB')
+            .attr('opacity', 1)
+            .raise();
+        }
+      });
+  }
+
+  /**
+   * Handle node hover out - hide popup
+   */
+  handleNodeHoverOut(d, event) {
+    event.stopPropagation();
+    
+    this.hideMoviePopup();
+    
+    const nodeGroup = this.nodeGroup.selectAll('g.node')
+      .filter(node => node.id === d.id);
+    const image = nodeGroup.select('image');
+    const baseSize = 60;
+    if (!image.empty()) {
+      image
+        .transition()
+        .duration(200)
+        .attr('width', baseSize)
+        .attr('height', baseSize)
+        .attr('x', -baseSize / 2)
+        .attr('y', -baseSize / 2);
+    }
+    
+    d3.selectAll('.link')
+      .each(function(linkData) {
+        const weight = linkData.value || 0;
+        const strokeColor = weight > 0 ? '#46AACB' : '#535353';
+        const opacity = weight > 0 ? 0.9 : 0.3;
+        d3.select(this)
+          .attr('stroke', strokeColor)
+          .attr('opacity', opacity);
+      });
+  }
+  
+    /**
    * Get movie titles for search/autocomplete
    */
   getMovieTitles() {

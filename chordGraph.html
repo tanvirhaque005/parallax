@@ -23,6 +23,77 @@
 				left: 40px;
 				z-index: 50;
 			}
+
+			/* Chord Intro Message */
+			.chord-intro-message {
+				position: fixed;
+				top: 60px;
+				left: 60px;
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: 'IBM Plex Sans', sans-serif;
+				z-index: 5000;
+				pointer-events: none;
+			}
+
+			.chord-intro-icon {
+				width: 16px;
+				height: 16px;
+				min-width: 16px;
+				min-height: 16px;
+				max-width: 16px;
+				max-height: 16px;
+				background-color: #ffffff;
+				opacity: 0;
+				transform: scale(0);
+				flex-shrink: 0;
+				flex-grow: 0;
+				box-sizing: border-box;
+				animation: boxAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+			}
+
+			@keyframes boxAppear {
+				0% {
+					opacity: 0;
+					transform: scale(0);
+				}
+				100% {
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
+
+			.chord-intro-text {
+				font-size: 11px;
+				color: #ffffff;
+				letter-spacing: 1px;
+				text-transform: uppercase;
+				max-width: 600px;
+				line-height: 1.4;
+				opacity: 0;
+				transition: opacity 0.5s ease;
+			}
+
+			.chord-intro-message.show-text .chord-intro-text {
+				opacity: 1;
+			}
+
+			.chord-intro-text.typing::after {
+				content: '|';
+				display: inline-block;
+				margin-left: 2px;
+				animation: blinkCursor 1s infinite;
+			}
+
+			@keyframes blinkCursor {
+				0%, 50% {
+					opacity: 1;
+				}
+				51%, 100% {
+					opacity: 0;
+				}
+			}
 			
 			.back-link {
 				display: flex;
@@ -229,15 +300,15 @@
 			#chordGraphPopup {
 				position: fixed !important;
 				z-index: 99999 !important;
-				background: rgba(0, 0, 0, 0.85) !important;
+				background: rgba(0, 0, 0, 0.6) !important;
 				color: #ffffff !important;
 				border-radius: 8px !important;
-				padding: 32px !important;
-				min-width: 400px !important;
-				max-width: 500px !important;
+				padding: 20px !important;
+				min-width: 280px !important;
+				max-width: 320px !important;
 				font-family: 'IBM Plex Sans', sans-serif !important;
-				font-size: 13px !important;
-				max-height: 600px !important;
+				font-size: 12px !important;
+				max-height: 400px !important;
 				overflow-y: auto !important;
 				backdrop-filter: blur(4px) !important;
 				box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8) !important;
@@ -370,21 +441,341 @@
   transition: opacity 0.15s ease, top 0.1s ease, left 0.1s ease;
 }
 
+			/* Page Container for Intro/Main Pages */
+			.page-container {
+				position: relative;
+				width: 100%;
+				height: 100vh;
+				overflow: hidden;
+			}
+
+			/* Page Slide */
+			.page-slide {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+				will-change: transform;
+			}
+
+			.page-slide.active {
+				transform: translateX(0);
+				z-index: 2;
+			}
+
+			.page-slide.next {
+				transform: translateX(100%);
+				z-index: 1;
+			}
+
+			.page-slide.prev {
+				transform: translateX(-100%);
+				z-index: 1;
+			}
+
+			/* Intro Page Styles */
+			.intro-page {
+				display: flex;
+				flex-direction: column;
+				padding: 60px;
+			}
+
+			.intro-panel {
+				position: relative;
+				width: 70%;
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				padding-top: 200px;
+			}
+
+			.intro-category {
+				display: inline-block;
+				padding: 10px 20px;
+				border-radius: 999px;
+				font-size: 14px;
+				font-weight: 600;
+				letter-spacing: 1.6px;
+				border: 1px solid rgba(255,255,255,0.45);
+				color: rgba(255,255,255,0.90);
+				background: rgba(255,255,255,0.02);
+				margin-bottom: 24px;
+				font-family: 'IBM Plex Sans', sans-serif;
+				width: fit-content;
+			}
+
+			.intro-title {
+				font-family: 'IBM Plex Sans', sans-serif;
+				font-size: 3.5rem;
+				font-weight: 400;
+				color: #ffffff;
+				margin: 0 0 32px 0;
+				line-height: 1.2;
+				letter-spacing: -0.5px;
+			}
+
+			.intro-description {
+				font-family: 'IBM Plex Sans', sans-serif;
+				font-size: 1rem;
+				color: #ffffff;
+				line-height: 1.6;
+				margin: 0 0 40px 0;
+				max-width: 600px;
+				font-weight: 300;
+			}
+
+			/* Intro Timeline Bars */
+			.intro-timeline {
+				display: flex;
+				align-items: flex-end;
+				gap: 3px;
+				height: 60px;
+				margin-bottom: 16px;
+			}
+
+			.intro-timeline-bar {
+				width: 8px;
+				height: 28px;
+				background: rgba(255, 255, 255, 0.45);
+				border-radius: 2px;
+			}
+
+			.intro-timeline-bar.active {
+				background: rgba(255, 255, 255, 1);
+			}
+
+			.intro-published {
+				font-size: 11px;
+				color: #888888;
+				letter-spacing: 0.5px;
+				font-family: 'IBM Plex Sans', sans-serif;
+			}
+
+			/* Arrow Button */
+			.intro-arrow-button {
+				position: fixed !important;
+				top: 50% !important;
+				right: 40px !important;
+				transform: translateY(-50%) !important;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 14px;
+				color: #ffffff;
+				text-decoration: none;
+				font-size: 20px;
+				letter-spacing: 2px;
+				text-transform: uppercase;
+				opacity: 1;
+				z-index: 9998;
+				font-family: 'IBM Plex Sans', sans-serif;
+				pointer-events: auto;
+				cursor: pointer;
+				background: transparent !important;
+				border: none !important;
+				padding: 0 !important;
+				margin: 0 !important;
+				visibility: visible;
+				width: auto !important;
+				height: auto !important;
+			}
+
+			.intro-arrow-button.hidden {
+				display: none !important;
+				opacity: 0 !important;
+				visibility: hidden !important;
+				pointer-events: none !important;
+				z-index: -1 !important;
+			}
+
+
+			.intro-arrow-circle {
+				width: 56px;
+				height: 56px;
+				border: 2px solid rgba(255,255,255,1);
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: border 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+				box-shadow: 0 0 20px rgba(255,255,255,0.6), 0 0 40px rgba(255,255,255,0.4);
+			}
+
+			.intro-arrow-circle span {
+				font-size: 26px;
+				color: rgba(255,255,255,1);
+				transition: transform 0.25s ease;
+				text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5);
+			}
+
+			.intro-arrow-button:hover .intro-arrow-circle {
+				border-color: white;
+				background: rgba(255,255,255,0.15);
+				box-shadow: 0 0 30px rgba(255,255,255,0.8), 0 0 60px rgba(255,255,255,0.6);
+			}
+
+			.intro-arrow-button:hover .intro-arrow-circle span {
+				transform: translateX(4px);
+			}
+
+			/* Main Chord Graph Page */
+			.chord-page {
+				z-index: 1;
+				background: #1a1a1a;
+			}
+
+			.chord-page.active {
+				z-index: 2;
+			}
+
+			/* Show chord graph on intro page (transparent, on right side) */
+			.intro-page .chord-page {
+				z-index: 0;
+				opacity: 0.3;
+				pointer-events: none;
+			}
+
+			.intro-page .chord-page #chordContainer {
+				opacity: 0.3;
+			}
+
+			/* Disable pointer events on intro graph to prevent blocking navigation menu */
+			#chordContainerIntro,
+			#chordContainerIntro svg,
+			#chordContainerIntro * {
+				pointer-events: none !important;
+			}
+			
+			/* Ensure intro graph container also has no pointer events */
+			#introChordGraph {
+				pointer-events: none !important;
+				z-index: 0 !important;
+			}
+			
+			/* Completely hide intro graph when on main page */
+			.chord-page.active ~ #introChordGraph,
+			.chord-page.active #introChordGraph,
+			body:has(.chord-page.active) #introChordGraph {
+				display: none !important;
+				visibility: hidden !important;
+				opacity: 0 !important;
+				pointer-events: none !important;
+				z-index: -1 !important;
+			}
+			
+			.chord-page.active ~ #introChordGraph svg,
+			.chord-page.active #introChordGraph svg,
+			body:has(.chord-page.active) #introChordGraph svg {
+				display: none !important;
+				visibility: hidden !important;
+				opacity: 0 !important;
+			}
+			
+			/* Ensure navigation menu is above everything and can receive clicks */
+			.navigation-menu {
+				z-index: 10000 !important;
+				pointer-events: auto !important;
+			}
+			
+			.navigation-menu *,
+			.navigation-menu a,
+			.navigation-menu li,
+			.nav-menu-item,
+			.nav-menu-item a {
+				pointer-events: auto !important;
+				z-index: 10001 !important;
+			}
+			
+			/* Ensure main chord graph container doesn't block menu either */
+			#chordContainer {
+				z-index: 1 !important;
+			}
+			
+			#chordContainer svg {
+				z-index: 1 !important;
+			}
+
 		</style>
 	</head>
 	<body>
 		<!-- Navigation Menu -->
 		<div class="navigation-menu" id="navigationMenu"></div>
 
-		<!-- Page Header -->
-		<div class="page-header">
-			<a href="bookshelf.html" class="back-link">
-				<span class="back-arrow">←</span>
-				<span>Back</span>
-			</a>
-		</div>
+		<!-- Arrow Button - Outside page container for always visible -->
+		<button class="intro-arrow-button" id="beginChordBtn">
+			<div class="intro-arrow-circle">
+				<span>→</span>
+			</div>
+		</button>
 
-		<!-- Sidebar Content -->
+		<!-- Page Container -->
+		<div class="page-container">
+			<!-- Intro Page (Page 1) -->
+			<div class="page-slide intro-page active" id="introPage">
+				<div class="intro-panel">
+					<div>
+						<!-- Back Link -->
+						<a href="bookshelf.html" class="back-link">
+							<span class="back-arrow">←</span>
+							<span>Back</span>
+						</a>
+
+						<!-- Category Pill -->
+						<div class="intro-category">TROPE NETWORK</div>
+
+						<!-- Title -->
+						<h1 class="intro-title">How do sci-fi share themes across time?</h1>
+
+						<!-- Description -->
+						<p class="intro-description">
+							This chord diagram shows how sci-fi films from different eras reuse and reinterpret the same motifs. Each line connects films that share a trope and how those connection reflect culture.
+						</p>
+					</div>
+
+					<div>
+						<!-- Timeline Bars -->
+						<div class="intro-timeline">
+							<div class="intro-timeline-bar active"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+						</div>
+						<div class="intro-published">Published 2025</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Main Chord Graph Page (Page 2) -->
+			<div class="page-slide chord-page next" id="chordPage">
+				<!-- Page Header -->
+				<div class="page-header">
+					<a href="bookshelf.html" class="back-link">
+						<span class="back-arrow">←</span>
+						<span>Back</span>
+					</a>
+				</div>
+
+				<!-- Intro Message with Typing Animation -->
+				<div class="chord-intro-message" id="chordIntroMessage">
+					<div class="chord-intro-icon"></div>
+					<div class="chord-intro-text" id="chordIntroText"></div>
+				</div>
+
+				<!-- Sidebar Content -->
 		<div class="sidebar">
 			<div class="sidebar-label">Motifs</div>
 			<h1 class="decade-title" id="decadeTitle">All 5-Year Windows</h1>
@@ -411,9 +802,18 @@
 			<a href="parallel.html" class="nav-btn" id="nextBtn">Next →</a>
 		</div> -->
 
-		<!-- Main Visualization -->
-		<div id="chordContainer">
-			<div class="loading">Loading visualization...</div>
+				<!-- Main Visualization -->
+				<div id="chordContainer">
+					<div class="loading">Loading visualization...</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Chord Graph for Intro Page (transparent, on right side) -->
+		<div id="introChordGraph" style="position: fixed; top: 0; right: -80px; width: 50%; height: 100vh; z-index: 0; opacity: 0.5; pointer-events: none; overflow: hidden;">
+			<div id="chordContainerIntro" style="width: 200%; height: 100%; display: flex; align-items: center; justify-content: flex-start; background: transparent; position: relative; left: 0;">
+				<div class="loading">Loading visualization...</div>
+			</div>
 		</div>
 
 		<script src="./chordGraph.js"></script>
@@ -474,6 +874,24 @@
 						}, 100);
 					} catch(e) {
 						console.error('Render error:', e);
+				}
+
+				// Also create intro chord graph (transparent, on right side)
+				const introContainerId = 'chordContainerIntro';
+				let cgIntro = null;
+				try {
+					cgIntro = new ChordGraph(introContainerId);
+					await cgIntro.loadData('./merged_movies_data.csv');
+					const introDims = getDimensions();
+					cgIntro.render(null, introDims);
+					// Make it transparent
+					if (cgIntro && typeof cgIntro.setDecade === 'function') {
+						cgIntro.setDecade(null);
+					}
+					// Store reference globally so we can stop it later
+					window.introChordGraphInstance = cgIntro;
+				} catch(e) {
+					console.error('Intro chord graph error:', e);
 				}
 
 				// Timeline functionality (5-year windows)
@@ -866,15 +1284,201 @@ function positionLabelOverBar(labelEl, barEl, text) {
 		</script>
 		    <link rel="stylesheet" href="arrowButton.css">
 			<script src="arrowButton.js"></script>
+			
+			<script>
+				// Typing animation for chord intro message
+				function typeText(element, text, speed = 30) {
+					element.textContent = '';
+					element.classList.add('typing');
+					
+					let i = 0;
+					function type() {
+						if (i < text.length) {
+							element.textContent += text.charAt(i);
+							i++;
+							setTimeout(type, speed);
+						} else {
+							element.classList.remove('typing');
+						}
+					}
+					type();
+				}
+
+				// Show intro message with typing animation
+				function showChordIntroMessage() {
+					const introMessage = document.getElementById('chordIntroMessage');
+					const introText = document.getElementById('chordIntroText');
+					
+					if (introMessage && introText) {
+						// Show the message container
+						introMessage.style.display = 'flex';
+						
+						// Wait for box animation, then start typing
+						setTimeout(() => {
+							introMessage.classList.add('show-text');
+							const text = "Hover paths to reveal shared themes. Scroll to travel through time.";
+							// Clear any existing text first
+							introText.textContent = '';
+							typeText(introText, text, 30);
+						}, 650);
+					}
+				}
+
+				// Trigger when page loads
+				document.addEventListener('DOMContentLoaded', () => {
+					setTimeout(showChordIntroMessage, 500);
+				});
+			</script>
 			<div data-arrow-button 
-			text="text3" 
+			text="EXPLORE TIMELINE" 
 			href="parallel.html"
-			delay="3">
+			delay="0"
+			id="text3ArrowButton">
 			</div>
 
 		    <div id="cursorCircle"></div>
 			<link rel="stylesheet" href="cursor.css">
 			<script src="cursor.js" defer></script>
+
+		<script>
+			// Page navigation
+			let currentPage = 0;
+			const pages = document.querySelectorAll('.page-slide');
+			const navMenu = document.getElementById('navigationMenu');
+			const beginBtn = document.getElementById('beginChordBtn');
+			const introChordGraph = document.getElementById('introChordGraph');
+
+			function updatePages() {
+				pages.forEach((page, index) => {
+					page.classList.remove('active', 'next', 'prev');
+					if (index === currentPage) {
+						page.classList.add('active');
+						// Navigation menu always visible
+						if (navMenu) navMenu.style.display = '';
+						
+						if (index === 1) {
+							// Hide BEGIN button when on main page
+							if (beginBtn) beginBtn.classList.add('hidden');
+							// Completely remove and stop rendering intro chord graph when on main page
+							// Stop any intervals or animations from the intro graph instance
+							if (window.introChordGraphInstance) {
+								if (window.introChordGraphInstance.hoverUpdateInterval) {
+									clearInterval(window.introChordGraphInstance.hoverUpdateInterval);
+								}
+								window.introChordGraphInstance = null;
+							}
+							
+							if (introChordGraph) {
+								introChordGraph.style.display = 'none';
+								introChordGraph.style.visibility = 'hidden';
+								introChordGraph.style.pointerEvents = 'none';
+								introChordGraph.style.zIndex = '-1';
+								introChordGraph.style.opacity = '0';
+							}
+							// Clear the intro container's content to stop rendering
+							const introContainer = document.getElementById('chordContainerIntro');
+							if (introContainer) {
+								// Remove all SVG and child elements to stop rendering
+								const svg = introContainer.querySelector('svg');
+								if (svg) {
+									svg.remove();
+								}
+								// Clear all content completely
+								introContainer.innerHTML = '';
+								introContainer.style.pointerEvents = 'none';
+								introContainer.style.zIndex = '-1';
+								introContainer.style.opacity = '0';
+								introContainer.style.display = 'none';
+							}
+							// Show intro message text after chord graph is revealed
+							setTimeout(() => {
+								if (typeof showChordIntroMessage === 'function') {
+									showChordIntroMessage();
+								}
+							}, 500);
+						} else {
+							// Show BEGIN button on intro page
+							if (beginBtn) beginBtn.classList.remove('hidden');
+							// Show intro chord graph on intro page
+							if (introChordGraph) {
+								introChordGraph.style.display = 'block';
+								introChordGraph.style.visibility = 'visible';
+								introChordGraph.style.pointerEvents = 'none'; // Still no pointer events on intro
+								introChordGraph.style.zIndex = '0';
+								introChordGraph.style.opacity = '0.5';
+							}
+						}
+					} else if (index > currentPage) {
+						page.classList.add('next');
+					} else {
+						page.classList.add('prev');
+					}
+				});
+			}
+
+			// Arrow button click handler
+			if (beginBtn) {
+				beginBtn.addEventListener('click', (e) => {
+					e.preventDefault();
+					if (currentPage < pages.length - 1) {
+						// Hide the BEGIN arrow button immediately using class
+						if (beginBtn) {
+							beginBtn.classList.add('hidden');
+						}
+						// Immediately clear and hide intro chord graph before page transition
+						const introChordGraphEl = document.getElementById('introChordGraph');
+						const introContainerEl = document.getElementById('chordContainerIntro');
+						
+						// Stop any intervals or animations from the intro graph instance
+						if (window.introChordGraphInstance) {
+							// Clear any update intervals
+							if (window.introChordGraphInstance.hoverUpdateInterval) {
+								clearInterval(window.introChordGraphInstance.hoverUpdateInterval);
+							}
+							// Clear the instance reference
+							window.introChordGraphInstance = null;
+						}
+						
+						if (introChordGraphEl) {
+							introChordGraphEl.style.display = 'none';
+							introChordGraphEl.style.visibility = 'hidden';
+							introChordGraphEl.style.opacity = '0';
+							introChordGraphEl.style.pointerEvents = 'none';
+							introChordGraphEl.style.zIndex = '-1';
+						}
+						if (introContainerEl) {
+							// Remove SVG to stop rendering
+							const svg = introContainerEl.querySelector('svg');
+							if (svg) {
+								svg.remove();
+							}
+							// Remove all child elements
+							introContainerEl.innerHTML = '';
+							introContainerEl.style.pointerEvents = 'none';
+							introContainerEl.style.zIndex = '-1';
+							introContainerEl.style.opacity = '0';
+							introContainerEl.style.display = 'none';
+						}
+						currentPage++;
+						updatePages();
+						// Show text3 arrow button after transitioning to main page
+						setTimeout(() => {
+							// The arrowButton.js replaces the div with a wrapper, find it by href
+							const arrowWrappers = document.querySelectorAll('.arrow-button-wrapper');
+							arrowWrappers.forEach(wrapper => {
+								if (wrapper.href && wrapper.href.includes('parallel.html')) {
+									wrapper.style.opacity = "1";
+									wrapper.style.pointerEvents = "auto";
+								}
+							});
+						}, 500);
+					}
+				});
+			}
+
+			// Initialize
+			updatePages();
+		</script>
 		
 	</body>
 </html>
