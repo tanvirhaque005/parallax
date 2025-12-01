@@ -25,20 +25,20 @@
 			}
 			
 			.back-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+				display: flex;
+				align-items: center;
+				gap: 12px;
       color: #cccccca4;
-      text-decoration: none;
+				text-decoration: none;
       font-size: 12px;
-      letter-spacing: 1px;
-      transition: color 0.3s;
-      text-transform: uppercase;
+				letter-spacing: 1px;
+				transition: color 0.3s;
+				text-transform: uppercase;
       position: fixed;
          top: 20px;
          left: 40px;
          z-index: 200;
-    }
+			}
 			
 			.back-link:hover {
 				color: #ffffff;
@@ -179,17 +179,25 @@
 			}
 
 			#chordContainer .node circle {
-				fill: #2a2a2a; /* keep dark fill */
-				/* node outline default (blue) - JS will animate stroke / radius */
-				stroke: #3b82f6;
-				stroke-width: 2;
-				transition: stroke 180ms ease, r 180ms ease, stroke-width 180ms ease;
+				/* Invisible circle for interactions only */
+				fill: none;
+				stroke: none;
 			}
-
-			#chordContainer .node circle:hover {
-				fill: #3a3a3a;
-				stroke: #60a5fa;
-				stroke-width: 3;
+			
+			#chordContainer .node image {
+				pointer-events: none;
+				filter: grayscale(100%) brightness(0) contrast(1000) !important;
+				mix-blend-mode: normal !important;
+				transition: opacity 0.3s ease;
+			}
+			
+			#chordContainer .node image[data-has-connections="true"] {
+				opacity: 1 !important;
+				filter: grayscale(100%) brightness(0) contrast(1000) !important;
+			}
+			
+			#chordContainer .node image[data-has-connections="false"] {
+				opacity: 0.2 !important;
 			}
 			
 			#chordContainer .node-text {
@@ -208,6 +216,27 @@
 #chordContainer svg circle {
     cursor: none !important;
 }
+
+			/* Movie popup styling */
+			.movie-popup {
+				position: fixed !important;
+				z-index: 99999 !important;
+				background: rgba(140, 140, 140, 0.9) !important;
+				color: #ffffff !important;
+				border-radius: 8px !important;
+				padding: 24px !important;
+				min-width: 320px !important;
+				max-width: 420px !important;
+				font-family: 'Courier New', monospace !important;
+				font-size: 13px !important;
+				max-height: 600px !important;
+				overflow-y: auto !important;
+				backdrop-filter: blur(2px) !important;
+				box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+				pointer-events: auto !important;
+				display: block !important;
+				visibility: visible !important;
+			}
 
 			
 			.chord-tooltip {
@@ -426,24 +455,24 @@
 				// Render all themes (no specific movie required)
 				try {
 					cg.render(null, {
-						width: Math.min(1400, window.innerWidth - 100),
-						height: Math.min(1000, window.innerHeight - 100)
-					});
+							width: Math.min(1400, window.innerWidth - 100),
+							height: Math.min(1000, window.innerHeight - 100)
+						});
 
-					// Center the visualization
-					setTimeout(() => {
-						try {
-							const svgEl = d3.select('#' + containerId + ' svg');
-							svgEl.attr('preserveAspectRatio', 'xMidYMid meet')
-								.style('display', 'block')
-								.style('margin', '0 auto');
+						// Center the visualization
+						setTimeout(() => {
+							try {
+								const svgEl = d3.select('#' + containerId + ' svg');
+								svgEl.attr('preserveAspectRatio', 'xMidYMid meet')
+									.style('display', 'block')
+									.style('margin', '0 auto');
 
-							// initialize decade visuals (show All)
-							if (cg && typeof cg.setDecade === 'function') cg.setDecade(null);
-						} catch(e) {}
-					}, 100);
-				} catch(e) {
-					console.error('Render error:', e);
+								// initialize decade visuals (show All)
+								if (cg && typeof cg.setDecade === 'function') cg.setDecade(null);
+							} catch(e) {}
+						}, 100);
+					} catch(e) {
+						console.error('Render error:', e);
 				}
 
 				// Timeline functionality (5-year windows)
@@ -622,7 +651,7 @@ function jumpToBook(index) {
 document.querySelectorAll(".book-bar").forEach(bar => {
   bar.addEventListener("click", (e) => {
     e.stopPropagation();
-    e.preventDefault();
+						e.preventDefault();
 
     const index = Number(bar.dataset.index);
 
@@ -700,7 +729,7 @@ barsContainer.addEventListener("mousemove", (e) => {
    CLICK ANYWHERE → ALWAYS CLICK THE HOVERED BAR
 ----------------------------------------------------------- */
 barsContainer.addEventListener("click", (e) => {
-    e.preventDefault();
+																											e.preventDefault();
     e.stopPropagation();
 
     // If no bar is hovered, do nothing

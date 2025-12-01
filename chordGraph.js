@@ -26,6 +26,38 @@ class ChordGraph {
     this.height = 900;
     this.originalColorScale = null; // Store original color scale for "All" view
     this.originalLinks = null; // Store original links data
+    
+    // Theme to image mapping
+    this.themeImages = {
+      'AI': 'node-images/Artificial_Intelligence.png',
+      'Consciousness': 'node-images/Consiousness.png',
+      'Free Will': 'node-images/Free Will.png',
+      'Social Control': 'node-images/Social Control.png',
+      'Evolution/Genetic Engineering': 'node-images/Evolution.png',
+      'Space': 'node-images/Space Travel.png',
+      'Interstellar Travel': 'node-images/Space Travel.png',
+      'Transcendence': 'node-images/Transcendence.png',
+      'Surveillance': 'node-images/Surveillance.png',
+      'Robotics': 'node-images/Robotics.png'
+    };
+    
+    // Theme descriptions
+    this.themeDescriptions = {
+      'AI': 'Stories exploring machine intelligence—logical, emotional, or superhuman. These films question what happens when thinking systems surpass human control, ethics, or understanding. Common elements: sentient programs, digital assistants, neural networks.',
+      'Artificial Intelligence': 'Stories exploring machine intelligence—logical, emotional, or superhuman. These films question what happens when thinking systems surpass human control, ethics, or understanding. Common elements: sentient programs, digital assistants, neural networks.',
+      'Consciousness': 'Explores the nature of awareness—human, artificial, or alien. These stories ask what makes a mind "alive" and how identity forms in bodies, machines, or networks. Includes memory, perception, and selfhood.',
+      'Free Will': 'Stories centered on choice versus determinism. Characters confront systems that predict, restrict, or override their decisions—raising questions about autonomy, fate, and moral responsibility.',
+      'Social Control': 'Examines societies shaped by power, governance, and manipulation. These futures use technology, propaganda, or surveillance to maintain order—or suppress freedom. Themes include authoritarianism, compliance, and resistance.',
+      'Evolution/Genetic Engineering': 'Explores the reshaping of life—through mutation, biotechnology, or engineered futures. These stories imagine new species, enhanced humans, or the consequences of altering biology. Raises questions about nature, ethics, and unintended change.',
+      'Evolution & Genetic Engineering': 'Explores the reshaping of life—through mutation, biotechnology, or engineered futures. These stories imagine new species, enhanced humans, or the consequences of altering biology. Raises questions about nature, ethics, and unintended change.',
+      'Space': 'Journeys through galaxies, planets, or cosmic frontiers. This trope symbolizes exploration, ambition, and encounters with the unknown. Common elements: starships, colonization, alien worlds, celestial danger.',
+      'Space Travel': 'Journeys through galaxies, planets, or cosmic frontiers. This trope symbolizes exploration, ambition, and encounters with the unknown. Common elements: starships, colonization, alien worlds, celestial danger.',
+      'Interstellar Travel': 'Journeys through galaxies, planets, or cosmic frontiers. This trope symbolizes exploration, ambition, and encounters with the unknown. Common elements: starships, colonization, alien worlds, celestial danger.',
+      'Transcendence': 'Stories about surpassing human limits—physically, mentally, or spiritually. Characters merge with machines, ascend to new forms, or transcend mortality. Themes include singularity, digital afterlife, and metaphysical evolution.',
+      'Surveillance': 'Futures where watching becomes a system of power. These stories explore monitoring, prediction, and the tension between safety and privacy. Themes include omnipresent sensors, predictive policing, and algorithmic control.',
+      'Robotics': 'Stories featuring mechanical or synthetic beings. Robots act as tools, companions, or rivals—reflecting hopes and fears about automation and artificial life. Themes include labor, autonomy, and machine emotions.',
+      'Class Struggle': 'Futures divided by wealth, access, and opportunity. Sci-fi uses dystopias, megacities, and off-world colonies to show how inequality shapes society. Themes include rebellion, scarcity, and structural power.'
+    };
   }
 
   /**
@@ -33,41 +65,123 @@ class ChordGraph {
    * movies: array of strings
    * startYear: number or null
    */
-  showMoviePopup(movies, startYear) {
+  showMoviePopup(movies, startYear, theme, nodeX, nodeY) {
     try {
-      if (!this.moviePopup) return;
-      const title = startYear ? `${movies.length} Movie${movies.length!==1?'s':''} (${startYear}-${startYear+4})` : `${movies.length} Movie${movies.length!==1?'s':''}`;
+      if (!this.moviePopup) {
+        console.error('Movie popup not initialized!');
+        return;
+      }
+      
+      console.log('showMoviePopup called', {
+        theme,
+        moviesCount: movies?.length,
+        nodeX,
+        nodeY,
+        popupElement: this.moviePopup.node()
+      });
+      
+      // Get theme description
+      const themeName = theme || 'Unknown Theme';
+      const description = this.themeDescriptions[theme] || this.themeDescriptions[themeName] || 'Explore movies featuring this theme.';
+      
+      // Format movies as "[Year] [Title of Movie]"
+      const formattedMovies = movies.length > 0 ? movies.map(m => {
+        const match = m.match(/^(.+?)\s*\((\d{4})\)$/);
+        if (match) {
+          return `[${match[2]}] ${match[1]}`;
+        }
+        return m;
+      }) : ['No movies found for this time period'];
+      
       const html = `
-        <div style="font-weight:700; margin-bottom:8px; color:#0f172a">${title}</div>
-        <div style="font-size:12px; color:#0f172a; line-height:1.5;">
-          ${movies.map(m => `<div style=\"padding:4px 0; border-bottom:1px solid #f1f5f9;\">${m}</div>`).join('')}
+        <div style="font-weight:700; margin-bottom:12px; color:#ffffff; font-size:18px;">${themeName}</div>
+        <div style="font-size:13px; color:#ffffff; line-height:1.6; margin-bottom:16px; opacity:0.95;">
+          ${description}
+        </div>
+        <div style="font-size:12px; color:#ffffff; line-height:1.8; margin-top:12px;">
+          ${formattedMovies.map(m => `<div style="padding:4px 0;">${m}</div>`).join('')}
         </div>
       `;
 
-      this.moviePopup.html(html)
+      // Show the popup - make absolutely sure it's visible
+      this.moviePopup
+        .html(html)
+        .style('display', 'block')
+        .style('visibility', 'visible')
         .style('opacity', 1)
-        .style('pointer-events', 'auto');
+        .style('pointer-events', 'auto')
+        .style('z-index', '99999'); // Extremely high z-index
 
-      // Position the popup at the top-right of the SVG/visualization area with a margin
+      // Position the popup to the right of the node
       try {
-        const containerRect = this.container.node().getBoundingClientRect();
-        const svgRect = this.svg && this.svg.node() ? this.svg.node().getBoundingClientRect() : containerRect;
+        // First, make sure popup is visible to get accurate dimensions
+        this.moviePopup
+          .style('display', 'block')
+          .style('visibility', 'visible')
+          .style('opacity', 0.01); // Nearly invisible but rendered
+        
+        // Force a reflow
+        void this.moviePopup.node().offsetHeight;
+        
         const popupRect = this.moviePopup.node().getBoundingClientRect();
-        // Place further to the top-right (closer to the page's right edge) so long lists don't overlap the graph
-        const marginRight = 32; // distance from the right edge
-        const marginTop = 12; // distance from top of svg
-        // compute left relative to container (container left -> 0)
-        let left = Math.round(containerRect.width - popupRect.width - marginRight);
-        let top = Math.round((svgRect.top - containerRect.top) + marginTop);
-        // clamp so popup stays within container
-        if (left < 8) left = 8;
-        if (top < 8) top = 8;
-        this.moviePopup.style('left', `${left}px`).style('top', `${top}px`);
+        
+        // Convert SVG coordinates to screen coordinates
+        const svgPoint = this.svg.node().createSVGPoint();
+        svgPoint.x = nodeX;
+        svgPoint.y = nodeY;
+        const svgMatrix = this.svg.node().getScreenCTM();
+        const screenPoint = svgPoint.matrixTransform(svgMatrix);
+        
+        const offsetX = 60; // Distance from node
+        const offsetY = -popupRect.height / 2; // Center vertically with node
+        
+        // Use screen coordinates directly since popup is fixed
+        let left = Math.round(screenPoint.x + offsetX);
+        let top = Math.round(screenPoint.y + offsetY);
+        
+        // Keep popup within viewport bounds
+        if (left + popupRect.width > window.innerWidth - 20) {
+          left = Math.round(screenPoint.x - popupRect.width - offsetX); // Show to the left instead
+        }
+        if (left < 20) left = 20;
+        if (top < 20) top = 20;
+        if (top + popupRect.height > window.innerHeight - 20) {
+          top = Math.round(window.innerHeight - popupRect.height - 20);
+        }
+        
+        // Set position and make fully visible
+        this.moviePopup
+          .style('left', `${left}px`)
+          .style('top', `${top}px`)
+          .style('position', 'fixed')
+          .style('opacity', 1)
+          .style('display', 'block')
+          .style('visibility', 'visible')
+          .style('z-index', '99999'); // Extremely high z-index
+        
+        // Draw connecting line from node to popup
+        if (this.popupLine && this.svg) {
+          // Node position is in SVG coordinates (relative to SVG)
+          const nodeSvgX = nodeX;
+          const nodeSvgY = nodeY;
+          
+          // Popup position is in screen coordinates, need to convert to SVG coordinates
+          const svgRect = this.svg.node().getBoundingClientRect();
+          const popupCenterX = left + popupRect.width / 2 - svgRect.left;
+          const popupCenterY = top + popupRect.height / 2 - svgRect.top;
+          
+          this.popupLine
+            .attr('x1', nodeSvgX)
+            .attr('y1', nodeSvgY)
+            .attr('x2', popupCenterX)
+            .attr('y2', popupCenterY)
+            .attr('opacity', 1);
+        }
       } catch(e) {
-        // fallback to previous approximate position
+        // fallback
         const containerRect = this.container.node().getBoundingClientRect();
-        const left = Math.round(containerRect.width - 320 - 32);
-        const top = Math.round(24);
+        const left = Math.round(containerRect.width - 400 - 32);
+        const top = Math.round(100);
         this.moviePopup.style('left', `${left}px`).style('top', `${top}px`);
       }
     } catch (e) {
@@ -78,7 +192,10 @@ class ChordGraph {
   hideMoviePopup() {
     try {
       if (!this.moviePopup) return;
-      this.moviePopup.style('opacity', 0).style('pointer-events', 'none');
+      this.moviePopup.style('opacity', 0).style('pointer-events', 'none').style('display', 'none');
+      if (this.popupLine) {
+        this.popupLine.attr('opacity', 0);
+      }
     } catch(e){}
   }
 
@@ -222,6 +339,65 @@ class ChordGraph {
     const feMerge = glowFilter.append('feMerge');
     feMerge.append('feMergeNode').attr('in', 'coloredBlur');
     feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+    
+    // Create SVG filter to make images completely solid black
+    const solidBlackFilter = defs.append('filter')
+      .attr('id', 'solidBlack')
+      .attr('x', '-50%')
+      .attr('y', '-50%')
+      .attr('width', '200%')
+      .attr('height', '200%');
+    
+    // Convert to grayscale first
+    solidBlackFilter.append('feColorMatrix')
+      .attr('type', 'saturate')
+      .attr('values', '0')
+      .attr('result', 'grayscale');
+    
+    // Make it completely black using component transfer
+    const blackTransfer = solidBlackFilter.append('feComponentTransfer')
+      .attr('in', 'grayscale')
+      .attr('result', 'black');
+    
+    blackTransfer.append('feFuncR')
+      .attr('type', 'linear')
+      .attr('slope', '0')
+      .attr('intercept', '0');
+    
+    blackTransfer.append('feFuncG')
+      .attr('type', 'linear')
+      .attr('slope', '0')
+      .attr('intercept', '0');
+    
+    blackTransfer.append('feFuncB')
+      .attr('type', 'linear')
+      .attr('slope', '0')
+      .attr('intercept', '0');
+    
+    // Apply threshold to make it completely solid - convert any visible pixel to pure black
+    const thresholdTransfer = solidBlackFilter.append('feComponentTransfer')
+      .attr('in', 'black')
+      .attr('result', 'threshold');
+    
+    // Use discrete transfer to force all non-transparent pixels to be pure black
+    thresholdTransfer.append('feFuncR')
+      .attr('type', 'discrete')
+      .attr('tableValues', '0');
+    
+    thresholdTransfer.append('feFuncG')
+      .attr('type', 'discrete')
+      .attr('tableValues', '0');
+    
+    thresholdTransfer.append('feFuncB')
+      .attr('type', 'discrete')
+      .attr('tableValues', '0');
+    
+    thresholdTransfer.append('feFuncA')
+      .attr('type', 'discrete')
+      .attr('tableValues', '1');
+    
+    const solidMerge = solidBlackFilter.append('feMerge');
+    solidMerge.append('feMergeNode').attr('in', 'threshold');
 
     // Gradient will be created dynamically in createCircleBorder with proper sizing
 
@@ -257,25 +433,38 @@ class ChordGraph {
       .style('transform', 'translateX(-50%)')
       .style('bottom', '20px');
 
-      // Create a white movie popup (matches the attached mockup) — hidden by default
-      this.moviePopup = this.container
+      // Create a semi-transparent gray movie popup (matches the attached image) — hidden by default
+      // Append to body instead of container to avoid positioning issues
+      this.moviePopup = d3.select('body')
         .append('div')
         .attr('class', 'movie-popup')
-        .style('position', 'absolute')
-        .style('min-width', '200px')
-        .style('max-width', '320px')
-        .style('background', '#ffffff')
-        .style('color', '#0f172a')
-        .style('border-radius', '10px')
-        .style('padding', '12px 14px')
-        .style('box-shadow', '0 12px 30px rgba(16,24,40,0.12)')
+        .style('position', 'fixed') // Fixed positioning for viewport-relative placement
+        .style('min-width', '320px')
+        .style('max-width', '420px')
+        .style('background', 'rgba(140, 140, 140, 0.9)') // Semi-transparent light gray (matches image)
+        .style('color', '#ffffff')
+        .style('border-radius', '8px')
+        .style('padding', '24px')
         .style('opacity', 0)
         .style('pointer-events', 'none')
-        .style('z-index', 1200)
-        .style('font-family', "'Space Mono', 'Courier New', monospace")
-        .style('font-size', '12px')
-        .style('max-height', '320px')
-        .style('overflow', 'auto');
+        .style('display', 'none')
+        .style('z-index', '99999') // Extremely high z-index to ensure it's on top
+        .style('font-family', "'Courier New', monospace")
+        .style('font-size', '13px')
+        .style('max-height', '600px')
+        .style('overflow-y', 'auto')
+        .style('backdrop-filter', 'blur(2px)')
+        .style('box-shadow', '0 8px 32px rgba(0, 0, 0, 0.4)');
+      
+      console.log('Popup created:', this.moviePopup.node());
+      
+      // Create SVG line connector (will be positioned dynamically)
+      this.popupLine = this.svg.append('line')
+        .attr('class', 'popup-connector-line')
+        .attr('stroke', '#46AACB')
+        .attr('stroke-width', '2')
+        .attr('opacity', 0)
+        .style('pointer-events', 'none');
   }
 
   /**
@@ -325,6 +514,9 @@ class ChordGraph {
     // Create links (connections between themes)
     const links = [];
     const relatedMoviesSet = new Set();
+    
+    // Track which nodes have connections
+    const nodesWithConnections = new Set();
 
     for (let i = 0; i < allThemes.length; i++) {
       for (let j = i + 1; j < allThemes.length; j++) {
@@ -340,6 +532,10 @@ class ChordGraph {
             targetTheme: allThemes[j]
           });
 
+          // Mark both nodes as having connections
+          nodesWithConnections.add(i);
+          nodesWithConnections.add(j);
+
           // Collect related movies
           moviesWithBoth.forEach(m => relatedMoviesSet.add(m));
         }
@@ -348,11 +544,33 @@ class ChordGraph {
 
     // Create curved path generator that curves inward toward center
     const linkPath = (d) => {
+      // Validate that source and target indices are valid
+      if (typeof d.source !== 'number' || typeof d.target !== 'number' ||
+          d.source < 0 || d.source >= nodes.length ||
+          d.target < 0 || d.target >= nodes.length) {
+        return `M0,0L0,0`; // Return a minimal valid path for invalid links
+      }
+      
       const sourceNode = nodes[d.source];
       const targetNode = nodes[d.target];
+      
+      // Safety check: ensure nodes exist and have valid coordinates
+      if (!sourceNode || !targetNode || 
+          typeof sourceNode.x !== 'number' || typeof sourceNode.y !== 'number' ||
+          typeof targetNode.x !== 'number' || typeof targetNode.y !== 'number' ||
+          isNaN(sourceNode.x) || isNaN(sourceNode.y) ||
+          isNaN(targetNode.x) || isNaN(targetNode.y)) {
+        return `M0,0L0,0`; // Return a minimal valid path
+      }
+      
       const dx = targetNode.x - sourceNode.x;
       const dy = targetNode.y - sourceNode.y;
       const dr = Math.sqrt(dx * dx + dy * dy);
+
+      // If nodes are at the same position, return a straight line
+      if (dr === 0) {
+        return `M${sourceNode.x},${sourceNode.y}L${targetNode.x},${targetNode.y}`;
+      }
 
       // Calculate center point
       const centerX = this.width / 2;
@@ -367,51 +585,72 @@ class ChordGraph {
       const toCenterY = centerY - midY;
       const toCenterDist = Math.sqrt(toCenterX * toCenterX + toCenterY * toCenterY);
       
+      // Prevent division by zero
+      if (toCenterDist === 0) {
+        // If midpoint is exactly at center, use a simple curve
+        const controlX = midX;
+        const controlY = midY - dr * 0.3; // Curve upward
+        return `M${sourceNode.x},${sourceNode.y}Q${controlX},${controlY} ${targetNode.x},${targetNode.y}`;
+      }
+      
       // Pull the curve inward by moving the control point toward the center
       const pullFactor = 0.5; // Increased pull factor to curve more inward
       const controlX = midX + (toCenterX / toCenterDist) * dr * pullFactor;
       const controlY = midY + (toCenterY / toCenterDist) * dr * pullFactor;
       
+      // Validate control point
+      if (isNaN(controlX) || isNaN(controlY)) {
+        // Fallback to straight line if control point is invalid
+        return `M${sourceNode.x},${sourceNode.y}L${targetNode.x},${targetNode.y}`;
+      }
+      
       // Create a quadratic bezier curve that curves inward
       return `M${sourceNode.x},${sourceNode.y}Q${controlX},${controlY} ${targetNode.x},${targetNode.y}`;
     };
 
-    // Create color scale: darker blue = more connections, lighter blue = fewer connections
+    // Fixed color for all links - no gradient
+    const linkColor = '#46AACB';
+    
+    // Calculate max value for thickness scaling
     const maxValue = d3.max(links, d => d.value) || 1;
     const minValue = d3.min(links, d => d.value) || 1;
-    
-    // Use a more sensitive color scale with better distribution
-    // Use a custom interpolation that emphasizes differences better
-    const colorScale = (value) => {
-      // Normalize value to 0-1 range
-      const t = (value - minValue) / (maxValue - minValue);
-      // Use a square root curve to make differences more visible
-      // This ensures that links with 16 vs 37 connections have clearly different shades
-      const adjustedT = Math.pow(t, 0.4); // More aggressive curve
-      // Use a wider color range for better differentiation
-      return d3.interpolateRgb('#bfdbfe', '#030712')(adjustedT); // Lighter start, much darker end
-    };
 
-    // Store original color scale and links for "All" view
-    this.originalColorScale = colorScale;
+    // Store original links for "All" view
     this.originalLinks = links;
 
     const tooltip = this.tooltip;
 
-    // Draw links (curved paths) with color gradient based on connection count
+    // Filter out invalid links (where source or target index is out of bounds)
+    const validLinks = links.filter(link => {
+      return typeof link.source === 'number' && typeof link.target === 'number' &&
+             link.source >= 0 && link.source < nodes.length &&
+             link.target >= 0 && link.target < nodes.length &&
+             nodes[link.source] && nodes[link.target];
+    });
+    
+    // Draw links (curved paths) with thickness based on connection count, fixed color
+    // Thickness scale: min 1.5px, max based on value
+    const minThickness = 1.5;
+    const maxThickness = 8; // Maximum thickness for lines with most connections
+    const thicknessScale = (value) => {
+      if (maxValue === minValue) return minThickness;
+      const t = (value - minValue) / (maxValue - minValue);
+      return minThickness + (maxThickness - minThickness) * t;
+    };
+    
     const link = this.linkGroup
       .selectAll('path.link')
-      .data(links, d => `${d.sourceTheme}-${d.targetTheme}`)
+      .data(validLinks, d => `${d.sourceTheme}-${d.targetTheme}`)
       .join(
         enter => enter.append('path')
           .attr('class', 'link')
           .attr('d', linkPath)
-          .attr('stroke', d => colorScale(d.value))
-          .attr('stroke-width', d => Math.max(1.5, Math.sqrt(d.value) * 2)) // Increased base thickness
+          .attr('stroke', linkColor)
+          .attr('stroke-width', d => thicknessScale(d.value))
           .attr('fill', 'none')
-          .attr('opacity', 0.9) // Increased opacity for better visibility
-          .style('stroke', d => colorScale(d.value)) // Use style to override CSS
-          .style('stroke-width', d => Math.max(1.5, Math.sqrt(d.value) * 2)) // Also set via style
+          .attr('opacity', 0.9)
+          .style('stroke', linkColor)
+          .style('stroke-width', d => thicknessScale(d.value))
           .call(enter => enter.transition()
             .duration(this.transitionDuration)
             .attr('opacity', 0.9)
@@ -420,11 +659,11 @@ class ChordGraph {
           .call(update => update.transition()
             .duration(this.transitionDuration)
             .attr('d', linkPath)
-            .attr('stroke', d => colorScale(d.value))
-            .style('stroke', d => colorScale(d.value)) // Use style to override CSS
-            .attr('stroke-width', d => Math.max(1.5, Math.sqrt(d.value) * 2)) // Increased base thickness
-            .style('stroke-width', d => Math.max(1.5, Math.sqrt(d.value) * 2)) // Also set via style
-            .attr('opacity', 0.9) // Increased opacity for better visibility
+            .attr('stroke', linkColor)
+            .style('stroke', linkColor)
+            .attr('stroke-width', d => thicknessScale(d.value))
+            .style('stroke-width', d => thicknessScale(d.value))
+            .attr('opacity', 0.9)
           ),
         exit => exit
           .call(exit => exit.transition()
@@ -439,17 +678,19 @@ class ChordGraph {
           .attr('opacity', 1)
           .raise();
 
-        // Highlight connected nodes
+        // Highlight connected nodes (scale up images)
+        const highlightSize = 75; // Increased to match hover size
         d3.selectAll('.node')
           .filter((n, i) => i === d.source || i === d.target)
-          .select('circle')
-          .attr('stroke', '#60a5fa')
-          .attr('stroke-width', 4)
-          .attr('r', 25);
+          .select('image')
+          .attr('width', highlightSize)
+          .attr('height', highlightSize)
+          .attr('x', -highlightSize / 2)
+          .attr('y', -highlightSize / 2);
 
         let tooltipHTML = `
-          <strong style="color: #60a5fa;">${d.sourceTheme}</strong> ↔ <strong style="color: #60a5fa;">${d.targetTheme}</strong><br/>
-          <span style="color: #60a5fa;">${d.value} movie${d.value !== 1 ? 's' : ''}</span> with both themes
+          <strong style="color: #46AACB;">${d.sourceTheme}</strong> ↔ <strong style="color: #46AACB;">${d.targetTheme}</strong><br/>
+          <span style="color: #46AACB;">${d.value} movie${d.value !== 1 ? 's' : ''}</span> with both themes
           <div style="margin-top: 10px; max-height: 500px; overflow-y: auto; font-size: 11px; padding-left: 4px; padding-right: 8px;">
         `;
 
@@ -468,12 +709,14 @@ class ChordGraph {
         d3.select(this)
           .attr('opacity', 0.9);
 
-        // Reset node colors
+        // Reset node sizes
+        const normalSize = 60; // Match the base image size
         d3.selectAll('.node')
-          .select('circle')
-          .attr('stroke', '#3b82f6')
-          .attr('stroke-width', 2)
-          .attr('r', 20);
+          .select('image')
+          .attr('width', normalSize)
+          .attr('height', normalSize)
+          .attr('x', -normalSize / 2)
+          .attr('y', -normalSize / 2);
 
         tooltip.style('opacity', 0);
       });
@@ -484,20 +727,76 @@ class ChordGraph {
       .data(nodes, d => d.id)
       .join(
         enter => {
+          const self = this; // Store reference to ChordGraph instance
+          const connectionsSet = nodesWithConnections; // Store reference to connections set
           const nodeEnter = enter.append('g')
             .attr('class', 'node')
             .attr('transform', d => `translate(${d.x},${d.y})`)
-            .style('opacity', 0);
-
-          nodeEnter.append('circle')
-            .attr('r', 20)
-            .attr('fill', '#2a2a2a')
-            .attr('stroke', '#3b82f6')
-            .attr('stroke-width', 2)
-            .style('cursor', 'pointer');
+            .style('pointer-events', 'auto') // Enable pointer events on the node group
+            .style('opacity', 0)
+            .each(function(d) {
+              // Get or create defs for clip paths
+              let defs = self.svg.select('defs');
+              if (defs.empty()) {
+                defs = self.svg.append('defs');
+              }
+              
+              // Image size constant
+              const imageSize = 60; // Increased from 40 to 60
+              
+              const nodeGroup = d3.select(this);
+              const imagePath = self.themeImages[d.label];
+              
+              // Check if this node has connections
+              const hasConnections = connectionsSet.has(d.index);
+              const imageOpacity = hasConnections ? 1 : 0.2; // Solid if has connections, transparent if not
+              
+              // Add the image - make it darker and more solid
+              if (imagePath) {
+                // Create a darker background circle behind the image for solid appearance
+                nodeGroup.append('circle')
+                  .attr('r', imageSize / 2)
+                  .attr('fill', '#000000') // Solid black background
+                  .attr('stroke', 'none')
+                  .style('pointer-events', 'none')
+                  .style('opacity', hasConnections ? 1 : 0.2)
+                  .lower(); // Put it behind the image
+                
+                nodeGroup.append('image')
+                  .attr('x', -imageSize / 2)
+                  .attr('y', -imageSize / 2)
+                  .attr('width', imageSize)
+                  .attr('height', imageSize)
+                  .attr('href', imagePath)
+                  .attr('preserveAspectRatio', 'xMidYMid meet')
+                  .style('pointer-events', 'none')
+                  .style('opacity', hasConnections ? '1' : '0.2')
+                  .style('opacity', hasConnections ? 1 : 0.2)
+                  .attr('filter', 'url(#solidBlack)') // Use SVG filter to make completely solid black
+                  .style('mix-blend-mode', 'normal')
+                  .style('filter', 'url(#solidBlack) brightness(0) contrast(3)') // Make darker and more solid
+                  .attr('data-has-connections', hasConnections ? 'true' : 'false');
+              } else {
+                console.warn('No image path found for theme:', d.label);
+              }
+              
+              // Add circle for hover/click interactions (invisible but functional)
+              // Make it larger to cover the whole image area, including hover scale-up
+              const hoverSize = 75; // Match the hover size
+              nodeGroup.append('circle')
+                .attr('r', hoverSize / 2) // Larger radius to cover entire image area
+                .attr('cx', 0) // Center at origin
+                .attr('cy', 0) // Center at origin
+                .attr('fill', 'none')
+                .attr('stroke', 'none')
+                .style('cursor', 'pointer')
+                .style('pointer-events', 'auto')
+                .raise(); // Ensure it's on top for event handling
+            });
 
           const labelGroup = nodeEnter.append('g')
-            .attr('class', 'label-group');
+            .attr('class', 'label-group')
+            .style('pointer-events', 'none'); // Don't block events from image area
 
           labelGroup.append('rect')
             .attr('class', 'node-label-bg')
@@ -505,7 +804,8 @@ class ChordGraph {
             .attr('fill', '#1a1a1a')
             .attr('stroke', '#333333')
             .attr('stroke-width', 1)
-            .attr('opacity', 0.9);
+            .attr('opacity', 0.9)
+            .style('pointer-events', 'none'); // Don't block events
 
           labelGroup.append('text')
             .attr('class', 'node-text')
@@ -546,20 +846,34 @@ class ChordGraph {
       );
 
     // Node hover interactions — show movie popup for movies in this theme and window
-    node.on('mouseover', (event, d) => {
-      d3.select(event.currentTarget).select('circle')
-        .transition()
-        .duration(200)
-        .attr('r', 25)
-        .attr('stroke', '#60a5fa')
-        .attr('stroke-width', 4);
+    // Use mouseenter instead of mouseover for more reliable triggering
+    node.on('mouseenter', (event, d) => {
+      event.stopPropagation();
+      console.log('Mouseenter on node:', d.label, 'Popup exists:', !!this.moviePopup);
+      if (!this.moviePopup) {
+        console.error('Popup not initialized!');
+        return;
+      }
+      const nodeGroup = d3.select(event.currentTarget);
+      // Scale up the image on hover
+      const hoverSize = 75; // Increased from 50 to 75
+      const image = nodeGroup.select('image');
+      if (!image.empty()) {
+        image
+          .transition()
+          .duration(200)
+          .attr('width', hoverSize)
+          .attr('height', hoverSize)
+          .attr('x', -hoverSize / 2)
+          .attr('y', -hoverSize / 2);
+      }
 
-      // Highlight connected chords
-      d3.selectAll('.link')
-        .filter((l) => l.source === d.index || l.target === d.index)
-        .attr('stroke', '#60a5fa')
-        .attr('opacity', 1)
-        .raise();
+        // Highlight connected chords
+        d3.selectAll('.link')
+          .filter((l) => l.source === d.index || l.target === d.index)
+          .attr('stroke', '#46AACB')
+          .attr('opacity', 1)
+          .raise();
 
       // Find movies in the current window that have this theme
       const theme = d.label;
@@ -575,7 +889,7 @@ class ChordGraph {
         return 0;
       }
       const moviesForTheme = this.movies.filter(m => {
-        if (!m.themes.includes(theme)) return false;
+        if (!m.themes || !m.themes.includes(theme)) return false;
         if (startYear !== null) {
           const y = parseYearField(m.year);
           if (!y || y < startYear || y > endYear) return false;
@@ -584,36 +898,40 @@ class ChordGraph {
       }).map(m => m.title + (m.year ? ` (${m.year})` : ''));
       // sort alphabetically
       moviesForTheme.sort((a,b)=> a.localeCompare(b));
-      if (moviesForTheme.length > 0) this.showMoviePopup(moviesForTheme, startYear);
-      else this.hideMoviePopup();
+      
+      // Get node position for popup placement
+      const nodeX = d.x;
+      const nodeY = d.y;
+      
+      // Always show popup when hovering, even if no movies (show theme info)
+      this.showMoviePopup(moviesForTheme, startYear, theme, nodeX, nodeY);
     })
     .on('mouseout', (event, d) => {
-      d3.select(event.currentTarget).select('circle')
+      const nodeGroup = d3.select(event.currentTarget);
+      nodeGroup.select('circle')
         .transition()
         .duration(200)
         .attr('r', 20)
-        .attr('stroke', '#3b82f6')
+        .attr('stroke', '#46AACB')
         .attr('stroke-width', 2);
 
       // Reset chord colors
       d3.selectAll('.link')
-        .attr('stroke', '#3b82f6')
+        .attr('stroke', '#46AACB')
         .attr('opacity', 0.4);
 
       this.hideMoviePopup();
     });
 
-    // Create color gradient legend (only if SVG is ready)
-    if (this.svg && links.length > 0) {
-      try {
-        this.createColorLegend(maxValue, minValue, colorScale);
-      } catch(e) {
-        console.warn('Legend creation failed:', e);
-      }
-    }
+    // No color legend needed - using fixed color with thickness variation
 
-    // Create circle border with white glow effect
+    // Create circle border with white glow effect (but hide it behind nodes)
     this.createCircleBorder(centerX, centerY, radius);
+    
+    // Hide the circle border behind nodes by lowering it
+    if (this.circleGroup) {
+      this.circleGroup.lower(); // Put circle behind nodes
+    }
 
     // Return stats for display
     return {
@@ -656,37 +974,37 @@ class ChordGraph {
       .attr('fy', centerY)
       .attr('fr', circleRadius); // Focal radius starts at circle edge - this makes it work!
     
-    // Gradient starts dark (more opaque) at the edge and gets lighter (more transparent) as it goes outward
+    // Gradient starts dimmer at the edge and gets more transparent as it goes outward
     // Offset 0% = circle edge (fr), 100% = outer edge (r)
     radialGradient.append('stop')
       .attr('offset', '0%')
       .attr('stop-color', '#ffffff')
-      .attr('stop-opacity', '0.6'); // Darker/more opaque white at edge
+      .attr('stop-opacity', '0.15'); // Dimmer white at edge
     
     radialGradient.append('stop')
       .attr('offset', '20%')
       .attr('stop-color', '#ffffff')
-      .attr('stop-opacity', '0.4');
+      .attr('stop-opacity', '0.1');
     
     radialGradient.append('stop')
       .attr('offset', '40%')
       .attr('stop-color', '#ffffff')
-      .attr('stop-opacity', '0.25');
+      .attr('stop-opacity', '0.06');
     
     radialGradient.append('stop')
       .attr('offset', '60%')
       .attr('stop-color', '#ffffff')
-      .attr('stop-opacity', '0.12');
+      .attr('stop-opacity', '0.03');
     
     radialGradient.append('stop')
       .attr('offset', '80%')
       .attr('stop-color', '#ffffff')
-      .attr('stop-opacity', '0.05');
+      .attr('stop-opacity', '0.012');
     
     radialGradient.append('stop')
       .attr('offset', '100%')
       .attr('stop-color', '#ffffff')
-      .attr('stop-opacity', '0'); // Lighter/fully transparent at outer edge
+      .attr('stop-opacity', '0'); // Fully transparent at outer edge
     
     // Create a unique mask for this circle instance
     const maskId = `circleMask_${Date.now()}`;
@@ -721,16 +1039,8 @@ class ChordGraph {
       .attr('opacity', '1') // Full opacity, gradient handles the fade
       .style('pointer-events', 'none'); // Don't interfere with interactions
     
-    // Create the main circle with background color (blends in)
-    this.circleGroup.append('circle')
-      .attr('cx', centerX)
-      .attr('cy', centerY)
-      .attr('r', circleRadius)
-      .attr('fill', 'none')
-      .attr('stroke', '#1a1a1a') // Same as background color
-      .attr('stroke-width', '2')
-      .attr('opacity', '1')
-      .style('pointer-events', 'none'); // Don't interfere with interactions
+    // Don't create the main circle - it interferes with node images
+    // The images should appear solid without the circle behind them
   }
 
   /**
@@ -847,55 +1157,51 @@ class ChordGraph {
       return 0;
     }
 
+    // Fixed color for all links
+    const linkColor = '#46AACB';
+    
     // If null, reset to default visuals based on overall cooccurrence
     if (!decade) {
-      // Use stored original color scale if available
-      if (this.originalColorScale && this.originalLinks) {
+      // Use stored original links if available
+      if (this.originalLinks) {
         const allMaxValue = d3.max(this.originalLinks, d => d.value) || 1;
         const allMinValue = d3.min(this.originalLinks, d => d.value) || 1;
-        const allColorScale = (value) => {
+        
+        // Thickness scale function
+        const minThickness = 1.5;
+        const maxThickness = 8;
+        const thicknessScale = (value) => {
+          if (allMaxValue === allMinValue) return minThickness;
           const t = (value - allMinValue) / (allMaxValue - allMinValue);
-          const adjustedT = Math.pow(t, 0.4); // More aggressive curve
-          return d3.interpolateRgb('#bfdbfe', '#030712')(adjustedT);
+          return minThickness + (maxThickness - minThickness) * t;
         };
 
-        // reset links with color gradient and thickness
+        // reset links with fixed color and thickness based on connections
         d3.selectAll('.link').each(function(d){
           try {
             if (d && d.value !== undefined) {
-              const strokeColor = allColorScale(d.value);
-              const strokeWidth = Math.max(1.5, Math.sqrt(d.value) * 2); // Increased base thickness
+              const strokeWidth = thicknessScale(d.value);
               d3.select(this)
                 .transition().duration(300)
-                .attr('stroke', strokeColor)
-                .style('stroke', strokeColor) // Use style to override CSS
+                .attr('stroke', linkColor)
+                .style('stroke', linkColor)
                 .attr('stroke-width', strokeWidth)
-                .style('stroke-width', strokeWidth) // Also set via style
-                .style('opacity', 0.9); // Increased opacity for better visibility
+                .style('stroke-width', strokeWidth)
+                .style('opacity', 0.9);
             }
           } catch(e){}
         });
-        
-        // Update legend for "All" view (only if SVG is ready)
-        if (this.svg && this.svg.node()) {
-          try {
-            const allMaxValue = d3.max(this.originalLinks, d => d.value) || 1;
-            const allMinValue = d3.min(this.originalLinks, d => d.value) || 1;
-            this.createColorLegend(allMaxValue, allMinValue, allColorScale);
-          } catch(e) {
-            console.warn('Legend update failed:', e);
-          }
-        }
       }
-      // reset nodes
+      // Update node images - all COMPLETELY opaque (no transparency) when showing "All"
       d3.selectAll('.node').each(function(d){
         try {
-          d3.select(this).select('circle')
-            .transition().duration(300)
-            .attr('r', 20)
-            .attr('stroke', '#60a5fa')
-            .attr('stroke-width', 4)
-            .style('opacity', 0.95);
+          const image = d3.select(this).select('image');
+          if (image && !image.empty()) {
+            image.transition().duration(300)
+              .style('opacity', '1')
+              .style('opacity', 1)
+              .attr('data-has-connections', 'true');
+          }
         } catch(e){}
       });
       // hide popup when showing 'All'
@@ -925,79 +1231,110 @@ class ChordGraph {
       }
     });
 
+    // Track which themes have connections in this decade
+    const themesWithConnections = new Set();
+    Object.keys(windowCo).forEach(theme => {
+      const connections = windowCo[theme];
+      if (connections && Object.keys(connections).length > 0) {
+        themesWithConnections.add(theme);
+      }
+    });
+    
     // compute max weight for color scale
     let maxW = 0;
     Object.keys(windowCo).forEach(a => {
       Object.keys(windowCo[a]||{}).forEach(b => { maxW = Math.max(maxW, windowCo[a][b] || 0); });
     });
 
-    // Create color scale for this decade window
+    // Thickness scale for this decade window
     const minWindowValue = 1;
     const maxWindowValue = maxW || 1;
-    const windowColorScale = (value) => {
+    const minThickness = 1.5;
+    const maxThickness = 8;
+    const thicknessScale = (value) => {
+      if (maxWindowValue === minWindowValue) return minThickness;
       const t = (value - minWindowValue) / (maxWindowValue - minWindowValue);
-      const adjustedT = Math.pow(t, 0.4); // More aggressive curve for better differentiation
-      // Use a wider color range - lighter start to very dark end
-      return d3.interpolateRgb('#bfdbfe', '#030712')(adjustedT);
+      return minThickness + (maxThickness - minThickness) * t;
     };
 
-    // Update legend for this decade (only if SVG is ready)
-    if (maxW > 0 && this.svg && this.svg.node()) {
-      try {
-        this.createColorLegend(maxW, minWindowValue, windowColorScale);
-      } catch(e) {
-        console.warn('Legend update failed:', e);
-      }
-    }
-
-    // update links with color gradient and thickness based on connection count
+    // update links with fixed color and thickness based on connection count
     d3.selectAll('.link').each(function(d){
       try {
         const a = d.sourceTheme || (d.source && d.source.label) || d.source;
         const b = d.targetTheme || (d.target && d.target.label) || d.target;
         const weight = (windowCo[a] && windowCo[a][b]) ? windowCo[a][b] : 0;
-        const opacity = weight > 0 ? 0.9 : 0.08; // Increased opacity for better visibility
-        const strokeW = weight > 0 ? Math.max(1.5, Math.sqrt(weight) * 2) : 1; // Increased base thickness
-        const strokeColor = weight > 0 ? windowColorScale(weight) : '#e0f2fe';
+        const opacity = weight > 0 ? 0.9 : 0.08;
+        const strokeW = weight > 0 ? thicknessScale(weight) : 1;
         
-        // Apply both color and thickness consistently
+        // Only update if both themes exist in the current window
+        if (!a || !b || (!windowCo[a] && !windowCo[b])) {
+          // Hide links that don't have valid connections
+          d3.select(this).transition().duration(300)
+            .style('opacity', 0)
+            .style('display', 'none');
+          return;
+        }
+        
+        // Apply fixed color and thickness based on connections
         d3.select(this).transition().duration(300)
-          .attr('stroke', strokeColor)
-          .style('stroke', strokeColor) // Use style to override CSS
+          .attr('stroke', linkColor)
+          .style('stroke', linkColor)
           .attr('stroke-width', strokeW)
-          .style('stroke-width', strokeW) // Also set via style for consistency
-          .style('opacity', opacity);
+          .style('stroke-width', strokeW)
+          .style('opacity', opacity)
+          .style('display', weight > 0 ? 'block' : 'none');
       } catch(e){}
     });
 
-    // update nodes - remove blue outline if no connections
+    // update node images - make transparent if no connections, completely opaque and dark if has connections
     d3.selectAll('.node').each(function(d){
       try {
         const theme = d && d.label ? d.label : (d.id || d);
-        let has = false;
+        let hasConnections = false;
         if (windowCo[theme]) {
-          for (const k in windowCo[theme]) { if ((windowCo[theme][k]||0) > 0) { has = true; break; } }
+          for (const k in windowCo[theme]) { 
+            if ((windowCo[theme][k]||0) > 0) { 
+              hasConnections = true; 
+              break; 
+            } 
+          }
         }
         const g = d3.select(this);
-        const circle = g.select('circle');
-        if (has) {
-          // Node has connections - show blue outline
-          circle.transition().duration(300)
-            .attr('r', 24)
-            .attr('stroke', '#93c5fd')
-            .style('stroke', '#93c5fd')
-            .attr('stroke-width', 5)
-            .style('stroke-width', 5)
-            .style('opacity', 1);
-        } else {
-          // Node has no connections - remove blue outline (no stroke)
-          circle.transition().duration(300)
-            .attr('r', 20)
-            .attr('stroke', 'none')
-            .style('stroke', 'none')
-            .attr('stroke-width', 0)
-            .style('stroke-width', 0)
-            .style('opacity', 0.5);
+        const image = g.select('image');
+        const bgCircle = g.select('circle').filter(function() {
+          // Find the background circle (first circle, not the interaction circle)
+          return d3.select(this).attr('fill') === '#000000';
+        });
+        
+        if (image && !image.empty()) {
+          // Update image opacity: COMPLETELY opaque (opacity 1, NO transparency) if has connections, transparent if not
+          if (hasConnections) {
+            image.transition().duration(300)
+              .style('opacity', '1')
+              .style('opacity', 1)
+              .attr('filter', 'url(#solidBlack)')
+              .style('filter', 'url(#solidBlack) brightness(0) contrast(2)') // Make darker
+              .attr('data-has-connections', 'true');
+            
+            // Update background circle
+            if (!bgCircle.empty()) {
+              bgCircle.transition().duration(300)
+                .style('opacity', 1);
+            }
+          } else {
+            image.transition().duration(300)
+              .style('opacity', '0.2')
+              .style('opacity', 0.2)
+              .attr('filter', 'url(#solidBlack)')
+              .style('filter', 'url(#solidBlack) brightness(0) contrast(2)')
+              .attr('data-has-connections', 'false');
+            
+            // Update background circle
+            if (!bgCircle.empty()) {
+              bgCircle.transition().duration(300)
+                .style('opacity', 0.2);
+            }
+          }
         }
       } catch(e){}
     });
