@@ -113,7 +113,7 @@
         }
 
         .cover-subtitle {
-            font-size: 12px;
+            font-size: 14px;
             color: #ffffff;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -167,40 +167,38 @@
         }
 
         /* Background Gradient Effect - bottom left with text */
-        /* Globe/semi-circle size - fixed pixel positioning */
+        /* Globe/semi-circle size - scales with viewport, always circular */
         .cover-gradient {
             position: fixed;
-            bottom: -400px;
-            left: -400px;
-            width: 1400px;
-            height: 1400px;
-            min-width: 1400px;
-            max-width: 1400px;
-            min-height: 1400px;
-            max-height: 1400px;
+            bottom: -30vh;
+            left: -30vh;
+            width: 120vh;
+            height: 120vh;
+            min-width: 120vh;
+            max-width: 120vh;
+            min-height: 120vh;
+            max-height: 120vh;
             background: radial-gradient(circle, transparent 0%, rgba(255, 255, 255, 0.02) 15%, rgba(255, 255, 255, 0.06) 35%, rgba(255, 255, 255, 0.10) 55%, rgba(255, 255, 255, 0.15) 75%, rgba(255, 255, 255, 0.18) 100%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
             filter: blur(0px);
-            box-shadow: 0 0 150px 80px rgba(255, 255, 255, 0.2),
-                        0 0 250px 120px rgba(255, 255, 255, 0.1),
-                        0 0 350px 160px rgba(255, 255, 255, 0.05);
-            transform: scale(1);
-            transform-origin: center center;
-            -webkit-transform: scale(1);
-            -moz-transform: scale(1);
-            -ms-transform: scale(1);
-            -o-transform: scale(1);
+            box-shadow: 0 0 8vh 4vh rgba(255, 255, 255, 0.2),
+                        0 0 14vh 7vh rgba(255, 255, 255, 0.1),
+                        0 0 20vh 10vh rgba(255, 255, 255, 0.05);
+            transform: none;
+            transform-origin: 0 0;
             box-sizing: border-box;
         }
 
+        /* Globe visibility controlled by JavaScript */
+
         .cover-description-text {
             color: #ffffff;
-            font-size: 16px;
+            font-size: 18px;
             letter-spacing: 0.2px;
             opacity: 0.95;
-            max-width: 500px;
+            max-width: 100%;
             line-height: 1.75;
             font-weight: 400;
             font-family: 'IBM Plex Sans', sans-serif !important;
@@ -231,11 +229,12 @@
         /* Position text on the semi-circle */
         .cover-page .cover-text-container {
             position: fixed;
-            left: 60px;
+            left: 4vw;
             top: 50%;
             transform: translateY(-50%);
             z-index: 1;
             padding-left: 0;
+            max-width: 40vw;
         }
 
         /* About Page Styles */
@@ -403,14 +402,15 @@
             left: 0;
             right: 0;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
+            flex-direction: column;
+            align-items: flex-start;
             padding: 0 60px;
             font-size: 11px;
             color: #888888;
             letter-spacing: 0.5px;
             font-family: 'IBM Plex Sans', sans-serif !important;
             z-index: 10;
+            gap: 8px;
         }
 
     </style>
@@ -444,7 +444,7 @@
             </div>
             <div class="cover-footer">
                 <div>Published 2025</div>
-                <div>Created by Audrey Yang, Michael Cai, Tanvir Haque, Sydney Nguyen</div>
+                <div>Created by Audrey Yang, Michael Cai,<br>Tanvir Haque, Sydney Nguyen</div>
             </div>
         </div>
 
@@ -515,6 +515,7 @@
 
         function updatePages() {
             const navMenu = document.getElementById('navigationMenu');
+            const globe = document.querySelector('.cover-gradient');
             pages.forEach((page, index) => {
                 page.classList.remove('active', 'next', 'prev');
                 if (index === currentPage) {
@@ -523,9 +524,13 @@
                     if (index === 0) {
                         // Hide menu on cover page
                         if (navMenu) navMenu.style.display = 'none';
+                        // Show globe only on cover page
+                        if (globe) globe.style.display = 'block';
                     } else {
                         // Show menu on other pages
                         if (navMenu) navMenu.style.display = '';
+                        // Hide globe on other pages
+                        if (globe) globe.style.display = 'none';
                     }
                     // Trigger animations when about page becomes active
                     if (index === 1) {
