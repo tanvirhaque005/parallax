@@ -1394,12 +1394,6 @@ window.addEventListener("mousemove", (e) => {
     return;
   }
 
-<<<<<<< HEAD
-    // 3. Normal arrow-zone logic
-  const x = e.clientX;
-  const w = window.innerWidth;
-    const zone = 800; // editable
-=======
     // 3. Percent-based logic
     const w = window.innerWidth;
     const x = e.clientX;
@@ -1407,7 +1401,6 @@ window.addEventListener("mousemove", (e) => {
 
     const leftZone  = 0.50; // left 50%
     const rightZone = 0.50; // right 50%
->>>>>>> c30ff49a7db385218909c2940db558df51c63bd1
 
     const atFirst = currentWindowStart <= windowStarts[0];
     const atLast  = currentWindowStart >= windowStarts[windowStarts.length - 1];
