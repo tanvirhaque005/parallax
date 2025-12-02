@@ -259,25 +259,21 @@ class ChordGraph {
   }
 
   /**
-   * Load and parse the CSV data
+   * Load and parse data from movies_data_for_shelf.js
    */
   async loadData(csvPath) {
-    const csvData = await d3.csv(csvPath);
-
     // Define allowed themes - only these will be included in the chord graph
-    // Note: Using exact theme names as they appear in the CSV
     const allowedThemes = new Set([
       'AI',
       'Consciousness',
       'Free Will',
       'Social Control',
       'Evolution/Genetic Engineering',
-      'Space', // CSV uses 'Space' instead of 'Space Travel'
-      'Interstellar Travel', // Also including this space-related theme
+      'Space',
+      'Interstellar Travel',
       'Transcendence',
       'Surveillance',
       'Robotics'
-      // Note: 'Class Struggle' does not exist in the CSV data
     ]);
 
     // Map tropes from movies_data_for_shelf.js to allowed themes
@@ -302,42 +298,19 @@ class ChordGraph {
       'Interstellar travel': 'Interstellar Travel',
       'Transcendence': 'Transcendence',
       'Surveillance': 'Surveillance',
-      'Robotics': 'Robotics',
       'Robotics': 'Robotics'
     };
 
-    // Parse movies from CSV and extract only allowed themes
-    const csvMovies = csvData.map(d => {
-      const themesStr = d['Sci-fi Categories'] || '';
-      const allThemes = themesStr
-        .split(',')
-        .map(t => t.trim())
-        .filter(t => t.length > 0);
-
-      // Filter to only include allowed themes
-      const filteredThemes = allThemes.filter(t => allowedThemes.has(t));
-
-      return {
-        title: d['Movie / TV Show Name'],
-        year: parseInt(d['Year']) || 0,
-        themes: filteredThemes,
-        rating: d['Rating']
-      };
-    });
-
-    // Load additional movies from movies_data_for_shelf.js
-    let additionalMovies = [];
+    // Load movies from movies_data_for_shelf.js
+    let movies = [];
     try {
-      // Try to import the data from movies_data_for_shelf.js
-      let shelfData = [];
-      
-      // Try ES module import
+      // Import the data from movies_data_for_shelf.js
       const shelfDataModule = await import('./movies_data_for_shelf.js');
-      shelfData = shelfDataModule.default || shelfDataModule || [];
+      const shelfData = shelfDataModule.default || shelfDataModule || [];
       
       if (shelfData && shelfData.length > 0) {
         // Convert tropes to themes for movies that have tropes
-        additionalMovies = shelfData
+        movies = shelfData
           .filter(movie => movie.tropes && Array.isArray(movie.tropes) && movie.tropes.length > 0)
           .map(movie => {
             // Map tropes to allowed themes
@@ -358,37 +331,17 @@ class ChordGraph {
           })
           .filter(movie => movie.themes.length > 0); // Only keep movies with valid themes
         
-        console.log(`Loaded ${additionalMovies.length} additional movies from movies_data_for_shelf.js`);
+        console.log(`Loaded ${movies.length} movies from movies_data_for_shelf.js`);
+      } else {
+        console.warn('No data found in movies_data_for_shelf.js');
       }
     } catch (error) {
-      console.warn('Could not load movies_data_for_shelf.js:', error);
+      console.error('Could not load movies_data_for_shelf.js:', error);
+      throw error;
     }
 
-    // Merge CSV movies and additional movies, avoiding duplicates by title
-    const movieMap = new Map();
-    
-    // Add CSV movies first
-    csvMovies.forEach(movie => {
-      if (movie.themes.length > 0) {
-        movieMap.set(movie.title.toLowerCase(), movie);
-      }
-    });
-    
-    // Add additional movies (will overwrite CSV if duplicate title, or add new ones)
-    additionalMovies.forEach(movie => {
-      const key = movie.title.toLowerCase();
-      if (!movieMap.has(key)) {
-        movieMap.set(key, movie);
-      } else {
-        // If duplicate, merge themes (keep unique themes from both)
-        const existing = movieMap.get(key);
-        const combinedThemes = [...new Set([...existing.themes, ...movie.themes])];
-        existing.themes = combinedThemes;
-      }
-    });
-
-    // Convert map back to array
-    this.movies = Array.from(movieMap.values());
+    // Store movies
+    this.movies = movies;
 
     // Collect all unique themes (will only be the allowed themes)
     this.movies.forEach(movie => {
@@ -398,7 +351,7 @@ class ChordGraph {
     // Pre-calculate co-occurrences for all theme pairs
     this.calculateCooccurrences();
 
-    console.log(`Loaded ${this.movies.length} movies (${csvMovies.length} from CSV, ${additionalMovies.length} from shelf data) with ${this.themes.size} unique themes`);
+    console.log(`Loaded ${this.movies.length} movies with ${this.themes.size} unique themes`);
     console.log(`Filtered to movies containing: ${Array.from(this.themes).join(', ')}`);
   }
 
@@ -834,6 +787,7 @@ class ChordGraph {
     this.originalLinks = links;
 
     const tooltip = this.tooltip;
+    const self = this; // Store reference to ChordGraph instance for use in callbacks
 
     // Filter out invalid links (where source or target index is out of bounds)
     // Also ensure both sourceTheme and targetTheme exist in allThemes
@@ -930,13 +884,49 @@ class ChordGraph {
           .attr('x', -highlightSize / 2)
           .attr('y', -highlightSize / 2);
 
+        // Filter movies by current 5-year window
+        let filteredMovies = d.movies;
+        console.log('Link hover - currentDecade:', self.currentDecade);
+        console.log('Link hover - all movies:', d.movies);
+        
+        if (self.currentDecade !== null) {
+          const windowStart = +self.currentDecade;
+          const windowEnd = windowStart + 4; // 5-year window
+          console.log('Filtering movies for window:', windowStart, 'to', windowEnd);
+          
+          filteredMovies = d.movies.filter(movieString => {
+            // Extract title from movie string format: "Movie Title (Year)"
+            const titleMatch = movieString.match(/^(.+?)\s*\(\d{4}\)$/);
+            if (titleMatch) {
+              const movieTitle = titleMatch[1].trim();
+              // Find the movie object in this.movies by title
+              const movieObj = self.movies.find(m => m.title === movieTitle);
+              if (movieObj && movieObj.year) {
+                const movieYear = parseInt(movieObj.year);
+                const inWindow = movieYear >= windowStart && movieYear <= windowEnd;
+                console.log(`Movie: ${movieTitle}, Year: ${movieYear}, In window: ${inWindow}`);
+                return inWindow;
+              } else {
+                console.log(`Movie not found or no year: ${movieTitle}`, movieObj);
+              }
+            } else {
+              console.log('No title match for:', movieString);
+            }
+            return false; // Exclude movies without valid year
+          });
+          
+          console.log('Filtered movies:', filteredMovies);
+        } else {
+          console.log('No decade filter - showing all movies');
+        }
+
         let tooltipHTML = `
           <strong style="color: #46AACB;">${d.sourceTheme}</strong> ↔ <strong style="color: #46AACB;">${d.targetTheme}</strong><br/>
-          <span style="color: #46AACB;">${d.value} movie${d.value !== 1 ? 's' : ''}</span> with both themes
+          <span style="color: #46AACB;">${filteredMovies.length} movie${filteredMovies.length !== 1 ? 's' : ''}</span> with both themes
           <div style="margin-top: 10px; max-height: 500px; overflow-y: auto; font-size: 11px; padding-left: 4px; padding-right: 8px;">
         `;
 
-        d.movies.forEach(movie => {
+        filteredMovies.forEach(movie => {
           tooltipHTML += `<div style="padding: 3px 0;">• ${movie}</div>`;
         });
 
@@ -1486,6 +1476,9 @@ class ChordGraph {
    * Passing null resets visuals to the full-movie view.
    */
   setDecade(decade) {
+    // Store the current decade for filtering
+    this.currentDecade = decade;
+    
     // helper to parse a 4-digit year from various movie.year formats
     function parseYearField(y){
       if (!y && y !== 0) return 0;
@@ -1557,11 +1550,15 @@ class ChordGraph {
 
     // compute cooccurrence limited to the decade
     const windowCo = {};
+    const windowThemeMovies = {}; // Store movies for each theme pair in this window
+    
     this.movies.forEach(m => {
       const y = parseYearField(m.year);
       if (!y) return;
       if (y < startYear || y > endYear) return;
       const t = (m.themes || []).filter(Boolean);
+      const movieLabel = `${m.title} (${m.year})`;
+      
       for (let i=0;i<t.length;i++){
         for (let j=i+1;j<t.length;j++){
           const a = t[i], b = t[j];
@@ -1569,6 +1566,14 @@ class ChordGraph {
           windowCo[b] = windowCo[b] || {};
           windowCo[a][b] = (windowCo[a][b]||0) + 1;
           windowCo[b][a] = (windowCo[b][a]||0) + 1;
+          
+          // Store movies for this theme pair in this window
+          if (!windowThemeMovies[a]) windowThemeMovies[a] = {};
+          if (!windowThemeMovies[a][b]) windowThemeMovies[a][b] = [];
+          if (!windowThemeMovies[b]) windowThemeMovies[b] = {};
+          if (!windowThemeMovies[b][a]) windowThemeMovies[b][a] = [];
+          windowThemeMovies[a][b].push(movieLabel);
+          windowThemeMovies[b][a].push(movieLabel);
         }
       }
     });
@@ -1605,6 +1610,22 @@ class ChordGraph {
         const a = d.sourceTheme || (d.source && d.source.label) || d.source;
         const b = d.targetTheme || (d.target && d.target.label) || d.target;
         const weight = (windowCo[a] && windowCo[a][b]) ? windowCo[a][b] : 0;
+        
+        // Update d.value to reflect the window-specific count
+        d.value = weight;
+        
+        // Update d.movies to only include movies from this window
+        if (windowThemeMovies[a] && windowThemeMovies[a][b]) {
+          d.movies = windowThemeMovies[a][b];
+        } else {
+          d.movies = [];
+        }
+        
+        // Debug: log if weight is 0 but link is being highlighted
+        if (weight === 0 && d.movies.length === 0) {
+          // This should never be blue - it's correctly gray
+        }
+        
         const opacity = weight > 0 ? 0.9 : 0.3;
         const strokeW = weight > 0 ? thicknessScale(weight) : 1;
         const strokeColor = weight > 0 ? linkColor : noConnectionColor; // Blue for connections, gray for no connections
@@ -1621,6 +1642,7 @@ class ChordGraph {
         }
         
         // Apply color: blue for connections, gray for no connections
+        // Only show blue if weight > 0 (at least one movie in this window)
         d3.select(this).transition().duration(300)
           .attr('stroke', strokeColor)
           .style('stroke', strokeColor)

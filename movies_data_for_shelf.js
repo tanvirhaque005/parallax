@@ -69,61 +69,7 @@ let data = [
       "depictedLocation": "Central Europe (fictional village based on Bavaria / Swiss Alps)",
       "id": 4
     },
-    {
-      "title": "Just Imagine",
-      "year": 1930,
-      "depicted": 1980,
-      "tropes": [
-        "Social Control",
-        "Space-travel",
-        "Surveillance",
-        "Class struggle"
-      ],
-      "filmingLocation": "Fox Studios, Hollywood, California, USA",
-      "depictedLocation": "Futuristic New York City (Earth) + Mars",
-      "id": 5
-    },
-    {
-      "title": "The Invisible Man",
-      "year": 1933,
-      "depicted": 1933,
-      "tropes": [
-        "Science ethics",
-        "Free Will",
-        "Surveillance",
-        "Consciousness"
-      ],
-      "filmingLocation": "Universal Studios, Hollywood, California, USA",
-      "depictedLocation": "Rural England (fictional Iping village)",
-      "id": 6
-    },
-    {
-      "title": "Deluge",
-      "year": 1933,
-      "depicted": 1950,
-      "tropes": [
-        "Social Control",
-        "Class struggle",
-        "Survival against nature",
-        "Free Will"
-      ],
-      "filmingLocation": "RKO-Pathé Studios, Culver City, California, USA",
-      "depictedLocation": "New York City (flooded / post-disaster Earth)",
-      "id": 7
-    },
-    {
-      "title": "Frankenstein",
-      "year": 1931,
-      "depicted": 1818,
-      "tropes": [
-        "Artificial intelligence",
-        "Consciousness",
-        "Free Will"
-      ],
-      "filmingLocation": "Universal Studios, Hollywood, California, USA",
-      "depictedLocation": "Central Europe (fictional village based on Bavaria / Swiss Alps)",
-      "id": 8
-    },
+
     {
       "title": "Just Imagine",
       "year": 1930,
