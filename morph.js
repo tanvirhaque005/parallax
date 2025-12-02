@@ -3039,12 +3039,3 @@ window.addEventListener('DOMContentLoaded', () => {
   updateTextOverlay();
   // Note: mapIntroMessage is triggered by page transition, not on initial load
 });
-
-setTimeout(() => {
-  const menu = document.querySelector('.nav-menu-container');
-  if (menu) {
-    menu.style.opacity = '1';
-    menu.style.visibility = 'visible';
-    menu.style.pointerEvents = 'auto';
-  }
-}, 10);

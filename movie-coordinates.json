@@ -58,7 +58,7 @@
     "Montreal, Quebec, Canada": {
       "lat": 45.5031824,
       "lon": -73.5698065,
-      "displayName": "Montr\u00e9al, Agglom\u00e9ration de Montr\u00e9al, Montr\u00e9al (r\u00e9gion administrative), Qu\u00e9bec, Canada"
+      "displayName": "Montréal, Agglomération de Montréal, Montréal (région administrative), Québec, Canada"
     },
     "Montana, USA": {
       "lat": 47.3752671,
@@ -71,8 +71,8 @@
       "displayName": "Los Angeles, California, USA"
     },
     "Budapest, Hungary": {
-      "lat": 47.4813896,
-      "lon": 19.1460941,
+      "lat": 46.4813896,
+      "lon": 16.45,
       "displayName": "Budapest, Hungary"
     },
     "London, England, UK": {
@@ -113,7 +113,7 @@
     "Valldal, Norway": {
       "lat": 62.2980545,
       "lon": 7.2623851,
-      "displayName": "Valldal, Fjord, M\u00f8re og Romsdal, Norge"
+      "displayName": "Valldal, Fjord, Møre og Romsdal, Norge"
     },
     "Alaska, USA": {
       "lat": 64.4459613,
@@ -153,7 +153,7 @@
     "Paris, France": {
       "lat": 48.8588897,
       "lon": 2.320041,
-      "displayName": "Paris, \u00cele-de-France, France m\u00e9tropolitaine, France"
+      "displayName": "Paris, Île-de-France, France métropolitaine, France"
     },
     "Berlin, Germany": {
       "lat": 52.5173885,
@@ -173,7 +173,7 @@
     "Montreal, Canada": {
       "lat": 45.5031824,
       "lon": -73.5698065,
-      "displayName": "Montr\u00e9al, Agglom\u00e9ration de Montr\u00e9al, Montr\u00e9al (r\u00e9gion administrative), Qu\u00e9bec, Canada"
+      "displayName": "Montréal, Agglomération de Montréal, Montréal (région administrative), Québec, Canada"
     },
     "Dallas, Texas, USA": {
       "lat": 32.7762719,
@@ -188,7 +188,7 @@
     "Prague, Czech Republic": {
       "lat": 50.0596288,
       "lon": 14.4464593,
-      "displayName": "Praha, obvod Praha 4, Hlavn\u00ed m\u011bsto Praha, Praha, \u010cesko"
+      "displayName": "Praha, obvod Praha 4, Hlavní město Praha, Praha, Česko"
     },
     "Tallinn, Estonia": {
       "lat": 59.4372419,
@@ -198,7 +198,7 @@
     "Siberia, Russia": {
       "lat": 60,
       "lon": 100,
-      "displayName": "\u0421\u0438\u0431\u0438\u0440\u044c, \u0411\u043e\u0433\u0443\u0447\u0430\u043d\u0441\u043a\u0438\u0439 \u0440\u0430\u0439\u043e\u043d, \u041a\u0440\u0430\u0441\u043d\u043e\u044f\u0440\u0441\u043a\u0438\u0439 \u043a\u0440\u0430\u0439, \u0421\u0438\u0431\u0438\u0440\u0441\u043a\u0438\u0439 \u0444\u0435\u0434\u0435\u0440\u0430\u043b\u044c\u043d\u044b\u0439 \u043e\u043a\u0440\u0443\u0433, \u0420\u043e\u0441\u0441\u0438\u044f"
+      "displayName": "Сибирь, Богучанский район, Красноярский край, Сибирский федеральный округ, Россия"
     },
     "Culver City, California, USA": {
       "lat": 34.0211224,
@@ -206,8 +206,8 @@
       "displayName": "Culver City, California, USA"
     },
     "New York City, New York, USA": {
-      "lat": 40.7127281,
-      "lon": -74.0060152,
+      "lat": 39.7127281,
+      "lon": -75.0060152,
       "displayName": "New York, 10000, United States of America"
     },
     "Vancouver, British Columbia, Canada": {
@@ -801,11 +801,6 @@
       "lon": 14.4464593,
       "displayName": "Barrandov Studios, Prague, Czechoslovakia"
     },
-    "Los Angeles, California, USA (Warner Bros. Studios)": {
-      "lat": 34.1522,
-      "lon": -118.3395,
-      "displayName": "Warner Bros. Studios, Burbank, California, USA"
-    },
     "Metro-Goldwyn-Mayer Studios, Culver City, California, USA": {
       "lat": 34.0211224,
       "lon": -118.396466,
@@ -1176,7 +1171,7 @@
       "lon": -122.3963589,
       "displayName": "San Francisco, California, USA"
     },
-    "Earth \u2192 Moon \u2192 Jupiter orbit (extraterrestrial monolith zone)": {
+    "Earth → Moon → Jupiter orbit (extraterrestrial monolith zone)": {
       "lat": 0,
       "lon": 0,
       "displayName": "Fictional Locations (extraterrestrial)"
@@ -1197,8 +1192,8 @@
       "displayName": "Montana, USA"
     },
     "Los Angeles, 2019": {
-      "lat": 34.0536909,
-      "lon": -118.242766,
+      "lat": 25.0536909,
+      "lon": -100.242766,
       "displayName": "Los Angeles, California, USA (2019)"
     },
     "Los Angeles, 2049": {
@@ -1401,7 +1396,7 @@
       "lon": -73.5698065,
       "displayName": "Montreal, Quebec, Canada"
     },
-    "Iceland \u2192 Subterranean world beneath the Earth": {
+    "Iceland → Subterranean world beneath the Earth": {
       "lat": 64.1466,
       "lon": -21.9426,
       "displayName": "Iceland"
@@ -1711,7 +1706,7 @@
       "lon": 151.2093,
       "displayName": "The Matrix (fictional)"
     },
-    "Earth \u2192 various galactic locations": {
+    "Earth → various galactic locations": {
       "lat": 0,
       "lon": 0,
       "displayName": "Fictional Locations (galactic)"
@@ -1771,7 +1766,7 @@
       "lon": 0,
       "displayName": "Earth Orbit (ISS)"
     },
-    "Earth \u2192 space \u2192 Gargantua system": {
+    "Earth → space → Gargantua system": {
       "lat": 0,
       "lon": 0,
       "displayName": "Fictional Locations (interstellar)"
@@ -1921,7 +1916,7 @@
       "to": "Jupiter",
       "type": "filming-to-depicted",
       "originalFrom": "MGM-British Studios, Borehamwood, UK",
-      "originalTo": "Earth \u2192 Moon \u2192 Jupiter orbit (extraterrestrial monolith zone)"
+      "originalTo": "Earth → Moon → Jupiter orbit (extraterrestrial monolith zone)"
     },
     {
       "movie": "A Clockwork Orange",
@@ -2095,7 +2090,7 @@
       "originalTo": "Global modern Earth + shared dreamscapes"
     },
     {
-      "movie": "La Jet\u00e9e",
+      "movie": "La Jetée",
       "year": "1962",
       "from": "Paris, France",
       "to": "Paris, France",
@@ -2249,7 +2244,7 @@
     },
     {
       "movie": "Neon Genesis Evangelion",
-      "year": "1995\u20131996",
+      "year": "1995–1996",
       "from": "Tokyo, Japan",
       "to": "Tokyo, Japan",
       "type": "filming-to-depicted",
@@ -2267,7 +2262,7 @@
     },
     {
       "movie": "Star Trek: The Next Generation",
-      "year": "1987\u20131994",
+      "year": "1987–1994",
       "from": "Los Angeles, California, USA",
       "to": "Fictional Locations",
       "type": "filming-to-depicted",
@@ -2276,7 +2271,7 @@
     },
     {
       "movie": "Star Trek: The Original Series",
-      "year": "1966\u20131969",
+      "year": "1966–1969",
       "from": "Los Angeles, California, USA",
       "to": "Fictional Locations",
       "type": "filming-to-depicted",
@@ -2285,7 +2280,7 @@
     },
     {
       "movie": "Stargate Atlantis",
-      "year": "2004\u20132009",
+      "year": "2004–2009",
       "from": "Vancouver, British Columbia, Canada",
       "to": "Fictional Locations",
       "type": "filming-to-depicted",
@@ -2294,7 +2289,7 @@
     },
     {
       "movie": "The Prisoner",
-      "year": "1967\u20131968",
+      "year": "1967–1968",
       "from": "Portmeirion, Wales, UK",
       "to": "Fictional Locations",
       "type": "filming-to-depicted",
@@ -2488,7 +2483,7 @@
       "to": "Iceland",
       "type": "filming-to-depicted",
       "originalFrom": "20th Century Fox Studios + Carlsbad Caverns (New Mexico, USA) + Edinburgh exteriors",
-      "originalTo": "Iceland \u2192 Subterranean world beneath the Earth"
+      "originalTo": "Iceland → Subterranean world beneath the Earth"
     },
     {
       "movie": "Assignment: Outer Space",
@@ -2950,7 +2945,7 @@
       "originalTo": "Deep Space Nine station (orbit of planet Bajor)"
     },
     {
-      "movie": "Star Wars: Episode I \u2013 The Phantom Menace",
+      "movie": "Star Wars: Episode I – The Phantom Menace",
       "year": "1999",
       "from": "England, UK",
       "to": "Fictional Locations",
@@ -2986,7 +2981,7 @@
       "originalTo": "Earth + NSEA Protector starship"
     },
     {
-      "movie": "Star Wars: Episode II \u2013 Attack of the Clones",
+      "movie": "Star Wars: Episode II – Attack of the Clones",
       "year": "2002",
       "from": "Australia",
       "to": "Fictional Locations",
@@ -3031,7 +3026,7 @@
       "originalTo": "New York/New Jersey"
     },
     {
-      "movie": "Star Wars: Episode III \u2013 Revenge of the Sith",
+      "movie": "Star Wars: Episode III – Revenge of the Sith",
       "year": "2005",
       "from": "Australia",
       "to": "Fictional Locations",
@@ -3046,7 +3041,7 @@
       "to": "Fictional Locations",
       "type": "filming-to-depicted",
       "originalFrom": "UK (Shepperton Studios) & Namibia",
-      "originalTo": "Earth \u2192 various galactic locations"
+      "originalTo": "Earth → various galactic locations"
     },
     {
       "movie": "War of the Worlds",
@@ -3154,7 +3149,7 @@
       "to": "Fictional Locations",
       "type": "filming-to-depicted",
       "originalFrom": "Iceland, Alberta, Los Angeles",
-      "originalTo": "Earth \u2192 space \u2192 Gargantua system"
+      "originalTo": "Earth → space → Gargantua system"
     },
     {
       "movie": "Transcendence",
@@ -3211,7 +3206,7 @@
       "originalTo": "Earth + Titan + various galactic sites"
     },
     {
-      "movie": "Star Wars: Episode IX \u2013 The Rise of Skywalker",
+      "movie": "Star Wars: Episode IX – The Rise of Skywalker",
       "year": "2019",
       "from": "England, UK",
       "to": "Fictional Locations",
@@ -3390,14 +3385,5 @@
       "originalFrom": "New Orleans, Louisiana, United States",
       "originalTo": "New Orleans, Louisiana, United States"
     }
-  ],
-  "generatedAt": "2025-11-30T00:00:00.000Z",
-  "stats": {
-    "totalMovies": 199,
-    "uniqueLocations": 157,
-    "earthLocations": 120,
-    "solarSystemBodies": 7,
-    "fantasyLocations": 30,
-    "connections": 199
-  }
+  ]
 }
