@@ -1400,7 +1400,15 @@ function hideBarDates() {
   barDateDisplay.style.opacity = 0;
 }
 
-function positionLabelOverBar(labelEl, barEl, text) {
+// Function to format year as 5-year range (e.g., 1960 -> "1960-1964")
+function formatYearRange(year) {
+  if (year === null || year === undefined) return '';
+  const startYear = parseInt(year);
+  const endYear = startYear + 4;
+  return `${startYear}-${endYear}`;
+}
+
+function positionLabelOverBar(labelEl, barEl, year) {
   if (!barEl) {
     labelEl.style.opacity = 0;
     return;
@@ -1408,7 +1416,8 @@ function positionLabelOverBar(labelEl, barEl, text) {
 
   const rect = barEl.getBoundingClientRect();
 
-  labelEl.textContent = text;
+  // Format year as 5-year range
+  labelEl.textContent = formatYearRange(year);
   labelEl.style.left = rect.left + rect.width / 2 + "px";
   labelEl.style.top  = rect.top - 12 + "px";
   labelEl.style.opacity = 0.9;
