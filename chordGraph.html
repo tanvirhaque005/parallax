@@ -266,6 +266,10 @@
 				/* Removed default stroke to allow JS color scale to work */
 				opacity: 0.8;
 				transition: stroke 180ms ease, opacity 180ms ease, stroke-width 180ms ease;
+				stroke-linecap: round !important;
+				stroke-linejoin: round !important;
+				shape-rendering: geometricPrecision !important;
+				-webkit-shape-rendering: geometricPrecision !important;
 			}
 
 			#chordContainer .link:hover {
