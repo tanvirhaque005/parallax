@@ -91,7 +91,7 @@ data = [
       "depictedLocation": "Bavaria, Germany"
     },
     {
-      "title": "Flash Gordon’s Trip to Mars",
+      "title": "Flash Gordon's Trip to Mars",
       "year": 1938,
       "id": 13,
       "filmingLocation": "Los Angeles, United States",
@@ -406,7 +406,7 @@ data = [
         "depictedLocation": "Future Earth"
       },
       {
-        "title": "Logan’s Run",
+        "title": "Logan's Run",
         "year": 1976,
         "id": 58,
         "filmingLocation": "Dallas/Fort Worth, United States",
@@ -805,7 +805,7 @@ data = [
         "depictedLocation": "Coruscant"
       },
       {
-        "title": "The Hitchhiker’s Guide to the Galaxy",
+        "title": "The Hitchhiker's Guide to the Galaxy",
         "year": 2005,
         "id": 115,
         "filmingLocation": "Shepperton, United Kingdom",
@@ -1092,7 +1092,7 @@ data = [
         "depictedLocation": "California"
       },
       {
-        "title": "Don’t Look Up",
+        "title": "Don't Look Up",
         "year": 2021,
         "id": 156,
         "filmingLocation": "Boston, United States",

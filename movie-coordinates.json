@@ -1877,7 +1877,8 @@
     },
     "Mexico": {
       "lat": 23.6345,
-      "lon": -102.5528
+      "lon": -102.5528,
+      "displayName": "Mexico"
     },
     "Australia": {
       "lat": -25.2744,
@@ -1903,6 +1904,21 @@
       "lat": 35.7596,
       "lon": -79.0193
     },
+    "South Carolina, USA": {
+      "lat": 33.8569,
+      "lon": -80.9450,
+      "displayName": "South Carolina, United States of America"
+    },
+    "Utah, USA": {
+      "lat": 40.7608,
+      "lon": -111.8910,
+      "displayName": "Utah, United States of America"
+    },
+    "Costa Rica": {
+      "lat": 9.9281,
+      "lon": -84.0907,
+      "displayName": "Costa Rica"
+    },
     "Estonia": {
       "lat": 58.5953,
       "lon": 25.0136
@@ -1921,7 +1937,7 @@
     {
       "movie": "A Clockwork Orange",
       "year": "1971",
-      "from": "England, UK",
+      "from": "London, UK",
       "to": "London, UK",
       "type": "filming-to-depicted",
       "originalFrom": "London and surrounding UK locations",
@@ -2327,7 +2343,7 @@
       "movie": "Frankenstein",
       "year": "1931",
       "from": "Los Angeles, California, USA",
-      "to": "Fictional Locations",
+      "to": "Paris, France",
       "type": "filming-to-depicted",
       "originalFrom": "Los Angeles, California, USA",
       "originalTo": "Central Europe (fictional village based on Bavaria / Swiss Alps)"
@@ -2363,7 +2379,7 @@
       "movie": "Bride of Frankenstein",
       "year": "1935",
       "from": "Los Angeles, California, USA",
-      "to": "Fictional Locations",
+      "to": "Paris, France",
       "type": "filming-to-depicted",
       "originalFrom": "Los Angeles, California, USA",
       "originalTo": "Central Europe (fictional villages modeled on Bavaria / Swiss Alps)"
@@ -2390,7 +2406,7 @@
       "movie": "Things to Come",
       "year": "1936",
       "from": "England, UK",
-      "to": "Fictional Locations",
+      "to": "London, UK",
       "type": "filming-to-depicted",
       "originalFrom": "Buckinghamshire, England",
       "originalTo": "Everytown (fictional British city)"
@@ -2444,7 +2460,7 @@
       "movie": "The Day the Earth Stood Still",
       "year": "1951",
       "from": "Los Angeles, California, USA",
-      "to": "Washington, USA",
+      "to": "Washington, D.C., USA",
       "type": "filming-to-depicted",
       "originalFrom": "Los Angeles, California, USA",
       "originalTo": "Washington, D.C., USA"
@@ -2462,7 +2478,7 @@
       "movie": "Invasion of the Body Snatchers",
       "year": "1956",
       "from": "California, USA",
-      "to": "Fictional Locations",
+      "to": "Los Angeles, California, USA",
       "type": "filming-to-depicted",
       "originalFrom": "Sierra Madre, California, USA + Allied Artists Studios",
       "originalTo": "Santa Mira (fictional California town)"
@@ -2507,7 +2523,7 @@
       "movie": "Beyond the Time Barrier",
       "year": "1960",
       "from": "Dallas, Texas, USA",
-      "to": "Fictional Locations",
+      "to": "Global Earth",
       "type": "filming-to-depicted",
       "originalFrom": "Dallas, Texas, USA (various airbase & local sets)",
       "originalTo": "Post-apocalyptic future Earth (underground city)"
@@ -2524,8 +2540,8 @@
     {
       "movie": "Mysterious Island",
       "year": "1961",
-      "from": "Fictional Locations",
-      "to": "Fictional Locations",
+      "from": "London, England, UK",
+      "to": "Pacific Island",
       "type": "filming-to-depicted",
       "originalFrom": "Pinewood Studios (UK) + Spain & Canary Islands exteriors",
       "originalTo": "Remote uncharted Pacific island"
@@ -2534,7 +2550,7 @@
       "movie": "The Nutty Professor",
       "year": "1963",
       "from": "California, USA",
-      "to": "Fictional Locations",
+      "to": "San Francisco, California, USA",
       "type": "filming-to-depicted",
       "originalFrom": "Paramount Studios, Hollywood, California, USA",
       "originalTo": "Fictional U.S. university campus"
@@ -2542,7 +2558,7 @@
     {
       "movie": "Doctor Who (Dr. Who and the Daleks)",
       "year": "1964",
-      "from": "Shepperton Studios, England",
+      "from": "London, England",
       "to": "Fictional Locations",
       "type": "filming-to-depicted",
       "originalFrom": "Shepperton Studios, Middlesex, England",
@@ -2551,7 +2567,7 @@
     {
       "movie": "Dr. Strangelove",
       "year": "1964",
-      "from": "Shepperton Studios, England",
+      "from": "London, England",
       "to": "Washington, D.C., USA",
       "type": "filming-to-depicted",
       "originalFrom": "Shepperton Studios, Middlesex, England (primary)",
@@ -2561,7 +2577,7 @@
       "movie": "Cyborg 2087",
       "year": "1966",
       "from": "Los Angeles, California, USA",
-      "to": "Fictional Locations",
+      "to": "Global Earth",
       "type": "filming-to-depicted",
       "originalFrom": "Los Angeles, California, USA",
       "originalTo": "Future Earth (2087) + mid-20th-century America"
@@ -2569,7 +2585,7 @@
     {
       "movie": "Daleks' Invasion Earth 2150 A.D.",
       "year": "1966",
-      "from": "Shepperton Studios, England",
+      "from": "London, England",
       "to": "London, England, UK",
       "type": "filming-to-depicted",
       "originalFrom": "Shepperton Studios, England",
@@ -2587,8 +2603,8 @@
     {
       "movie": "Fantastic Voyage",
       "year": "1966",
-      "from": "Fictional Locations",
-      "to": "Los Angeles, California, USA",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted",
       "originalFrom": "20th Century Fox Studios, Los Angeles, USA",
       "originalTo": "Inside the human body (miniaturized submarine mission)"
@@ -2597,7 +2613,7 @@
       "movie": "Planet of the Apes",
       "year": "1968",
       "from": "California, USA",
-      "to": "Fictional Locations",
+      "to": "Global Earth",
       "type": "filming-to-depicted",
       "originalFrom": "Arizona, California & Utah (USA)",
       "originalTo": "Future Earth (ruins of human civilization)"
@@ -2606,7 +2622,7 @@
       "movie": "The Illustrated Man",
       "year": "1969",
       "from": "California, USA",
-      "to": "Fictional Locations",
+      "to": "Global Earth",
       "type": "filming-to-depicted",
       "originalFrom": "California & Nevada (USA)",
       "originalTo": "Various future Earth settings (anthology format)"
@@ -2624,7 +2640,7 @@
       "movie": "Crimes of the Future",
       "year": "1970",
       "from": "Toronto, Ontario, Canada",
-      "to": "Fictional Locations",
+      "to": "Toronto, Ontario, Canada",
       "type": "filming-to-depicted",
       "originalFrom": "Toronto, Ontario, Canada",
       "originalTo": "Near-future dystopian Canada"
@@ -2633,7 +2649,7 @@
       "movie": "I Killed Einstein, Gentlemen",
       "year": "1970",
       "from": "Prague, Czech Republic",
-      "to": "Fictional Locations",
+      "to": "Paris, France",
       "type": "filming-to-depicted",
       "originalFrom": "Prague, Czechoslovakia (Barrandov Studios)",
       "originalTo": "Future Earth (primarily Europe)"
@@ -2641,7 +2657,7 @@
     {
       "movie": "The Mind of Mr. Soames",
       "year": "1970",
-      "from": "Shepperton Studios, England",
+      "from": "London, England",
       "to": "London, UK",
       "type": "filming-to-depicted",
       "originalFrom": "Shepperton Studios, England",
@@ -2696,7 +2712,7 @@
       "movie": "A Boy and His Dog",
       "year": "1975",
       "from": "Arizona, USA",
-      "to": "Fictional Locations",
+      "to": "Texas, USA",
       "type": "filming-to-depicted",
       "originalFrom": "Arizona, USA",
       "originalTo": "Post-apocalyptic American Southwest"
@@ -2731,7 +2747,7 @@
     {
       "movie": "Alien",
       "year": "1979",
-      "from": "Shepperton Studios, England",
+      "from": "London, England",
       "to": "Fictional Locations",
       "type": "filming-to-depicted",
       "originalFrom": "Shepperton Studios, England",
@@ -2741,7 +2757,7 @@
       "movie": "The Adventures of Buckaroo Banzai Across the 8th Dimension",
       "year": "1984",
       "from": "Los Angeles, California, USA",
-      "to": "Fictional Locations",
+      "to": "New Jersey, USA",
       "type": "filming-to-depicted",
       "originalFrom": "Los Angeles, California, USA",
       "originalTo": "New Jersey & the 8th Dimension (extradimensional)"
@@ -2750,7 +2766,7 @@
       "movie": "The Terminator",
       "year": "1984",
       "from": "Los Angeles, California, USA",
-      "to": "Fictional Locations",
+      "to": "Los Angeles, California, USA",
       "type": "filming-to-depicted",
       "originalFrom": "Los Angeles, California, USA",
       "originalTo": "Post-apocalyptic Earth (2029) + Los Angeles (1984)"
@@ -2795,7 +2811,7 @@
       "movie": "Aliens",
       "year": "1986",
       "from": "Pinewood Studios, England",
-      "to": "Moon",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted",
       "originalFrom": "Pinewood Studios, England",
       "originalTo": "LV-426 (extraterrestrial moon)"
@@ -2804,7 +2820,7 @@
       "movie": "Predator",
       "year": "1987",
       "from": "Mexico",
-      "to": "Fictional Locations",
+      "to": "Mexico",
       "type": "filming-to-depicted",
       "originalFrom": "Puerto Vallarta & Jalisco, Mexico",
       "originalTo": "Central American jungle (fictional country)"
@@ -2822,7 +2838,7 @@
       "movie": "Mad Max Beyond Thunderdome",
       "year": "1985",
       "from": "Australia",
-      "to": "Fictional Locations",
+      "to": "Australia",
       "type": "filming-to-depicted",
       "originalFrom": "New South Wales & Broken Hill, Australia",
       "originalTo": "Post-apocalyptic Australian wasteland"
@@ -2831,7 +2847,7 @@
       "movie": "Back to the Future",
       "year": "1985",
       "from": "Los Angeles, California, USA",
-      "to": "Fictional Locations",
+      "to": "Hill Valley, California, United States",
       "type": "filming-to-depicted",
       "originalFrom": "Universal Studios & Los Angeles, California, USA",
       "originalTo": "Hill Valley, California (fictional town)"
@@ -2840,7 +2856,7 @@
       "movie": "Cyborg",
       "year": "1989",
       "from": "North Carolina, USA",
-      "to": "Fictional Locations",
+      "to": "United States",
       "type": "filming-to-depicted",
       "originalFrom": "North Carolina (Wilmington), USA",
       "originalTo": "Post-apocalyptic United States"
@@ -2848,7 +2864,7 @@
     {
       "movie": "The Abyss",
       "year": "1989",
-      "from": "Fictional Locations",
+      "from": "South Carolina, USA",
       "to": "Caribbean trench",
       "type": "filming-to-depicted",
       "originalFrom": "Gaffney, South Carolina (abandoned nuclear reactor tank) & Bahamas",
@@ -2876,7 +2892,7 @@
       "movie": "Hardware",
       "year": "1990",
       "from": "London, England, UK",
-      "to": "Fictional Locations",
+      "to": "Global Earth",
       "type": "filming-to-depicted",
       "originalFrom": "London, England & Morocco",
       "originalTo": "Post-apocalyptic future Earth (urban wasteland)"
@@ -2885,7 +2901,7 @@
       "movie": "Circuitry Man",
       "year": "1990",
       "from": "Los Angeles, California, USA",
-      "to": "Fictional Locations",
+      "to": "United States",
       "type": "filming-to-depicted",
       "originalFrom": "Los Angeles, California, USA",
       "originalTo": "Cyberpunk post-apocalyptic United States"
@@ -2894,7 +2910,7 @@
       "movie": "Crash and Burn",
       "year": "1990",
       "from": "California, USA",
-      "to": "Fictional Locations",
+      "to": "United States",
       "type": "filming-to-depicted",
       "originalFrom": "California, USA",
       "originalTo": "Dystopian future Earth (collapsed US regions)"
@@ -2912,7 +2928,7 @@
       "movie": "Jurassic Park",
       "year": "1993",
       "from": "Hawaii, USA",
-      "to": "Fictional Locations",
+      "to": "Costa Rica",
       "type": "filming-to-depicted",
       "originalFrom": "Hawaii (Kauai, Oahu) + Universal Studios",
       "originalTo": "Isla Nublar (fictional island near Costa Rica)"
@@ -2956,7 +2972,7 @@
     {
       "movie": "Independence Day",
       "year": "1996",
-      "from": "California, USA",
+      "from": "Utah, USA",
       "to": "United States",
       "type": "filming-to-depicted",
       "originalFrom": "Utah, New Mexico, California (USA)",
@@ -2975,7 +2991,7 @@
       "movie": "Galaxy Quest",
       "year": "1999",
       "from": "Los Angeles, California, USA",
-      "to": "United States",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted",
       "originalFrom": "Los Angeles, California, USA",
       "originalTo": "Earth + NSEA Protector starship"
@@ -2992,7 +3008,7 @@
     {
       "movie": "X-Men",
       "year": "2000",
-      "from": "Toronto, Ontario, Canada",
+      "from": "Toronto, Canada",
       "to": "United States",
       "type": "filming-to-depicted",
       "originalFrom": "Toronto, Ontario, Canada",
@@ -3002,7 +3018,7 @@
       "movie": "A.I. Artificial Intelligence",
       "year": "2001",
       "from": "California, USA",
-      "to": "Fictional Locations",
+      "to": "Global Earth",
       "type": "filming-to-depicted",
       "originalFrom": "Oregon, Washington, California (USA)",
       "originalTo": "Future flooded Earth (various regions)"
@@ -3047,7 +3063,7 @@
       "movie": "War of the Worlds",
       "year": "2005",
       "from": "New York City, New York, USA",
-      "to": "Fictional Locations",
+      "to": "United States",
       "type": "filming-to-depicted",
       "originalFrom": "New York, New Jersey, Virginia (USA)",
       "originalTo": "United States (alien invasion)"
@@ -3065,7 +3081,7 @@
       "movie": "I Am Legend",
       "year": "2007",
       "from": "New York City, New York, USA",
-      "to": "Fictional Locations",
+      "to": "New York City, New York, USA",
       "type": "filming-to-depicted",
       "originalFrom": "New York City, USA",
       "originalTo": "Post-apocalyptic Manhattan"
@@ -3092,7 +3108,7 @@
       "movie": "Avatar",
       "year": "2009",
       "from": "Wellington, New Zealand",
-      "to": "Moon",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted",
       "originalFrom": "Wellington (New Zealand), Los Angeles performance capture",
       "originalTo": "Pandora (extraterrestrial moon)"
@@ -3101,7 +3117,7 @@
       "movie": "Black Mirror",
       "year": "2011",
       "from": "England, UK",
-      "to": "Fictional Locations",
+      "to": "Global Earth",
       "type": "filming-to-depicted",
       "originalFrom": "United Kingdom (various)",
       "originalTo": "Near-future Earth (varies by episode)"
@@ -3119,7 +3135,7 @@
       "movie": "Oblivion",
       "year": "2013",
       "from": "New York City, New York, USA",
-      "to": "Fictional Locations",
+      "to": "Global Earth",
       "type": "filming-to-depicted",
       "originalFrom": "Iceland, New York, Louisiana",
       "originalTo": "Post-apocalyptic Earth"
@@ -3155,7 +3171,7 @@
       "movie": "Transcendence",
       "year": "2014",
       "from": "New Mexico, USA",
-      "to": "Fictional Locations",
+      "to": "United States",
       "type": "filming-to-depicted",
       "originalFrom": "New Mexico, California",
       "originalTo": "United States (near-future scientific setting)"
@@ -3173,7 +3189,7 @@
       "movie": "Captain America: The Winter Soldier",
       "year": "2014",
       "from": "Washington, D.C., USA",
-      "to": "Fictional Locations",
+      "to": "Washington, D.C., USA",
       "type": "filming-to-depicted",
       "originalFrom": "Cleveland, Los Angeles, Washington D.C.",
       "originalTo": "Washington D.C."
@@ -3200,7 +3216,7 @@
       "movie": "Avengers: Infinity War",
       "year": "2018",
       "from": "New York City, New York, USA",
-      "to": "United States",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted",
       "originalFrom": "Atlanta, Edinburgh, New York (stand-in set)",
       "originalTo": "Earth + Titan + various galactic sites"
@@ -3236,7 +3252,7 @@
       "movie": "Avatar: The Way of Water",
       "year": "2022",
       "from": "New Zealand",
-      "to": "Moon",
+      "to": "Fictional Locations",
       "type": "filming-to-depicted",
       "originalFrom": "New Zealand & LA performance capture",
       "originalTo": "Pandora (extraterrestrial moon)"
@@ -3290,7 +3306,7 @@
       "movie": "King of the Rocket Men",
       "year": "1949",
       "from": "California, USA",
-      "to": "Fictional Locations",
+      "to": "United States",
       "type": "filming-to-depicted",
       "originalFrom": "Republic Pictures Studios, Hollywood, California, USA",
       "originalTo": "United States (various urban/scientific sites)"
@@ -3299,7 +3315,7 @@
       "movie": "Krakatit",
       "year": "1948",
       "from": "Prague, Czech Republic",
-      "to": "Fictional Locations",
+      "to": "Prague, Czech Republic",
       "type": "filming-to-depicted",
       "originalFrom": "Barrandov Studios, Prague, Czechoslovakia",
       "originalTo": "Czechoslovakia (postwar scientific/industrial environments)"
@@ -3308,7 +3324,7 @@
       "movie": "The Jungle Captive",
       "year": "1945",
       "from": "Los Angeles, California, USA",
-      "to": "Fictional Locations",
+      "to": "United States",
       "type": "filming-to-depicted",
       "originalFrom": "Universal Studios, Hollywood, California, USA",
       "originalTo": "United States (laboratories + forests/jungle-like areas)"
@@ -3317,7 +3333,7 @@
       "movie": "Bloodshot",
       "year": "2020",
       "from": "Cape Town, South Africa",
-      "to": "Fictional Locations",
+      "to": "Global Earth",
       "type": "filming-to-depicted",
       "originalFrom": "Cape Town, South Africa; Prague, Czech Republic",
       "originalTo": "Multiple urban locations (global, near-future setting)"
@@ -3371,7 +3387,7 @@
       "movie": "Looper",
       "year": "2012",
       "from": "New South Wales, Australia",
-      "to": "Fictional Locations",
+      "to": "Australia",
       "type": "filming-to-depicted",
       "originalFrom": "New South Wales, Australia",
       "originalTo": "Post-apocalyptic Australia"

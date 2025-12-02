@@ -38,7 +38,7 @@ let data = [
         "Consciousness"
       ],
       "filmingLocation": "Studio Babelsberg (Potsdam, Germany), plus Berlin & Vienna for some sequences",
-      "depictedLocation": "Futuristic city \u2018Metropolis\u2019 (fictional dystopian megalopolis)",
+      "depictedLocation": "Futuristic city 'Metropolis' (fictional dystopian megalopolis)",
       "id": 2
     },
     {
@@ -52,7 +52,7 @@ let data = [
         "Free Will"
       ],
       "filmingLocation": "UK (London / British studios)",
-      "depictedLocation": "Global super-powers / Europe & Atlantic States \u2014 primarily imagined London / Europe / transatlantic conflict zones",
+      "depictedLocation": "Global super-powers / Europe & Atlantic States - primarily imagined London / Europe / transatlantic conflict zones",
       "id": 3
     },
     {
@@ -107,7 +107,7 @@ let data = [
         "Survival against nature",
         "Free Will"
       ],
-      "filmingLocation": "RKO-Path\u00e9 Studios, Culver City, California, USA",
+      "filmingLocation": "RKO-Pathé Studios, Culver City, California, USA",
       "depictedLocation": "New York City (flooded / post-disaster Earth)",
       "id": 7
     },
@@ -161,7 +161,7 @@ let data = [
         "Survival against nature",
         "Free Will"
       ],
-      "filmingLocation": "RKO-Path\u00e9 Studios, Culver City, California, USA",
+      "filmingLocation": "RKO-Pathé Studios, Culver City, California, USA",
       "depictedLocation": "New York City (flooded / post-disaster Earth)",
       "id": 11
     },
@@ -179,7 +179,7 @@ let data = [
       "id": 12
     },
     {
-      "title": "Flash Gordon\u2019s Trip to Mars",
+      "title": "Flash Gordon's Trip to Mars",
       "year": 1938,
       "depicted": 2038,
       "tropes": [
@@ -462,7 +462,7 @@ let data = [
       "id": 33
     },
     {
-      "title": "La Jet\u00e9e",
+      "title": "La Jetée",
       "year": 1962,
       "depicted": 2100,
       "tropes": [
@@ -598,7 +598,7 @@ let data = [
         "Consciousness"
       ],
       "filmingLocation": "Portmeirion, Wales (primary)",
-      "depictedLocation": "\u2018The Village\u2019 (fictional isolated control settlement)",
+      "depictedLocation": "'The Village' (fictional isolated control settlement)",
       "id": 43
     },
     {
@@ -798,7 +798,7 @@ let data = [
       "id": 57
     },
     {
-      "title": "Logan\u2019s Run",
+      "title": "Logan's Run",
       "year": 1976,
       "depicted": 2274,
       "tropes": [
@@ -1274,7 +1274,7 @@ let data = [
       "id": 91
     },
     {
-      "title": "Star Wars: Episode I \u2013 The Phantom Menace",
+      "title": "Star Wars: Episode I - The Phantom Menace",
       "year": 1999,
       "depicted": 1000,
       "tropes": [
@@ -1428,7 +1428,7 @@ let data = [
       "id": 102
     },
     {
-      "title": "Star Wars: Episode II \u2013 Attack of the Clones",
+      "title": "Star Wars: Episode II - Attack of the Clones",
       "year": 2002,
       "depicted": 1000,
       "tropes": [
@@ -1582,7 +1582,7 @@ let data = [
       "id": 113
     },
     {
-      "title": "Star Wars: Episode III \u2013 Revenge of the Sith",
+      "title": "Star Wars: Episode III - Revenge of the Sith",
       "year": 2005,
       "depicted": 1000,
       "tropes": [
@@ -1596,7 +1596,7 @@ let data = [
       "id": 114
     },
     {
-      "title": "The Hitchhiker\u2019s Guide to the Galaxy",
+      "title": "The Hitchhiker's Guide to the Galaxy",
       "year": 2005,
       "depicted": 2005,
       "tropes": [
@@ -2072,7 +2072,7 @@ let data = [
       "id": 148
     },
     {
-      "title": "Star Wars: Episode IX \u2013 The Rise of Skywalker",
+      "title": "Star Wars: Episode IX - The Rise of Skywalker",
       "year": 2019,
       "depicted": 1000,
       "tropes": [
@@ -2170,7 +2170,7 @@ let data = [
       "id": 155
     },
     {
-      "title": "Don\u2019t Look Up",
+      "title": "Don't Look Up",
       "year": 2021,
       "depicted": 2021,
       "tropes": [

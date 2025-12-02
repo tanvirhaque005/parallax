@@ -12,64 +12,64 @@ const periodTexts = {
     description: 'Most sci-fi futures originate from the same real cities—Los Angeles, Vancouver, London. Real landscapes anchor imagined ones.'
   },
   1925: {
-    description: 'The earliest sci-fi films emerged in the silent era, pioneering visual effects and imaginative world-building.' // ADD YOUR DESCRIPTION HERE
+    description: 'The silent era unleashed pure visual imagination. Without dialogue, filmmakers stretched reality through expressionist sets and fantastical machines, creating worlds unbound by language.'
   },
   1930: {
-    description: 'Early sound era sci-fi explored new storytelling possibilities with emerging technologies.' // ADD YOUR DESCRIPTION HERE
+    description: 'Sound arrived, but imagination contracted. The Great Depression grounded fantasies in economic reality. Escapism became more practical, less cosmic—monsters closer to home.'
   },
   1935: {
-    description: 'Early sound era sci-fi explored new storytelling possibilities with emerging technologies.' // ADD YOUR DESCRIPTION HERE
+    description: 'Pre-war tension sharpened focus. Imagination turned from distant planets to immediate threats. Science became weapon, not wonder—a shift from exploration to survival.'
   },
   1940: {
-    description: 'Wartime sci-fi reflected anxieties and aspirations of the era through speculative fiction.' // ADD YOUR DESCRIPTION HERE
+    description: 'War narrowed vision. Filmmakers worked with limited resources, imagining futures constrained by present scarcity. Imagination became tactical, not transcendent.'
   },
   1945: {
-    description: 'Wartime sci-fi reflected anxieties and aspirations of the era through speculative fiction.' // ADD YOUR DESCRIPTION HERE
+    description: 'In the midst of the second world war, imagination narrowed even further. People were more fixated on reality and did not have the luxury to dream of far-off places and futuristic technologies.'
   },
   1950: {
-    description: 'Many futures were shot in the same hubs—LA, Vancouver, London—using familiar landscapes to anchor imagined ones.' // ADD YOUR DESCRIPTION HERE
+    description: 'Cold War paranoia channeled imagination inward. Fear of invasion replaced wonder at discovery. Sci-fi became warning system, mapping anxieties onto familiar American landscapes.'
   },
   1955: {
-    description: 'Many futures were shot in the same hubs—LA, Vancouver, London—using familiar landscapes to anchor imagined ones.' // ADD YOUR DESCRIPTION HERE
+    description: 'Space race optimism lifted imagination skyward. Rockets made the impossible plausible. Filmmakers projected earthly conflicts onto cosmic stages, but with new hope.'
   },
   1960: {
-    description: 'Many futures were shot in the same hubs—LA, Vancouver, London—using familiar landscapes to anchor imagined ones.' // ADD YOUR DESCRIPTION HERE
+    description: 'Counterculture questioned everything. Imagination broke from authority, exploring consciousness and identity. Sci-fi became philosophical, not just technological.'
   },
   1965: {
-    description: 'Many futures were shot in the same hubs—LA, Vancouver, London—using familiar landscapes to anchor imagined ones.' // ADD YOUR DESCRIPTION HERE
+    description: 'Social upheaval darkened visions. Imagination turned dystopian, reflecting real-world chaos. Future cities became prisons; technology, oppressor. Cynicism replaced wonder.'
   },
   1970: {
-    description: 'Many futures were shot in the same hubs—LA, Vancouver, London—using familiar landscapes to anchor imagined ones.' // ADD YOUR DESCRIPTION HERE
+    description: 'Environmental awakening reshaped fears. Imagination focused on Earth\'s limits, not space\'s infinity. Post-apocalyptic visions replaced cosmic adventures—survival over exploration.'
   },
   1975: {
-    description: 'As sci-fi globalized, stories turned to Tokyo, Mexico City, and Seoul. Global cities symbolized the future, reshaping identity and technology through diverse cultural lenses.' // ADD YOUR DESCRIPTION HERE
+    description: 'Economic stagnation narrowed horizons. Imagination became more grounded, more urban. Future cities reflected present decay. Optimism faded; realism intensified.'
   },
   1980: {
-    description: 'As sci-fi globalized, stories turned to Tokyo, Mexico City, and Seoul. Global cities symbolized the future, reshaping identity and technology through diverse cultural lenses.' // ADD YOUR DESCRIPTION HERE
+    description: 'Cyberpunk emerged from tech anxiety. Imagination split: corporate control versus digital liberation. Cities became battlegrounds; information, weapon. Dystopia went digital.'
   },
   1985: {
-    description: 'As sci-fi globalized, stories turned to Tokyo, Mexico City, and Seoul. Global cities symbolized the future, reshaping identity and technology through diverse cultural lenses.' // ADD YOUR DESCRIPTION HERE
+    description: 'Globalization expanded perspectives. Imagination moved beyond Western cities, incorporating Tokyo, Seoul, Mexico City. Diverse futures reflected interconnected world.'
   },
   1990: {
-    description: 'As sci-fi globalized, stories turned to Tokyo, Mexico City, and Seoul. Global cities symbolized the future, reshaping identity and technology through diverse cultural lenses.' // ADD YOUR DESCRIPTION HERE
+    description: 'Post-Cold War uncertainty opened new possibilities. Imagination explored alternate histories, parallel worlds. Without clear enemy, futures became more complex, less binary.'
   },
   1995: {
-    description: 'As sci-fi globalized, stories turned to Tokyo, Mexico City, and Seoul. Global cities symbolized the future, reshaping identity and technology through diverse cultural lenses.' // ADD YOUR DESCRIPTION HERE
+    description: 'Digital revolution transformed reality itself. Imagination questioned what\'s real versus virtual. Boundaries blurred; identity became fluid. Technology reshaped human experience.'
   },
   2000: {
-    description: 'As sci-fi globalized, stories turned to Tokyo, Mexico City, and Seoul. Global cities symbolized the future, reshaping identity and technology through diverse cultural lenses.' // ADD YOUR DESCRIPTION HERE
+    description: 'Millennial anxiety focused imagination on surveillance and control. Y2K fears gave way to deeper questions about technology\'s grip. Futures became more intimate, less cosmic.'
   },
   2005: {
-    description: 'World-building breaks from Earth entirely. Alien planets, alternate timelines, and deep-space environments reimagine physics, biology, and society on a cosmic scale.' // ADD YOUR DESCRIPTION HERE
+    description: 'Climate consciousness expanded scope. Imagination returned to Earth with urgency. Environmental collapse replaced nuclear war as primary fear. Scale shifted from global to planetary.'
   },
   2010: {
-    description: 'World-building breaks from Earth entirely. Alien planets, alternate timelines, and deep-space environments reimagine physics, biology, and society on a cosmic scale.' // ADD YOUR DESCRIPTION HERE
+    description: 'Social media era questioned identity and connection. Imagination explored consciousness, memory, and what makes us human. Technology became internal, not external.'
   },
   2015: {
-    description: 'World-building breaks from Earth entirely. Alien planets, alternate timelines, and deep-space environments reimagine physics, biology, and society on a cosmic scale.' // ADD YOUR DESCRIPTION HERE
+    description: 'AI anxiety and climate crisis converged. Imagination grappled with existential threats—both artificial and natural. Futures became more urgent, less speculative.'
   },
   2020: {
-    description: 'World-building breaks from Earth entirely. Alien planets, alternate timelines, and deep-space environments reimagine physics, biology, and society on a cosmic scale.' // ADD YOUR DESCRIPTION HERE
+    description: 'Pandemic isolation reimagined connection. Virtual worlds and remote realities became familiar. Imagination adapted to new constraints, finding wonder in digital spaces and reimagined Earth.'
   }
 };
 
@@ -278,11 +278,15 @@ function createGradientCircle(position, size = 0.015) {
   return sprite;
 }
 
+// Global coordinates object for use in hover handler
+let coordinates = {};
+
 async function loadPaths(){
   const res = await fetch('./movie-coordinates.json');
   const data = await res.json();
 
-  const { coordinates, connections } = data;
+  const { coordinates: coords, connections } = data;
+  coordinates = coords; // Store globally
   // Filter to only include Earth-to-Earth paths
   // Exclude: Fictional Locations, Solar System bodies
   const paths = connections.filter(c => {
@@ -306,7 +310,9 @@ async function loadPaths(){
     const yearInt = parseInt(c.year) || 0;
 
     // Check if production and depicted locations are the same
-    if (c.from === c.to) {
+    // Either same name OR same coordinates (handles cases like "London, England" vs "London, England, UK")
+    const sameLocation = c.from === c.to || (A.lat === B.lat && A.lon === B.lon);
+    if (sameLocation) {
       // Create a gradient circle instead of a line
       const circle = createGradientCircle(new THREE.Vector3(p1.x, p1.y, 0.01), 0.02);
       circle.userData = {
@@ -2310,6 +2316,18 @@ window.addEventListener("mousemove", (evt) => {
       // Collect all movies with the same from/to combination
       const targetFrom = d.from;
       const targetTo = d.to;
+      
+      // Check if this is a solar system path (solar system bodies have coordinates 0,0)
+      const targetFromCoords = coordinates[targetFrom];
+      const targetToCoords = coordinates[targetTo];
+      const isSolarPath = (targetFromCoords && targetFromCoords.lat === 0 && targetFromCoords.lon === 0) ||
+                         (targetToCoords && targetToCoords.lat === 0 && targetToCoords.lon === 0);
+      
+      const targetFromLat = targetFromCoords ? targetFromCoords.lat : null;
+      const targetFromLon = targetFromCoords ? targetFromCoords.lon : null;
+      const targetToLat = targetToCoords ? targetToCoords.lat : null;
+      const targetToLon = targetToCoords ? targetToCoords.lon : null;
+      
       const matchingMovies = [];
       const seenMovies = new Set();
 
@@ -2328,8 +2346,32 @@ window.addEventListener("mousemove", (evt) => {
         const visiblePaths = pathGroup.children.filter(child => child.visible);
         for (const path of visiblePaths) {
           const pathData = path.userData;
-          // Match if from and to are the same
-          if (pathData.from === targetFrom && pathData.to === targetTo) {
+          
+          // For solar system paths, match by destination name only (not coordinates)
+          // For Earth paths, match by name OR coordinates
+          let matches = false;
+          
+          if (isSolarPath || currentZoomState === ZOOM_STATES.SOLAR) {
+            // Solar system paths: match by exact name (destination planet/moon)
+            matches = pathData.from === targetFrom && pathData.to === targetTo;
+          } else {
+            // Earth paths: match by name OR coordinates
+            const pathFromCoords = coordinates[pathData.from];
+            const pathToCoords = coordinates[pathData.to];
+            const pathFromLat = pathFromCoords ? pathFromCoords.lat : null;
+            const pathFromLon = pathFromCoords ? pathFromCoords.lon : null;
+            const pathToLat = pathToCoords ? pathToCoords.lat : null;
+            const pathToLon = pathToCoords ? pathToCoords.lon : null;
+            
+            const nameMatch = pathData.from === targetFrom && pathData.to === targetTo;
+            const coordMatch = targetFromLat !== null && targetToLat !== null &&
+                              pathFromLat === targetFromLat && pathFromLon === targetFromLon &&
+                              pathToLat === targetToLat && pathToLon === targetToLon;
+            
+            matches = nameMatch || coordMatch;
+          }
+          
+          if (matches) {
             const movieKey = `${pathData.movie}-${pathData.year}`;
             // Skip if we've already added this movie
             if (seenMovies.has(movieKey)) {
