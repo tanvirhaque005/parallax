@@ -8,8 +8,10 @@
 // -----------------------------
 
 // ACTUAL WORLD SCROLL LIMITS (editable)
-const WORLD_START = 0;
-const WORLD_END   = 3000;
+// const WORLD_START = 0;
+// const WORLD_END   = 3000;
+const WORLD_START = 1920;
+const WORLD_END = 2045;
 let hoverShifted = false;
 let hoverOriginalTop = "";
 let currentlyHoveredID = null;
@@ -66,6 +68,10 @@ function yearToX(year) {
     return LEFT_PADDING + (year - WORLD_START) * PX_PER_YEAR;
 }
 
+function xToYear(x) {
+    return WORLD_START + (x - LEFT_PADDING) / PX_PER_YEAR;
+}
+
 
 function clear(node) {
     while (node.firstChild) node.removeChild(node.firstChild);
@@ -109,6 +115,50 @@ applyWorldTransform();
 // -----------------------------
 //  CONTINUOUS SCROLL
 // -----------------------------
+
+// Function to detect which 5-year window is in the center view
+function detectCenterWindow() {
+    const screenCenter = window.innerWidth / 2;
+    const centerX = worldX + screenCenter;
+    
+    // Convert center X position to year
+    const centerYear = xToYear(centerX);
+    
+    // Find which 5-year window this year belongs to
+    // Clamp to valid range
+    const clampedYear = Math.max(START_YEAR, Math.min(END_YEAR, centerYear));
+    
+    // Find the window start that contains this year
+    let detectedWindowStart = null;
+    for (const windowStart of windowStarts) {
+        if (clampedYear >= windowStart && clampedYear < windowStart + WINDOW_SIZE) {
+            detectedWindowStart = windowStart;
+            break;
+        }
+    }
+    
+    // If no window found (shouldn't happen), use the closest one
+    if (detectedWindowStart === null) {
+        // Find closest window start
+        let minDist = Infinity;
+        for (const windowStart of windowStarts) {
+            const dist = Math.abs(clampedYear - (windowStart + WINDOW_SIZE / 2));
+            if (dist < minDist) {
+                minDist = dist;
+                detectedWindowStart = windowStart;
+            }
+        }
+    }
+    
+    // Update window if it changed
+    if (detectedWindowStart !== null && detectedWindowStart !== currentWindowStart) {
+        currentWindowStart = detectedWindowStart;
+        updateWindowHighlight();
+        updateActiveBookBar();
+        updateLeftCard();
+    }
+}
+
 window.addEventListener("wheel", (e) => {
     // Prevent scroll on intro page
     if (document.querySelector(".intro-page.active")) return;
@@ -127,6 +177,9 @@ window.addEventListener("wheel", (e) => {
     if (worldX > maxX) worldX = maxX;
 
     applyWorldTransform();
+    
+    // Detect and update the center window
+    detectCenterWindow();
 }, { passive: false });
 
 
@@ -1026,9 +1079,11 @@ buildWorld = function() {
 
 buildWorld();  // rebuild world including events
 buildFixedAxisLabels(); // builds fixed labels
+detectCenterWindow(); // set initial window based on center view
 
 window.addEventListener("resize", () => {
     buildFixedAxisLabels();    // recreate at new yTop/yBot
+    detectCenterWindow();      // update window based on new viewport
 });
 
 
