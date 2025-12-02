@@ -269,7 +269,7 @@ function buildAxisLines() {
 
     // Depicted Year label
     const topLabel = S("text");
-    topLabel.textContent = "Depicted Year";
+    // topLabel.textContent = "Depicted Year";
     topLabel.setAttribute("x", 40);                  // left side offset
     topLabel.setAttribute("y", yTop - 16);           // slightly above top axis
     for (const [k,v] of Object.entries(labelStyle)) topLabel.setAttribute(k, v);
@@ -277,7 +277,7 @@ function buildAxisLines() {
 
     // Release Year label
     const bottomLabel = S("text");
-    bottomLabel.textContent = "Release Year";
+    // bottomLabel.textContent = "Release Year";
     bottomLabel.setAttribute("x", 40);               // same offset
     bottomLabel.setAttribute("y", yBot - 10);        // slightly above bottom axis
     for (const [k,v] of Object.entries(labelStyle)) bottomLabel.setAttribute(k, v);
