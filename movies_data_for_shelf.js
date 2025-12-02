@@ -244,7 +244,7 @@ let data = [
         "title": "Forbidden Planet",
         "year": 1956,
         "depicted": 2200,
-        "tropes": ["Consciousness", "Space", "Transcendence"],
+        "tropes": ["Consciousness", "Space", "Transcendence", "Robotics"],
         "filmingLocation": "Metro-Goldwyn-Mayer Studios, Culver City, California, USA",
         "depictedLocation": "Planet Altair IV (extraterrestrial)",
         "id": 24
@@ -280,7 +280,7 @@ let data = [
         "title": "Assignment: Outer Space",
         "year": 1960,
         "depicted": 2200,
-        "tropes": ["Space", "AI", "Surveillance", "Free Will"],
+        "tropes": ["Space", "AI"],
         "filmingLocation": "Rome, Italy (Cines Studios)",
         "depictedLocation": "Outer space (various spacecraft) + futuristic Earth",
         "id": 28
@@ -289,7 +289,7 @@ let data = [
         "title": "Voyage to the End of the Universe",
         "year": 1963,
         "depicted": 2163,
-        "tropes": ["Space", "Evolution", "Consciousness", "Transcendence"],
+        "tropes": ["Space", "Evolution", "Consciousness"],
         "filmingLocation": "Barrandov Studios, Prague, Czechoslovakia",
         "depictedLocation": "Interstellar spacecraft Ikaria XB-1",
         "id": 29
@@ -301,7 +301,6 @@ let data = [
         "tropes": [
           "Social Control",
           "Evolution/Genetic Engineering",
-          "Free Will"
         ],
         "filmingLocation": "Dallas, Texas, USA (various airbase & local sets)",
         "depictedLocation": "Post-apocalyptic future Earth (underground city)",
@@ -315,7 +314,6 @@ let data = [
           "Space",
           "Evolution/Genetic Engineering",
           "AI",
-          "Consciousness"
         ],
         "filmingLocation": "East Germany & Poland (DEFA Studios, Babelsberg)",
         "depictedLocation": "Venus (extraterrestrial)",
@@ -327,7 +325,6 @@ let data = [
         "depicted": 3000,
         "tropes": [
           "Evolution/Genetic Engineering",
-          "Social Control",
           "Transcendence"
         ],
         "filmingLocation": "Metro-Goldwyn-Mayer Studios, Culver City, California, USA",
@@ -340,7 +337,6 @@ let data = [
         "depicted": 1860,
         "tropes": [
           "Evolution/Genetic Engineering",
-          "Free Will"
         ],
         "filmingLocation": "Pinewood Studios (UK) + Spain & Canary Islands exteriors",
         "depictedLocation": "Remote uncharted Pacific island",
@@ -366,8 +362,7 @@ let data = [
         "depicted": 1963,
         "tropes": [
           "Evolution/Genetic Engineering",
-          "Consciousness",
-          "Free Will"
+          "Transcendence"
         ],
         "filmingLocation": "Paramount Studios, Hollywood, California, USA",
         "depictedLocation": "Fictional U.S. university campus",
@@ -378,10 +373,9 @@ let data = [
         "year": 1964,
         "depicted": 2700,
         "tropes": [
-          "Free Will",
           "AI",
-          "Social Control",
-          "Robotics"
+          "Robotics",
+          "Space"
         ],
         "filmingLocation": "Shepperton Studios, Middlesex, England",
         "depictedLocation": "Planet Skaro (Dalek homeworld)",
@@ -393,9 +387,6 @@ let data = [
         "depicted": 1964,
         "tropes": [
           "Social Control",
-          "Surveillance",
-          "Free Will",
-          "AI"
         ],
         "filmingLocation": "Shepperton Studios, Middlesex, England (primary)",
         "depictedLocation": "United States (Pentagon, B-52 bomber) + USSR (nuclear target zones)",
@@ -407,6 +398,7 @@ let data = [
         "depicted": 2087,
         "tropes": [
           "AI",
+          "Robotics",
           "Free Will",
           "Social Control",
           "Surveillance"
@@ -422,7 +414,8 @@ let data = [
         "tropes": [
           "Robotics",
           "AI",
-          "Social Control"
+          "Social Control",
+          "Space"
         ],
         "filmingLocation": "Shepperton Studios, England",
         "depictedLocation": "Post-apocalyptic Earth (ruined London)",
@@ -449,6 +442,7 @@ let data = [
         "tropes": [
           "Space",
           "Evolution",
+          "Robotics",
           "AI",
           "Consciousness"
         ],
@@ -462,8 +456,6 @@ let data = [
         "depicted": 1966,
         "tropes": [
           "Evolution",
-          "Evolution",
-          "Consciousness",
           "Free Will"
         ],
         "filmingLocation": "20th Century Fox Studios, Los Angeles, USA",
@@ -478,6 +470,7 @@ let data = [
           "Social Control",
           "Surveillance",
           "Free Will",
+          "Robotics",
           "Consciousness"
         ],
         "filmingLocation": "Portmeirion, Wales (primary)",
@@ -491,8 +484,6 @@ let data = [
         "tropes": [
           "Evolution",
           "Social Control",
-          "Social Control",
-          "Surveillance"
         ],
         "filmingLocation": "Arizona, California & Utah (USA)",
         "depictedLocation": "Future Earth (ruins of human civilization)",
@@ -504,6 +495,7 @@ let data = [
         "depicted": 2001,
         "tropes": [
           "Evolution",
+          "Robotics",
           "AI",
           "Transcendence",
           "Space"
@@ -520,7 +512,6 @@ let data = [
           "Consciousness",
           "Free Will",
           "Social Control",
-          "Evolution"
         ],
         "filmingLocation": "California & Nevada (USA)",
         "depictedLocation": "Various future Earth settings (anthology format)",
@@ -533,8 +524,6 @@ let data = [
         "tropes": [
           "Evolution",
           "Social Control",
-          "Social Control",
-          "Surveillance"
         ],
         "filmingLocation": "20th Century Fox Studios, California, USA",
         "depictedLocation": "Post-apocalyptic Earth (ruins of New York City)",
@@ -723,7 +712,7 @@ let data = [
           "title": "Dune",
           "year": 1984,
           "depicted": 3000,
-          "tropes": ["Consciousness", "Transcendence"],
+          "tropes": ["Consciousness", "Transcendence", "Space"],
           "filmingLocation": "Mexico (Churubusco Studios, Mexico City)",
           "depictedLocation": "Arrakis (extraterrestrial planet)",
           "id": 66
@@ -959,7 +948,7 @@ let data = [
             "title": "Ghost in the Shell",
             "year": 1995,
             "depicted": 2029,
-            "tropes": ["Robotics", "Consciousness", "Surveillance"],
+            "tropes": ["Consciousness", "Surveillance"],
             "filmingLocation": "Japan (animation production)",
             "depictedLocation": "New Port City (futuristic Japanese metropolis)",
             "id": 94
@@ -1064,7 +1053,8 @@ let data = [
             "depicted": 3000,
             "tropes": [
               "Consciousness",
-              "Transcendence"
+              "Transcendence",
+              "Space"
             ],
             "filmingLocation": "Prague (Barrandov Studios), Czech Republic",
             "depictedLocation": "Arrakis (extraterrestrial planet)",
@@ -1547,7 +1537,7 @@ let data = [
                 "title": "Dune: Part Two",
                 "year": 2024,
                 "depicted": 3000,
-                "tropes": [ "Transcendence", "Consciousness", "Free Will", "Social Control"],
+                "tropes": [ "Transcendence", "Consciousness", "Free Will", "Social Control", "Space"],
                 "filmingLocation": "Budapest, Abu Dhabi, Jordan",
                 "depictedLocation": "Arrakis",
                 "id": 151
@@ -1574,7 +1564,7 @@ let data = [
                 "title": "Ghostbusters: Afterlife",
                 "year": 2021,
                 "depicted": 2021,
-                "tropes": ["Transcendence","Robotics"],
+                "tropes": ["Transcendence"],
                 "filmingLocation": "Alberta, Canada",
                 "depictedLocation": "Small-town Oklahoma",
                 "id": 154

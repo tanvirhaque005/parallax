@@ -711,7 +711,7 @@ const leftCardContent = {
           "ATOMIC BOMBS DROPPED",
           "COLD WAR BEGINS"
         ],
-        desc: "Fewer sci-fi media is produced, as during the mid-to-late 40's most resources were dedicated to the war effort. sci-fi media produced tends to serve as commentary to contemporary issues."
+        desc: "Fewer sci-fi media finish production in the mid-to-late 40's, as during the early 40's most resources were dedicated to the war effort. Sci-fi media produced tends to serve as commentary to contemporary issues."
       },
       1950: {
         title: "1950-1954",
@@ -735,7 +735,7 @@ const leftCardContent = {
         tags: [
           "COLD WAR",
           "LASERS INVENTED",
-          "CUBAN MISSILE CRISIS"
+          "APOLLO PROGRAM BEGINS"
         ],
         desc: "Like in the late 50's, competition between US and Russia propelled technological innovation. These contributed to the popularization of sci-fi, and technologies themselves enabled directors to be more ambitious."
       },
