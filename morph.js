@@ -83,7 +83,7 @@ function updateTextOverlay() {
     let title, description;
 
     if (currentDecade === null) {
-      title = '1925-2020';
+      title = '1925-2024';
       description = periodTexts['All'].description;
     } else {
       title = `${currentDecade}–${currentDecade + WINDOW_STEP - 1}`;
@@ -2307,15 +2307,74 @@ window.addEventListener("mousemove", (evt) => {
         hideMovieHoverCard();
       }
     } else {
-      // Single movie (regular path or same-location circle)
-      const movieData = {
-        movie: d.movie,
-        year: d.year,
-        from: d.from,
-        to: d.to,
-        isSameLocation: d.isSameLocation || false
-      };
-      showMovieHoverCard(movieData, evt.clientX, evt.clientY);
+      // Collect all movies with the same from/to combination
+      const targetFrom = d.from;
+      const targetTo = d.to;
+      const matchingMovies = [];
+      const seenMovies = new Set();
+
+      // Get the appropriate path group based on zoom state
+      let pathGroup = null;
+      if (currentZoomState === ZOOM_STATES.US && usFlightPathGroup.visible) {
+        pathGroup = usFlightPathGroup;
+      } else if (currentZoomState === ZOOM_STATES.WORLD && flightPathGroup.visible) {
+        pathGroup = flightPathGroup;
+      } else if (currentZoomState === ZOOM_STATES.SOLAR && solarFlightPathsGroup.visible) {
+        pathGroup = solarFlightPathsGroup;
+      }
+
+      // Search through all visible paths in the group to find matching from/to
+      if (pathGroup) {
+        const visiblePaths = pathGroup.children.filter(child => child.visible);
+        for (const path of visiblePaths) {
+          const pathData = path.userData;
+          // Match if from and to are the same
+          if (pathData.from === targetFrom && pathData.to === targetTo) {
+            const movieKey = `${pathData.movie}-${pathData.year}`;
+            // Skip if we've already added this movie
+            if (seenMovies.has(movieKey)) {
+              continue;
+            }
+
+            // Check if this movie should be visible based on decade filter
+            if (currentDecade !== null) {
+              const year = parseInt(pathData.year);
+              if (year >= currentDecade && year < currentDecade + WINDOW_STEP) {
+                matchingMovies.push({
+                  movie: pathData.movie,
+                  year: pathData.year,
+                  from: pathData.from,
+                  to: pathData.to,
+                  originalFrom: pathData.originalFrom || pathData.from,
+                  originalTo: pathData.originalTo || pathData.to,
+                  isSameLocation: pathData.isSameLocation || false
+                });
+                seenMovies.add(movieKey);
+              }
+            } else {
+              // No decade filter - include all matching movies
+              matchingMovies.push({
+                movie: pathData.movie,
+                year: pathData.year,
+                from: pathData.from,
+                to: pathData.to,
+                originalFrom: pathData.originalFrom || pathData.from,
+                originalTo: pathData.originalTo || pathData.to,
+                isSameLocation: pathData.isSameLocation || false
+              });
+              seenMovies.add(movieKey);
+            }
+          }
+        }
+      }
+
+      if (matchingMovies.length > 0) {
+        // Show all matching movies in the hover card
+        showMovieHoverCard(matchingMovies, evt.clientX, evt.clientY);
+      } else {
+        // No movies match the decade filter - hide the card
+        hideMovieHoverCard();
+      }
     }
   } else if (hoveringPlanet) {
     // Hovering over a planet/moon but not a flight path

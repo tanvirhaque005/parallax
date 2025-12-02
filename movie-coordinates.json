@@ -106,7 +106,7 @@
       "displayName": "France, Blackwall Tunnel, Blackwall Reach, Greenwich Peninsula, Royal Borough of Greenwich, Greater London, England, E14 9PB, United Kingdom"
     },
     "New York, USA": {
-      "lat": 40.7127281,
+      "lat": 45.7127281,
       "lon": -74.0060152,
       "displayName": "New York, 10000, United States of America"
     },
@@ -206,7 +206,7 @@
       "displayName": "Culver City, California, USA"
     },
     "New York City, New York, USA": {
-      "lat": 39.7127281,
+      "lat": 40.7127281,
       "lon": -75.0060152,
       "displayName": "New York, 10000, United States of America"
     },
@@ -240,8 +240,8 @@
       "lon": -120.7401
     },
     "Iceland": {
-      "lat": 64.1466,
-      "lon": -21.9426,
+      "lat": 71.1466,
+      "lon": -19.9426,
       "displayName": "Reykjavik, Iceland (center)"
     },
     "Rome, Italy": {
@@ -2235,7 +2235,7 @@
     },
     {
       "movie": "Mr. Robot",
-      "year": "-2015",
+      "year": "2015",
       "from": "New York City, New York, USA",
       "to": "New York City, New York, USA",
       "type": "filming-to-depicted",
