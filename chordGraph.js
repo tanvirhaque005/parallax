@@ -1718,9 +1718,9 @@ class ChordGraph {
     
     nodes.forEach((nodeData, index) => {
       // Use lower z-index than navigation menu (menu is 10000) to prevent blocking
-      // Reduce hover size to prevent interference with navigation menu area
+      // Hover size should match node sprite size (60px) with a bit of padding
       const zIndex = this.containerId === 'chordContainer' ? '9999' : '10000';
-      const hoverSize = this.containerId === 'chordContainer' ? '140px' : '180px';
+      const hoverSize = this.containerId === 'chordContainer' ? '80px' : '80px';
       
       const hoverDiv = d3.select('body')
         .append('div')
@@ -1785,9 +1785,9 @@ class ChordGraph {
     // Ensure we have enough hover divs
     while (this.nodeHoverDivs.length < nodes.length) {
       // Use lower z-index than navigation menu (menu is 10000) to prevent blocking
-      // Reduce hover size to prevent interference with navigation menu area
+      // Hover size should match node sprite size (60px) with a bit of padding
       const zIndex = this.containerId === 'chordContainer' ? '9999' : '10000';
-      const hoverSize = this.containerId === 'chordContainer' ? '140px' : '180px';
+      const hoverSize = this.containerId === 'chordContainer' ? '80px' : '80px';
       
       const hoverDiv = d3.select('body')
         .append('div')
@@ -1847,14 +1847,13 @@ class ChordGraph {
       
       const screenPoint = svgPoint.matrixTransform(svgMatrix);
       
-      // Position div above the node
-      // Reduced hover area to prevent interference with navigation menu
-      const divSize = this.containerId === 'chordContainer' ? 140 : 180;
-      const offsetY = -60;
+      // Position div centered on the node
+      // Hover size should match node sprite size (60px) with a bit of padding
+      const divSize = this.containerId === 'chordContainer' ? 80 : 80;
       
-      // Calculate hover div position
+      // Calculate hover div position - center it on the node
       let left = screenPoint.x - divSize / 2;
-      let top = screenPoint.y - divSize / 2 + offsetY;
+      let top = screenPoint.y - divSize / 2;
       
       // Navigation menu area: top-right corner (approximately 40px from top and right)
       // Disable pointer events if hover div overlaps with menu area
