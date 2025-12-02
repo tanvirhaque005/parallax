@@ -44,7 +44,7 @@ class ChordGraph {
     
     // Theme descriptions
     this.themeDescriptions = {
-      'AI': 'Stories exploring machine intelligence—logical, emotional, or superhuman. These films question what happens when thinking systems surpass human control, ethics, or understanding. Common elements: sentient programs, digital assistants, neural networks.',
+      'AI': 'Stories exploring machine/manmade intelligence—logical, emotional, or superhuman. These films question what happens when thinking systems surpass human control, ethics, or understanding. Common elements: sentient programs, digital assistants, neural networks.',
       'Artificial Intelligence': 'Stories exploring machine intelligence—logical, emotional, or superhuman. These films question what happens when thinking systems surpass human control, ethics, or understanding. Common elements: sentient programs, digital assistants, neural networks.',
       'Consciousness': 'Explores the nature of awareness—human, artificial, or alien. These stories ask what makes a mind "alive" and how identity forms in bodies, machines, or networks. Includes memory, perception, and selfhood.',
       'Free Will': 'Stories centered on choice versus determinism. Characters confront systems that predict, restrict, or override their decisions—raising questions about autonomy, fate, and moral responsibility.',
