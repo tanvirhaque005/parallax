@@ -1539,6 +1539,125 @@ function positionLabelOverBar(labelEl, barEl, text) {
 			const beginBtn = document.getElementById('beginChordBtn');
 			const introChordGraph = document.getElementById('introChordGraph');
 
+			// Function to transition from intro to main page (used by both button click and scroll)
+			function goToMainPage() {
+				if (currentPage < pages.length - 1) {
+					// Hide the BEGIN arrow button immediately using class
+					if (beginBtn) {
+						beginBtn.classList.add('hidden');
+					}
+					// Immediately clear and hide intro chord graph before page transition
+					const introChordGraphEl = document.getElementById('introChordGraph');
+					const introContainerEl = document.getElementById('chordContainerIntro');
+					
+					// Stop any intervals or animations from the intro graph instance
+					if (window.introChordGraphInstance) {
+						// Clear any update intervals
+						if (window.introChordGraphInstance.hoverUpdateInterval) {
+							clearInterval(window.introChordGraphInstance.hoverUpdateInterval);
+						}
+						// Clear the instance reference
+						window.introChordGraphInstance = null;
+					}
+					
+					if (introChordGraphEl) {
+						introChordGraphEl.style.display = 'none';
+						introChordGraphEl.style.visibility = 'hidden';
+						introChordGraphEl.style.opacity = '0';
+						introChordGraphEl.style.pointerEvents = 'none';
+						introChordGraphEl.style.zIndex = '-1';
+					}
+					if (introContainerEl) {
+						// Remove SVG to stop rendering
+						const svg = introContainerEl.querySelector('svg');
+						if (svg) {
+							svg.remove();
+						}
+						// Remove all child elements
+						introContainerEl.innerHTML = '';
+						introContainerEl.style.pointerEvents = 'none';
+						introContainerEl.style.zIndex = '-1';
+						introContainerEl.style.opacity = '0';
+						introContainerEl.style.display = 'none';
+					}
+					currentPage++;
+					updatePages();
+					// Show EXPLORE TIMELINE button after transitioning to main page
+					// Use multiple timeouts to ensure it works in Chrome
+					const enableExploreTimelineButton = () => {
+						// The arrowButton.js replaces the div with a wrapper, find it by href
+						const arrowWrappers = document.querySelectorAll('.arrow-button-wrapper');
+						arrowWrappers.forEach(wrapper => {
+							if (wrapper.href && (wrapper.href.includes('parallel.html') || wrapper.getAttribute('href') === 'parallel.html')) {
+								// Add class to trigger CSS
+								wrapper.classList.add('show-on-main-page');
+								
+								// Show and enable the button with very high z-index
+								wrapper.style.opacity = "1";
+								wrapper.style.pointerEvents = "auto";
+								wrapper.style.visibility = "visible";
+								wrapper.style.zIndex = "99999";
+								wrapper.style.position = "fixed";
+								wrapper.style.display = "inline-flex";
+								wrapper.style.top = "50%";
+								wrapper.style.right = "40px";
+								wrapper.style.transform = "translateY(-50%)";
+								
+								// Ensure it's clickable
+								wrapper.setAttribute('tabindex', '0');
+								
+								// Ensure the href is set correctly
+								if (!wrapper.href || !wrapper.href.includes('parallel.html')) {
+									wrapper.href = 'parallel.html';
+								}
+								
+								// Remove any click handlers that might prevent navigation
+								const newClickHandler = (e) => {
+									// Allow default navigation
+									window.location.href = wrapper.href;
+								};
+								
+								// Remove old listeners and add new one
+								wrapper.onclick = newClickHandler;
+								
+								// Add cursor hover effect
+								const cursorEl = document.getElementById('cursorCircle');
+								if (cursorEl && !wrapper.dataset.cursorHoverSetup) {
+									wrapper.dataset.cursorHoverSetup = 'true';
+									wrapper.addEventListener('mouseenter', () => {
+										cursorEl.classList.add('hover');
+										cursorEl.style.setProperty('width', '45px', 'important');
+										cursorEl.style.setProperty('height', '45px', 'important');
+										cursorEl.style.setProperty('opacity', '0.7', 'important');
+										cursorEl.style.setProperty('background', 'white', 'important');
+									});
+									wrapper.addEventListener('mouseleave', () => {
+										cursorEl.classList.remove('hover');
+										cursorEl.style.setProperty('width', '18px', 'important');
+										cursorEl.style.setProperty('height', '18px', 'important');
+										cursorEl.style.setProperty('opacity', '1', 'important');
+										cursorEl.style.setProperty('background', 'rgba(200, 200, 200, 0.5)', 'important');
+									});
+								}
+							}
+						});
+					};
+					
+					// Try multiple times to catch the button at different creation times
+					setTimeout(enableExploreTimelineButton, 100);
+					setTimeout(enableExploreTimelineButton, 500);
+					setTimeout(enableExploreTimelineButton, 1000);
+					setTimeout(enableExploreTimelineButton, 2000);
+					
+					// Show intro message text after chord graph is revealed
+					setTimeout(() => {
+						if (typeof showChordIntroMessage === 'function') {
+							showChordIntroMessage();
+						}
+					}, 500);
+				}
+			}
+
 			function updatePages() {
 				pages.forEach((page, index) => {
 					page.classList.remove('active', 'next', 'prev');
@@ -1724,116 +1843,46 @@ function positionLabelOverBar(labelEl, barEl, text) {
 
 				beginBtn.addEventListener('click', (e) => {
 					e.preventDefault();
-					if (currentPage < pages.length - 1) {
-						// Hide the BEGIN arrow button immediately using class
-						if (beginBtn) {
-							beginBtn.classList.add('hidden');
-						}
-						// Immediately clear and hide intro chord graph before page transition
-						const introChordGraphEl = document.getElementById('introChordGraph');
-						const introContainerEl = document.getElementById('chordContainerIntro');
-						
-						// Stop any intervals or animations from the intro graph instance
-						if (window.introChordGraphInstance) {
-							// Clear any update intervals
-							if (window.introChordGraphInstance.hoverUpdateInterval) {
-								clearInterval(window.introChordGraphInstance.hoverUpdateInterval);
-							}
-							// Clear the instance reference
-							window.introChordGraphInstance = null;
-						}
-						
-						if (introChordGraphEl) {
-							introChordGraphEl.style.display = 'none';
-							introChordGraphEl.style.visibility = 'hidden';
-							introChordGraphEl.style.opacity = '0';
-							introChordGraphEl.style.pointerEvents = 'none';
-							introChordGraphEl.style.zIndex = '-1';
-						}
-						if (introContainerEl) {
-							// Remove SVG to stop rendering
-							const svg = introContainerEl.querySelector('svg');
-							if (svg) {
-								svg.remove();
-							}
-							// Remove all child elements
-							introContainerEl.innerHTML = '';
-							introContainerEl.style.pointerEvents = 'none';
-							introContainerEl.style.zIndex = '-1';
-							introContainerEl.style.opacity = '0';
-							introContainerEl.style.display = 'none';
-						}
-						currentPage++;
-						updatePages();
-						// Show EXPLORE TIMELINE button after transitioning to main page
-						// Use multiple timeouts to ensure it works in Chrome
-						const enableExploreTimelineButton = () => {
-							// The arrowButton.js replaces the div with a wrapper, find it by href
-							const arrowWrappers = document.querySelectorAll('.arrow-button-wrapper');
-							arrowWrappers.forEach(wrapper => {
-								if (wrapper.href && (wrapper.href.includes('parallel.html') || wrapper.getAttribute('href') === 'parallel.html')) {
-									// Add class to trigger CSS
-									wrapper.classList.add('show-on-main-page');
-									
-									// Show and enable the button with very high z-index
-									wrapper.style.opacity = "1";
-									wrapper.style.pointerEvents = "auto";
-									wrapper.style.visibility = "visible";
-									wrapper.style.zIndex = "99999";
-									wrapper.style.position = "fixed";
-									wrapper.style.display = "inline-flex";
-									wrapper.style.top = "50%";
-									wrapper.style.right = "40px";
-									wrapper.style.transform = "translateY(-50%)";
-									
-									// Ensure it's clickable
-									wrapper.setAttribute('tabindex', '0');
-									
-									// Ensure the href is set correctly
-									if (!wrapper.href || !wrapper.href.includes('parallel.html')) {
-										wrapper.href = 'parallel.html';
-									}
-									
-									// Remove any click handlers that might prevent navigation
-									const newClickHandler = (e) => {
-										// Allow default navigation
-										window.location.href = wrapper.href;
-									};
-									
-									// Remove old listeners and add new one
-									wrapper.onclick = newClickHandler;
-									
-									// Add cursor hover effect
-									const cursorEl = document.getElementById('cursorCircle');
-									if (cursorEl && !wrapper.dataset.cursorHoverSetup) {
-										wrapper.dataset.cursorHoverSetup = 'true';
-										wrapper.addEventListener('mouseenter', () => {
-											cursorEl.classList.add('hover');
-											cursorEl.style.setProperty('width', '45px', 'important');
-											cursorEl.style.setProperty('height', '45px', 'important');
-											cursorEl.style.setProperty('opacity', '0.7', 'important');
-											cursorEl.style.setProperty('background', 'white', 'important');
-										});
-										wrapper.addEventListener('mouseleave', () => {
-											cursorEl.classList.remove('hover');
-											cursorEl.style.setProperty('width', '18px', 'important');
-											cursorEl.style.setProperty('height', '18px', 'important');
-											cursorEl.style.setProperty('opacity', '1', 'important');
-											cursorEl.style.setProperty('background', 'rgba(200, 200, 200, 0.5)', 'important');
-										});
-									}
-								}
-							});
-						};
-						
-						// Try multiple times to catch the button at different creation times
-						setTimeout(enableExploreTimelineButton, 100);
-						setTimeout(enableExploreTimelineButton, 500);
-						setTimeout(enableExploreTimelineButton, 1000);
-						setTimeout(enableExploreTimelineButton, 2000);
-					}
+					goToMainPage();
 				});
 			}
+
+			// Scroll functionality on intro page
+			let scrollCooldown = false;
+			let lastScrollTime = 0;
+			const SCROLL_THRESHOLD = 50; // Minimum scroll delta to trigger
+			const SCROLL_COOLDOWN_MS = 500; // Prevent rapid scrolling
+
+			window.addEventListener('wheel', (e) => {
+				// Only handle scroll on intro page (page 0)
+				if (currentPage !== 0) {
+					return;
+				}
+
+				// Prevent default scrolling behavior on intro page
+				e.preventDefault();
+
+				const now = Date.now();
+				
+				// Cooldown check
+				if (scrollCooldown || (now - lastScrollTime < SCROLL_COOLDOWN_MS)) {
+					return;
+				}
+
+				// Trigger on scroll in either direction (up or down)
+				if (Math.abs(e.deltaY) > SCROLL_THRESHOLD) {
+					lastScrollTime = now;
+					scrollCooldown = true;
+
+					// Transition to main page
+					goToMainPage();
+					
+					// Reset cooldown
+					setTimeout(() => {
+						scrollCooldown = false;
+					}, SCROLL_COOLDOWN_MS);
+				}
+			}, { passive: false });
 
 			// Initialize
 			updatePages();

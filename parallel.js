@@ -1395,20 +1395,24 @@ let scrollLocked = false;
 window.addEventListener("wheel", (e) => {
     if (scrollLocked) return;
 
-    scrollLocked = true;
-
-    const direction = -e.deltaY > 0 ? "down" : "up";
-
-    // scroll down from INTRO → go to chart
-    if (direction === "down" && currentPage === 0) {
+    // scroll in either direction from INTRO → go to chart
+    // Use a much lower threshold for sensitivity
+    if (currentPage === 0 && Math.abs(e.deltaY) > 10) {
+        scrollLocked = true;
         currentPage = 1;
         updatePages();
+        
+        // unlock after gesture completes
+        setTimeout(() => {
+            scrollLocked = false;
+        }, 350);
+    } else if (currentPage !== 0) {
+        // Only lock scroll for non-intro pages
+        scrollLocked = true;
+        setTimeout(() => {
+            scrollLocked = false;
+        }, 350);
     }
-
-    // unlock after gesture completes
-    setTimeout(() => {
-        scrollLocked = false;
-    }, 350);
 });
 
 

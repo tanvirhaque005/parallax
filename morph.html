@@ -1230,8 +1230,8 @@
         return;
       }
 
-      // Trigger on scroll down (negative deltaY with natural scrolling)
-      if (e.deltaY < -SCROLL_THRESHOLD) {
+      // Trigger on scroll in either direction (up or down)
+      if (Math.abs(e.deltaY) > SCROLL_THRESHOLD) {
         lastScrollTime = now;
         scrollCooldown = true;
 
