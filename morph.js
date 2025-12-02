@@ -30,7 +30,7 @@ const periodTexts = {
     description: 'Cold War paranoia channeled imagination inward. Fear of invasion replaced wonder at discovery. Sci-fi became warning system, mapping anxieties onto familiar American landscapes.'
   },
   1955: {
-    description: 'Space race optimism lifted imagination skyward. Rockets made the impossible plausible. Filmmakers projected earthly conflicts onto cosmic stages, but with new hope.'
+    description: 'Space race optimism lifted imagination skyward. Rockets made the impossible plausible. Nationalism within the U.S. stemming from post-World War reconstruction drove nation-centric depictions.'
   },
   1960: {
     description: 'Counterculture questioned everything. Imagination broke from authority, exploring consciousness and identity. Sci-fi became philosophical, not just technological.'
@@ -42,34 +42,34 @@ const periodTexts = {
     description: 'Environmental awakening reshaped fears. Imagination focused on Earth\'s limits, not space\'s infinity. Post-apocalyptic visions replaced cosmic adventures—survival over exploration.'
   },
   1975: {
-    description: 'Economic stagnation narrowed horizons. Imagination became more grounded, more urban. Future cities reflected present decay. Optimism faded; realism intensified.'
+    description: 'Economic stagnation narrowed horizons. Escapism increased as movies projected further into fictional realms. Future cities reflected present decay.'
   },
   1980: {
-    description: 'Cyberpunk emerged from tech anxiety. Imagination split: corporate control versus digital liberation. Cities became battlegrounds; information, weapon. Dystopia went digital.'
+    description: 'Cyberpunk emerged from tech anxiety. Imagination split: corporate control versus digital liberation. Dystopia went digital with the emergence of movies forecasting artificially intelligent robots.'
   },
   1985: {
     description: 'Globalization expanded perspectives. Imagination moved beyond Western cities, incorporating Tokyo, Seoul, Mexico City. Diverse futures reflected interconnected world.'
   },
   1990: {
-    description: 'Post-Cold War uncertainty opened new possibilities. Imagination explored alternate histories, parallel worlds. Without clear enemy, futures became more complex, less binary.'
+    description: 'Post-Cold War uncertainty opened new possibilities. Imagination explored alternate histories, parallel worlds. Without clear enemy, futures became more complex, less binary, and increasingly dystopian.'
   },
   1995: {
-    description: 'Digital revolution transformed reality itself. Imagination questioned what\'s real versus virtual. Boundaries blurred; identity became fluid. Technology reshaped human experience.'
+    description: 'Digital revolution transformed reality itself. Imagination questioned what\'s real versus virtual. Technology reshaped human experience.'
   },
   2000: {
     description: 'Millennial anxiety focused imagination on surveillance and control. Y2K fears gave way to deeper questions about technology\'s grip. Futures became more intimate, less cosmic.'
   },
   2005: {
-    description: 'Climate consciousness expanded scope. Imagination returned to Earth with urgency. Environmental collapse replaced nuclear war as primary fear. Scale shifted from global to planetary.'
+    description: 'Climate consciousness expanded scope. Environmental collapse replaced nuclear war as primary fear. Scale shifted from global to planetary, as people imagined life beyond Earth.'
   },
   2010: {
-    description: 'Social media era questioned identity and connection. Imagination explored consciousness, memory, and what makes us human. Technology became internal, not external.'
+    description: 'Social media era questioned identity and connection. Imagination explored consciousness, memory, and what makes us human. Technology became internal and real, not external.'
   },
   2015: {
-    description: 'AI anxiety and climate crisis converged. Imagination grappled with existential threats—both artificial and natural. Futures became more urgent, less speculative.'
+    description: 'AI anxiety and climate crisis converged. Imagination grappled with existential threats—both artificial and natural. Futures became more urgent, as people imagined futures where Earth and space life converged.'
   },
   2020: {
-    description: 'Pandemic isolation reimagined connection. Virtual worlds and remote realities became familiar. Imagination adapted to new constraints, finding wonder in digital spaces and reimagined Earth.'
+    description: 'Pandemic isolation reimagined connection. Virtual worlds and remote realities became familiar. Imagination adapted to new constraints, finding wonder in digital spaces, multiverses, and reimagined Earth.'
   }
 };
 
