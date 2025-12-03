@@ -872,7 +872,7 @@ function polarPoint(cx, cy, r, angleInDegrees) {
 
 
 function updateLeftCard() {
-    const card = document.querySelector(".left-card");
+  const card = document.querySelector(".left-card");
     if (!card) return;
 
     const content = leftCardContent[currentWindowStart];
@@ -945,7 +945,7 @@ const mid = Math.floor(sorted.length / 2);
 let median;
 if (sorted.length % 2 === 0) {
     median = (sorted[mid - 1] + sorted[mid]) / 2;
-} else {
+  } else {
     median = sorted[mid];
 }
 
