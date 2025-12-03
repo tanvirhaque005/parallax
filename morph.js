@@ -40,25 +40,29 @@ const periodTexts = {
     // Sci-fi became philosophical, not just technological.'
   },
   1965: {
-    description: 'Social upheaval darkened visions. Imagination turned dystopian, reflecting real-world chaos. Future cities became prisons; technology, oppressor. Cynicism replaced wonder.'
+    // description: 'Social upheaval darkened visions. Imagination turned dystopian, reflecting real-world chaos. Future cities became prisons; technology, oppressor. Cynicism replaced wonder.'
+    description: 'Increasing technological advancement inspired the production of more fantastical, far-off stories.'
   },
   1970: {
-    description: 'Environmental awakening reshaped fears. Imagination focused on Earth\'s limits, not space\'s infinity. Post-apocalyptic visions replaced cosmic adventures—survival over exploration.'
+    description: 'Environmental awakening reshaped fears. Imagination focused on Earth\'s limits, not space\'s infinity. Domestic post-apocalyptic visions replaced cosmic adventures—survival over exploration.'
   },
   1975: {
-    description: 'Economic stagnation narrowed horizons. Escapism increased as movies projected further into fictional realms. Future cities reflected present decay.'
+    // description: 'Economic stagnation narrowed horizons. Escapism increased as movies projected further into fictional realms. Future cities reflected present decay.'
+    description: 'Increasing technological advancement inspired the production of more fantastical, far-off stories.'
   },
   1980: {
-    description: 'Cyberpunk emerged from tech anxiety. Imagination split: corporate control versus digital liberation. Dystopia went digital with the emergence of movies forecasting artificially intelligent robots.'
+    // description: 'Cyberpunk emerged from tech anxiety. Imagination split: corporate control versus digital liberation. Dystopia went digital with the emergence of movies forecasting artificially intelligent robots.'
+    description: 'Increasing technological advancement inspired the production of more fantastical, far-off stories.' 
   },
   1985: {
-    description: 'Globalization expanded perspectives. Imagination moved beyond Western cities, incorporating Tokyo, Seoul, Mexico City. Diverse futures reflected interconnected world.'
+    description: 'Modern globalization expanded perspectives. Interest in sci-fi expanded beyond Western stories, shifting interest to Tokyo, Seoul, Mexico City. Diverse futures were reflected in global stories, which ended up outpacing galactic ones.'
   },
   1990: {
-    description: 'Post-Cold War uncertainty opened new possibilities. Imagination explored alternate histories, parallel worlds. Without clear enemy, futures became more complex, less binary, and increasingly dystopian.'
+    description: 'Post-Cold War uncertainty and even more advanced scientific discoveries opened new possibilities. Imagination explored alternate histories and parallel worlds. '
+    // Without clear enemy, stories became more complex, less binary, and increasingly dystopian.
   },
   1995: {
-    description: 'Digital revolution transformed reality itself. Imagination questioned what\'s real versus virtual. Technology reshaped human experience.'
+    description: 'Digital revolution transformed reality itself. Imagination questioned what\'s real versus virtual. Technology reshaped human experience and films began to explore fictional digital worlds in addition to intergalactic ones.'
   },
   2000: {
     description: 'Millennial anxiety focused imagination on surveillance and control. Y2K fears gave way to deeper questions about technology\'s grip. Futures became more intimate, less cosmic.'
@@ -70,7 +74,8 @@ const periodTexts = {
     description: 'Social media era questioned identity and connection. Imagination explored consciousness, memory, and what makes us human. Technology became internal and real, not external.'
   },
   2015: {
-    description: 'AI anxiety and climate crisis converged. Imagination grappled with existential threats—both artificial and natural. Futures became more urgent, as people imagined futures where Earth and space life converged.'
+    description: 'AI anxiety and climate crisis converged. Imagination grappled with existential threats—both artificial and natural.  People imagined futures where Earth and space life converged.'
+    // Futures became more urgent, as
   },
   2020: {
     description: 'Pandemic isolation reimagined connection. Virtual worlds and remote realities became familiar. Imagination adapted to new constraints, finding wonder in digital spaces, multiverses, and reimagined Earth.'
