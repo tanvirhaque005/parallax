@@ -527,9 +527,7 @@
 .zoom-text {
   opacity: 0;
   transition: opacity 0.6s ease-in-out;
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  position: relative;
   padding: 0;
 }
 
@@ -740,6 +738,38 @@
          top: 20px;
          left: 40px;
          z-index: 200;
+    }
+
+    /* Event Pills Container */
+    #eventPills {
+      position: relative;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      max-width: 600px;
+      margin: 20px 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    #eventPills.visible {
+      opacity: 1;
+    }
+
+    .event-pill {
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      border: 1px solid rgba(255,255,255,0.45);
+      color: rgba(255,255,255,0.90);
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(4px);
+      text-transform: uppercase;
+      display: inline-block;
+      white-space: nowrap;
     }
 
     /* Scroll Indicator Arrow */
@@ -1247,6 +1277,10 @@
   <!-- US Zoom Text -->
   <div class="zoom-text" data-zoom="US">
     <h1 class="main-title">1925-2020</h1>
+    
+    <!-- Event Pills Container -->
+    <div id="eventPills"></div>
+    
     <p class="description">
       Most sci-fi futures originate from the same real cities—Los Angeles,
       Vancouver, London. Real landscapes anchor imagined ones.

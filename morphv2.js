@@ -270,8 +270,8 @@ async function loadPaths(){
 
     // Check if production and depicted locations are the same
     if (c.from === c.to) {
-      // Create a gradient circle instead of a line
-      const circle = createGradientCircle(new THREE.Vector3(p1.x, p1.y, 0.01), 0.02);
+      // Create a gradient circle instead of a line (slightly smaller size)
+      const circle = createGradientCircle(new THREE.Vector3(p1.x, p1.y, 0.01), 0.015);
       circle.userData = {
         movie: c.movie,
         year: yearInt,
@@ -1379,7 +1379,7 @@ function animate(){
     usFlightPathGroup.children.forEach(child => {
       if (child.isSprite) {
         // Inverse scale to maintain original size and circular shape
-        const baseSize = 0.02; // Original circle size
+        const baseSize = 0.015; // Original circle size (slightly smaller)
         child.scale.set(
           baseSize / currentScale,      // Counter horizontal scale
           baseSize / verticalScale,     // Counter vertical scale (different due to 1.3x)
@@ -1400,8 +1400,8 @@ function animate(){
     // Counter-scale circles (sprites) to maintain size
     flightPathGroup.children.forEach(child => {
       if (child.isSprite) {
-        const baseSize = 0.02; // Original circle size
-        const worldCircleMultiplier = 3.0; // Make world map circles 2x larger
+        const baseSize = 0.015; // Original circle size (slightly smaller)
+        const worldCircleMultiplier = 2.5; // Make world map circles larger, but a bit smaller than before
         child.scale.set(
           (baseSize / worldScale) * worldCircleMultiplier,
           (baseSize / worldScale) * worldCircleMultiplier,
