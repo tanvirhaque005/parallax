@@ -828,6 +828,21 @@
 				z-index: 1 !important;
 			}
 
+			.page-footer {
+				position: fixed;
+				bottom: 20px;
+				left: 0;
+				right: 0;
+				padding: 0 40px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				font-family: 'IBM Plex Sans', sans-serif;
+				font-size: 14px;
+				color: rgba(255,255,255,0.65);
+				z-index: 1000;
+				pointer-events: none;
+			}
 		</style>
 	</head>
 	<body>
@@ -941,6 +956,11 @@
 				<!-- Main Visualization -->
 				<div id="chordContainer">
 					<div class="loading">Loading visualization...</div>
+				</div>
+				
+				<div class="page-footer">
+					<div>Published 2025</div>
+					<div>Created by Michael, Audrey, Tanvir, Sydney</div>
 				</div>
 			</div>
 		</div>
@@ -2026,6 +2046,5 @@ function positionLabelOverBar(labelEl, barEl, year) {
 			// Initialize
 			updatePages();
 		</script>
-		
 	</body>
 </html>

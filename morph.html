@@ -967,6 +967,15 @@
     z-index: 99999;
 }
 
+  .page-footer {
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+  }
   </style>
   <link rel="stylesheet" href="mapIntroMessage.css">
 </head>
@@ -1287,6 +1296,10 @@
     </p>
   </div>
 
+  <div class="page-footer">
+    <div>Published 2025</div>
+    <div>Created by Michael, Audrey, Tanvir, Sydney</div>
+  </div>
 </div>
     </div> <!-- End map-page -->
   </div> <!-- End page-container -->
@@ -1499,11 +1512,6 @@
     }, 100);
   </script>
 
-  <div class="page-footer">
-    <div>Published 2025</div>
-    <div>Created by Michael, Audrey, Tanvir, Sydney</div>
-  </div>
-
   <!-- Pie Chart Container -->
   <div id="pieChartContainer" style="
     position: fixed;
@@ -1518,6 +1526,5 @@
   ">
     <svg id="pieChart" width="260" height="180"></svg>
   </div>
-
 </body>
 </html>
