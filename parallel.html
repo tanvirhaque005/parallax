@@ -127,34 +127,35 @@
 
     .intro-category {
       display: inline-block;
-      padding: 6px 14px;
+      padding: clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 20px);
       border-radius: 999px;
-      font-size: 11px;
-      font-weight: 600;
+      font-size: clamp(12px, 1.5vw, 14px);
+      font-weight: 400;
       letter-spacing: 1.6px;
       border: 1px solid rgba(255,255,255,0.45);
       color: rgba(255,255,255,0.90);
       background: rgba(255,255,255,0.02);
-      margin-bottom: 24px;
+      margin-bottom: clamp(16px, 2.5vh, 24px);
       font-family: 'IBM Plex Sans', sans-serif;
+      width: fit-content;
     }
 
     .intro-title {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 3.5rem;
+      font-size: clamp(2rem, 5vw, 3.5rem);
       font-weight: 400;
       color: #ffffff;
-      margin: 0 0 32px 0;
+      margin: 0 0 clamp(20px, 3vh, 32px) 0;
       line-height: 1.2;
       letter-spacing: -0.5px;
     }
 
     .intro-description {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 1.5rem;
+      font-size: clamp(0.875rem, 1.5vw, 1rem);
       color: #ffffff;
       line-height: 1.6;
-      margin: 0 0 40px 0;
+      margin: 0 0 clamp(24px, 4vh, 40px) 0;
       max-width: 600px;
       font-weight: 300;
     }
@@ -191,20 +192,26 @@
 
     /* The First Decade Button */
     .first-decade-button {
-      position: fixed;
-      bottom: 25%;
-      left: 50px;
-      display: flex;
+      display: flex !important;
       align-items: center;
-      gap: 18px;
+      gap: clamp(12px, 2vw, 18px);
       color: #ffffff;
       text-decoration: none;
-      font-size: 16px;
+      font-size: clamp(14px, 2vw, 16px);
       letter-spacing: 3px;
       text-transform: uppercase;
       transition: opacity 0.3s ease;
-      z-index: 10;
+      z-index: 10001;
       font-family: 'IBM Plex Sans', sans-serif;
+      pointer-events: auto;
+      cursor: none !important;
+      margin-top: clamp(40px, 15vh, 200px);
+      background: transparent;
+      border: none;
+      padding: 0;
+      position: relative;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
 
     .first-decade-button,
@@ -212,15 +219,13 @@
       cursor: none !important;
     }
 
-
-
     .first-decade-button:hover {
       opacity: 0.7;
     }
 
     .first-decade-arrow {
-      width: 60px;
-      height: 60px;
+      width: clamp(50px, 8vw, 60px);
+      height: clamp(50px, 8vw, 60px);
       border: 1px solid #ffffff;
       border-radius: 50%;
       display: flex;
@@ -237,6 +242,36 @@
       content: '→';
       font-size: 24px;
       color: #ffffff;
+    }
+
+    /* Responsive styles for intro page */
+    @media (max-width: 768px) {
+      .intro-title {
+        font-size: clamp(1.75rem, 6vw, 2.5rem);
+      }
+
+      .intro-description {
+        font-size: clamp(0.875rem, 2vw, 1rem);
+        max-width: 100%;
+      }
+
+      .intro-category {
+        font-size: 11px;
+        padding: 6px 12px;
+      }
+    }
+
+    /* Ensure button is visible on smaller screens */
+    @media (max-height: 800px) {
+      .first-decade-button {
+        margin-top: 60px;
+      }
+    }
+    
+    @media (max-height: 600px) {
+      .first-decade-button {
+        margin-top: 40px;
+      }
     }
 
     .page-header {
