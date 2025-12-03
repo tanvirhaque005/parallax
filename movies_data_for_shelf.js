@@ -227,7 +227,6 @@ let data = [
     "tropes": [
       "Space",
       "Robotics",
-      "Free Will"
     ],
     "filmingLocation": "Los Angeles, California, USA (Eagle-Lion Studios)",
     "depictedLocation": "The Moon (primary) + Earth launch sites (USA)",
@@ -239,9 +238,8 @@ let data = [
     "year": 1951,
     "depicted": 1951,
     "tropes": [
-      "AI",
+      "Robotics",
       "Social Control",
-      "Free Will",
       "Surveillance"
     ],
     "filmingLocation": "20th Century Fox Studios, Los Angeles, California, USA",
@@ -256,7 +254,6 @@ let data = [
     "tropes": [
       "Space",
       "Evolution",
-      "AI"
     ],
     "filmingLocation": "Paramount Studios + various California locations (USA)",
     "depictedLocation": "Southern California (primarily Los Angeles and surrounding areas)",
@@ -282,8 +279,6 @@ let data = [
     "tropes": [
       "Consciousness",
       "Space",
-      "Transcendence",
-      "Robotics"
     ],
     "filmingLocation": "Metro-Goldwyn-Mayer Studios, Culver City, California, USA",
     "depictedLocation": "Planet Altair IV (extraterrestrial)",
@@ -295,9 +290,8 @@ let data = [
     "year": 1956,
     "depicted": 1956,
     "tropes": [
-      "Social Control",
-      "Surveillance",
-      "Consciousness"
+      "Space",
+      "Evolution"
     ],
     "filmingLocation": "Sierra Madre, California, USA + Allied Artists Studios",
     "depictedLocation": "Santa Mira (fictional California town)",
@@ -310,8 +304,7 @@ let data = [
     "depicted": 1958,
     "tropes": [
       "Evolution",
-      "Consciousness",
-      "Free Will"
+      "Transendence"
     ],
     "filmingLocation": "20th Century Fox Studios, Los Angeles, California, USA",
     "depictedLocation": "Montreal, Canada (in-film setting)",
@@ -324,8 +317,7 @@ let data = [
     "depicted": 1850,
     "tropes": [
       "Evolution",
-      "Free Will",
-      "Transcendence"
+      "Free Will"
     ],
     "filmingLocation": "20th Century Fox Studios + Carlsbad Caverns (New Mexico, USA) + Edinburgh exteriors",
     "depictedLocation": "Iceland \u2192 Subterranean world beneath the Earth",
@@ -516,12 +508,11 @@ let data = [
     "year": 1966,
     "depicted": 2265,
     "tropes": [
-      "Space",
-      "Evolution",
-      "Robotics",
-      "AI",
-      "Consciousness"
-    ],
+        "Space",
+        "AI",
+        "Evolution",
+        "Robotics"
+      ],
     "filmingLocation": "Desilu Studios & Paramount Studios, Hollywood, USA",
     "depictedLocation": "The Milky Way Galaxy (USS Enterprise & various planets)",
     "id": 41,
@@ -1006,7 +997,6 @@ let data = [
     "depicted": 2100,
     "tropes": [
       "Robotics",
-      "Social Control",
       "Free Will"
     ],
     "filmingLocation": "North Carolina (Wilmington), USA",
@@ -1021,7 +1011,6 @@ let data = [
     "tropes": [
       "Space",
       "AI",
-      "Consciousness",
       "Evolution",
       "Robotics"
     ],
@@ -1103,7 +1092,6 @@ let data = [
     "tropes": [
       "Evolution",
       "Robotics",
-      "Social Control"
     ],
     "filmingLocation": "Los Angeles, California, USA",
     "depictedLocation": "Cyberpunk post-apocalyptic United States",
@@ -1118,7 +1106,6 @@ let data = [
       "Robotics",
       "AI",
       "Evolution",
-      "Social Control"
     ],
     "filmingLocation": "California, USA",
     "depictedLocation": "Dystopian future Earth (collapsed US regions)",
@@ -1183,9 +1170,11 @@ let data = [
     "year": 1993,
     "depicted": 2375,
     "tropes": [
-      "Space",
-      "Consciousness"
-    ],
+        "Space",
+        "AI",
+        "Evolution",
+        "Robotics"
+      ],
     "filmingLocation": "Paramount Studios, Hollywood, USA",
     "depictedLocation": "Deep Space Nine station (orbit of planet Bajor)",
     "id": 91,

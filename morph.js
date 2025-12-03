@@ -29,14 +29,16 @@ const periodTexts = {
     description: 'In the midst of the second world war, imagination narrowed even further as resources for film were stretched thin. People were more fixated on depicting reality and did not have the luxury to portray of far-off places.'
   },
   1950: {
-    description: 'Post-war technologies and motivation allowed for the creation of more fantastical sci-fi films that depicted interplanetary stories.'
+    description: 'Post-war resources and motivation allowed for the creation of fantastical, far-away sci-fi films after its wartime hiatus.'
     // description: 'Cold War paranoia channeled imagination inward. Fear of invasion replaced wonder at discovery. Sci-fi became warning system, mapping anxieties onto familiar American landscapes.'
   },
   1955: {
-    description: 'Space race optimism lifted imagination skyward. Rockets made the impossible plausible. Nationalism within the U.S. stemming from post-World War reconstruction drove nation-centric depictions.'
+    // description: 'Space race optimism lifted imagination skyward. Rockets made the impossible plausible. Nationalism within the U.S. stemming from post-World War reconstruction drove nation-centric depictions.'
+    description: 'Like before, post-war resources and motivation allowed for the creation of fantastical, far-away sci-fi films after its wartime hiatus.'
   },
   1960: {
-    description: 'As increasing technological advancement inspired the production of more fantastical, far-off stories, counterculture questioned everything. Imagination broke from authority, exploring consciousness and identity.' 
+    description: 'Increasing technological advancement inspired the production of more fantastical, far-off stories.'
+    //  counterculture questioned everything. Imagination broke from authority, exploring consciousness and identity.' 
     // Sci-fi became philosophical, not just technological.'
   },
   1965: {
@@ -55,7 +57,7 @@ const periodTexts = {
     description: 'Increasing technological advancement inspired the production of more fantastical, far-off stories.' 
   },
   1985: {
-    description: 'Modern globalization expanded perspectives. Interest in sci-fi expanded beyond Western stories, shifting interest to Tokyo, Seoul, Mexico City. Diverse futures were reflected in global stories, which ended up outpacing galactic ones.'
+    description: 'During globalization, interest in sci-fi expanded beyond Western-depicted settings.'
   },
   1990: {
     description: 'Post-Cold War uncertainty and even more advanced scientific discoveries opened new possibilities. Imagination explored alternate histories and parallel worlds. '
@@ -68,17 +70,22 @@ const periodTexts = {
     description: 'Millennial anxiety focused imagination on surveillance and control. Y2K fears gave way to deeper questions about technology\'s grip. Futures became more intimate, less cosmic.'
   },
   2005: {
-    description: 'Climate consciousness expanded scope. Environmental collapse replaced nuclear war as primary fear. Scale shifted from global to planetary, as people imagined life beyond Earth.'
+    // description: 'Climate consciousness expanded scope. Environmental collapse replaced nuclear war as primary fear. Scale shifted from global to planetary, as people imagined life beyond Earth.'
+    description: 'Despite the great recession and climate crisis, more films explore fantastical, far-away stories. As shown in the first trope network visualization, these movies also continued to integrate fantastical sci-fi with societal themes. So, distant lands begin to be used for social commentary.'
   },
   2010: {
-    description: 'Social media era questioned identity and connection. Imagination explored consciousness, memory, and what makes us human. Technology became internal and real, not external.'
+    // description: 'Social media era questioned identity and connection. Imagination explored consciousness, memory, and what makes us human. Technology became internal and real, not external.'
+    description: 'Questions about security, technology, and war remain prevalent. Far-away stories continue to serve as a way to portray social commentary.'
   },
   2015: {
-    description: 'AI anxiety and climate crisis converged. Imagination grappled with existential threats—both artificial and natural.  People imagined futures where Earth and space life converged.'
+    // description: 'AI anxiety and climate crisis converged. Imagination grappled with existential threats—both artificial and natural.  People imagined futures where Earth and space life converged.'
+    description: 'Geopolitical and cultural tensions rise. Far-away stories continue to serve as a way to portray social commentary.'
     // Futures became more urgent, as
   },
   2020: {
-    description: 'Pandemic isolation reimagined connection. Virtual worlds and remote realities became familiar. Imagination adapted to new constraints, finding wonder in digital spaces, multiverses, and reimagined Earth.'
+    // description: 'Pandemic isolation reimagined connection. Virtual worlds and remote realities became familiar. Imagination adapted to new constraints, finding wonder in digital spaces, multiverses, and reimagined Earth.'
+    // description: 'Alternate realities and distant lands continue as a way to portray social comentary.'
+    description: 'In light of the pandemic, AI worries, and geopolitical crisis, far-away stories continue to serve as a way to portray social commentary.'
   }
 };
 

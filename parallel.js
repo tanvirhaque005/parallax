@@ -684,7 +684,7 @@ const leftCardContent = {
           "PLUTO DISCOVERED",
           "PROHIBITION ENDS"
         ],
-        desc: "The early 30's was shaped by the Great Depression, contributing to the consumption of more cheap escapist entertainment. Sci-fi continued to fluorish under radio, sound-cinema, and pulp comics."
+        desc: "The early 30's was shaped by the Great Depression, contributing to the consumption of more cheap escapist entertainment. To distract, sci-fi depicted fantastical worlds in distant times."
       },
       1935: {
         title: "1935-1939",
@@ -693,7 +693,7 @@ const leftCardContent = {
           "GLOBAL TENSIONS RISE",
           "WW2 BEGINS"
         ],
-        desc: "Anxieties from the depression and ongoing global tensions contribute to the continued flourishing of sci-fi and other escapist media. These tensions culminate in World War II in 1939."
+        desc: "Anxieties from the depression and ongoing global tensions contribute to the continued flourishing of escapist films with large time leaps. These tensions culminate in World War II in 1939."
       },
       1940: {
         title: "1940-1944",
@@ -711,7 +711,7 @@ const leftCardContent = {
           "ATOMIC BOMBS DROPPED",
           "COLD WAR BEGINS"
         ],
-        desc: "Fewer sci-fi media finish production in the mid-to-late 40's, as during the early 40's most resources were dedicated to the war effort. Sci-fi media produced tends to serve as commentary to contemporary issues."
+        desc: "With fewer resources to depict fantastical worlds due to the war effort, sci-fi media produced tends to serve as commentary to contemporary issues."
       },
       1950: {
         title: "1950-1954",
@@ -720,7 +720,7 @@ const leftCardContent = {
           "KOREAN WAR",
           "COLORED TV INVENTED"
         ],
-        desc: "As nuclear fear grows and the Cold War rages in the form of proxy conflicts, stories mix caution and curiosity. sci-fi is overall less speculative and more reflective of contemporary concerns."
+        desc: "As nuclear fear grows and the Cold War rages in the form of proxy conflicts, stories mix caution and curiosity. There is a mix between fantastical and contemporary sci-fi."
       },
       1955: {
         title: "1955–1959",
@@ -728,7 +728,7 @@ const leftCardContent = {
           "COLD WAR","SPACE RACE",
           "VIETNAM WAR BEGINS"
                 ],
-        desc: "The Space Race popularized all forms of sci-fi, including those with larger time leaps. With newer technologies from the decade, directors are encouraged to be more ambitious."
+        desc: "The Space Race popularized all forms of sci-fi, including those with larger time leaps. With newer technologies from the decade, directors are encouraged to be more ambitious with time leaps."
       },
       1960: {
         title: "1960-1964",
@@ -737,7 +737,7 @@ const leftCardContent = {
           "LASERS INVENTED",
           "APOLLO PROGRAM BEGINS"
         ],
-        desc: "Like in the late 50's, competition between US and Russia propelled technological innovation. These contributed to the popularization of sci-fi, and technologies themselves enabled directors to be more ambitious."
+        desc: "Like in the late 50's, competition between US and Russia propelled technological innovation. These contributed to the popularization of sci-fi, and technologies themselves enabled directors to be more ambitious with time leaps."
       },
       1965: {
         title: "1965-1969",
@@ -746,7 +746,7 @@ const leftCardContent = {
           "MOON LANDING",
           "VIETNAM WAR ESCALATES"
         ],
-        desc: "The late 60's was characterized by concerns from the Vietnam War as well as scientific inspiration from the moon landings. Both propelled the production and consumption of ambitious sci-fi."
+        desc: "Scientific innovation and inspiration booms with the moon landing, propelling the production and consumption of more fantastical sci-fi stories from distant times."
       },
       1970: {
         title: "1970-1974",
@@ -755,7 +755,7 @@ const leftCardContent = {
           "ENVIRONMENTAL MOVEMENT",
           "EMAIL INVENTED",
         ],
-        desc: "Scientific and technological innovation booms, while environmental concerns also rise. Both contribute to the production and consumption of speculative sci-fi."
+        desc: "Scientific and technological innovation continues to boom, popularizing the production of sci-fi with large time leaps."
       },
       1975: {
         title: "1975-1979",
@@ -764,7 +764,7 @@ const leftCardContent = {
           "APPLE COMPUTER INVENTED",
           "THREE MILE ISLAND NUCLEAR DISASTER"
         ],
-        desc: "Like in the first half of the decade, scientific and technological innovation booms, while environmental/nuclear concerns also rise. Both contribute to the production and consumption of speculative sci-fi."
+        desc: "Like in the first half of the decade, scientific and technological innovation continues to boom, popularizing the production of sci-fi with large time leaps."
       },
       1980: {
         title: "1980-1984",
@@ -773,7 +773,7 @@ const leftCardContent = {
           "REAGAN ELECTED",
           "CD FORMAT LAUNCHED"
         ],
-        desc: "Like in past decades, sientific anxieties and discoveries propel production of speculative sci-fi ficiton."
+        desc: "Like in past decades, sientific innovations inspire the production of sci-fi ficiton with large time leaps."
       },
       1985: {
         title: "1985-1989",
@@ -782,7 +782,7 @@ const leftCardContent = {
           "STOCK MARKET BOOMS",
           "CHERNOBYL DISASTER"
         ],
-        desc: "A booming economy, paried with continued sientific anxieties and discoveries, propel production of speculative sci-fi ficiton."
+        desc: "A booming economy, paried with sientific news, propel production of fantastical sci-fi ficiton."
       },
       1990: {
         title: "1990-1994",
@@ -791,7 +791,7 @@ const leftCardContent = {
           "INTERNET COMMERCIALIZATION",
           "US DOMINANCE"
         ],
-        desc: "With the fall of the Soviet Union and the end of the Cold War, America is positioned in economic dominance. This, paired with the spread of scientific breakthroughs like the internet, further popularize ambitious sci-fi."
+        desc: "Like before, a booming economy, paried with sientific news, propel production of fantastical sci-fi ficiton."
       },
       1995: {
         title: "1995-1999",
@@ -800,7 +800,7 @@ const leftCardContent = {
           "WINDOWS 95 LAUNCHES",
           "GOOGLE FOUNDED"
         ],
-        desc: "The creation and spread of advanced technological innovations facilitate the production and spread of more ambitious forms of media, including sci-fi entertainment."
+        desc: "The creation and spread of advanced technological innovations facilitate the production and spread of more ambitious forms of media, including sci-fi with large time leaps."
       },
       2000: {
         title: "2000-2004",
@@ -818,7 +818,7 @@ const leftCardContent = {
           "iPHONE INTRODUCED",
           "HURRICANE KATRINA"
         ],
-        desc: "Economic recession, global conflict, and envrionmental disasters accompanied scientific innovation. sci-fi continued to boom, but directors began turning inwards to contemporary  anxieties."
+        desc: "Economic recession, global conflict, and envrionmental disasters accompanied scientific innovation. Sci-fi continued to boom, but directors began turning inwards to contemporary  anxieties."
       },
       2010: {
         title: "2010-2014",
@@ -836,7 +836,7 @@ const leftCardContent = {
           "#METOO MOVEMENT",
           "Paris Climate Accord"
         ],
-        desc: "Geopolitical volatility, rising nationalism, and environmental urgency define the period. These compounding issues prompt many directors to look to contemporary anxieties. "
+        desc: "Geopolitical volatility, rising nationalism, and environmental urgency define the period. These compounding issues prompt many directors to comment on contemporary anxieties. "
       },
       2020: {
         title: "2020-2024",
@@ -845,7 +845,7 @@ const leftCardContent = {
           "invasion of Ukraine",
           "AI boom"
         ],
-        desc: "Anxieties from the pandemic, geopolitical conflicts, and misuse of powerful technologies like A.I. feed more into scientific and technological anxieties about contemporary periods. Many directors focus on these modern issues instead of fantastical ones."
+        desc: "Anxieties from the pandemic, geopolitical conflicts, and misuse of powerful technologies like A.I. feed more into scientific and technological anxieties about contemporary periods. Many directors focus on these modern issues instead of fantastical/distant ones."
       },
   }
   
