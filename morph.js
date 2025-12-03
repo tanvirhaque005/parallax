@@ -2220,10 +2220,10 @@ function showMovieHoverCard(movies, x, y) {
     const posterId = movieTitleToId[movie.movie];
     const posterImg = document.createElement('img');
     posterImg.className = 'movieHoverPoster';
-    posterImg.src = posterId !== undefined ? `./postersID/${posterId}.jpg` : './postersID/placeholder.jpg';
+    posterImg.src = posterId !== undefined ? `.postersID/${posterId}.jpg` : '.postersID/placeholder.jpg';
     posterImg.alt = movie.movie;
     posterImg.onerror = () => {
-      posterImg.src = './postersID/0.jpg'; // Fallback to first image if missing
+      posterImg.src = '.postersID/0.jpg'; // Fallback to first image if missing
     };
 
     // Details text
