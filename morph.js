@@ -1656,6 +1656,32 @@ function animate(){
   // International paths visible when in WORLD state AND not on intro page
   flightPathGroup.visible = currentZoomState === ZOOM_STATES.WORLD && (typeof currentPage === 'undefined' || currentPage !== 0);
 
+  // Update world scroll indicator visibility
+  const worldScrollIndicator = document.getElementById('worldScrollIndicator');
+  if (worldScrollIndicator) {
+    const shouldShow = currentZoomState === ZOOM_STATES.WORLD && 
+                       (typeof currentPage === 'undefined' || currentPage === 1) &&
+                       !worldScrollIndicator.classList.contains('hidden');
+    if (shouldShow) {
+      worldScrollIndicator.classList.add('visible');
+    } else {
+      worldScrollIndicator.classList.remove('visible');
+    }
+  }
+
+  // Update solar scroll indicator visibility
+  const solarScrollIndicator = document.getElementById('solarScrollIndicator');
+  if (solarScrollIndicator) {
+    const shouldShow = currentZoomState === ZOOM_STATES.SOLAR && 
+                       (typeof currentPage === 'undefined' || currentPage === 1) &&
+                       !solarScrollIndicator.classList.contains('hidden');
+    if (shouldShow) {
+      solarScrollIndicator.classList.add('visible');
+    } else {
+      solarScrollIndicator.classList.remove('visible');
+    }
+  }
+
   // Scale international flight paths to match fullscreen world map
   if (currentZoomState === ZOOM_STATES.WORLD) {
     flightPathGroup.scale.set(worldScale, worldScale, worldScale);
@@ -2670,6 +2696,9 @@ window.addEventListener('wheel', (event) => {
   const scrollingOut = event.deltaY > 0; // Scrolling down = zoom out
   const scrollingIn = event.deltaY < 0;  // Scrolling up = zoom in
 
+  // Store previous zoom state to detect transitions
+  const previousZoomState = currentZoomState;
+
   // Transition to next/previous zoom state
   if (scrollingOut) {
     // Zoom out: US → World → Solar
@@ -2691,11 +2720,55 @@ window.addEventListener('wheel', (event) => {
     }
   }
 
+  // Show world scroll indicator when entering WORLD view, hide when leaving
+  const worldScrollIndicator = document.getElementById('worldScrollIndicator');
+  if (worldScrollIndicator) {
+    if (currentZoomState === ZOOM_STATES.WORLD && previousZoomState !== ZOOM_STATES.WORLD) {
+      // Just entered WORLD view - show indicator
+      if (!worldScrollIndicator.classList.contains('hidden')) {
+        worldScrollIndicator.classList.add('visible');
+      }
+    } else if (currentZoomState !== ZOOM_STATES.WORLD && previousZoomState === ZOOM_STATES.WORLD) {
+      // Just left WORLD view - hide indicator
+      worldScrollIndicator.classList.add('hidden');
+      worldScrollIndicator.classList.remove('visible');
+    } else if (currentZoomState === ZOOM_STATES.WORLD && previousZoomState === ZOOM_STATES.WORLD) {
+      // Still in WORLD view but scrolled - hide after first scroll
+      worldScrollIndicator.classList.add('hidden');
+      worldScrollIndicator.classList.remove('visible');
+    }
+  }
+
+  // Show solar scroll indicator when entering SOLAR view, hide when leaving
+  const solarScrollIndicator = document.getElementById('solarScrollIndicator');
+  if (solarScrollIndicator) {
+    if (currentZoomState === ZOOM_STATES.SOLAR && previousZoomState !== ZOOM_STATES.SOLAR) {
+      // Just entered SOLAR view - show indicator
+      if (!solarScrollIndicator.classList.contains('hidden')) {
+        solarScrollIndicator.classList.add('visible');
+      }
+    } else if (currentZoomState !== ZOOM_STATES.SOLAR && previousZoomState === ZOOM_STATES.SOLAR) {
+      // Just left SOLAR view - hide indicator
+      solarScrollIndicator.classList.add('hidden');
+      solarScrollIndicator.classList.remove('visible');
+    } else if (currentZoomState === ZOOM_STATES.SOLAR && previousZoomState === ZOOM_STATES.SOLAR) {
+      // Still in SOLAR view but scrolled - hide after first scroll
+      solarScrollIndicator.classList.add('hidden');
+      solarScrollIndicator.classList.remove('visible');
+    }
+  }
+
   // Set cooldown to prevent multiple rapid transitions
   scrollCooldown = true;
   setTimeout(() => {
     scrollCooldown = false;
   }, SCROLL_COOLDOWN_TIME);
+
+  // Hide scroll indicator after first scroll
+  const scrollIndicator = document.getElementById('scrollIndicator');
+  if (scrollIndicator && scrollIndicator.classList.contains('visible')) {
+    scrollIndicator.classList.remove('visible');
+  }
 
 }, { passive: false });
 
@@ -2733,6 +2806,7 @@ window.addEventListener('touchmove', (event) => {
       touchDistanceAccumulator += distanceChange;
 
       // Check if accumulated distance exceeds threshold
+      const previousZoomState = currentZoomState;
       if (Math.abs(touchDistanceAccumulator) >= TOUCH_THRESHOLD) {
         if (touchDistanceAccumulator > 0) {
           // Expand (fingers apart) = zoom in (map)
@@ -2754,12 +2828,56 @@ window.addEventListener('touchmove', (event) => {
           }
         }
 
+        // Update world scroll indicator based on zoom state change
+        const worldScrollIndicator = document.getElementById('worldScrollIndicator');
+        if (worldScrollIndicator) {
+          if (currentZoomState === ZOOM_STATES.WORLD && previousZoomState !== ZOOM_STATES.WORLD) {
+            // Just entered WORLD view - show indicator
+            if (!worldScrollIndicator.classList.contains('hidden')) {
+              worldScrollIndicator.classList.add('visible');
+            }
+          } else if (currentZoomState !== ZOOM_STATES.WORLD && previousZoomState === ZOOM_STATES.WORLD) {
+            // Just left WORLD view - hide indicator
+            worldScrollIndicator.classList.add('hidden');
+            worldScrollIndicator.classList.remove('visible');
+          } else if (currentZoomState === ZOOM_STATES.WORLD && previousZoomState === ZOOM_STATES.WORLD) {
+            // Still in WORLD view but scrolled - hide after first scroll
+            worldScrollIndicator.classList.add('hidden');
+            worldScrollIndicator.classList.remove('visible');
+          }
+        }
+
+        // Update solar scroll indicator based on zoom state change
+        const solarScrollIndicator = document.getElementById('solarScrollIndicator');
+        if (solarScrollIndicator) {
+          if (currentZoomState === ZOOM_STATES.SOLAR && previousZoomState !== ZOOM_STATES.SOLAR) {
+            // Just entered SOLAR view - show indicator
+            if (!solarScrollIndicator.classList.contains('hidden')) {
+              solarScrollIndicator.classList.add('visible');
+            }
+          } else if (currentZoomState !== ZOOM_STATES.SOLAR && previousZoomState === ZOOM_STATES.SOLAR) {
+            // Just left SOLAR view - hide indicator
+            solarScrollIndicator.classList.add('hidden');
+            solarScrollIndicator.classList.remove('visible');
+          } else if (currentZoomState === ZOOM_STATES.SOLAR && previousZoomState === ZOOM_STATES.SOLAR) {
+            // Still in SOLAR view but scrolled - hide after first scroll
+            solarScrollIndicator.classList.add('hidden');
+            solarScrollIndicator.classList.remove('visible');
+          }
+        }
+
         // Reset accumulator and set cooldown
         touchDistanceAccumulator = 0;
         scrollCooldown = true;
         setTimeout(() => {
           scrollCooldown = false;
         }, SCROLL_COOLDOWN_TIME);
+
+        // Hide scroll indicator after first touch zoom
+        const scrollIndicator = document.getElementById('scrollIndicator');
+        if (scrollIndicator && scrollIndicator.classList.contains('visible')) {
+          scrollIndicator.classList.remove('visible');
+        }
       }
     }
 
