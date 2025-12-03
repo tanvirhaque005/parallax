@@ -297,10 +297,10 @@ async function loadPaths(){
   const { coordinates: coords, connections } = data;
   coordinates = coords; // Store globally
   // Filter to only include Earth-to-Earth paths
-  // Exclude: Fictional Locations, Solar System bodies
+  // Exclude: Universe, Solar System bodies
   const paths = connections.filter(c => {
     if (c.type !== "filming-to-depicted") return false;
-    if (c.from === "Fictional Locations" || c.to === "Fictional Locations") return false;
+    if (c.from === "Universe" || c.to === "Universe") return false;
     if (isSolarSystemBody(c.from) || isSolarSystemBody(c.to)) return false;
     return true;
   });
@@ -471,7 +471,7 @@ function updateFlightPathVisibility() {
   // Update solar flight paths
   let fictionalPathsCount = 0;
   solarFlightPathsGroup.children.forEach(path => {
-    // Special handling for Fictional Locations arc - check if any movies match the time period
+    // Special handling for Universe arc - check if any movies match the time period
     if (path.userData.isFictionalLocations) {
       if (!currentDecade) {
         // Show all when no decade filter
@@ -598,7 +598,7 @@ const customPositions = {
   saturn:   new THREE.Vector3(8, 2, 0),
   uranus:   new THREE.Vector3(-7, 2, -2),
   neptune:  new THREE.Vector3(-9, -2, 1),
-  "fictional locations": new THREE.Vector3(-5, -6, 2)  // Right side, lower to avoid text overlap
+  "universe": new THREE.Vector3(-5, -6, 2)  // Right side, lower to avoid text overlap
 };
 
 // ==========================================================
@@ -618,7 +618,7 @@ const planetColors = {
   saturn: 0xdcc58a,
   uranus: 0x7fdbff,
   neptune: 0x4169e1,
-  "fictional locations": 0x9b59b6  // Purple for fictional/unknown
+  "universe": 0x9b59b6  // Purple for fictional/unknown
 };
 
 const radii = {
@@ -631,7 +631,7 @@ const radii = {
   saturn: 0.9,     // Smaller Saturn
   uranus: 0.4,     // Bigger Uranus
   neptune: 0.4,     // Bigger Neptune
-  "fictional locations": 0.3  // Medium-sized sphere
+  "universe": 0.3  // Medium-sized sphere
 };
 
 Object.keys(planetColors).forEach((name)=>{
@@ -654,8 +654,8 @@ Object.keys(planetColors).forEach((name)=>{
       metalness: 0,
       depthWrite: false  // Don't write to depth buffer so flight paths render in front
     });
-  } else if (name === 'fictional locations') {
-    // Fictional locations - mystical glowing purple sphere
+  } else if (name === 'universe') {
+    // Universe - mystical glowing purple sphere
     mat = new THREE.MeshStandardMaterial({
       color: planetColors[name],
       emissive: 0xaa44ff,  // Bright purple/magenta glow
@@ -713,8 +713,8 @@ Object.keys(planetColors).forEach((name)=>{
     });
   }
 
-  // Add mystical glow around fictional locations planet
-  if (name === 'fictional locations') {
+  // Add mystical glow around universe planet
+  if (name === 'universe') {
     p.renderOrder = 0; // Render before flight paths
 
     const mysticalGlowLayers = [
@@ -918,7 +918,7 @@ scene.add(solarFlightPathsGroup);
 solarFlightPathsGroup.visible = false;
 
 // Valid solar system destinations
-const solarDestinations = ['Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Io', 'Europa', 'Ganymede', 'Callisto', 'Fictional Locations'];
+const solarDestinations = ['Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Io', 'Europa', 'Ganymede', 'Callisto', 'Universe'];
 
 async function loadSolarFlightPaths(){
   try {
@@ -986,7 +986,7 @@ async function loadSolarFlightPaths(){
       }
     }
 
-    console.log(`📍 Sample fictional locations:`, Object.entries(fictionalLocationMap).slice(0, 5));
+    console.log(`📍 Sample universe locations:`, Object.entries(fictionalLocationMap).slice(0, 5));
 
     // Filter for connections that include any planet/moon
     const solarConnections = connections.filter(conn => {
@@ -1004,16 +1004,16 @@ async function loadSolarFlightPaths(){
 
     console.log(`✅ Found ${solarConnections.length} solar system flight paths`);
 
-    // Extract all Fictional Locations connections
+    // Extract all Universe connections
     const fictionalConns = solarConnections.filter(c =>
-      c.to === "Fictional Locations"
+      c.to === "Universe"
     );
-    console.log(`📍 Fictional Locations connections: ${fictionalConns.length}`);
+    console.log(`📍 Universe connections: ${fictionalConns.length}`);
 
-    // Create single arc to Fictional Locations with all movies
+    // Create single arc to Universe with all movies
     if (fictionalConns.length > 0) {
       const earthPos = customPositions.earth;
-      const fictionalPos = customPositions["fictional locations"];
+      const fictionalPos = customPositions["universe"];
 
       const start = new THREE.Vector3(earthPos.x, earthPos.y, earthPos.z);
       const end = new THREE.Vector3(fictionalPos.x, fictionalPos.y, fictionalPos.z);
@@ -1060,29 +1060,29 @@ async function loadSolarFlightPaths(){
 
       // Store all fictional location movies in userData with actual fictional location names
       line.userData = {
-        to: "Fictional Locations",
+        to: "Universe",
         from: "Earth",
         isFictionalLocations: true,
         movies: fictionalConns.map(c => ({
           movie: c.movie,
           year: c.year,
           from: c.from,
-          to: c.originalTo || fictionalLocationMap[c.movie] || "Fictional Locations",
+          to: c.originalTo || fictionalLocationMap[c.movie] || "Universe",
           originalFrom: c.originalFrom || c.from,
-          originalTo: c.originalTo || fictionalLocationMap[c.movie] || "Fictional Locations"
+          originalTo: c.originalTo || fictionalLocationMap[c.movie] || "Universe"
         }))
       };
 
       solarFlightPathsGroup.add(line);
-      console.log(`✅ Created Fictional Locations arc with ${fictionalConns.length} movies`);
+      console.log(`✅ Created Universe arc with ${fictionalConns.length} movies`);
     }
 
-    // Filter out Fictional Locations from regular solar connections
+    // Filter out Universe from regular solar connections
     const regularSolarConns = solarConnections.filter(c =>
-      c.to !== "Fictional Locations" && c.from !== "Fictional Locations"
+      c.to !== "Universe" && c.from !== "Universe"
     );
 
-    // Create flight paths between Earth and destinations (excluding Fictional Locations)
+    // Create flight paths between Earth and destinations (excluding Universe)
     regularSolarConns.forEach((conn) => {
       const fromLower = conn.from.toLowerCase();
       const toLower = conn.to.toLowerCase();
