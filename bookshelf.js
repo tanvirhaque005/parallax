@@ -497,8 +497,15 @@ const WHEEL_PUSH = 0.0004;   // how strongly scroll pushes the shelf
 let shelfOffset = 0;
 let targetShelfOffset = 0;
 
-const MAX_SCROLL_LEFT = 95;
-const MAX_SCROLL_RIGHT = -95;
+// Calculate scroll limits based on actual book positions
+// Books are positioned from startX (first book, negative) to -startX (last book, positive)
+// To center a book at position bookX, we need: shelfOffset = -bookX
+// To center the first book (at startX): shelfOffset = -startX (positive value)
+// To center the last book (at -startX): shelfOffset = -(-startX) = startX (negative value)
+// Add some padding to allow scrolling beyond the edges
+const SCROLL_PADDING = 2; // Extra space beyond first/last book
+const MAX_SCROLL_LEFT = -startX + SCROLL_PADDING;  // Can scroll right to show first book centered (positive offset)
+const MAX_SCROLL_RIGHT = startX - SCROLL_PADDING;  // Can scroll left to show last book centered (negative offset)
 
 const scrollLeftBtn = document.getElementById('scrollLeft');
 const scrollRightBtn = document.getElementById('scrollRight');
@@ -817,12 +824,43 @@ function rebuildOverlayForIndex() {
   const tags = meta.tropes.slice(0,NUM_MOTIFS) || [];
   pillContainer.innerHTML = tags.map(t => `<span class="tag-pill">${t}</span>`).join('');
 
-  motifsContainer.innerHTML = tags.map(t => `
-    <div class="motif-circle" data-motif="${t}"
-         onclick="location.href='/chordGraph.html'">
-      ${t}
-    </div>
-  `).join('');
+  // Map trope names to image filenames
+  const tropeToImageMap = {
+    'AI': 'Artificial_Intelligence.png',
+    'Artificial Intelligence': 'Artificial_Intelligence.png',
+    'Consciousness': 'Consiousness.png', // Note: filename has typo
+    'Free Will': 'Free Will.png',
+    'Social Control': 'Social Control.png',
+    'Evolution': 'Evolution.png',
+    'Evolution/Genetic Engineering': 'Evolution.png',
+    'Space': 'Space Travel.png',
+    'Space Travel': 'Space Travel.png',
+    'Space-travel': 'Space Travel.png',
+    'Robotics': 'Robotics.png',
+    'Surveillance': 'Surveillance.png',
+    'Transcendence': 'Transcendence.png',
+    'Class Struggle': 'Class Struggle.png'
+  };
+
+  motifsContainer.innerHTML = tags.map(t => {
+    const imageName = tropeToImageMap[t] || null;
+    if (imageName) {
+      return `
+        <div class="motif-circle" data-motif="${t}"
+             onclick="location.href='/chordGraph.html'">
+          <img src="node-images/${imageName}" alt="${t}" class="motif-image" />
+        </div>
+      `;
+    } else {
+      // Fallback to text if no image found
+      return `
+        <div class="motif-circle" data-motif="${t}"
+             onclick="location.href='/chordGraph.html'">
+          ${t}
+        </div>
+      `;
+    }
+  }).join('');
 
   if (overlayBook) overlayScene.remove(overlayBook);
   const coverFile = `/postersID/${meta.id}.jpg`;

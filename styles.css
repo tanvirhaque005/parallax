@@ -517,6 +517,14 @@ html, body {
   transform: scale(1.05);
 }
 
+.motif-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
 .motif-circle.highlighted::after {
   content: '';
   position: absolute;
