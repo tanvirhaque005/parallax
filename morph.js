@@ -187,7 +187,7 @@ const earthMesh = new THREE.Mesh(geometry, material);
 scene.add(earthMesh);
 
 // ==========================================================
-// LOAD WORLD MAP IMAGE (MORPHV2 - USING World Map.svg)
+// LOAD WORLD MAP IMAGE (MORPH - USING World Map.svg)
 // ==========================================================
 async function renderWorldMapImage() {
   return new Promise((resolve, reject) => {

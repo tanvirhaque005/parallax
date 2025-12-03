@@ -1019,20 +1019,7 @@ animate();
    AUTO-OPEN FROM URL
 ----------------------------------------------------------- */
 window.addEventListener('DOMContentLoaded', () => {
-  const params = new URLSearchParams(window.location.search);
-  const title = params.get('movie');
-
   showDefaultIntro();
-
-
-  if (title) {
-    const movieIndex = booksMeta.findIndex(m => m.title === title);
-    if (movieIndex !== -1) {
-      setTimeout(() => openOverlayForIndex(movieIndex), 500);
-    } else {
-      window.location.href = `/infoPage.html?movie=${encodeURIComponent(title)}`;
-    }
-  }
 });
 
 

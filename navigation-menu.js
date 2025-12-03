@@ -14,7 +14,6 @@
     'parallel.html': 3,
     'morph.html': 4,
     'reflectionPage.html': 5,
-    'landingPage.html': 0
   };
 
   // Menu items configuration
@@ -34,7 +33,7 @@
     if (!menuContainer) return;
 
     // Get current page
-    const currentPage = window.location.pathname.split('/').pop() || 'landingPage.html';
+    const currentPage = window.location.pathname.split('/').pop() || 'aboutPage.html';
     const currentIndex = pageMap[currentPage] !== undefined ? pageMap[currentPage] : -1;
 
     // Create white progress line
