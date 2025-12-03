@@ -380,384 +380,384 @@
       text-transform: capitalize;
       z-index: 1 !important;
     }
-/* MAIN TIMELINE BAR */
-#timelineBar {
-  position: fixed;
-  bottom: 175px;
-  left: 50%;
-  transform: translateX(-50%);
+    /* MAIN TIMELINE BAR */
+    #timelineBar {
+      position: fixed;
+      bottom: 175px;
+      left: 50%;
+      transform: translateX(-50%);
 
-  display: flex;
-  align-items: center;
-  gap: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
 
-  background: none;
-  padding: 0;
-  border-radius: 0;
+      background: none;
+      padding: 0;
+      border-radius: 0;
 
-  color: white;
-  font-family: 'IBM Plex Sans', sans-serif;
+      color: white;
+      font-family: 'IBM Plex Sans', sans-serif;
 
-  z-index: 100;
-}
+      z-index: 100;
+    }
 
-/* SMALL UPPER LABEL */
-#timelineLabel {
-  font-size: 12px;
-  color: #666666;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
+    /* SMALL UPPER LABEL */
+    #timelineLabel {
+      font-size: 12px;
+      color: #666666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
 
-/* CURRENT DECADE VALUE */
-#decadeValue {
-  font-size: 18px;
-  font-weight: 600;
-  color: #ffffff !important;
-  text-align: center;
-  min-width: 100px;
-  padding: 12px 20px;
-  background: rgba(255, 255, 255, 0.287);
-  backdrop-filter: blur(8px);
-  border-radius: 18px;
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  font-family: 'Inter', sans-serif;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-  display: none; /* Hide the middle counter */
-}
+    /* CURRENT DECADE VALUE */
+    #decadeValue {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffffff !important;
+      text-align: center;
+      min-width: 100px;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.287);
+      backdrop-filter: blur(8px);
+      border-radius: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      font-family: 'Inter', sans-serif;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      display: none; /* Hide the middle counter */
+    }
 
-/* TRACK — now a visible flat dark bar */
-#timelineTrack {
-  width: 420px;
-  height: 10px;
+    /* TRACK — now a visible flat dark bar */
+    #timelineTrack {
+      width: 420px;
+      height: 10px;
 
-  background: #333333;     /* <— brings back visible track */
-  border-radius: 4px;
+      background: #333333;     /* <— brings back visible track */
+      border-radius: 4px;
 
-  position: relative;
-  cursor: none !important;
-  display: none;
-}
+      position: relative;
+      cursor: none !important;
+      display: none;
+    }
 
-/* DRAGGABLE HANDLE — visible circle again */
-#timelineHandle {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
+    /* DRAGGABLE HANDLE — visible circle again */
+    #timelineHandle {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
 
-  width: 18px;
-  height: 18px;
+      width: 18px;
+      height: 18px;
 
-  border-radius: 50%;
-  background: #ffffff;
+      border-radius: 50%;
+      background: #ffffff;
 
-  cursor: grab;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      cursor: grab;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 
-  left: 0%;   /* JS updates this */
-  transition: background 0.2s;
-  display: none;
-}
+      left: 0%;   /* JS updates this */
+      transition: background 0.2s;
+      display: none;
+    }
 
-#timelineHandle:active {
-  cursor: grabbing;
-}
+    #timelineHandle:active {
+      cursor: grabbing;
+    }
 
-/* Optional: active state color */
-#timelineHandle.active {
-  background: #eaeaea;
-}
+    /* Optional: active state color */
+    #timelineHandle.active {
+      background: #eaeaea;
+    }
 
-/* Top-left horizontal bars — thicker + lower on the page */
-#bookBars {
-  position: fixed;
-  bottom: 48px;
-  left: 60px;
-  height: 60px;
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  z-index: 2;        /* ← VERY IMPORTANT */
-  pointer-events: auto;   /* ← ensure clicks reach the bars */
-}
+    /* Top-left horizontal bars — thicker + lower on the page */
+    #bookBars {
+      position: fixed;
+      bottom: 48px;
+      left: 60px;
+      height: 60px;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      z-index: 2;        /* ← VERY IMPORTANT */
+      pointer-events: auto;   /* ← ensure clicks reach the bars */
+    }
 
-#bookBars:hover {
-  cursor: none;
-}
+    #bookBars:hover {
+      cursor: none;
+    }
 
-.book-bar.hovered {
-  background: rgba(255,255,255,1);
-  opacity: 1;
-}
-
-
-#bookBars::before {
-  content: "";
-  position: absolute;
-  inset: -20px 0;
-  pointer-events: none;   /* ← FIX */
-}
+    .book-bar.hovered {
+      background: rgba(255,255,255,1);
+      opacity: 1;
+    }
 
 
+    #bookBars::before {
+      content: "";
+      position: absolute;
+      inset: -20px 0;
+      pointer-events: none;   /* ← FIX */
+    }
 
 
-.book-bar {
-  width: 8px;
-  height: 28px;
-  background: rgba(255, 255, 255, 0.45);
-  border-radius: 2px;
-  pointer-events: auto;
-  transition:
-    height 0.35s ease,
-    transform 0.35s ease,
-    opacity 0.25s ease,
-    background 0.25s ease;
-}
-
-.book-bar.active {
-  background: rgba(255, 255, 255, 1);
-  /* transform: scale(1.15); */
-}
 
 
-#barDateDisplay {
-  position: fixed;
-  top: 90px;            /* adjust as you want */
-  left: 24px;
-  color: #ffffff;
-  font-family: 'Courier New', monospace;
-  font-size: 14px;
-  opacity: 0.85;
-  letter-spacing: 1px;
-  z-index: 999999;      /* always visible */
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
+    .book-bar {
+      width: 8px;
+      height: 28px;
+      background: rgba(255, 255, 255, 0.45);
+      border-radius: 2px;
+      pointer-events: auto;
+      transition:
+        height 0.35s ease,
+        transform 0.35s ease,
+        opacity 0.25s ease,
+        background 0.25s ease;
+    }
 
-.barDateLabel {
-  position: fixed;
-  color: #ffffff;
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-  letter-spacing: 1px;
-  pointer-events: none;
-  opacity: 0;
-  transform: translate(-50%, -8px); /* centered above bar */
-  z-index: 999999;
-  transition: opacity 0.15s ease, top 0.1s ease, left 0.1s ease;
-}
+    .book-bar.active {
+      background: rgba(255, 255, 255, 1);
+      /* transform: scale(1.15); */
+    }
 
-/* Text Overlay Styles */
-#textOverlay {
-  position: fixed;
-  bottom: 330px;
-  left: 60px;
-  max-width: 800px;
-  pointer-events: none;
-  z-index: 100;
-}
 
-.zoom-text {
-  opacity: 0;
-  transition: opacity 0.6s ease-in-out;
-  position: relative;
-  padding: 0;
-}
+    #barDateDisplay {
+      position: fixed;
+      top: 90px;            /* adjust as you want */
+      left: 24px;
+      color: #ffffff;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      opacity: 0.85;
+      letter-spacing: 1px;
+      z-index: 999999;      /* always visible */
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
 
-.zoom-text.active {
-  opacity: 1;
-}
+    .barDateLabel {
+      position: fixed;
+      color: #ffffff;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      letter-spacing: 1px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -8px); /* centered above bar */
+      z-index: 999999;
+      transition: opacity 0.15s ease, top 0.1s ease, left 0.1s ease;
+    }
 
-.main-title {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 64px;
-  font-weight: 300;
-  color: #ffffff;
-  margin: 0 0 20px 0;
-  line-height: 1.1;
-  letter-spacing: -1px;
-  white-space: nowrap;
-}
+    /* Text Overlay Styles */
+    #textOverlay {
+      position: fixed;
+      bottom: 330px;
+      left: 60px;
+      max-width: 800px;
+      pointer-events: none;
+      z-index: 100;
+    }
 
-.description {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 18px;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.6;
-  margin: 0;
-  max-width: 700px;
-}
+    .zoom-text {
+      opacity: 0;
+      transition: opacity 0.6s ease-in-out;
+      position: relative;
+      padding: 0;
+    }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  #textOverlay {
-    bottom: 80px;
-    left: 30px;
-    right: 30px;
-    max-width: none;
-  }
+    .zoom-text.active {
+      opacity: 1;
+    }
 
-  .main-title {
-    font-size: 42px;
-  }
+    .main-title {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 64px;
+      font-weight: 300;
+      color: #ffffff;
+      margin: 0 0 20px 0;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      white-space: nowrap;
+    }
 
-  .description {
-    font-size: 16px;
-  }
-}
+    .description {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 18px;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.6;
+      margin: 0;
+      max-width: 700px;
+    }
 
-/* Movie Hover Card */
-#movieHoverCard {
-  position: fixed;
-  top: 0;
-  left: 0;
-  max-width: 400px;
-  max-height: 80vh;
-  padding: 22px 26px;
-  background: rgba(255, 255, 255, 0.287);
-  backdrop-filter: blur(8px);
-  border-radius: 18px;
-  border: 2px solid rgba(255,255,255,0.15);
-  color: white;
-  font-family: "Inter", sans-serif;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.20s ease;
-  z-index: 999999;
-  overflow: hidden;
-  cursor: auto;
-}
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      #textOverlay {
+        bottom: 80px;
+        left: 30px;
+        right: 30px;
+        max-width: none;
+      }
 
-#movieHoverCard h2 {
-  margin: 0 0 12px 0;
-  font-size: 22px;
-  line-height: 1.25;
-  font-weight: 600;
-}
+      .main-title {
+        font-size: 42px;
+      }
 
-.movieHoverDivider {
-  width: 100%;
-  height: 1px;
-  background: rgba(251, 251, 251, 0.555);
-  margin: 12px 0;
-}
+      .description {
+        font-size: 16px;
+      }
+    }
 
-#movieHoverContent {
-  max-height: calc(80vh - 120px);
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-right: 4px;
-}
+    /* Movie Hover Card */
+    #movieHoverCard {
+      position: fixed;
+      top: 0;
+      left: 0;
+      max-width: 400px;
+      max-height: 80vh;
+      padding: 22px 26px;
+      background: rgba(255, 255, 255, 0.287);
+      backdrop-filter: blur(8px);
+      border-radius: 18px;
+      border: 2px solid rgba(255,255,255,0.15);
+      color: white;
+      font-family: "Inter", sans-serif;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.20s ease;
+      z-index: 999999;
+      overflow: hidden;
+      cursor: auto;
+    }
 
-#movieHoverContent::-webkit-scrollbar {
-  width: 6px;
-}
+    #movieHoverCard h2 {
+      margin: 0 0 12px 0;
+      font-size: 22px;
+      line-height: 1.25;
+      font-weight: 600;
+    }
 
-#movieHoverContent::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-}
+    .movieHoverDivider {
+      width: 100%;
+      height: 1px;
+      background: rgba(251, 251, 251, 0.555);
+      margin: 12px 0;
+    }
 
-#movieHoverContent::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
-}
+    #movieHoverContent {
+      max-height: calc(80vh - 120px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 4px;
+    }
 
-#movieHoverContent::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
+    #movieHoverContent::-webkit-scrollbar {
+      width: 6px;
+    }
 
-.movieHoverRow {
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  align-items: flex-start;
-  margin-bottom: 20px;
-}
+    #movieHoverContent::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
 
-.movieHoverRow:last-child {
-  margin-bottom: 0;
-}
+    #movieHoverContent::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 3px;
+    }
 
-.movieHoverPoster {
-  width: 120px;
-  height: 170px;
-  object-fit: cover;
-  border-radius: 6px;
-  flex-shrink: 0;
-}
+    #movieHoverContent::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
 
-.movieHoverDetails {
-  font-size: 14px;
-  line-height: 1.6;
-  color: rgba(255,255,255,0.9);
-  flex: 1;
-}
+    .movieHoverRow {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
 
-.movieHoverDetails strong {
-  color: rgba(255,255,255,1);
-  font-weight: 600;
-}
+    .movieHoverRow:last-child {
+      margin-bottom: 0;
+    }
 
-/* Gradient Legend */
-#gradientLegend {
-  position: fixed;
-  bottom: 600px;
-  left: 60px;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  pointer-events: none;
-}
+    .movieHoverPoster {
+      width: 120px;
+      height: 170px;
+      object-fit: cover;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
 
-.legend-line {
-  width: 120px;
-  height: 4px;
-  background: linear-gradient(to right, rgb(179, 77, 255), rgb(0, 204, 204));
-  border-radius: 2px;
-  box-shadow: 0 0 8px rgba(179, 77, 255, 0.3);
-}
+    .movieHoverDetails {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.9);
+      flex: 1;
+    }
 
-.legend-labels {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+    .movieHoverDetails strong {
+      color: rgba(255,255,255,1);
+      font-weight: 600;
+    }
 
-.legend-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+    /* Gradient Legend */
+    #gradientLegend {
+      position: fixed;
+      bottom: 600px;
+      left: 60px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      pointer-events: none;
+    }
 
-.legend-color {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
+    .legend-line {
+      width: 120px;
+      height: 4px;
+      background: linear-gradient(to right, rgb(179, 77, 255), rgb(0, 204, 204));
+      border-radius: 2px;
+      box-shadow: 0 0 8px rgba(179, 77, 255, 0.3);
+    }
 
-.purple-dot {
-  background: rgb(179, 77, 255);
-  box-shadow: 0 0 6px rgba(179, 77, 255, 0.5);
-}
+    .legend-labels {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-.teal-dot {
-  background: rgb(0, 204, 204);
-  box-shadow: 0 0 6px rgba(0, 204, 204, 0.5);
-}
+    .legend-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-.legend-text {
-  font-family: 'Courier New', monospace;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.75);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
+    .legend-color {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .purple-dot {
+      background: rgb(179, 77, 255);
+      box-shadow: 0 0 6px rgba(179, 77, 255, 0.5);
+    }
+
+    .teal-dot {
+      background: rgb(0, 204, 204);
+      box-shadow: 0 0 6px rgba(0, 204, 204, 0.5);
+    }
+
+    .legend-text {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
 
     .back-link {
       display: flex;
@@ -984,34 +984,34 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
-.page-footer {
-    position: fixed;
-    bottom: 5px;
-    left: 0;
-    right: 0;
-    padding: 0 40px;
+    .page-footer {
+        position: fixed;
+        bottom: 5px;
+        left: 0;
+        right: 0;
+        padding: 0 40px;
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 14px;
-    color: rgba(255,255,255,0.65);
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 14px;
+        color: rgba(255,255,255,0.65);
 
-    z-index: 99999;
-    pointer-events: none;
-}
+        z-index: 99999;
+        pointer-events: none;
+    }
 
-  .page-footer {
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 14px;
-    color: rgba(255,255,255,0.65);
-  }
+    .page-footer {
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+    }
   </style>
   <link rel="stylesheet" href="mapIntroMessage.css">
 </head>
@@ -1029,10 +1029,6 @@
     <div class="page-slide active intro-page" id="introPage">
       <div class="intro-panel">
         <div class="intro-category">WORLD BUILDING MAP</div>
-        <!-- <h1 class="intro-title">Where did the future take us?</h1> -->
-         <!-- <h1 class="intro-title">Where did the future take us?</h1>
-        <p class="intro-description">Sci-fi worlds often begin in the real, physical places where cameras roll. But the stories they create leap far beyond those locations—into imagined cities, reinterpreted geographies, and entirely new planets.
-          This map traces those leaps, showing how far filmmakers stretched reality to build their futures.</p> -->
           <h1 class="intro-title">Depicted Settings vs Real Locations</h1>
           <p class="intro-description">You will see how attitudes to science fiction films change as time progresses and sci-fi evolves. While distant worlds used to be depicted for escapism or hope, in recent times, faraway places are used to mirror domestic issues.</p>
   
@@ -1052,9 +1048,6 @@
  
 
   <!-- Navigation Buttons -->
-  <!-- <div class="nav-buttons">
-    <a href="reflectionPage.html" class="nav-btn" id="nextBtn">Next →</a>
-  </div> -->
 
   <div id="flightPathTooltip"></div>
 
@@ -1081,7 +1074,6 @@
   </div>
 
   <div id="timelineBar">
-    <!-- <div id="timelineLabel">Decade Filter</div> -->
     <div id="decadeValue"></div>
     <div id="timelineTrack">
       <div id="timelineHandle"></div>
@@ -1089,7 +1081,6 @@
   </div>
 
   <div id="bookBars"></div>
-  <!-- <div id="barDateDisplay"></div> -->
   <div id="hoverBarDate" class="barDateLabel"></div>
   <div id="activeBarDate" class="barDateLabel"></div>
 
@@ -1373,16 +1364,6 @@
     let currentPage = 0;
     const pages = document.querySelectorAll('.page-slide');
     const enterMapBtn = document.getElementById('enterMapBtn');
-    // const navMenu = document.getElementById('navigationMenu');
-    
-
-// const styles = window.getComputedStyle(navMenu);
-
-// console.log(styles);
-// console.log(styles.backgroundColor);
-// console.log(styles.fontSize);
-
-
 
     function updatePages() {
       pages.forEach((page, index) => {
@@ -1391,7 +1372,6 @@
           page.classList.add('active');
           // Show navigation menu only on map page
           if (index === 1) {
-            // if (navMenu) navMenu.style.display = '';
             // Show pie chart on map page
             const pieChartContainer = document.getElementById('pieChartContainer');
             if (pieChartContainer) pieChartContainer.style.opacity = '1';

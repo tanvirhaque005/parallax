@@ -20,7 +20,7 @@ import * as THREE from 'https://unpkg.com/three@0.164.0/build/three.module.js';
   
 // ];
 
-import booksMeta from "./movies_data_for_shelf.js"; // note this is sorted (id is sorted based on release yr)
+import booksMeta from "./movies_data_for_shelf.js";
 console.log(booksMeta)
 
 /* -----------------------------------------------------------
@@ -28,7 +28,6 @@ console.log(booksMeta)
 ----------------------------------------------------------- */
 let currentView = 'list'; // 'list' or 'grid'
 
-// Group books by decade
 function groupBooksByDecade(books) {
   const grouped = {};
   books.forEach(book => {
@@ -44,7 +43,6 @@ function groupBooksByDecade(books) {
     grouped[decadeKey].push(book);
   });
   
-  // Sort decades numerically
   const sortedDecades = Object.keys(grouped).sort((a, b) => {
     const decadeA = parseInt(a.replace('s', ''));
     const decadeB = parseInt(b.replace('s', ''));
@@ -54,7 +52,6 @@ function groupBooksByDecade(books) {
   return { grouped, sortedDecades };
 }
 
-// Render grid view
 function renderGridView() {
   const gridContent = document.getElementById('gridContent');
   if (!gridContent) return;
@@ -102,13 +99,11 @@ function renderGridView() {
       movieCard.appendChild(coverImg);
       movieCard.appendChild(titleOverlay);
       
-      // Click handler to open book details
       movieCard.addEventListener('click', () => {
         const bookIndex = booksMeta.findIndex(b => b.id === book.id);
         if (bookIndex !== -1) {
-          // Switch back to list view and open the book
           switchView('list');
-          // Wait a moment for the view to switch, then open the book
+          // Wait for view to switch before opening book
           setTimeout(() => {
             openOverlayForIndex(bookIndex);
           }, 100);
@@ -123,7 +118,6 @@ function renderGridView() {
   });
 }
 
-// Switch between list and grid views
 function switchView(view) {
   currentView = view;
   const gridView = document.getElementById('gridView');
@@ -132,12 +126,10 @@ function switchView(view) {
   const bookinfo = document.getElementById('bookinfo');
   
   if (view === 'grid') {
-    // Close any open book overlay
     if (bookinfo && bookinfo.classList.contains('open')) {
       closeOverlay();
     }
     
-    // Hide 3D bookshelf
     baseCanvas.style.display = 'none';
     overlayCanvas.style.display = 'none';
     const bookBars = document.getElementById('bookBars');
@@ -147,27 +139,22 @@ function switchView(view) {
     const introMessage = document.getElementById('introMessageDefault');
     if (introMessage) introMessage.style.display = 'none';
     
-    // Hide scroll buttons in grid view
     if (scrollLeftBtn) scrollLeftBtn.style.display = 'none';
     if (scrollRightBtn) scrollRightBtn.style.display = 'none';
     
-    // Show grid view and enable scrolling
     if (gridView) {
       gridView.style.display = 'block';
-      document.body.style.overflow = 'hidden'; // Prevent body scroll
+      document.body.style.overflow = 'hidden';
       renderGridView();
       
-      // Trigger typing animation for grid view header
       setTimeout(() => {
         const headerIcon = document.querySelector('#gridViewHeader .intro-icon');
         const headerTitle = document.querySelector('#gridViewHeader .intro-text');
         if (headerIcon && headerTitle) {
-          // Reset animation
           headerIcon.style.animation = 'none';
           setTimeout(() => {
             headerIcon.style.animation = '';
           }, 10);
-          // Start typing animation
           setTimeout(() => {
             typeTextForGrid(headerTitle, 'Click any movie cover to step inside its world.', 30);
           }, 600);
@@ -175,16 +162,13 @@ function switchView(view) {
       }, 100);
     }
     
-    // Update button states
     if (listViewBtn) listViewBtn.classList.remove('active');
     if (gridViewBtn) gridViewBtn.classList.add('active');
   } else {
-    // Close any open book overlay first
     if (bookinfo && bookinfo.classList.contains('open')) {
       closeOverlay();
     }
     
-    // Reset book states - ensure no book is presented
     if (activeBook) {
       activeBook.isPresented = false;
       activeBook.targetRotY = Math.PI / 2;
@@ -192,7 +176,6 @@ function switchView(view) {
       activeBook.mesh.visible = true;
     }
     
-    // Reset all books to default state
     books.forEach(b => {
       b.isPresented = false;
       b.targetRotY = Math.PI / 2;
@@ -200,14 +183,11 @@ function switchView(view) {
       b.mesh.visible = true;
     });
     
-    // Reset current index
     currentIndex = -1;
     activeBook = null;
     
-    // Hide overlay canvas
     overlayCanvas.style.display = 'none';
     
-    // Show 3D bookshelf
     baseCanvas.style.display = 'block';
     const bookBars = document.getElementById('bookBars');
     if (bookBars) bookBars.style.display = 'flex';
@@ -216,14 +196,11 @@ function switchView(view) {
     const introMessage = document.getElementById('introMessageDefault');
     if (introMessage) introMessage.style.display = 'block';
     
-    // Hide grid view and restore body scroll
     if (gridView) gridView.style.display = 'none';
-    document.body.style.overflow = 'hidden'; // Keep body scroll hidden for 3D view
+    document.body.style.overflow = 'hidden';
     
-    // Show scroll buttons in list view (but hide if overlay is open)
     updateScrollButtons();
     
-    // Update button states
     if (listViewBtn) listViewBtn.classList.add('active');
     if (gridViewBtn) gridViewBtn.classList.remove('active');
   }
@@ -547,19 +524,18 @@ if (document.readyState === 'loading') {
 if (scrollLeftBtn) {
   scrollLeftBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    e.stopPropagation(); // Prevent mousedown handler from interfering
-    console.log('Left button clicked, current offset:', targetShelfOffset); // Debug
+    e.stopPropagation();
+    console.log('Left button clicked, current offset:', targetShelfOffset);
     if (!introDismissed) {
       dismissIntroPanel();
     }
     if (targetShelfOffset < MAX_SCROLL_LEFT) {
       targetShelfOffset += 2.5;
-      console.log('New offset:', targetShelfOffset); // Debug
+      console.log('New offset:', targetShelfOffset);
       updateScrollButtons();
     }
-  }, true); // Use capture phase to ensure it fires
+  }, true);
   
-  // Also add mousedown handler to ensure it works
   scrollLeftBtn.addEventListener('mousedown', (e) => {
     e.stopPropagation();
   }, true);
@@ -569,16 +545,16 @@ if (scrollRightBtn) {
   scrollRightBtn.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation(); // Prevent mousedown handler from interfering
-    console.log('Right button clicked, current offset:', targetShelfOffset); // Debug
+    console.log('Right button clicked, current offset:', targetShelfOffset);
     if (!introDismissed) {
       dismissIntroPanel();
     }
     if (targetShelfOffset > MAX_SCROLL_RIGHT) {
       targetShelfOffset -= 2.5;
-      console.log('New offset:', targetShelfOffset); // Debug
+      console.log('New offset:', targetShelfOffset);
       updateScrollButtons();
     }
-  }, true); // Use capture phase to ensure it fires
+  }, true);
   
   // Also add mousedown handler to ensure it works
   scrollRightBtn.addEventListener('mousedown', (e) => {

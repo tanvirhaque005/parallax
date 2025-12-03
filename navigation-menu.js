@@ -8,7 +8,7 @@
 
   // Page mapping - maps file names to menu item indices
   const pageMap = {
-    'aboutPage.html': 0,
+    'index.html': 0,
     'bookshelf.html': 1,
     'chordGraph.html': 2,
     'parallel.html': 3,
@@ -19,7 +19,7 @@
 
   // Menu items configuration
   const menuItems = [
-    { text: 'Introduction', href: 'aboutPage.html' },
+    { text: 'Introduction', href: 'index.html' },
     { text: 'Library', href: 'bookshelf.html' },
     { text: 'Trope Network', href: 'chordGraph.html' },
     { text: 'Depicted vs Reality', href: 'parallel.html' },
@@ -33,15 +33,12 @@
 
     if (!menuContainer) return;
 
-    // Get current page
     const currentPage = window.location.pathname.split('/').pop() || 'landingPage.html';
     const currentIndex = pageMap[currentPage] !== undefined ? pageMap[currentPage] : -1;
 
-    // Create white progress line
     const progressLine = document.createElement('div');
     progressLine.className = 'nav-progress-line';
     
-    // Create blue square indicator
     const progressDot = document.createElement('div');
     progressDot.className = 'nav-progress-dot';
     progressDot.dataset.currentIndex = currentIndex;
@@ -52,7 +49,6 @@
     
     progressLine.appendChild(progressDot);
     
-    // Create menu items
     const menuItemsList = document.createElement('ul');
     menuItemsList.className = 'nav-menu-items';
     
@@ -74,28 +70,27 @@
     });
 
     
-    // Append to container
     menuContainer.appendChild(progressLine);
     menuContainer.appendChild(menuItemsList);
     requestAnimationFrame(() => menuContainer.updateLineHeightAndDot());
-setTimeout(() => menuContainer.updateLineHeightAndDot(), 200);
+    setTimeout(() => menuContainer.updateLineHeightAndDot(), 200);
 
 
-    // Initial positioning (frame 1)
-requestAnimationFrame(() => {
-  menuContainer.updateLineHeightAndDot();
-});
+        // Initial positioning (frame 1)
+    requestAnimationFrame(() => {
+      menuContainer.updateLineHeightAndDot();
+    });
 
-// Frame 2 (after layout settles)
-requestAnimationFrame(() => {
-  requestAnimationFrame(() => {
-    menuContainer.updateLineHeightAndDot();
-  });
-});
+    // Frame 2 (after layout settles)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        menuContainer.updateLineHeightAndDot();
+      });
+    });
 
-// Extra safety for pages with heavy JS layout shifts (parallel/morph)
-setTimeout(() => menuContainer.updateLineHeightAndDot(), 300);
-setTimeout(() => menuContainer.updateLineHeightAndDot(), 800);
+    // Extra safety for pages with heavy JS layout shifts (parallel/morph)
+    setTimeout(() => menuContainer.updateLineHeightAndDot(), 300);
+    setTimeout(() => menuContainer.updateLineHeightAndDot(), 800);
 
 
     requestAnimationFrame(() => {
@@ -106,7 +101,6 @@ setTimeout(() => menuContainer.updateLineHeightAndDot(), 800);
     }, 50);
     
     
-    // Set initial state - menu should be visible on page load
     menuContainer.classList.remove('collapsed');
     const items = menuContainer.querySelectorAll('.nav-menu-item');
     const menuItemsEl = menuContainer.querySelector('.nav-menu-items');
@@ -120,7 +114,6 @@ setTimeout(() => menuContainer.updateLineHeightAndDot(), 800);
       menuItemsEl.style.pointerEvents = 'auto';
     }
     
-    // Set items to visible state immediately
     items.forEach((item) => {
       item.style.opacity = '1';
       item.style.transform = 'translateX(0)';
@@ -128,66 +121,6 @@ setTimeout(() => menuContainer.updateLineHeightAndDot(), 800);
       item.style.pointerEvents = 'auto';
     });
     
-    // Set line height IMMEDIATELY - calculate and set synchronously before first paint
-    // Calculate height synchronously after items are in DOM
-    // if (progressLine && menuItemsList) {
-    //   // Disable transitions FIRST to prevent any animation
-    //   progressLine.style.transition = 'none';
-      
-    //   // Ensure items are fully visible and laid out
-    //   menuItemsList.style.opacity = '1';
-    //   menuItemsList.style.transform = 'translateX(0)';
-    //   menuItemsList.style.width = 'auto';
-    //   menuItemsList.style.overflow = 'visible';
-    //   menuItemsList.style.pointerEvents = 'auto';
-      
-    //   // Force reflow to ensure layout is calculated
-    //   void menuItemsList.offsetHeight;
-      
-    //   // Calculate height immediately in one synchronous operation
-    //   let itemsHeight = menuItemsList.offsetHeight;
-      
-    //   // If height is still 0 or too small, calculate from individual items
-    //   if (itemsHeight <= 0 || itemsHeight < 100) {
-    //     let totalHeight = 0;
-    //     items.forEach((item) => {
-    //       const itemRect = item.getBoundingClientRect();
-    //       totalHeight += itemRect.height;
-    //     });
-    //     // Add gap between items (6px per gap, n-1 gaps for n items)
-    //     const gap = 6;
-    //     totalHeight += (items.length - 1) * gap;
-    //     if (totalHeight > 0) {
-    //       itemsHeight = totalHeight;
-    //     }
-    //   }
-      
-    //   // Set height IMMEDIATELY to calculated value - all in one operation
-    //   // This ensures the line is always at full size from the very first render
-    //   if (itemsHeight > 0) {
-    //     // Set height with !important to override any CSS
-    //     progressLine.style.setProperty('height', `${itemsHeight}px`, 'important');
-    //     progressLine.style.setProperty('min-height', `${itemsHeight}px`, 'important');
-    //     // Also set it as a regular style property
-    //     progressLine.style.height = `${itemsHeight}px`;
-    //     progressLine.style.minHeight = `${itemsHeight}px`;
-    //     // Force multiple reflows to ensure it's applied before paint
-    //     void progressLine.offsetHeight;
-    //     void progressLine.offsetWidth;
-    //     void progressLine.offsetHeight;
-    //     // Store the height so we can reference it later
-    //     progressLine.dataset.fullHeight = `${itemsHeight}px`;
-    //   }
-      
-    //   progressLine.style.transform = 'translateX(0)';
-    //   progressLine.style.opacity = '1';
-    //   progressLine.style.transition = 'none'; // No transition on initial load
-      
-    //   // Re-enable transition after a delay to prevent glitches
-    //   setTimeout(() => {
-    //     progressLine.style.transition = '';
-    //   }, 300);
-    // }
     
     // Re-enable transitions after a brief delay
     setTimeout(() => {
@@ -330,28 +263,28 @@ setTimeout(() => menuContainer.updateLineHeightAndDot(), 800);
     // Store update function for use when menu expands
     // menuContainer.updateLineHeightAndDot = updateLineHeightAndDot;
     // Disable all dynamic height calculations
-// menuContainer.updateLineHeightAndDot = function () {};
-// Keep static height but allow dot placement
-// Correct dot positioning (keeps static 150px height)
-menuContainer.updateLineHeightAndDot = function () {
-  const active = menuContainer.querySelector('.nav-menu-item.active');
-  const dot = menuContainer.querySelector('.nav-progress-dot');
-  const line = menuContainer.querySelector('.nav-progress-line');
+    // menuContainer.updateLineHeightAndDot = function () {};
+    // Keep static height but allow dot placement
+    // Correct dot positioning (keeps static 150px height)
+    menuContainer.updateLineHeightAndDot = function () {
+      const active = menuContainer.querySelector('.nav-menu-item.active');
+      const dot = menuContainer.querySelector('.nav-progress-dot');
+      const line = menuContainer.querySelector('.nav-progress-line');
 
-  if (!active || !dot || !line) return;
+      if (!active || !dot || !line) return;
 
-  const link = active.querySelector('a');
-  const rect = link.getBoundingClientRect();
-  const lineRect = line.getBoundingClientRect();
+      const link = active.querySelector('a');
+      const rect = link.getBoundingClientRect();
+      const lineRect = line.getBoundingClientRect();
 
-  // vertical center of active item
-  const linkCenterY = rect.top + rect.height / 2;
-  const relative = ((linkCenterY - lineRect.top) / lineRect.height) * 100;
+      // vertical center of active item
+      const linkCenterY = rect.top + rect.height / 2;
+      const relative = ((linkCenterY - lineRect.top) / lineRect.height) * 100;
 
-  dot.style.top = `${relative}%`;
-  dot.style.opacity = '1';
-  dot.style.visibility = 'visible';
-};
+      dot.style.top = `${relative}%`;
+      dot.style.opacity = '1';
+      dot.style.visibility = 'visible';
+    };
 
 
     

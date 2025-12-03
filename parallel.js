@@ -121,14 +121,9 @@ function detectCenterWindow() {
     const screenCenter = window.innerWidth / 2;
     const centerX = worldX + screenCenter;
     
-    // Convert center X position to year
     const centerYear = xToYear(centerX);
-    
-    // Find which 5-year window this year belongs to
-    // Clamp to valid range
     const clampedYear = Math.max(START_YEAR, Math.min(END_YEAR, centerYear));
     
-    // Find the window start that contains this year
     let detectedWindowStart = null;
     for (const windowStart of windowStarts) {
         if (clampedYear >= windowStart && clampedYear < windowStart + WINDOW_SIZE) {
@@ -137,9 +132,7 @@ function detectCenterWindow() {
         }
     }
     
-    // If no window found (shouldn't happen), use the closest one
     if (detectedWindowStart === null) {
-        // Find closest window start
         let minDist = Infinity;
         for (const windowStart of windowStarts) {
             const dist = Math.abs(clampedYear - (windowStart + WINDOW_SIZE / 2));
@@ -651,8 +644,6 @@ function updateWindowHighlight() {
 }
 
 // -----------------------------
-//  WINDOW LABEL (bottom-right) DEBUGGING ONLY
-// -----------------------------
 // function updateWindowLabel() {
 //     const el = document.getElementById("window-label");
 //     const start = currentWindowStart;
@@ -902,127 +893,6 @@ function updateLeftCard() {
     // ----------------------------
     document.getElementById("leftCardDesc").textContent = content.desc;
 
-
-    // ============================================================
-    //  TRUE GEOMETRIC AVERAGE SLOPE + DIAL UPDATE
-    // ============================================================
-    /* (function updateAvgSlopeDial() {
-
-        const dialValue = document.getElementById("dialValue");
-        const dialLabel = document.getElementById("dialLabel");
-        const needle    = document.getElementById("dialNeedle");
-        const arc       = document.getElementById("dialArc");
-
-        // If dial elements aren't present yet, skip safely
-        if (!dialValue || !dialLabel || !needle || !arc) {
-            console.warn("Dial is not in DOM yet.");
-            return;
-        }
-
-        const start = currentWindowStart;
-        const end   = currentWindowStart + WINDOW_SIZE;
-
-        // Movies inside the 5-year window (by release year)
-        const windowMovies = data.filter(d =>
-            d.endYear >= start && d.endYear < end
-        );
-
-        if (!windowMovies.length) {
-            dialValue.textContent = "—";
-            dialLabel.textContent = "";
-            return;
-        }
-
-        // Compute absolute leaps
-        const leaps = windowMovies.map(d =>
-            Math.abs(d.startYear - d.endYear)
-        );
-
-// Median leap (years)
-const sorted = leaps.slice().sort((a, b) => a - b);
-const mid = Math.floor(sorted.length / 2);
-
-let median;
-if (sorted.length % 2 === 0) {
-    median = (sorted[mid - 1] + sorted[mid]) / 2;
-  } else {
-    median = sorted[mid];
-}
-
-const rounded = Math.round(median);
-
-        // --------------------------------------------------------
-        // DIAL TEXT
-        // --------------------------------------------------------
-        dialValue.textContent = `${rounded} Years`;
-
-        let qualitative;
-        if (median < 25) qualitative = "Low";
-        else if (median < 80) qualitative = "Medium";
-        else qualitative = "High";
-
-        dialLabel.textContent = qualitative;
-
-
-        // --------------------------------------------------------
-        // TRUE GEOMETRIC SLOPE (based on chart geometry)
-        // --------------------------------------------------------
-
-       // --------------------------------------------------------
-// SAFE: READ AXIS POSITIONS DIRECTLY FROM GLOBALS
-// (yTop and yBot are guaranteed defined by now)
-// --------------------------------------------------------
-// const risePx = (typeof yBot !== "undefined" && typeof yTop !== "undefined")
-// ? (yBot - yTop)
-// : (H - 380);   // fallback if somehow early
-// --------------------------------------------------------
-//  TRUE CHART SLOPE → HORIZONTAL DIAL ANGLE
-// --------------------------------------------------------
-
-const runPx  = median * PX_PER_YEAR;   // horizontal
-const risePx = yBot - yTop;         // vertical
-
-// real slope angle measured from vertical axis
-const angleRealRad = Math.atan(runPx / risePx);
-const angleRealDeg = angleRealRad * 180 / Math.PI;
-
-// convert to dial's horizontal angle
-// (dial's 0° = vertical up)
-const angleDialDeg = 90 - angleRealDeg;
-const angle = angleDialDeg * Math.PI / 180;
-
-// --------------------------------------------------------
-//  Draw needle using horizontal dial geometry
-// --------------------------------------------------------
-console.log("ANGLE", angle)
-const length = 55;
-const cx = 90;
-const cy = 40;
-
-// top of needle
-const xTop = cx;
-const yTopPos = cy;
-
-// bottom of needle (horizontal dial)
-const xBot = cx + Math.cos(angle) * length;
-const yBotPos = cy + Math.sin(angle) * length;
-
-console.log(`(${xTop},${yTopPos}) (${xBot},${yBotPos})`)
-const yBotPosAdjusted = yTopPos - (yBotPos-yTopPos)
-needle.setAttribute("x1", xTop);
-needle.setAttribute("y1", yTopPos);
-needle.setAttribute("x2", xBot);
-needle.setAttribute("y2", yBotPosAdjusted);
-
-        // --------------------------------------------------------
-        // ARC (semi-circle)
-        // --------------------------------------------------------
-        if (typeof describeArc === "function") {
-            const arcPath = describeArc(90, 120, 60, -90, 90);
-            arc.setAttribute("d", arcPath);
-        }
-
-    })(); // end updateAvgSlopeDial() */
 
 }
 

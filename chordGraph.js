@@ -68,7 +68,6 @@ class ChordGraph {
    */
   showMoviePopup(movies, startYear, theme, nodeX, nodeY) {
     try {
-      // Ensure popup exists, create if missing
       if (!this.moviePopup || !this.moviePopup.node()) {
         console.warn('Popup not found, creating new one');
         this.moviePopup = d3.select('body')
@@ -100,7 +99,6 @@ class ChordGraph {
         popupElement: this.moviePopup.node()
       });
       
-      // Get theme description
       const themeName = theme || 'Unknown Theme';
       const description = this.themeDescriptions[theme] || this.themeDescriptions[themeName] || 'Explore movies featuring this theme.';
       
@@ -124,14 +122,12 @@ class ChordGraph {
         </div>
       `;
 
-      // Show the popup - make absolutely sure it's visible
       const popupNode = this.moviePopup.node();
       if (!popupNode) {
         console.error('Popup node is null!');
         return;
       }
       
-      // Set HTML content first
       this.moviePopup.html(html);
       
       // Make it visible immediately - use setProperty for !important
@@ -150,20 +146,17 @@ class ChordGraph {
         .style('pointer-events', 'auto')
         .style('z-index', '99999');
       
-      // Force a reflow to ensure styles are applied
       void popupEl.offsetHeight;
       
       console.log('Popup HTML set and made visible');
 
-      // Position the popup next to the node
       try {
-        // First, make sure popup is visible to get accurate dimensions
+        // Make popup visible to get accurate dimensions
         this.moviePopup
           .style('display', 'block')
           .style('visibility', 'visible')
-          .style('opacity', 0.01); // Nearly invisible but rendered
+          .style('opacity', 0.01);
         
-        // Force a reflow
         void this.moviePopup.node().offsetHeight;
         
         const popupRect = this.moviePopup.node().getBoundingClientRect();
@@ -221,7 +214,6 @@ class ChordGraph {
         // Force another reflow to ensure visibility
         void popupEl.offsetHeight;
         
-        // Double-check it's visible
         const finalStyles = window.getComputedStyle(popupEl);
         console.log('Popup positioned next to node:', { left, top, width: popupRect.width, height: popupRect.height, finalDisplay: finalStyles.display, finalOpacity: finalStyles.opacity });
         
@@ -547,10 +539,7 @@ class ChordGraph {
       
       console.log('Popup created:', this.moviePopup.node());
       
-      // Test that popup can be shown
       if (this.moviePopup && this.moviePopup.node()) {
-        console.log('Popup element exists and is ready');
-        // Test visibility
         const testNode = this.moviePopup.node();
         console.log('Popup initial styles:', {
           display: window.getComputedStyle(testNode).display,
@@ -1030,7 +1019,7 @@ class ChordGraph {
                 .attr('stroke', 'none')
                 .style('cursor', 'pointer')
                 .style('pointer-events', 'auto')
-                .attr('class', 'hover-area'); // Add class for debugging
+                .attr('class', 'hover-area');
               
               // Ensure hover circle is on top
               hoverCircle.raise();
@@ -1154,7 +1143,6 @@ class ChordGraph {
         currentDisplay: this.moviePopup ? window.getComputedStyle(this.moviePopup.node()).display : 'N/A'
       });
       
-      // Force show the popup
       try {
         this.showMoviePopup(moviesForTheme, startYear, theme, nodeX, nodeY);
         
@@ -1630,9 +1618,7 @@ class ChordGraph {
           d.movies = [];
         }
         
-        // Debug: log if weight is 0 but link is being highlighted
         if (weight === 0 && d.movies.length === 0) {
-          // This should never be blue - it's correctly gray
         }
         
         const opacity = weight > 0 ? 0.9 : 0.3;

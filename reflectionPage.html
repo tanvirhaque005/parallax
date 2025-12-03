@@ -339,48 +339,48 @@
             color: #ffffff;
         }
         .back-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: #cccccca4;
-      text-decoration: none;
-      font-size: 12px;
-      letter-spacing: 1px;
-      transition: color 0.3s;
-      text-transform: uppercase;
-      position: fixed;
-         top: 20px;
-         left: 40px;
-         z-index: 200;
-    }
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #cccccca4;
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            text-transform: uppercase;
+            position: fixed;
+                top: 20px;
+                left: 40px;
+                z-index: 200;
+            }
 
-    .explore-list {
-        list-style: none;
-        margin-left: 0;
-        padding-left: 0;
-        padding-bottom: 20px;
-        max-width: calc(100% - 200px);
-    }
+            .explore-list {
+                list-style: none;
+                margin-left: 0;
+                padding-left: 0;
+                padding-bottom: 20px;
+                max-width: calc(100% - 200px);
+            }
 
-    .explore-list li {
-        font-size: 18px;
-        color: #ffffff;
-        line-height: 1.6;
-        letter-spacing: 0.2px;
-        margin-bottom: 12px;
-        padding-left: 0;
-        font-weight: 400;
-        position: relative;
-        padding-left: 24px;
-    }
+            .explore-list li {
+                font-size: 18px;
+                color: #ffffff;
+                line-height: 1.6;
+                letter-spacing: 0.2px;
+                margin-bottom: 12px;
+                padding-left: 0;
+                font-weight: 400;
+                position: relative;
+                padding-left: 24px;
+            }
 
-    .explore-list li::before {
-        content: '•';
-        position: absolute;
-        left: 0;
-        color: #ffffff;
-        font-size: 18px;
-    }
+            .explore-list li::before {
+                content: '•';
+                position: absolute;
+                left: 0;
+                color: #ffffff;
+                font-size: 18px;
+            }
 			
     </style>
 </head>
@@ -409,18 +409,6 @@
                 <span class="intro-text" id="introPageTitle"></span>
             </div>
             
-            <!-- <h1 class="intro-main-title">100 Years of Imagination</h1>
-            
-            <p class="intro-paragraph">Together, these patterns reveal how imagination responds to the world—war, technology, globalization, and climate change. When the world feels uncertain, futures shrink. When optimism rises, stories leap further ahead.</p>
-            
-            <div class="explored-section">
-                <div class="explored-line"></div>
-                <div class="explored-content">
-                    <div class="explored-title">Why this matters</div>
-                    <p class="intro-paragraph" style="margin-bottom: 0;">Science fiction does more than predict the future. It primes it. The technologies we build—AI, robotics, interfaces, cities, and companion machines—often follow blueprints first imagined on screen.</p>
-                </div>
-            </div> -->
-
             <h1 class="intro-main-title">100 Years of Imagination</h1>
             
             <p class="intro-paragraph">Together, we saw that...</p>
@@ -487,7 +475,7 @@
             </div>
             
             <!-- Restart button positioned in right middle -->
-            <a href="aboutPage.html" class="restart-button">
+            <a href="index.html" class="restart-button">
                 <span>RESTART</span>
                 <div class="restart-circle">
                     <span class="restart-arrow">→</span>
@@ -625,47 +613,47 @@
         }, 100);
 
         /* ---------------------------------------------------------
-   DISCRETE SCROLL DETECTOR (1 scroll = 1 gesture)
-   For: ONLY "CONTINUE"
---------------------------------------------------------- */
+        DISCRETE SCROLL DETECTOR (1 scroll = 1 gesture)
+        For: ONLY "CONTINUE"
+        --------------------------------------------------------- */
 
-let scrollingReflection = false;
-let scrollTimeoutReflection;
+        let scrollingReflection = false;
+        let scrollTimeoutReflection;
 
-window.addEventListener("wheel", (e) => {
-    // Momentum protection
-    if (scrollingReflection) return;
-    scrollingReflection = true;
+        window.addEventListener("wheel", (e) => {
+            // Momentum protection
+            if (scrollingReflection) return;
+            scrollingReflection = true;
 
-    const direction = e.deltaY > 0 ? "down" : "up";
+            const direction = e.deltaY > 0 ? "down" : "up";
 
-    /* ============================
-       SCROLL DOWN → CONTINUE
-       (Equivalent to clicking CONTINUE)
-    ============================= */
-    if (direction === "down") {
-        if (currentPage === 0) {
-            currentPage = 1;
-            updatePages();
-        }
-    }
+            /* ============================
+            SCROLL DOWN → CONTINUE
+            (Equivalent to clicking CONTINUE)
+            ============================= */
+            if (direction === "down") {
+                if (currentPage === 0) {
+                    currentPage = 1;
+                    updatePages();
+                }
+            }
 
-    /* ============================
-       SCROLL UP → GO BACK
-    ============================= */
-    if (direction === "up") {
-        if (currentPage === 1) {
-            currentPage = 0;
-            updatePages();
-        }
-    }
+            /* ============================
+            SCROLL UP → GO BACK
+            ============================= */
+            if (direction === "up") {
+                if (currentPage === 1) {
+                    currentPage = 0;
+                    updatePages();
+                }
+            }
 
-    // Unlock scrolling after gesture ends
-    clearTimeout(scrollTimeoutReflection);
-    scrollTimeoutReflection = setTimeout(() => {
-        scrollingReflection = false;
-    }, 180); // debounce duration
-});
+            // Unlock scrolling after gesture ends
+            clearTimeout(scrollTimeoutReflection);
+            scrollTimeoutReflection = setTimeout(() => {
+                scrollingReflection = false;
+            }, 180); // debounce duration
+        });
 
     </script>
 </body>

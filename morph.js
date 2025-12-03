@@ -103,7 +103,6 @@ function updateTextOverlay() {
       description = periodTexts['All'].description;
     } else {
       title = `${currentDecade}–${currentDecade + WINDOW_STEP - 1}`;
-      // Get description for the specific 5-year period
       const textData = periodTexts[currentDecade];
       description = textData ? textData.description : '';
     }
@@ -119,7 +118,7 @@ function updateTextOverlay() {
 // ==========================================================
 const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene"), antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor("#000000"); // Black background
+renderer.setClearColor("#000000");
 
 // CSS2D Renderer for labels
 const labelRenderer = new CSS2DRenderer();
@@ -193,7 +192,6 @@ async function renderWorldMapImage() {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
-      // Draw the loaded SVG onto the canvas
       mapContext.drawImage(img, 0, 0, mapCanvas.width, mapCanvas.height);
       texture.needsUpdate = true;
       console.log('✅ World Map.svg loaded and rendered');
@@ -260,16 +258,14 @@ function createArc(a,b,h){
 function createGradientCircle(position, size = 0.015) {
   const circleGroup = new THREE.Group();
 
-  // Create canvas for gradient texture
   const canvas = document.createElement('canvas');
   canvas.width = 64;
   canvas.height = 64;
   const ctx = canvas.getContext('2d');
 
-  // Create linear gradient from purple (left) to teal (right)
   const gradient = ctx.createLinearGradient(0, 32, 64, 32);
-  gradient.addColorStop(0, '#9747FF');    // Purple left
-  gradient.addColorStop(1, '#46AACB');     // Teal right
+  gradient.addColorStop(0, '#9747FF');
+  gradient.addColorStop(1, '#46AACB');
 
   ctx.fillStyle = gradient;
   ctx.beginPath();
@@ -1217,7 +1213,6 @@ async function loadSolarFlightPaths(){
       let destPos;
       const lowerMatch = matchedLocation.toLowerCase();
 
-      // Debug logging for Fictional Locations
       if (matchedLocation === "Fictional Locations") {
         console.log(`🔍 Processing Fictional Locations path: ${conn.from} → ${conn.to}`);
         console.log(`🔍 Looking up: customPositions["${lowerMatch}"]`);
@@ -3069,28 +3064,6 @@ function jumpToBook(index) {
   updateScrollButtons();
   updateActiveBookBar(index);
 }
-
-/* -----------------------------------------------------------
-   CLICK HANDLER (works reliably)
------------------------------------------------------------ */
-// document.querySelectorAll(".book-bar").forEach(bar => {
-//   bar.addEventListener("click", (e) => {
-//     e.stopPropagation();
-//     e.preventDefault();
-
-//     const index = Number(bar.dataset.index);
-//     const startYear = booksMeta[index].start;
-
-//     // Update global filter
-//     currentDecade = startYear;   // but now means 5-year start
-//     updateDecadeDisplay(startYear);
-//     updateFlightPathVisibility();
-
-//     updateActiveBookBar(index);
-//   });
-// });
-
-
 
 /* -----------------------------------------------------------
    CLICK-SAFE MOVEMENT SUPPRESSION

@@ -61,52 +61,52 @@
     }
 
     /* Make the intro overlay translucent so the chart shows behind it */
-.intro-page {
-    pointer-events: auto;
-    backdrop-filter: blur(6px);
-    z-index: 5;
+    .intro-page {
+        pointer-events: auto;
+        backdrop-filter: blur(6px);
+        z-index: 5;
+
+        .intro-panel {
+            background: linear-gradient(
+                to right,
+                rgba(14, 14, 15, 1) 80%,
+                rgba(14, 14, 15, 0) 100%
+            ) !important;
+
+            backdrop-filter: blur(6px);
+        }
+    }
 
     .intro-panel {
-        background: linear-gradient(
-            to right,
-            rgba(14, 14, 15, 1) 80%,
-            rgba(14, 14, 15, 0) 100%
-        ) !important;
-
-        backdrop-filter: blur(6px);
+        background: rgba(14, 14, 15, 0.40) !important;  /* make panel see-through */
+        backdrop-filter: blur(6px);                     /* match page blur */
     }
-}
+    /* Override ONLY for chart page → keep chart always underneath intro */
+    .chart-page.next {
+        transform: translateX(0) !important;
+    }
 
-.intro-panel {
-    background: rgba(14, 14, 15, 0.40) !important;  /* make panel see-through */
-    backdrop-filter: blur(6px);                     /* match page blur */
-}
-/* Override ONLY for chart page → keep chart always underneath intro */
-.chart-page.next {
-    transform: translateX(0) !important;
-}
-
-/* When intro-page leaves, fade + slide it */
-.intro-page.prev {
-    opacity: 0;
-    pointer-events: none !important;   /* <— THIS FIXES SCROLLING */
-    transition:
-        transform 0.8s cubic-bezier(0.16,1,0.3,1),
-        opacity 0.8s ease-out;
-}
+    /* When intro-page leaves, fade + slide it */
+    .intro-page.prev {
+        opacity: 0;
+        pointer-events: none !important;   /* <— THIS FIXES SCROLLING */
+        transition:
+            transform 0.8s cubic-bezier(0.16,1,0.3,1),
+            opacity 0.8s ease-out;
+    }
 
 
-.chart-page {
-    z-index: 1; /* under intro */
-}
+    .chart-page {
+        z-index: 1; /* under intro */
+    }
 
-/* Fade the intro away when sliding out */
-.page-slide.prev.intro-page {
-    opacity: 0;
-    transition: 
-      transform 0.8s cubic-bezier(0.16,1,0.3,1),
-      opacity 0.6s ease-out;
-}
+    /* Fade the intro away when sliding out */
+    .page-slide.prev.intro-page {
+        opacity: 0;
+        transition: 
+          transform 0.8s cubic-bezier(0.16,1,0.3,1),
+          opacity 0.6s ease-out;
+    }
 
 
 
@@ -335,79 +335,79 @@
    LEFT DECADE CARD (New Modern Style)
    =========================================== */
 
-.left-card {
-  position: absolute;
-  pointer-events: none;
-  left: 70px;
-  top: 220px;
+    .left-card {
+      position: absolute;
+      pointer-events: none;
+      left: 70px;
+      top: 220px;
 
-  width: 450px;
-  padding: 28px 32px 40px 32px;
+      width: 450px;
+      padding: 28px 32px 40px 32px;
 
-  /* background: rgba(255,255,255,0.03); */
-  /* border: 1px solid rgba(255,255,255,0.15); */
-  /* border-radius: 22px; */
-  /* backdrop-filter: blur(8px); */
+      /* background: rgba(255,255,255,0.03); */
+      /* border: 1px solid rgba(255,255,255,0.15); */
+      /* border-radius: 22px; */
+      /* backdrop-filter: blur(8px); */
 
-  color: rgba(255,255,255,0.92);
+      color: rgba(255,255,255,0.92);
 
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
 
-  font-family: 'IBM Plex Sans', sans-serif;
+      font-family: 'IBM Plex Sans', sans-serif;
 
-  /* box-shadow: 0 10px 28px rgba(0,0,0,0.3); */
-}
-.left-card * {
-    pointer-events: auto;   /* allows interacting with its internal content */
-}
+      /* box-shadow: 0 10px 28px rgba(0,0,0,0.3); */
+    }
+    .left-card * {
+        pointer-events: auto;   /* allows interacting with its internal content */
+    }
 
 
-/* Large decade header */
-.left-card h2 {
-  margin: 0;
-  font-size: 36px;
-  font-weight: 300;
-  letter-spacing: -1px;
-}
+    /* Large decade header */
+    .left-card h2 {
+      margin: 0;
+      font-size: 36px;
+      font-weight: 300;
+      letter-spacing: -1px;
+    }
 
-/* Tags row */
-.left-card .tag-row {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
+    /* Tags row */
+    .left-card .tag-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
 
-/* Individual pill tags */
-.left-card .tag {
-  padding: 6px 16px;
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  border: 1px solid rgba(255,255,255,0.45);
-  color: rgba(255,255,255,0.90);
-  background: rgba(255,255,255,0.03);
-  backdrop-filter: blur(4px);
-  text-transform: uppercase;
-  display: inline-block;
-}
+    /* Individual pill tags */
+    .left-card .tag {
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      border: 1px solid rgba(255,255,255,0.45);
+      color: rgba(255,255,255,0.90);
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(4px);
+      text-transform: uppercase;
+      display: inline-block;
+    }
 
-/* Description paragraph */
-.left-card .desc {
-  font-size: 20px;
-  line-height: 1.55;
-  color: rgba(255,255,255,0.80);
-  letter-spacing: 0.3px;
-  font-weight: 300;
-  margin-top: -6px;
-}
+    /* Description paragraph */
+    .left-card .desc {
+      font-size: 20px;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.80);
+      letter-spacing: 0.3px;
+      font-weight: 300;
+      margin-top: -6px;
+    }
 
-/* Hide image boxes (optional) */
-.left-card .img-boxes {
-  display: none;
-}
+    /* Hide image boxes (optional) */
+    .left-card .img-boxes {
+      display: none;
+    }
 
 
 
@@ -446,346 +446,267 @@
     }
 
     /* Top-left horizontal bars — thicker + lower on the page */
-#bookBars {
-  position: fixed;
-  bottom: 65px; 
-  left: 64px;
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  z-index: 2;        /* ← VERY IMPORTANT */
-  pointer-events: auto;   /* ← ensure clicks reach the bars */
-}
+    #bookBars {
+      position: fixed;
+      bottom: 65px; 
+      left: 64px;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      z-index: 2;        /* ← VERY IMPORTANT */
+      pointer-events: auto;   /* ← ensure clicks reach the bars */
+    }
 
-#bookBars:hover {
-  cursor: none;
-}
+    #bookBars:hover {
+      cursor: none;
+    }
 
-.book-bar.hovered {
-  background: rgba(255,255,255,1);
-  opacity: 1;
-}
-
-
-#bookBars::before {
-  content: "";
-  position: absolute;
-  inset: -20px 0;
-  pointer-events: none;   /* ← FIX */
-}
+    .book-bar.hovered {
+      background: rgba(255,255,255,1);
+      opacity: 1;
+    }
 
 
-
-
-.book-bar {
-  width: 8px;
-  height:18px;
-  background: rgba(255, 255, 255, 0.45);
-  border-radius: 1px;
-  pointer-events: auto;
-  transition:
-    height 0.35s ease,
-    transform 0.35s ease,
-    opacity 0.25s ease,
-    background 0.25s ease;
-}
-
-.book-bar.active {
-  background: rgba(255, 255, 255, 1);
-  /* transform: scale(1.15); */
-}
-
-
-#barDateDisplay {
-  position: fixed;
-  top: 90px;            /* adjust as you want */
-  left: 24px;
-  color: #ffffff;
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 14px;
-  opacity: 0.85;
-  letter-spacing: 1px;
-  z-index: 999999;      /* always visible */
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-.barDateLabel {
-  position: fixed;
-  color: #ffffff;
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 12px;
-  letter-spacing: 1px;
-  pointer-events: none;
-  opacity: 0;
-  transform: translate(-50%, -8px); /* centered above bar */
-  z-index: 999999;
-  transition: opacity 0.15s ease, top 0.1s ease, left 0.1s ease;
-}
-
-.hover-card {
-    position: fixed;
-    pointer-events: none; /* prevents flicker */
-    background: rgba(20,20,20,0.92);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 12px 18px;
-    border-radius: 10px;
-    backdrop-filter: blur(4px);
-    color: white;
-    font-family: 'IBM Plex Sans', sans-serif;
-    width: 260px;
-
-    opacity: 0;
-    transform: translate(-50%, -40%);
-    transition: opacity 0.18s ease-out, transform 0.08s ease-out;
-    z-index: 99999;
-}
-
-.hover-card.shown {
-    opacity: 1;
-}
-
-.hover-card.hidden {
-    opacity: 0;
-}
-
-.movieLine {
-    pointer-events: stroke; /* ensure hover catches strokes */
-}
-
-.hover-card .hover-img {
-    width: 100%;
-    height: auto;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    display: block;
-}
-
-/* Hover Card */
-#movieHoverCard {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 320px;
-  padding: 22px 26px;
-  background: rgba(255, 255, 255, 0.287);
-  backdrop-filter: blur(8px);
-  border-radius: 18px;
-  border: 2px solid rgba(255,255,255,0.15);
-  color: white;
-  font-family: "Inter", sans-serif;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.20s ease;
-  z-index: 999999;
-}
-
-#movieHoverCard h2 {
-  margin: 0 0 12px 0;
-  font-size: 22px;
-  line-height: 1.25;
-  font-weight: 600;
-}
-
-#movieHoverPoster {
-  width: 120px;
-  height: 170px;
-  object-fit: cover;
-  border-radius: 6px;
-  margin-right: 16px;
-}
-
-.movieHoverRow {
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  align-items: flex-start;
-}
-
-.movieHoverDetails {
-  font-size: 14px;
-  line-height: 1.4;
-  color: rgba(255,255,255,0.9);
-}
-
-.movieHoverDivider {
-  width: 100%;
-  height: 1px;
-  background: rgba(251, 251, 251, 0.555);
-  margin: 12px 0;
-}
+    #bookBars::before {
+      content: "";
+      position: absolute;
+      inset: -20px 0;
+      pointer-events: none;   /* ← FIX */
+    }
 
 
 
-#depictedAxis {
-    top: 200px;                 /* ← pull closer to the top of viz */
-    padding-bottom: 10px;
-}
 
-#releaseAxis {
-    bottom: 200px;              /* ← pull closer upward */
-    padding-top: 10px;
-}
+    .book-bar {
+      width: 8px;
+      height:18px;
+      background: rgba(255, 255, 255, 0.45);
+      border-radius: 1px;
+      pointer-events: auto;
+      transition:
+        height 0.35s ease,
+        transform 0.35s ease,
+        opacity 0.25s ease,
+        background 0.25s ease;
+    }
 
-/* Title text (Depicted Year / Release Year) */
-.axis-title {
-    font-size: 26px;
-    font-weight: 500;
-    margin-bottom: 4px;
-}
-
-/* Horizontal white line */
-.axis-bar::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 1.5px;
-    background: rgba(255,255,255,0.32);
-    top: 36px;
-}
-
-/* Year numbers */
-.axis-years {
-    margin-top: 16px;
-    font-size: 20px;
-    letter-spacing: 3px;
-    opacity: 0.92;
-}
-
-/* Individual year labels */
-.axis-year {
-    display: inline-block;
-    width: 80px;     /* spacing like screenshot */
-    text-align: center;
-}
-
-/* Footer */
-.page-footer {
-    position: fixed;
-    bottom: 20px;
-    left: 0;
-    right: 0;
-    padding: 0 40px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 14px;
-    color: rgba(255,255,255,0.65);
-
-    z-index: 99999;
-    pointer-events: none;
-}
-
-/* Footer */
-.clarification-footer {
-    position: fixed;
-    bottom: 40px;
-    right: 0px;
-    padding: 0 40px;
+    .book-bar.active {
+      background: rgba(255, 255, 255, 1);
+      /* transform: scale(1.15); */
+    }
 
 
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.928);
+    #barDateDisplay {
+      position: fixed;
+      top: 90px;            /* adjust as you want */
+      left: 24px;
+      color: #ffffff;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      opacity: 0.85;
+      letter-spacing: 1px;
+      z-index: 999999;      /* always visible */
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
 
-    z-index: 1;
-    pointer-events: none;
-}
+    .barDateLabel {
+      position: fixed;
+      color: #ffffff;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -8px); /* centered above bar */
+      z-index: 999999;
+      transition: opacity 0.15s ease, top 0.1s ease, left 0.1s ease;
+    }
 
-.movieLine {
-    transition:
-        stroke 0.28s ease,
-        stroke-width 0.28s ease,
-        stroke-opacity 0.28s ease;
-}
+    .hover-card {
+        position: fixed;
+        pointer-events: none; /* prevents flicker */
+        background: rgba(20,20,20,0.92);
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 12px 18px;
+        border-radius: 10px;
+        backdrop-filter: blur(4px);
+        color: white;
+        font-family: 'IBM Plex Sans', sans-serif;
+        width: 260px;
 
-.movieHalo {
-    transition:
-        stroke-opacity 0.28s ease;
-}
+        opacity: 0;
+        transform: translate(-50%, -40%);
+        transition: opacity 0.18s ease-out, transform 0.08s ease-out;
+        z-index: 99999;
+    }
+
+    .hover-card.shown {
+        opacity: 1;
+    }
+
+    .hover-card.hidden {
+        opacity: 0;
+    }
+
+    .movieLine {
+        pointer-events: stroke; /* ensure hover catches strokes */
+    }
+
+    .hover-card .hover-img {
+        width: 100%;
+        height: auto;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    /* Hover Card */
+    #movieHoverCard {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 320px;
+      padding: 22px 26px;
+      background: rgba(255, 255, 255, 0.287);
+      backdrop-filter: blur(8px);
+      border-radius: 18px;
+      border: 2px solid rgba(255,255,255,0.15);
+      color: white;
+      font-family: "Inter", sans-serif;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.20s ease;
+      z-index: 999999;
+    }
+
+    #movieHoverCard h2 {
+      margin: 0 0 12px 0;
+      font-size: 22px;
+      line-height: 1.25;
+      font-weight: 600;
+    }
+
+    #movieHoverPoster {
+      width: 120px;
+      height: 170px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-right: 16px;
+    }
+
+    .movieHoverRow {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .movieHoverDetails {
+      font-size: 14px;
+      line-height: 1.4;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .movieHoverDivider {
+      width: 100%;
+      height: 1px;
+      background: rgba(251, 251, 251, 0.555);
+      margin: 12px 0;
+    }
 
 
-/* .avg-slope {
-  margin-top: 4px;
-  font-size: 15px;
-  letter-spacing: 0.6px;
-  font-weight: 300;
-  color: rgba(255,255,255,0.75);
-  opacity: 0.9;
-} */
+
+    #depictedAxis {
+        top: 200px;                 /* ← pull closer to the top of viz */
+        padding-bottom: 10px;
+    }
+
+    #releaseAxis {
+        bottom: 200px;              /* ← pull closer upward */
+        padding-top: 10px;
+    }
+
+    /* Title text (Depicted Year / Release Year) */
+    .axis-title {
+        font-size: 26px;
+        font-weight: 500;
+        margin-bottom: 4px;
+    }
+
+    /* Horizontal white line */
+    .axis-bar::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 1.5px;
+        background: rgba(255,255,255,0.32);
+        top: 36px;
+    }
+
+    /* Year numbers */
+    .axis-years {
+        margin-top: 16px;
+        font-size: 20px;
+        letter-spacing: 3px;
+        opacity: 0.92;
+    }
+
+    /* Individual year labels */
+    .axis-year {
+        display: inline-block;
+        width: 80px;     /* spacing like screenshot */
+        text-align: center;
+    }
+
+    /* Footer */
+    .page-footer {
+        position: fixed;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        padding: 0 40px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 14px;
+        color: rgba(255,255,255,0.65);
+
+        z-index: 99999;
+        pointer-events: none;
+    }
+
+    /* Footer */
+    .clarification-footer {
+        position: fixed;
+        bottom: 40px;
+        right: 0px;
+        padding: 0 40px;
 
 
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.928);
 
-/* ============================
-   ENLARGED ARC + NEEDLE ALIGNMENT
-   ============================ */
+        z-index: 1;
+        pointer-events: none;
+    }
 
-/* Pull whole dial upward slightly */
-/* #avgSlopeDial {
-  position: absolute;
-  bottom: 40%;
-  width: 200px;
-  opacity: 0.95;
-  top: 55%;
-  left: 10%;
-} */
+    .movieLine {
+        transition:
+            stroke 0.28s ease,
+            stroke-width 0.28s ease,
+            stroke-opacity 0.28s ease;
+    }
 
-/* Expand SVG viewport upward */
-/* #slopeDialSVG {
-    overflow: visible;
-    width: 200px;
-    height: 150px;
-    transform: translateY(-14px);
-} */
-
-/* ============================
-   THINNER ARC + SMALLER TEXT
-   ============================ */
-
-/* Make arc thinner + slightly smaller radius */
-/* #dialArc {
-    stroke-width: 4;
-    opacity: 0.65;
-    transform: translateY(-10px) scale(1.05);
-    transform-origin: center;
-} */
-
-/* Needle stays the same thickness but shifts slightly up */
-/* #dialNeedle {
-    stroke-width: 2;
-    transform: translateY(70px) scale(1.0);
-    transform-origin: top center;
-} */
-
-/* Make "10 Years" smaller */
-/* #dialValue {
-    font-size: 13px !important;
-    opacity: 0.85;
-    transform: translateY(-14px);
-} */
-
-/* Make "Low" smaller */
-/* #dialLabel {
-    font-size: 16px !important;
-    opacity: 0.8;
-    transform: translateY(-10px);
-} */
-
-
-/* Make "Time Leap" smaller too */
-/* #slopeDialSVG text:last-of-type {
-    font-size: 12px !important;
-    opacity: 0.35;
-    transform: translateY(-6px);
-} */
-/* #avgSlopeDial text {
-    fill: white !important;
-    opacity: 1 !important;
-} */
+    .movieHalo {
+        transition:
+            stroke-opacity 0.28s ease;
+    }
 
 
 
@@ -812,17 +733,10 @@
     <div class="page-slide active intro-page" id="introPage">
       <div class="intro-panel">
         <div class="intro-category">DEPICTED YEAR VS REALITY TIMELINE</div>
-        <!-- <h1 class="intro-title">How far in time did<br>they dare to look?</h1>
-        <p class="intro-description">
-          This timeline compares a film's release year with the year it imagines. Scroll to see how ambition rises and falls across decades.
-          </p> -->
           <h1 class="intro-title">Sci-Fi Time Leaps<br>Depicted Year vs Release Year</h1>
           <p class="intro-description">
             You will see how the setting of sci-fi films changes as the genre evolves. Initially, sci-fi indulged in large time leaps to paint fantastical worlds that distracted from societal issues or reflected people’s hopes. But as we get to modern day, fictional settings more so reflect contemporary times to address contemporary anxieties.
           </p>
-          <!-- <p class="intro-description"> -->
-          <!-- Each slope shows the distance between a film's release year and the future it imagines. Short slopes = near futures Long slopes = bold leaps across centuries. Now that you've seen how motifs evolve, let's explore how far films leap into the future.</p> -->
-        
         <!-- Slope Example Legend -->
         <div class="slope-legend">
           <div class="slope-legend-item">
@@ -855,102 +769,29 @@
         <div class="desc" id="leftCardDesc"></div>
     
         <!-- NEW: AVERAGE SLOPE DISPLAY -->
-        <!-- <div class="avg-slope" id="avgSlopeDisplay"></div> -->
-        
-        
-      
     </div>
     
-    <!-- <div id="avgSlopeDial">
-      <svg id="slopeDialSVG" width="180" height="140" viewBox="0 0 180 140">
-        
-          <path id="dialArc" stroke="#666" stroke-width="6"
-                fill="none" stroke-linecap="round"></path>
-    
-          <line id="dialNeedle" x1="90" y1="20" x2="90" y2="60"
-                stroke="#6EC3E6" stroke-width="8" stroke-linecap="round"></line>
-    
-          <text id="dialValue"
-                x="90" y="90"
-                font-size="16"
-                text-anchor="middle"
-                fill="white" opacity="0.9"></text>
-    
-    
-          <rect id="dialLabelBg"
-                x="56" y="108"
-                width="64" height="14"
-                rx="6"
-                fill="var(--bg)"
-                
-                stroke="rgba(255,255,255,1)"
-                stroke-width="0"></rect>
-    
-          <text id="dialLabel"
-                x="90" y="128"
-                font-size="20"
-                text-anchor="middle"
-                fill="white"
-                opacity="1"></text>
 
-          <rect id="dialLabelBg"
-          x="35" y="123"
-          width="109" height="14"
-          rx="6"
-          fill="var(--bg)"
-          
-          stroke="rgba(255,255,255,1)"
-          stroke-width="0"></rect>
+    <div id="bookBars"></div>
+    <!-- <div id="barDateDisplay"></div> -->
+    <div id="hoverBarDate" class="barDateLabel"></div>
+    <div id="activeBarDate" class="barDateLabel"></div>
+
+
+    <!-- SVG STAGE -->
+    <div class="stage">
+      <svg id="parallel">
+        <g id="worldViewport">  
+            <g id="worldG">     
+                <!-- (grid, ticks, lines, etc.) -->
+            </g>
+        </g>
     
-          <text x="90" y="140"
-                font-size="12" text-anchor="middle"
-                fill="white">
-                Median Time Leap*
-          </text>
-    
+        <g id="fixedOverlay">  
+            <!-- (Depicted Year, Release Year) -->
+        </g>
       </svg>
-    </div> -->
-      
-      
-
-      <!-- WINDOW LABEL DEBUGGING ONLY
-      <div id="window-label"
-           style="
-             position: fixed;
-             bottom: 80px;
-             right: 40px;
-             font-family: 'IBM Plex Sans', sans-serif;
-             color: #d12020;
-             font-size: 15px;
-             opacity: 0.85;
-             z-index: 200;
-             display: none;
-           ">
-      </div> -->
-
-      <div id="bookBars"></div>
-      <!-- <div id="barDateDisplay"></div> -->
-      <div id="hoverBarDate" class="barDateLabel"></div>
-      <div id="activeBarDate" class="barDateLabel"></div>
-
-
-      <!-- SVG STAGE -->
-      <div class="stage">
-        <svg id="parallel">
-          <g id="worldViewport">  
-              <g id="worldG">     
-                  <!-- (grid, ticks, lines, etc.) -->
-              </g>
-          </g>
-      
-          <g id="fixedOverlay">  
-              <!-- (Depicted Year, Release Year) -->
-          </g>
-      </svg>
-      
-          <!-- <div class="axis-title">Depicted Year</div> -->
-          <!-- <div class="axis-years" id="depictedYears"></div> -->
-      </div>
+    </div>
       
           <div class="axis-title">Release Year</div>
           <div class="axis-years" id="releaseYears"></div>
@@ -1000,9 +841,7 @@
       <div class="movieHoverDetails" id="movieHoverInfo"></div>
     </div>
   </div>
-  <!-- <div class="clarification-footer">
-    <div>*Slope of Median Time Leap dial has the median slope of the lines in the main view.</div>
-  </div> -->
+ 
   <div class="page-footer">
     <div>Published 2025</div>
     <div>Created by Michael, Audrey, Tanvir, Sydney</div>
