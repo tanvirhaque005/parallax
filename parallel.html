@@ -709,86 +709,6 @@
 }
 
 
-/* .avg-slope {
-  margin-top: 4px;
-  font-size: 15px;
-  letter-spacing: 0.6px;
-  font-weight: 300;
-  color: rgba(255,255,255,0.75);
-  opacity: 0.9;
-} */
-
-
-
-/* ============================
-   ENLARGED ARC + NEEDLE ALIGNMENT
-   ============================ */
-
-/* Pull whole dial upward slightly */
-/* #avgSlopeDial {
-  position: absolute;
-  bottom: 40%;
-  width: 200px;
-  opacity: 0.95;
-  top: 55%;
-  left: 10%;
-} */
-
-/* Expand SVG viewport upward */
-/* #slopeDialSVG {
-    overflow: visible;
-    width: 200px;
-    height: 150px;
-    transform: translateY(-14px);
-} */
-
-/* ============================
-   THINNER ARC + SMALLER TEXT
-   ============================ */
-
-/* Make arc thinner + slightly smaller radius */
-/* #dialArc {
-    stroke-width: 4;
-    opacity: 0.65;
-    transform: translateY(-10px) scale(1.05);
-    transform-origin: center;
-} */
-
-/* Needle stays the same thickness but shifts slightly up */
-/* #dialNeedle {
-    stroke-width: 2;
-    transform: translateY(70px) scale(1.0);
-    transform-origin: top center;
-} */
-
-/* Make "10 Years" smaller */
-/* #dialValue {
-    font-size: 13px !important;
-    opacity: 0.85;
-    transform: translateY(-14px);
-} */
-
-/* Make "Low" smaller */
-/* #dialLabel {
-    font-size: 16px !important;
-    opacity: 0.8;
-    transform: translateY(-10px);
-} */
-
-
-/* Make "Time Leap" smaller too */
-/* #slopeDialSVG text:last-of-type {
-    font-size: 12px !important;
-    opacity: 0.35;
-    transform: translateY(-6px);
-} */
-/* #avgSlopeDial text {
-    fill: white !important;
-    opacity: 1 !important;
-} */
-
-
-
   </style>
   <link rel="stylesheet" href="introMessage.css">
 </head>
@@ -854,79 +774,10 @@
         <div class="tag-row" id="leftCardTags"></div>
         <div class="desc" id="leftCardDesc"></div>
     
-        <!-- NEW: AVERAGE SLOPE DISPLAY -->
-        <!-- <div class="avg-slope" id="avgSlopeDisplay"></div> -->
-        
-        
       
     </div>
     
-    <!-- <div id="avgSlopeDial">
-      <svg id="slopeDialSVG" width="180" height="140" viewBox="0 0 180 140">
-        
-          <path id="dialArc" stroke="#666" stroke-width="6"
-                fill="none" stroke-linecap="round"></path>
-    
-          <line id="dialNeedle" x1="90" y1="20" x2="90" y2="60"
-                stroke="#6EC3E6" stroke-width="8" stroke-linecap="round"></line>
-    
-          <text id="dialValue"
-                x="90" y="90"
-                font-size="16"
-                text-anchor="middle"
-                fill="white" opacity="0.9"></text>
-    
-    
-          <rect id="dialLabelBg"
-                x="56" y="108"
-                width="64" height="14"
-                rx="6"
-                fill="var(--bg)"
-                
-                stroke="rgba(255,255,255,1)"
-                stroke-width="0"></rect>
-    
-          <text id="dialLabel"
-                x="90" y="128"
-                font-size="20"
-                text-anchor="middle"
-                fill="white"
-                opacity="1"></text>
-
-          <rect id="dialLabelBg"
-          x="35" y="123"
-          width="109" height="14"
-          rx="6"
-          fill="var(--bg)"
-          
-          stroke="rgba(255,255,255,1)"
-          stroke-width="0"></rect>
-    
-          <text x="90" y="140"
-                font-size="12" text-anchor="middle"
-                fill="white">
-                Median Time Leap*
-          </text>
-    
-      </svg>
-    </div> -->
-      
-      
-
-      <!-- WINDOW LABEL DEBUGGING ONLY
-      <div id="window-label"
-           style="
-             position: fixed;
-             bottom: 80px;
-             right: 40px;
-             font-family: 'IBM Plex Sans', sans-serif;
-             color: #d12020;
-             font-size: 15px;
-             opacity: 0.85;
-             z-index: 200;
-             display: none;
-           ">
-      </div> -->
+  
 
       <div id="bookBars"></div>
       <!-- <div id="barDateDisplay"></div> -->
@@ -948,8 +799,6 @@
           </g>
       </svg>
       
-          <!-- <div class="axis-title">Depicted Year</div> -->
-          <!-- <div class="axis-years" id="depictedYears"></div> -->
       </div>
       
           <div class="axis-title">Release Year</div>
