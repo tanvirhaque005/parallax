@@ -261,6 +261,7 @@
 
         <div style="text-align: center;">
             <a href="/index.html" class="back-button">← Back to Library</a>
+            <a href="/timeline.html" class="back-button" style="margin-left:12px;">View Timeline →</a>
         </div>
     </div>
 
@@ -271,6 +272,8 @@
         // Parse URL parameters
         const params = new URLSearchParams(window.location.search);
         const movieTitle = params.get("movie");
+        const trope = params.get("trope");
+        console.log(trope);
 
         // Global reference to chord graph for control buttons
         let chordGraph = null;

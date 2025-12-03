@@ -1,0 +1,3405 @@
+{
+  "coordinates": {
+    "Mars": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Mars (Solar System)"
+    },
+    "Venus": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Venus (Solar System)"
+    },
+    "Jupiter": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Jupiter (Solar System)"
+    },
+    "Moon": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Moon (Solar System)"
+    },
+    "Europa": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Europa (Solar System)"
+    },
+    "Fictional Locations": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Solar System)"
+    },
+    "England": {
+      "lat": 51.5074,
+      "lon": -0.1278,
+      "displayName": "London, England (center)"
+    },
+    "England, UK": {
+      "lat": 52.5310214,
+      "lon": -1.2649062,
+      "displayName": "England, United Kingdom"
+    },
+    "London, UK": {
+      "lat": 51.5074456,
+      "lon": -0.1277653,
+      "displayName": "Greater London, England, United Kingdom"
+    },
+    "Japan": {
+      "lat": 35.6762,
+      "lon": 139.6503,
+      "displayName": "Tokyo, Japan (center)"
+    },
+    "Tokyo, Japan": {
+      "lat": 35.6768601,
+      "lon": 139.7638947,
+      "displayName": "Tokyo, Japan"
+    },
+    "Montreal, Quebec, Canada": {
+      "lat": 45.5031824,
+      "lon": -73.5698065,
+      "displayName": "Montréal, Agglomération de Montréal, Montréal (région administrative), Québec, Canada"
+    },
+    "Montana, USA": {
+      "lat": 47.3752671,
+      "lon": -109.638757,
+      "displayName": "Montana, United States of America"
+    },
+    "Los Angeles, California, USA": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Los Angeles, California, USA"
+    },
+    "Budapest, Hungary": {
+      "lat": 46.4813896,
+      "lon": 16.45,
+      "displayName": "Budapest, Hungary"
+    },
+    "London, England, UK": {
+      "lat": 51.5074456,
+      "lon": -0.1277653,
+      "displayName": "Greater London, England, United Kingdom"
+    },
+    "Johannesburg, South Africa": {
+      "lat": -26.205,
+      "lon": 28.049722,
+      "displayName": "Johannesburg, City of Johannesburg Metropolitan Municipality, Gauteng, 2001, South Africa"
+    },
+    "New Mexico, USA": {
+      "lat": 34.5802074,
+      "lon": -105.996047,
+      "displayName": "New Mexico, United States of America"
+    },
+    "Sydney, Australia": {
+      "lat": -33.8698439,
+      "lon": 151.2082848,
+      "displayName": "Sydney, Council of the City of Sydney, New South Wales, Australia"
+    },
+    "Czech Republic": {
+      "lat": 50.0755,
+      "lon": 14.4378,
+      "displayName": "Prague, Czech Republic (center)"
+    },
+    "France, UK": {
+      "lat": 51.5029386,
+      "lon": -0.0014592,
+      "displayName": "France, Blackwall Tunnel, Blackwall Reach, Greenwich Peninsula, Royal Borough of Greenwich, Greater London, England, E14 9PB, United Kingdom"
+    },
+    "New York, USA": {
+      "lat": 45.7127281,
+      "lon": -74.0060152,
+      "displayName": "New York, 10000, United States of America"
+    },
+    "Valldal, Norway": {
+      "lat": 62.2980545,
+      "lon": 7.2623851,
+      "displayName": "Valldal, Fjord, Møre og Romsdal, Norge"
+    },
+    "Alaska, USA": {
+      "lat": 64.4459613,
+      "lon": -149.680909,
+      "displayName": "Alaska, United States of America"
+    },
+    "Toronto, Ontario, Canada": {
+      "lat": 43.6534817,
+      "lon": -79.3839347,
+      "displayName": "Toronto, Golden Horseshoe, Ontario, Canada"
+    },
+    "San Rafael, California, USA": {
+      "lat": 37.9747795,
+      "lon": -122.5316686,
+      "displayName": "San Rafael, Marin County, California, United States of America"
+    },
+    "New Zealand": {
+      "lat": -41.2866,
+      "lon": 174.7756,
+      "displayName": "Wellington, New Zealand (center)"
+    },
+    "New York City, USA": {
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "displayName": "New York City, USA"
+    },
+    "North Vancouver, Canada": {
+      "lat": 49.3206294,
+      "lon": -123.0737925,
+      "displayName": "North Vancouver, Metro Vancouver Regional District, British Columbia, Canada"
+    },
+    "Chicago, Illinois, USA": {
+      "lat": 41.8755616,
+      "lon": -87.6244212,
+      "displayName": "Chicago, South Chicago Township, Cook County, Illinois, United States of America"
+    },
+    "Paris, France": {
+      "lat": 48.8588897,
+      "lon": 2.320041,
+      "displayName": "Paris, Île-de-France, France métropolitaine, France"
+    },
+    "Berlin, Germany": {
+      "lat": 52.5173885,
+      "lon": 13.3951309,
+      "displayName": "Berlin, Deutschland"
+    },
+    "Washington, D.C., USA": {
+      "lat": 38.8950368,
+      "lon": -77.0365427,
+      "displayName": "Washington, D.C., USA"
+    },
+    "Shepperton Studios, England, UK": {
+      "lat": 51.4079823,
+      "lon": -0.4662004,
+      "displayName": "Shepperton Studios, Littleton, Spelthorne, Surrey, England, United Kingdom"
+    },
+    "Montreal, Canada": {
+      "lat": 45.5031824,
+      "lon": -73.5698065,
+      "displayName": "Montréal, Agglomération de Montréal, Montréal (région administrative), Québec, Canada"
+    },
+    "Dallas, Texas, USA": {
+      "lat": 32.7762719,
+      "lon": -96.7968559,
+      "displayName": "Dallas, Dallas County, Texas, United States of America"
+    },
+    "Texas, USA": {
+      "lat": 31.2638905,
+      "lon": -98.5456116,
+      "displayName": "Texas, United States of America"
+    },
+    "Prague, Czech Republic": {
+      "lat": 50.0596288,
+      "lon": 14.4464593,
+      "displayName": "Praha, obvod Praha 4, Hlavní město Praha, Praha, Česko"
+    },
+    "Tallinn, Estonia": {
+      "lat": 59.4372419,
+      "lon": 24.7572802,
+      "displayName": "Tallinn, Harju maakond, Eesti"
+    },
+    "Siberia, Russia": {
+      "lat": 60,
+      "lon": 100,
+      "displayName": "Сибирь, Богучанский район, Красноярский край, Сибирский федеральный округ, Россия"
+    },
+    "Culver City, California, USA": {
+      "lat": 34.0211224,
+      "lon": -118.396466,
+      "displayName": "Culver City, California, USA"
+    },
+    "New York City, New York, USA": {
+      "lat": 40.7127281,
+      "lon": -75.0060152,
+      "displayName": "New York, 10000, United States of America"
+    },
+    "Vancouver, British Columbia, Canada": {
+      "lat": 49.2608724,
+      "lon": -123.113952,
+      "displayName": "Vancouver, Metro Vancouver Regional District, British Columbia, Canada"
+    },
+    "San Francisco, California, USA": {
+      "lat": 37.7932754,
+      "lon": -122.3963589,
+      "displayName": "San Francisco, California, United States of America"
+    },
+    "California, USA": {
+      "lat": 36.7014631,
+      "lon": -118.755997,
+      "displayName": "California, United States of America"
+    },
+    "Burbank, California, USA": {
+      "lat": 34.1812089,
+      "lon": -118.307201,
+      "displayName": "Burbank, Los Angeles County, California, United States of America"
+    },
+    "Portmeirion, Wales, UK": {
+      "lat": 52.9134555,
+      "lon": -4.0993672,
+      "displayName": "Portmeirion, Gwynedd, Cymru / Wales, LL48 6ER, United Kingdom"
+    },
+    "Washington, USA": {
+      "lat": 47.7511,
+      "lon": -120.7401
+    },
+    "Iceland": {
+      "lat": 71.1466,
+      "lon": -19.9426,
+      "displayName": "Reykjavik, Iceland (center)"
+    },
+    "Rome, Italy": {
+      "lat": 41.9028,
+      "lon": 12.4964
+    },
+    "Shepperton Studios, England": {
+      "lat": 51.3953,
+      "lon": -0.4462
+    },
+    "United Kingdom": {
+      "lat": 51.5074,
+      "lon": -0.1278,
+      "displayName": "London, UK (center)"
+    },
+    "Arizona, USA": {
+      "lat": 34.0489,
+      "lon": -111.0937
+    },
+    "Pinewood Studios, England": {
+      "lat": 51.5465,
+      "lon": -0.5365
+    },
+    "Wellington, New Zealand": {
+      "lat": -41.2865,
+      "lon": 174.7762
+    },
+    "Atlanta, Georgia, USA": {
+      "lat": 33.749,
+      "lon": -84.388
+    },
+    "Titan": {
+      "lat": 0,
+      "lon": 0
+    },
+    "Malta": {
+      "lat": 35.8989,
+      "lon": 14.5146,
+      "displayName": "Valletta, Malta (center)"
+    },
+    "Cape Town, South Africa": {
+      "lat": -33.9249,
+      "lon": 18.4241
+    },
+    "Germany": {
+      "lat": 52.52,
+      "lon": 13.405,
+      "displayName": "Berlin, Germany"
+    },
+    "East Germany": {
+      "lat": 52.52,
+      "lon": 13.405,
+      "displayName": "East Germany (GDR)"
+    },
+    "Potsdam, Germany": {
+      "lat": 52.3906,
+      "lon": 13.0645,
+      "displayName": "Potsdam, Brandenburg, Germany"
+    },
+    "New York City, United States": {
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "displayName": "New York, 10000, United States of America"
+    },
+    "London, United Kingdom": {
+      "lat": 51.5074456,
+      "lon": -0.1277653,
+      "displayName": "Greater London, England, United Kingdom"
+    },
+    "Los Angeles, United States": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Los Angeles, Los Angeles County, California, United States of America"
+    },
+    "Bavaria, Germany": {
+      "lat": 48.7904,
+      "lon": 11.4979,
+      "displayName": "Bavaria, Germany"
+    },
+    "Iping, England, United Kingdom": {
+      "lat": 50.9755,
+      "lon": -0.8233,
+      "displayName": "Iping, West Sussex, England, United Kingdom"
+    },
+    "Buckinghamshire, United Kingdom": {
+      "lat": 51.8133,
+      "lon": -0.8083,
+      "displayName": "Buckinghamshire, England, United Kingdom"
+    },
+    "Hiroshima, Japan": {
+      "lat": 34.3853,
+      "lon": 132.4553,
+      "displayName": "Hiroshima, Japan"
+    },
+    "Santa Mira, California, United States": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Santa Mira (fictional), California, United States"
+    },
+    "Dallas, United States": {
+      "lat": 32.7762719,
+      "lon": -96.7968559,
+      "displayName": "Dallas, Dallas County, Texas, United States of America"
+    },
+    "Hollywood, United States": {
+      "lat": 34.0928,
+      "lon": -118.3287,
+      "displayName": "Hollywood, Los Angeles, California, United States"
+    },
+    "Middlesex, United Kingdom": {
+      "lat": 51.5074,
+      "lon": -0.1278,
+      "displayName": "Middlesex, England, United Kingdom"
+    },
+    "Borehamwood, United Kingdom": {
+      "lat": 51.6578,
+      "lon": -0.2716,
+      "displayName": "Borehamwood, Hertfordshire, England, United Kingdom"
+    },
+    "California, United States": {
+      "lat": 36.7014631,
+      "lon": -118.755997,
+      "displayName": "California, United States of America"
+    },
+    "Moscow, Russia": {
+      "lat": 55.7558,
+      "lon": 37.6173,
+      "displayName": "Moscow, Russia"
+    },
+    "Alabama, United States": {
+      "lat": 32.3182,
+      "lon": -86.9023,
+      "displayName": "Alabama, United States of America"
+    },
+    "Devils Tower, Wyoming, United States": {
+      "lat": 44.5902,
+      "lon": -104.7153,
+      "displayName": "Devils Tower, Wyoming, United States"
+    },
+    "Arizona, United States": {
+      "lat": 34.0489,
+      "lon": -111.0937,
+      "displayName": "Arizona, United States of America"
+    },
+    "Dallas/Fort Worth, United States": {
+      "lat": 32.8998,
+      "lon": -97.0403,
+      "displayName": "Dallas/Fort Worth, Texas, United States"
+    },
+    "Tunis, Tunisia": {
+      "lat": 36.8065,
+      "lon": 10.1815,
+      "displayName": "Tunis, Tunisia"
+    },
+    "Estonia, Estonia": {
+      "lat": 58.5953,
+      "lon": 25.0136,
+      "displayName": "Estonia"
+    },
+    "Shepperton, United Kingdom": {
+      "lat": 51.4079823,
+      "lon": -0.4662004,
+      "displayName": "Shepperton Studios, Littleton, Spelthorne, Surrey, England, United Kingdom"
+    },
+    "Elstree, United Kingdom": {
+      "lat": 51.6425,
+      "lon": -0.2991,
+      "displayName": "Elstree, Hertfordshire, England, United Kingdom"
+    },
+    "St. Louis, United States": {
+      "lat": 38.627,
+      "lon": -90.1994,
+      "displayName": "St. Louis, Missouri, United States"
+    },
+    "Yuma, United States": {
+      "lat": 32.6927,
+      "lon": -114.6277,
+      "displayName": "Yuma, Arizona, United States"
+    },
+    "Puerto Vallarta, Mexico": {
+      "lat": 20.6534,
+      "lon": -105.2253,
+      "displayName": "Puerto Vallarta, Jalisco, Mexico"
+    },
+    "Broken Hill, Australia": {
+      "lat": -31.9571,
+      "lon": 141.4333,
+      "displayName": "Broken Hill, New South Wales, Australia"
+    },
+    "Wilmington, United States": {
+      "lat": 34.2257,
+      "lon": -77.9447,
+      "displayName": "Wilmington, North Carolina, United States"
+    },
+    "Gaffney, South CarolinaUnited States": {
+      "lat": 35.0718,
+      "lon": -81.6498,
+      "displayName": "Gaffney, South Carolina, United States"
+    },
+    "Sonora, United States": {
+      "lat": 37.9827,
+      "lon": -120.382,
+      "displayName": "Sonora, California, United States"
+    },
+    "Mexico City, Mexico": {
+      "lat": 19.4326,
+      "lon": -99.1332,
+      "displayName": "Mexico City, Mexico"
+    },
+    "Pinewood Studios, United Kingdom": {
+      "lat": 51.5465,
+      "lon": -0.5365,
+      "displayName": "Pinewood Studios, Buckinghamshire, England, United Kingdom"
+    },
+    "Leavesden, United Kingdom": {
+      "lat": 51.6944,
+      "lon": -0.4099,
+      "displayName": "Leavesden, Hertfordshire, England, United Kingdom"
+    },
+    "Utah, United States": {
+      "lat": 39.321,
+      "lon": -111.0937,
+      "displayName": "Utah, United States of America"
+    },
+    "Quebec, Canada": {
+      "lat": 52.9399,
+      "lon": -73.5491,
+      "displayName": "Quebec, Canada"
+    },
+    "Kauai, Hawaii, United States": {
+      "lat": 22.0964,
+      "lon": -159.5261,
+      "displayName": "Kauai, Hawaii, United States"
+    },
+    "Fox Studios, Australia": {
+      "lat": -33.8688,
+      "lon": 151.2093,
+      "displayName": "Fox Studios Australia, Sydney, New South Wales, Australia"
+    },
+    "Oregon, United States": {
+      "lat": 43.8041,
+      "lon": -120.5542,
+      "displayName": "Oregon, United States of America"
+    },
+    "Vancouver, Canada": {
+      "lat": 49.2608724,
+      "lon": -123.113952,
+      "displayName": "Vancouver, Metro Vancouver Regional District, British Columbia, Canada"
+    },
+    "Birmingham, United Kingdom": {
+      "lat": 52.4862,
+      "lon": -1.8904,
+      "displayName": "Birmingham, England, United Kingdom"
+    },
+    "Atlanta, United States": {
+      "lat": 33.749,
+      "lon": -84.388,
+      "displayName": "Atlanta, Georgia, United States"
+    },
+    "Jordan": {
+      "lat": 31.9454,
+      "lon": 35.9284,
+      "displayName": "Amman, Jordan (center)"
+    },
+    "Norway": {
+      "lat": 59.9139,
+      "lon": 10.7522,
+      "displayName": "Oslo, Norway (center)"
+    },
+    "British Columbia, Canada": {
+      "lat": 53.7267,
+      "lon": -127.6476,
+      "displayName": "British Columbia, Canada"
+    },
+    "Alberta, Canada": {
+      "lat": 53.9333,
+      "lon": -116.5765,
+      "displayName": "Alberta, Canada"
+    },
+    "Boston, United States": {
+      "lat": 42.3601,
+      "lon": -71.0589,
+      "displayName": "Boston, Massachusetts, United States"
+    },
+    "Santa Clarita, United States": {
+      "lat": 34.3917,
+      "lon": -118.5426,
+      "displayName": "Santa Clarita, California, United States"
+    },
+    "Simi Valley, United States": {
+      "lat": 34.2694,
+      "lon": -118.7815,
+      "displayName": "Simi Valley, California, United States"
+    },
+    "Prague, Czechoslovakia": {
+      "lat": 50.0596288,
+      "lon": 14.4464593,
+      "displayName": "Praha, Czechoslovakia"
+    },
+    "Toronto, Canada": {
+      "lat": 43.6534817,
+      "lon": -79.3839347,
+      "displayName": "Toronto, Golden Horseshoe, Ontario, Canada"
+    },
+    "New South Wales, Australia": {
+      "lat": -31.2532,
+      "lon": 146.9211,
+      "displayName": "New South Wales, Australia"
+    },
+    "New Orleans, Louisiana, United States": {
+      "lat": 29.9511,
+      "lon": -90.0715,
+      "displayName": "New Orleans, Louisiana, USA"
+    },
+    "United States": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "Kansas, USA (center)"
+    },
+    "Kansas, United States": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "Kansas, USA"
+    },
+    "Earth": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Earth (Solar System)"
+    },
+    "Rural England, United Kingdom": {
+      "lat": 52.5310214,
+      "lon": -1.2649062,
+      "displayName": "Rural England, United Kingdom"
+    },
+    "Babelsberg, Germany": {
+      "lat": 52.393,
+      "lon": 13.132,
+      "displayName": "Babelsberg, Potsdam, Brandenburg, Germany"
+    },
+    "Portmeirion, United Kingdom": {
+      "lat": 52.9134555,
+      "lon": -4.0993672,
+      "displayName": "Portmeirion, Gwynedd, Cymru / Wales, LL48 6ER, United Kingdom"
+    },
+    "Suburban California, United States": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Suburban California, United States"
+    },
+    "Hill Valley, California, United States": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Hill Valley (fictional), California, United States"
+    },
+    "Neo-Tokyo, Japan": {
+      "lat": 35.6768601,
+      "lon": 139.7638947,
+      "displayName": "Neo-Tokyo (fictional future Tokyo), Japan"
+    },
+    "Caribbean trench": {
+      "lat": 18.0,
+      "lon": -70.0,
+      "displayName": "Caribbean Trench"
+    },
+    "Old West Hill Valley, California, USA": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Hill Valley (fictional), California, United States"
+    },
+    "Detroit, United States": {
+      "lat": 42.3314,
+      "lon": -83.0458,
+      "displayName": "Detroit, Michigan, United States"
+    },
+    "Central American jungle": {
+      "lat": 9.0,
+      "lon": -84.0,
+      "displayName": "Central American jungle"
+    },
+    "New York City": {
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "displayName": "New York City, USA"
+    },
+    "Washington, D.C.": {
+      "lat": 38.8950368,
+      "lon": -77.0365427,
+      "displayName": "Washington, District of Columbia, United States of America"
+    },
+    "Chicago, United States": {
+      "lat": 41.8755616,
+      "lon": -87.6244212,
+      "displayName": "Chicago, South Chicago Township, Cook County, Illinois, United States of America"
+    },
+    "New York/New Jersey": {
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "displayName": "New York/New Jersey, USA"
+    },
+    "Manhattan, New York City": {
+      "lat": 40.7831,
+      "lon": -73.9712,
+      "displayName": "Manhattan, New York City, United States"
+    },
+    "Afghanistan": {
+      "lat": 34.5553,
+      "lon": 69.2075,
+      "displayName": "Kabul, Afghanistan (center)"
+    },
+    "San Francisco, United States": {
+      "lat": 37.7932754,
+      "lon": -122.3963589,
+      "displayName": "San Francisco, California, United States of America"
+    },
+    "Oklahoma": {
+      "lat": 35.0078,
+      "lon": -97.0929,
+      "displayName": "Oklahoma, United States"
+    },
+    "Agua Dulce, California": {
+      "lat": 34.5006,
+      "lon": -118.3245,
+      "displayName": "Agua Dulce, California, USA"
+    },
+    "Czechoslovakia": {
+      "lat": 50.0755,
+      "lon": 14.4378,
+      "displayName": "Prague, Czechoslovakia (center)"
+    },
+    "New Jersey & 8th Dimension": {
+      "lat": 40.0583,
+      "lon": -74.4057,
+      "displayName": "New Jersey, United States"
+    },
+    "Johannesburg": {
+      "lat": -26.205,
+      "lon": 28.049722,
+      "displayName": "Johannesburg, South Africa"
+    },
+    "Montana": {
+      "lat": 47.3752671,
+      "lon": -109.638757,
+      "displayName": "Montana, United States of America"
+    },
+    "Columbus, Ohio + OASIS": {
+      "lat": 39.9612,
+      "lon": -82.9988,
+      "displayName": "Columbus, Ohio, United States"
+    },
+    "London, England": {
+      "lat": 51.5074456,
+      "lon": -0.1277653,
+      "displayName": "Greater London, England, United Kingdom"
+    },
+    "San Francisco, California, United State": {
+      "lat": 37.7932754,
+      "lon": -122.3963589,
+      "displayName": "San Francisco, California, United States of America"
+    },
+    "20th Century Fox Studios, Los Angeles, California, USA": {
+      "lat": 34.058,
+      "lon": -118.417,
+      "displayName": "20th Century Fox Studios, Los Angeles, California, USA"
+    },
+    "20th Century Fox Studios, California, USA": {
+      "lat": 34.058,
+      "lon": -118.417,
+      "displayName": "20th Century Fox Studios, California, USA"
+    },
+    "20th Century Fox Studios, Los Angeles, USA": {
+      "lat": 34.058,
+      "lon": -118.417,
+      "displayName": "20th Century Fox Studios, Los Angeles, USA"
+    },
+    "20th Century Fox Studios + Carlsbad Caverns (New Mexico, USA) + Edinburgh exteriors": {
+      "lat": 34.5802074,
+      "lon": -105.996047,
+      "displayName": "New Mexico, USA (primary location)"
+    },
+    "MGM-British Studios, Borehamwood, UK": {
+      "lat": 51.6578,
+      "lon": -0.2716,
+      "displayName": "MGM-British Studios, Borehamwood, Hertfordshire, England, UK"
+    },
+    "Shepperton Studios, UK": {
+      "lat": 51.4079823,
+      "lon": -0.4662004,
+      "displayName": "Shepperton Studios, Surrey, England, UK"
+    },
+    "Shepperton Studios, Middlesex, England": {
+      "lat": 51.4079823,
+      "lon": -0.4662004,
+      "displayName": "Shepperton Studios, Middlesex (now Surrey), England, UK"
+    },
+    "Shepperton Studios, Middlesex, England (primary)": {
+      "lat": 51.4079823,
+      "lon": -0.4662004,
+      "displayName": "Shepperton Studios, Middlesex, England, UK"
+    },
+    "Pinewood Studios (UK) + Mauritania": {
+      "lat": 51.5465,
+      "lon": -0.5365,
+      "displayName": "Pinewood Studios, Buckinghamshire, England, UK"
+    },
+    "Pinewood Studios (UK) + Spain & Canary Islands exteriors": {
+      "lat": 51.5465,
+      "lon": -0.5365,
+      "displayName": "Pinewood Studios, England, UK"
+    },
+    "London and surrounding UK locations": {
+      "lat": 51.5074456,
+      "lon": -0.1277653,
+      "displayName": "London and surrounding UK locations"
+    },
+    "London & various UK sites": {
+      "lat": 51.5074456,
+      "lon": -0.1277653,
+      "displayName": "London & various UK sites"
+    },
+    "3 Mills Studios, London (UK)": {
+      "lat": 51.528,
+      "lon": -0.012,
+      "displayName": "3 Mills Studios, London, England, UK"
+    },
+    "Alabama, Wyoming, and California (USA)": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "United States (multi-state filming)"
+    },
+    "Arizona, California & Utah (USA)": {
+      "lat": 36.7014631,
+      "lon": -118.755997,
+      "displayName": "California, USA (primary location)"
+    },
+    "Montreal & Quebec, Canada": {
+      "lat": 45.5031824,
+      "lon": -73.5698065,
+      "displayName": "Montreal & Quebec, Canada"
+    },
+    "Norway & UK": {
+      "lat": 59.9139,
+      "lon": 10.7522,
+      "displayName": "Norway (primary location)"
+    },
+    "Prague (Barrandov Studios), Czech Republic": {
+      "lat": 50.0596288,
+      "lon": 14.4464593,
+      "displayName": "Barrandov Studios, Prague, Czech Republic"
+    },
+    "Barrandov Studios, Prague, Czechoslovakia": {
+      "lat": 50.0596288,
+      "lon": 14.4464593,
+      "displayName": "Barrandov Studios, Prague, Czechoslovakia"
+    },
+    "Prague, Czechoslovakia (Barrandov Studios)": {
+      "lat": 50.0596288,
+      "lon": 14.4464593,
+      "displayName": "Barrandov Studios, Prague, Czechoslovakia"
+    },
+    "Metro-Goldwyn-Mayer Studios, Culver City, California, USA": {
+      "lat": 34.0211224,
+      "lon": -118.396466,
+      "displayName": "MGM Studios, Culver City, California, USA"
+    },
+    "Metro-Goldwyn-Mayer Studios + Arizona & California desert locations": {
+      "lat": 34.0211224,
+      "lon": -118.396466,
+      "displayName": "MGM Studios, California, USA"
+    },
+    "Paramount Studios, Hollywood, USA": {
+      "lat": 34.0836,
+      "lon": -118.3211,
+      "displayName": "Paramount Studios, Hollywood, California, USA"
+    },
+    "Paramount Studios, Hollywood, California, USA": {
+      "lat": 34.0836,
+      "lon": -118.3211,
+      "displayName": "Paramount Studios, Hollywood, California, USA"
+    },
+    "Desilu Studios & Paramount Studios, Hollywood, USA": {
+      "lat": 34.0836,
+      "lon": -118.3211,
+      "displayName": "Desilu/Paramount Studios, Hollywood, California, USA"
+    },
+    "Universal Studios, Hollywood, California, USA": {
+      "lat": 34.1381,
+      "lon": -118.3534,
+      "displayName": "Universal Studios, Hollywood, California, USA"
+    },
+    "Universal Studios & Los Angeles, California, USA": {
+      "lat": 34.1381,
+      "lon": -118.3534,
+      "displayName": "Universal Studios, Los Angeles, California, USA"
+    },
+    "Universal Studios + Golden Gate Park & UCLA (California, USA)": {
+      "lat": 34.1381,
+      "lon": -118.3534,
+      "displayName": "Universal Studios, California, USA"
+    },
+    "Republic Pictures Studios, Hollywood, California, USA": {
+      "lat": 34.1466,
+      "lon": -118.3395,
+      "displayName": "Republic Pictures Studios, Hollywood, California, USA"
+    },
+    "Tokyo, Japan (animation production)": {
+      "lat": 35.6768601,
+      "lon": 139.7638947,
+      "displayName": "Tokyo, Japan (animation production)"
+    },
+    "Japan (animation production)": {
+      "lat": 35.6768601,
+      "lon": 139.7638947,
+      "displayName": "Japan (animation production)"
+    },
+    "Los Angeles (animation production)": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Los Angeles, California, USA (animation)"
+    },
+    "Los Angeles, California, United States (animated)": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Los Angeles, California, USA (animation)"
+    },
+    "California (various modernist buildings)": {
+      "lat": 36.7014631,
+      "lon": -118.755997,
+      "displayName": "California, USA"
+    },
+    "California, USA (Los Angeles & Northridge)": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Los Angeles area, California, USA"
+    },
+    "California & Nevada (USA)": {
+      "lat": 36.7014631,
+      "lon": -118.755997,
+      "displayName": "California, USA"
+    },
+    "California (USA) + Nevada desert": {
+      "lat": 36.7014631,
+      "lon": -118.755997,
+      "displayName": "California, USA"
+    },
+    "California (Redwood forests), Yuma Desert (Arizona), UK studios": {
+      "lat": 36.7014631,
+      "lon": -118.755997,
+      "displayName": "California, USA (primary location)"
+    },
+    "Sonora & Jamestown, California (USA)": {
+      "lat": 37.9827,
+      "lon": -120.382,
+      "displayName": "Sonora, California, USA"
+    },
+    "Santa Clarita Valley, California": {
+      "lat": 34.3917,
+      "lon": -118.5426,
+      "displayName": "Santa Clarita Valley, California, USA"
+    },
+    "Simi Valley & San Fernando Valley, California": {
+      "lat": 34.2694,
+      "lon": -118.7815,
+      "displayName": "Simi Valley, California, USA"
+    },
+    "Sierra Madre, California, USA + Allied Artists Studios": {
+      "lat": 34.1619,
+      "lon": -118.0531,
+      "displayName": "Sierra Madre, California, USA"
+    },
+    "Dallas, Texas, USA (various airbase & local sets)": {
+      "lat": 32.7762719,
+      "lon": -96.7968559,
+      "displayName": "Dallas, Texas, USA"
+    },
+    "Dallas/Fort Worth, Texas (USA)": {
+      "lat": 32.8998,
+      "lon": -97.0403,
+      "displayName": "Dallas/Fort Worth, Texas, USA"
+    },
+    "Texas, Florida, California (USA)": {
+      "lat": 31.2638905,
+      "lon": -98.5456116,
+      "displayName": "Texas, USA (primary location)"
+    },
+    "Utah, New Mexico, California (USA)": {
+      "lat": 39.321,
+      "lon": -111.0937,
+      "displayName": "Utah, USA"
+    },
+    "New Mexico, California": {
+      "lat": 34.5802074,
+      "lon": -105.996047,
+      "displayName": "New Mexico, USA"
+    },
+    "New York City & New Jersey, USA": {
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "displayName": "New York City & New Jersey, USA"
+    },
+    "New York, New Jersey, Virginia (USA)": {
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "displayName": "New York area, USA"
+    },
+    "Washington, D.C. & Virginia (USA)": {
+      "lat": 38.8950368,
+      "lon": -77.0365427,
+      "displayName": "Washington, D.C. area, USA"
+    },
+    "North Carolina (Wilmington), USA": {
+      "lat": 34.2257,
+      "lon": -77.9447,
+      "displayName": "Wilmington, North Carolina, USA"
+    },
+    "Gaffney, South Carolina (abandoned nuclear reactor tank) & Bahamas": {
+      "lat": 35.0718,
+      "lon": -81.6498,
+      "displayName": "Gaffney, South Carolina, USA"
+    },
+    "Boston & Massachusetts (USA)": {
+      "lat": 42.3601,
+      "lon": -71.0589,
+      "displayName": "Boston, Massachusetts, USA"
+    },
+    "Oregon, Washington, California (USA)": {
+      "lat": 43.8041,
+      "lon": -120.5542,
+      "displayName": "Oregon, USA"
+    },
+    "Cleveland, Albuquerque, New York City": {
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "displayName": "New York City, USA (depicted location)"
+    },
+    "Cleveland, Los Angeles, Washington D.C.": {
+      "lat": 38.8950368,
+      "lon": -77.0365427,
+      "displayName": "Washington D.C., USA"
+    },
+    "Atlanta, Edinburgh, New York (stand-in set)": {
+      "lat": 33.749,
+      "lon": -84.388,
+      "displayName": "Atlanta, Georgia, USA"
+    },
+    "Atlanta, Georgia; Los Angeles; New York City": {
+      "lat": 33.749,
+      "lon": -84.388,
+      "displayName": "Atlanta, Georgia, USA"
+    },
+    "Atlanta, USA": {
+      "lat": 33.749,
+      "lon": -84.388,
+      "displayName": "Atlanta, Georgia, USA"
+    },
+    "St. Louis, Missouri (doubling as NYC)": {
+      "lat": 38.627,
+      "lon": -90.1994,
+      "displayName": "St. Louis, Missouri, USA"
+    },
+    "Puerto Vallarta & Jalisco, Mexico": {
+      "lat": 20.6534,
+      "lon": -105.2253,
+      "displayName": "Puerto Vallarta, Jalisco, Mexico"
+    },
+    "New South Wales & Broken Hill, Australia": {
+      "lat": -31.2532,
+      "lon": 146.9211,
+      "displayName": "New South Wales, Australia"
+    },
+    "Sydney & Alameda (USA freeway set)": {
+      "lat": -33.8698439,
+      "lon": 151.2082848,
+      "displayName": "Sydney, Australia"
+    },
+    "Fox Studios Australia; Tunisia; Italy; Spain": {
+      "lat": -33.8688,
+      "lon": 151.2093,
+      "displayName": "Fox Studios Australia, Sydney"
+    },
+    "Fox Studios Australia; UK; Italy; Thailand": {
+      "lat": -33.8688,
+      "lon": 151.2093,
+      "displayName": "Fox Studios Australia, Sydney"
+    },
+    "Hawaii (Kauai, Oahu) + Universal Studios": {
+      "lat": 22.0964,
+      "lon": -159.5261,
+      "displayName": "Kauai, Hawaii, USA"
+    },
+    "New Zealand & LA performance capture": {
+      "lat": -41.2865,
+      "lon": 174.7762,
+      "displayName": "Wellington, New Zealand"
+    },
+    "Wellington (New Zealand), Los Angeles performance capture": {
+      "lat": -41.2865,
+      "lon": 174.7762,
+      "displayName": "Wellington, New Zealand"
+    },
+    "England (Leavesden Studios), Tunisia, Italy": {
+      "lat": 51.6944,
+      "lon": -0.4099,
+      "displayName": "Leavesden Studios, England, UK"
+    },
+    "Tunisia + Elstree Studios (UK) + Guatemala (Yavin IV)": {
+      "lat": 36.8065,
+      "lon": 10.1815,
+      "displayName": "Tunisia"
+    },
+    "Norway (Hoth), Elstree Studios UK": {
+      "lat": 59.9139,
+      "lon": 10.7522,
+      "displayName": "Norway"
+    },
+    "UK (Shepperton Studios) & Namibia": {
+      "lat": 51.4079823,
+      "lon": -0.4662004,
+      "displayName": "Shepperton Studios, UK"
+    },
+    "United Kingdom (various)": {
+      "lat": 51.5074,
+      "lon": -0.1278,
+      "displayName": "United Kingdom"
+    },
+    "London, UK; Buckinghamshire; Pinewood Studios": {
+      "lat": 51.5074456,
+      "lon": -0.1277653,
+      "displayName": "London & Pinewood Studios, UK"
+    },
+    "London, England & Morocco": {
+      "lat": 51.5074456,
+      "lon": -0.1277653,
+      "displayName": "London, England, UK"
+    },
+    "Buckinghamshire, England": {
+      "lat": 51.8133,
+      "lon": -0.8083,
+      "displayName": "Buckinghamshire, England, UK"
+    },
+    "Portmeirion, Wales (primary)": {
+      "lat": 52.9134555,
+      "lon": -4.0993672,
+      "displayName": "Portmeirion, Wales, UK"
+    },
+    "Prague, Austria, South Korea": {
+      "lat": 50.0596288,
+      "lon": 14.4464593,
+      "displayName": "Prague, Czech Republic"
+    },
+    "Cape Town, South Africa; Prague, Czech Republic": {
+      "lat": -33.9249,
+      "lon": 18.4241,
+      "displayName": "Cape Town, South Africa"
+    },
+    "Budapest, Abu Dhabi, Jordan": {
+      "lat": 47.4813896,
+      "lon": 19.1460941,
+      "displayName": "Budapest, Hungary"
+    },
+    "Wadi Rum (Jordan), Budapest": {
+      "lat": 31.9454,
+      "lon": 35.9284,
+      "displayName": "Wadi Rum, Jordan"
+    },
+    "Jordan, England, Wadi Rum": {
+      "lat": 31.9454,
+      "lon": 35.9284,
+      "displayName": "Wadi Rum, Jordan"
+    },
+    "British Columbia, Malta, UK": {
+      "lat": 53.7267,
+      "lon": -127.6476,
+      "displayName": "British Columbia, Canada"
+    },
+    "Iceland, Alberta, Los Angeles": {
+      "lat": 64.1466,
+      "lon": -21.9426,
+      "displayName": "Iceland"
+    },
+    "Iceland, New York, Louisiana": {
+      "lat": 64.1466,
+      "lon": -21.9426,
+      "displayName": "Iceland"
+    },
+    "Tallinn, Oslo, Mumbai, Italy, LA": {
+      "lat": 59.4372419,
+      "lon": 24.7572802,
+      "displayName": "Tallinn, Estonia"
+    },
+    "Los Angeles, USA & Shanghai": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Los Angeles, USA"
+    },
+    "Tokyo, Paris, Los Angeles, London, Calgary": {
+      "lat": 35.6768601,
+      "lon": 139.7638947,
+      "displayName": "Tokyo, Japan (primary)"
+    },
+    "Rome, Italy (Cines Studios)": {
+      "lat": 41.9028,
+      "lon": 12.4964,
+      "displayName": "Cines Studios, Rome, Italy"
+    },
+    "East Germany (DEFA Studios, Babelsberg)": {
+      "lat": 52.393,
+      "lon": 13.132,
+      "displayName": "DEFA Studios, Babelsberg, East Germany"
+    },
+    "Mosfilm Studios (Moscow, USSR)": {
+      "lat": 55.7558,
+      "lon": 37.6173,
+      "displayName": "Mosfilm Studios, Moscow, USSR"
+    },
+    "Estonia & Tajikistan (Soviet Union)": {
+      "lat": 58.5953,
+      "lon": 25.0136,
+      "displayName": "Estonia, Soviet Union"
+    },
+    "Birmingham (UK), Ohio (USA)": {
+      "lat": 52.4862,
+      "lon": -1.8904,
+      "displayName": "Birmingham, UK"
+    },
+    "San Francisco, California, United States": {
+      "lat": 37.7932754,
+      "lon": -122.3963589,
+      "displayName": "San Francisco, California, USA"
+    },
+    "Earth → Moon → Jupiter orbit (extraterrestrial monolith zone)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (extraterrestrial)"
+    },
+    "Dystopian near-future Britain": {
+      "lat": 51.5074456,
+      "lon": -0.1277653,
+      "displayName": "London, UK (dystopian future)"
+    },
+    "Neo-Tokyo (futuristic city)": {
+      "lat": 35.6768601,
+      "lon": 139.7638947,
+      "displayName": "Neo-Tokyo (fictional future Tokyo)"
+    },
+    "Montana + alien ship": {
+      "lat": 47.3752671,
+      "lon": -109.638757,
+      "displayName": "Montana, USA"
+    },
+    "Los Angeles, 2019": {
+      "lat": 25.0536909,
+      "lon": -100.242766,
+      "displayName": "Los Angeles, California, USA (2019)"
+    },
+    "Los Angeles, 2049": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Los Angeles, California, USA (2049)"
+    },
+    "Johannesburg (alien refugee zone)": {
+      "lat": -26.205,
+      "lon": 28.049722,
+      "displayName": "Johannesburg, South Africa (alien zone)"
+    },
+    "Arrakis (extraterrestrial planet)": {
+      "lat": 24.4539,
+      "lon": 54.3773,
+      "displayName": "Arrakis (fictional planet)"
+    },
+    "Arrakis": {
+      "lat": 24.4539,
+      "lon": 54.3773,
+      "displayName": "Arrakis (fictional planet)"
+    },
+    "Future Western Europe": {
+      "lat": 48.8588897,
+      "lon": 2.320041,
+      "displayName": "Western Europe (future)"
+    },
+    "Remote mountain research residence": {
+      "lat": 64.4459613,
+      "lon": -149.680909,
+      "displayName": "Alaska, USA (remote location)"
+    },
+    "Planet Altair IV (extraterrestrial)": {
+      "lat": 34.0522,
+      "lon": -118.2437,
+      "displayName": "Planet Altair IV (fictional)"
+    },
+    "Near-future United States (eugenics society)": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "United States (near future)"
+    },
+    "New Port City (futuristic Japanese metropolis)": {
+      "lat": 35.6768601,
+      "lon": 139.7638947,
+      "displayName": "New Port City (fictional Japan)"
+    },
+    "Near-future Los Angeles": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Los Angeles, California, USA (near future)"
+    },
+    "Chicago (futuristic)": {
+      "lat": 41.8755616,
+      "lon": -87.6244212,
+      "displayName": "Chicago, Illinois, USA (futuristic)"
+    },
+    "Global modern Earth + shared dreamscapes": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (dreamscapes)"
+    },
+    "Post-apocalyptic Paris + future time periods": {
+      "lat": 48.8588897,
+      "lon": 2.320041,
+      "displayName": "Paris, France (post-apocalyptic)"
+    },
+    "Metropolis (fictional futuristic city)": {
+      "lat": 52.52,
+      "lon": 13.405,
+      "displayName": "Metropolis (fictional city)"
+    },
+    "Washington, D.C. (futuristic)": {
+      "lat": 38.8950368,
+      "lon": -77.0365427,
+      "displayName": "Washington, D.C., USA (futuristic)"
+    },
+    "Washington D.C.": {
+      "lat": 38.8950368,
+      "lon": -77.0365427,
+      "displayName": "Washington, D.C., USA"
+    },
+    "The Moon (lunar mining base)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Moon (lunar base)"
+    },
+    "Near-future Tokyo (dream landscapes)": {
+      "lat": 35.6768601,
+      "lon": 139.7638947,
+      "displayName": "Tokyo, Japan (near future)"
+    },
+    "Texas suburbs (USA)": {
+      "lat": 31.2638905,
+      "lon": -98.5456116,
+      "displayName": "Texas, USA (suburbs)"
+    },
+    "Sirius 6B (extraterrestrial mining planet)": {
+      "lat": 45.5017,
+      "lon": -73.5673,
+      "displayName": "Sirius 6B (fictional planet)"
+    },
+    "Los Angeles, 1999": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Los Angeles, California, USA (1999)"
+    },
+    "Global Earth": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Earth (global)"
+    },
+    "New York City (futuristic) + Fhloston Paradise (extraterrestrial)": {
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "displayName": "New York City, USA (futuristic)"
+    },
+    "Far-future Earth (Eloi/Morlock world)": {
+      "lat": 51.5074456,
+      "lon": -0.1277653,
+      "displayName": "London, UK (far future)"
+    },
+    "New York City (dream/LC tech layers)": {
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "displayName": "New York City, USA"
+    },
+    "Milky Way Galaxy (Enterprise & Regula I station)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Milky Way)"
+    },
+    "The Milky Way Galaxy (USS Enterprise-D)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Milky Way)"
+    },
+    "The Milky Way Galaxy (USS Enterprise & various planets)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Milky Way)"
+    },
+    "Multiverse (various planets/dimensions)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (multiverse)"
+    },
+    "Pegasus Galaxy (Atlantis city-ship)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (Pegasus Galaxy)"
+    },
+    "'The Village' (fictional isolated control settlement)": {
+      "lat": 40.2732,
+      "lon": -76.8867,
+      "displayName": "The Village (fictional)"
+    },
+    "Central Europe (fictional village based on Bavaria / Swiss Alps)": {
+      "lat": 48.7904,
+      "lon": 11.4979,
+      "displayName": "Bavaria, Germany"
+    },
+    "Central Europe (fictional villages modeled on Bavaria / Swiss Alps)": {
+      "lat": 48.7904,
+      "lon": 11.4979,
+      "displayName": "Bavaria, Germany"
+    },
+    "Outer space locations": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (outer space)"
+    },
+    "Everytown (fictional British city)": {
+      "lat": 51.8133,
+      "lon": -0.8083,
+      "displayName": "Buckinghamshire, England, UK"
+    },
+    "Planet Mongo (extraterrestrial)": {
+      "lat": 34.1381,
+      "lon": -118.3534,
+      "displayName": "Planet Mongo (fictional)"
+    },
+    "Rural England": {
+      "lat": 52.5310214,
+      "lon": -1.2649062,
+      "displayName": "Rural England, UK"
+    },
+    "Los Alamos, New Mexico, USA": {
+      "lat": 35.8872,
+      "lon": -106.3048,
+      "displayName": "Los Alamos, New Mexico, USA"
+    },
+    "Santa Mira (fictional California town)": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Santa Mira (fictional), California"
+    },
+    "Montreal, Canada (in-film setting)": {
+      "lat": 45.5031824,
+      "lon": -73.5698065,
+      "displayName": "Montreal, Quebec, Canada"
+    },
+    "Iceland → Subterranean world beneath the Earth": {
+      "lat": 64.1466,
+      "lon": -21.9426,
+      "displayName": "Iceland"
+    },
+    "Outer space (various spacecraft) + futuristic Earth": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (outer space)"
+    },
+    "Interstellar spacecraft Ikaria XB-1": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (interstellar)"
+    },
+    "Post-apocalyptic future Earth (underground city)": {
+      "lat": 32.7762719,
+      "lon": -96.7968559,
+      "displayName": "Dallas, Texas, USA (future)"
+    },
+    "Remote uncharted Pacific island": {
+      "lat": 0,
+      "lon": -150.0,
+      "displayName": "Pacific Ocean (fictional island)"
+    },
+    "Fictional U.S. university campus": {
+      "lat": 34.0836,
+      "lon": -118.3211,
+      "displayName": "California, USA (fictional campus)"
+    },
+    "Planet Skaro (Dalek homeworld)": {
+      "lat": 51.5074,
+      "lon": -0.1278,
+      "displayName": "Planet Skaro (fictional)"
+    },
+    "United States (Pentagon, B-52 bomber) + USSR (nuclear target zones)": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "United States"
+    },
+    "Future Earth (2087) + mid-20th-century America": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "United States (future)"
+    },
+    "Post-apocalyptic Earth (ruined London)": {
+      "lat": 51.5074456,
+      "lon": -0.1277653,
+      "displayName": "London, England, UK (post-apocalyptic)"
+    },
+    "Alphaville (dystopian sci-fi city on Earth)": {
+      "lat": 48.8588897,
+      "lon": 2.320041,
+      "displayName": "Paris, France (Alphaville)"
+    },
+    "Inside the human body (miniaturized submarine mission)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (microscopic)"
+    },
+    "Future Earth (ruins of human civilization)": {
+      "lat": 34.0489,
+      "lon": -111.0937,
+      "displayName": "Arizona, USA (future)"
+    },
+    "Various future Earth settings (anthology format)": {
+      "lat": 36.7014631,
+      "lon": -118.755997,
+      "displayName": "California, USA (future)"
+    },
+    "Post-apocalyptic Earth (ruins of New York City)": {
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "displayName": "New York City, USA (post-apocalyptic)"
+    },
+    "Near-future dystopian Canada": {
+      "lat": 43.6534817,
+      "lon": -79.3839347,
+      "displayName": "Toronto, Ontario, Canada (dystopian)"
+    },
+    "Future Earth (primarily Europe)": {
+      "lat": 50.0596288,
+      "lon": 14.4464593,
+      "displayName": "Prague, Czech Republic (future)"
+    },
+    "United Kingdom (medical research facility)": {
+      "lat": 51.5074,
+      "lon": -0.1278,
+      "displayName": "United Kingdom"
+    },
+    "Outer space (interplanetary ship)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (outer space)"
+    },
+    "United States (Colossus HQ) + USSR (Guardian AI system)": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "United States"
+    },
+    "Orbiting research station above Planet Solaris": {
+      "lat": 55.7558,
+      "lon": 37.6173,
+      "displayName": "Planet Solaris (fictional)"
+    },
+    "Delos theme park (futuristic, fictional)": {
+      "lat": 34.0489,
+      "lon": -111.0937,
+      "displayName": "Arizona, USA (fictional theme park)"
+    },
+    "Devils Tower, Wyoming (primary)": {
+      "lat": 44.5902,
+      "lon": -104.7153,
+      "displayName": "Devils Tower, Wyoming, USA"
+    },
+    "Post-apocalyptic American Southwest": {
+      "lat": 34.0489,
+      "lon": -111.0937,
+      "displayName": "Arizona, USA (post-apocalyptic)"
+    },
+    "Domed future city (fictional Earth metropolis)": {
+      "lat": 32.8998,
+      "lon": -97.0403,
+      "displayName": "Dallas/Fort Worth, Texas, USA (future)"
+    },
+    "A galaxy far, far away (extraterrestrial)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "A galaxy far, far away (Star Wars)"
+    },
+    "A galaxy far, far away": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "A galaxy far, far away (Star Wars)"
+    },
+    "A galaxy far, far away (Hoth, Dagobah, Cloud City)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "A galaxy far, far away (Star Wars)"
+    },
+    "A galaxy far, far away (Endor, Tatooine, Death Star)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "A galaxy far, far away (Star Wars)"
+    },
+    "A galaxy far, far away (Naboo, Tatooine, Coruscant)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "A galaxy far, far away (Star Wars)"
+    },
+    "A galaxy far, far away (Coruscant, Naboo, Kamino, Geonosis)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "A galaxy far, far away (Star Wars)"
+    },
+    "A galaxy far, far away (Coruscant, Mustafar, etc.)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "A galaxy far, far away (Star Wars)"
+    },
+    "a galaxy far, far away": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "A galaxy far, far away (Star Wars)"
+    },
+    "The Zone (fictional restricted area)": {
+      "lat": 58.5953,
+      "lon": 25.0136,
+      "displayName": "Estonia (The Zone - fictional)"
+    },
+    "Deep space (Nostromo spaceship + LV-426)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (deep space)"
+    },
+    "New Jersey & the 8th Dimension (extradimensional)": {
+      "lat": 40.0583,
+      "lon": -74.4057,
+      "displayName": "New Jersey, USA"
+    },
+    "Post-apocalyptic Earth (2029) + Los Angeles (1984)": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Los Angeles, California, USA (1984/2029)"
+    },
+    "Suburban California, USA": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Suburban California, USA"
+    },
+    "LV-426 (extraterrestrial moon)": {
+      "lat": 51.5074,
+      "lon": -0.1278,
+      "displayName": "LV-426 (fictional moon)"
+    },
+    "Central American jungle (fictional country)": {
+      "lat": 9.0,
+      "lon": -84.0,
+      "displayName": "Central American jungle"
+    },
+    "Detroit, Michigan (fictionalized future city)": {
+      "lat": 42.3314,
+      "lon": -83.0458,
+      "displayName": "Detroit, Michigan, USA (future)"
+    },
+    "Post-apocalyptic Australian wasteland": {
+      "lat": -31.2532,
+      "lon": 146.9211,
+      "displayName": "New South Wales, Australia (post-apocalyptic)"
+    },
+    "Hill Valley, California (fictional town)": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Hill Valley (fictional), California, USA"
+    },
+    "Post-apocalyptic United States": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "United States (post-apocalyptic)"
+    },
+    "Deep-sea environment (Caribbean trench region)": {
+      "lat": 18.0,
+      "lon": -70.0,
+      "displayName": "Caribbean Trench"
+    },
+    "The Moon (extraterrestrial) + Earth orbit": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Moon (Solar System)"
+    },
+    "Old West Hill Valley (American frontier)": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Hill Valley (fictional), California, USA (1885)"
+    },
+    "Post-apocalyptic future Earth (urban wasteland)": {
+      "lat": 51.5074456,
+      "lon": -0.1277653,
+      "displayName": "London, England, UK (post-apocalyptic)"
+    },
+    "Cyberpunk post-apocalyptic United States": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Los Angeles, California, USA (cyberpunk)"
+    },
+    "Dystopian future Earth (collapsed US regions)": {
+      "lat": 36.7014631,
+      "lon": -118.755997,
+      "displayName": "California, USA (dystopian)"
+    },
+    "Los Angeles, 1995": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "Los Angeles, California, USA (1995)"
+    },
+    "Isla Nublar (fictional island near Costa Rica)": {
+      "lat": 10.0,
+      "lon": -85.0,
+      "displayName": "Isla Nublar (fictional)"
+    },
+    "Mars (extraterrestrial) + Earth (futuristic cities)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Mars (Solar System)"
+    },
+    "Fiorina 161 (extraterrestrial prison planet)": {
+      "lat": 51.5074,
+      "lon": -0.1278,
+      "displayName": "Fiorina 161 (fictional planet)"
+    },
+    "Deep Space Nine station (orbit of planet Bajor)": {
+      "lat": 34.0522,
+      "lon": -118.2437,
+      "displayName": "Deep Space Nine (fictional)"
+    },
+    "Earth (primarily USA, cities globally attacked)": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "United States"
+    },
+    "Earth + asteroid in deep space": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Earth (global)"
+    },
+    "Earth + NSEA Protector starship": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Earth (global)"
+    },
+    "United States (various locations)": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "United States"
+    },
+    "Future flooded Earth (various regions)": {
+      "lat": 43.8041,
+      "lon": -120.5542,
+      "displayName": "Oregon, USA (flooded future)"
+    },
+    "The Matrix + post-apocalyptic real Earth": {
+      "lat": -33.8688,
+      "lon": 151.2093,
+      "displayName": "The Matrix (fictional)"
+    },
+    "The Matrix (simulated Earth) + real-world future Earth": {
+      "lat": -33.8688,
+      "lon": 151.2093,
+      "displayName": "The Matrix (fictional)"
+    },
+    "Earth → various galactic locations": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (galactic)"
+    },
+    "United States (alien invasion)": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "United States"
+    },
+    "Interstellar spacecraft Icarus II (solar mission)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (spacecraft)"
+    },
+    "Post-apocalyptic Manhattan": {
+      "lat": 40.7831,
+      "lon": -73.9712,
+      "displayName": "Manhattan, New York City (post-apocalyptic)"
+    },
+    "Malibu, California & Afghanistan": {
+      "lat": 34.0259,
+      "lon": -118.7798,
+      "displayName": "Malibu, California, USA"
+    },
+    "Ancient starship Destiny (deep space)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (starship)"
+    },
+    "Pandora (extraterrestrial moon)": {
+      "lat": -41.2865,
+      "lon": 174.7762,
+      "displayName": "Pandora (fictional moon)"
+    },
+    "Near-future Earth (varies by episode)": {
+      "lat": 51.5074,
+      "lon": -0.1278,
+      "displayName": "United Kingdom (near future)"
+    },
+    "San Francisco, USA": {
+      "lat": 37.7932754,
+      "lon": -122.3963589,
+      "displayName": "San Francisco, California, USA"
+    },
+    "Post-apocalyptic Earth": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Earth (post-apocalyptic)"
+    },
+    "Earth (global freezing catastrophe)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Earth (global catastrophe)"
+    },
+    "Low Earth Orbit (ISS, Shenzhou)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Earth Orbit (ISS)"
+    },
+    "Earth → space → Gargantua system": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (interstellar)"
+    },
+    "United States (near-future scientific setting)": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "United States (near future)"
+    },
+    "Columbus, Ohio + OASIS virtual universe": {
+      "lat": 39.9612,
+      "lon": -82.9988,
+      "displayName": "Columbus, Ohio, USA"
+    },
+    "Earth + space (various locations)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Earth (global)"
+    },
+    "Earth + Titan + various galactic sites": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (galactic)"
+    },
+    "New York City + multiverse crossover settings": {
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "displayName": "New York City, USA (multiverse)"
+    },
+    "Multiple timelines/universes (Marvel multiverse)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (multiverse)"
+    },
+    "Parallel Worlds": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (parallel worlds)"
+    },
+    "Post-apocalyptic Australia": {
+      "lat": -31.2532,
+      "lon": 146.9211,
+      "displayName": "New South Wales, Australia (post-apocalyptic)"
+    },
+    "Dystopian United Kingdom": {
+      "lat": 51.5074,
+      "lon": -0.1278,
+      "displayName": "United Kingdom (dystopian)"
+    },
+    "Europa (moon of Jupiter)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Europa (Solar System)"
+    },
+    "New York City (maximum-security prison city)": {
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "displayName": "New York City, USA (prison city)"
+    },
+    "Tokyo-3 & various apocalyptic Earth sites": {
+      "lat": 35.6768601,
+      "lon": 139.7638947,
+      "displayName": "Tokyo-3 (fictional future Tokyo)"
+    },
+    "Multiverse (various timelines/universes)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Fictional Locations (multiverse)"
+    },
+    "United States (laboratories + forests/jungle-like areas)": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "United States"
+    },
+    "Multiple urban locations (global, near-future setting)": {
+      "lat": 0,
+      "lon": 0,
+      "displayName": "Earth (global, near future)"
+    },
+    "California (fictional coastal town)": {
+      "lat": 34.0536909,
+      "lon": -118.242766,
+      "displayName": "California, USA (fictional town)"
+    },
+    "Czechoslovakia (postwar scientific/industrial environments)": {
+      "lat": 50.0755,
+      "lon": 14.4378,
+      "displayName": "Prague, Czechoslovakia"
+    },
+    "United States (various urban/scientific sites)": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "United States"
+    },
+    "Small-town Oklahoma": {
+      "lat": 35.0078,
+      "lon": -97.0929,
+      "displayName": "Oklahoma, USA"
+    },
+    "United States + global": {
+      "lat": 39.0119,
+      "lon": -98.4842,
+      "displayName": "United States"
+    },
+    "Tunisia": {
+      "lat": 33.8869,
+      "lon": 10.1658
+    },
+    "Mexico": {
+      "lat": 23.6345,
+      "lon": -102.5528,
+      "displayName": "Mexico"
+    },
+    "Australia": {
+      "lat": -25.2744,
+      "lon": 133.7751
+    },
+    "Hawaii, USA": {
+      "lat": 19.8968,
+      "lon": -155.5828
+    },
+    "Massachusetts, USA": {
+      "lat": 42.4072,
+      "lon": -71.3824
+    },
+    "Ohio, USA": {
+      "lat": 40.4173,
+      "lon": -82.9071
+    },
+    "Missouri, USA": {
+      "lat": 38.5767,
+      "lon": -92.1735
+    },
+    "North Carolina, USA": {
+      "lat": 35.7596,
+      "lon": -79.0193
+    },
+    "South Carolina, USA": {
+      "lat": 33.8569,
+      "lon": -80.9450,
+      "displayName": "South Carolina, United States of America"
+    },
+    "Utah, USA": {
+      "lat": 40.7608,
+      "lon": -111.8910,
+      "displayName": "Utah, United States of America"
+    },
+    "Costa Rica": {
+      "lat": 9.9281,
+      "lon": -84.0907,
+      "displayName": "Costa Rica"
+    },
+    "Estonia": {
+      "lat": 58.5953,
+      "lon": 25.0136
+    }
+  },
+  "connections": [
+    {
+      "movie": "2001: A Space Odyssey",
+      "year": "1968",
+      "from": "England",
+      "to": "Jupiter",
+      "type": "filming-to-depicted",
+      "originalFrom": "MGM-British Studios, Borehamwood, UK",
+      "originalTo": "Earth → Moon → Jupiter orbit (extraterrestrial monolith zone)"
+    },
+    {
+      "movie": "A Clockwork Orange",
+      "year": "1971",
+      "from": "London, UK",
+      "to": "London, UK",
+      "type": "filming-to-depicted",
+      "originalFrom": "London and surrounding UK locations",
+      "originalTo": "Dystopian near-future Britain"
+    },
+    {
+      "movie": "Akira",
+      "year": "1988",
+      "from": "Tokyo, Japan",
+      "to": "Tokyo, Japan",
+      "type": "filming-to-depicted",
+      "originalFrom": "Tokyo, Japan (animation production)",
+      "originalTo": "Neo-Tokyo (futuristic city)"
+    },
+    {
+      "movie": "Arrival",
+      "year": "2016",
+      "from": "Montreal, Quebec, Canada",
+      "to": "Montana, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Montreal & Quebec, Canada",
+      "originalTo": "Montana + alien ship"
+    },
+    {
+      "movie": "Blade Runner",
+      "year": "1982",
+      "from": "Los Angeles, California, USA",
+      "to": "Los Angeles, California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA (Warner Bros. Studios)",
+      "originalTo": "Los Angeles, 2019"
+    },
+    {
+      "movie": "Blade Runner 2049",
+      "year": "2017",
+      "from": "Budapest, Hungary",
+      "to": "Los Angeles, California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Budapest, Hungary",
+      "originalTo": "Los Angeles, 2049"
+    },
+    {
+      "movie": "Chappie",
+      "year": "2015",
+      "from": "Johannesburg, South Africa",
+      "to": "Johannesburg, South Africa",
+      "type": "filming-to-depicted",
+      "originalFrom": "Johannesburg, South Africa",
+      "originalTo": "Johannesburg"
+    },
+    {
+      "movie": "Children of Men",
+      "year": "2006",
+      "from": "London, UK",
+      "to": "London, UK",
+      "type": "filming-to-depicted",
+      "originalFrom": "London & various UK sites",
+      "originalTo": "Dystopian United Kingdom"
+    },
+    {
+      "movie": "District 9",
+      "year": "2009",
+      "from": "Johannesburg, South Africa",
+      "to": "Johannesburg, South Africa",
+      "type": "filming-to-depicted",
+      "originalFrom": "Johannesburg, South Africa",
+      "originalTo": "Johannesburg (alien refugee zone)"
+    },
+    {
+      "movie": "Dune",
+      "year": "1984",
+      "from": "Czech Republic",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Prague (Barrandov Studios), Czech Republic",
+      "originalTo": "Arrakis (extraterrestrial planet)"
+    },
+    {
+      "movie": "Edge of Tomorrow",
+      "year": "2014",
+      "from": "London, England, UK",
+      "to": "France, UK",
+      "type": "filming-to-depicted",
+      "originalFrom": "London, UK",
+      "originalTo": "Future Western Europe"
+    },
+    {
+      "movie": "Europa Report",
+      "year": "2013",
+      "from": "New York, USA",
+      "to": "Europa",
+      "type": "filming-to-depicted",
+      "originalFrom": "New York City, USA",
+      "originalTo": "Europa (moon of Jupiter)"
+    },
+    {
+      "movie": "Ex Machina",
+      "year": "2015",
+      "from": "Valldal, Norway",
+      "to": "Alaska, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Norway & UK",
+      "originalTo": "Remote mountain research residence"
+    },
+    {
+      "movie": "Forbidden Planet",
+      "year": "1956",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Culver City, California, USA",
+      "originalTo": "Planet Altair IV (extraterrestrial)"
+    },
+    {
+      "movie": "Gattaca",
+      "year": "1997",
+      "from": "Los Angeles, California, USA",
+      "to": "San Rafael, California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "California (various modernist buildings)",
+      "originalTo": "Near-future United States (eugenics society)"
+    },
+    {
+      "movie": "Ghost in the Shell",
+      "year": "1995",
+      "from": "Tokyo, Japan",
+      "to": "Tokyo, Japan",
+      "type": "filming-to-depicted",
+      "originalFrom": "Japan (animation production)",
+      "originalTo": "New Port City (futuristic Japanese metropolis)"
+    },
+    {
+      "movie": "Godzilla",
+      "year": "1954",
+      "from": "Tokyo, Japan",
+      "to": "Tokyo, Japan",
+      "type": "filming-to-depicted",
+      "originalFrom": "Tokyo, Japan",
+      "originalTo": "Tokyo, Japan"
+    },
+    {
+      "movie": "Her",
+      "year": "2014",
+      "from": "Los Angeles, California, USA",
+      "to": "Los Angeles, California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, USA & Shanghai",
+      "originalTo": "Near-future Los Angeles"
+    },
+    {
+      "movie": "I, Robot",
+      "year": "2004",
+      "from": "North Vancouver, Canada",
+      "to": "Chicago, Illinois, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Vancouver, British Columbia, Canada",
+      "originalTo": "Chicago (futuristic)"
+    },
+    {
+      "movie": "Inception",
+      "year": "2010",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Tokyo, Paris, Los Angeles, London, Calgary",
+      "originalTo": "Global modern Earth + shared dreamscapes"
+    },
+    {
+      "movie": "La Jetée",
+      "year": "1962",
+      "from": "Paris, France",
+      "to": "Paris, France",
+      "type": "filming-to-depicted",
+      "originalFrom": "Paris, France",
+      "originalTo": "Post-apocalyptic Paris + future time periods"
+    },
+    {
+      "movie": "Metropolis",
+      "year": "1927",
+      "from": "Berlin, Germany",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Potsdam, Germany",
+      "originalTo": "Metropolis (fictional futuristic city)"
+    },
+    {
+      "movie": "Minority Report",
+      "year": "2002",
+      "from": "Washington, D.C., USA",
+      "to": "Washington, D.C., USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Washington, D.C. & Virginia (USA)",
+      "originalTo": "Washington, D.C. (futuristic)"
+    },
+    {
+      "movie": "Moon",
+      "year": "2009",
+      "from": "Shepperton Studios, England, UK",
+      "to": "Moon",
+      "type": "filming-to-depicted",
+      "originalFrom": "Shepperton Studios, England",
+      "originalTo": "The Moon (lunar mining base)"
+    },
+    {
+      "movie": "Paprika",
+      "year": "2006",
+      "from": "Tokyo, Japan",
+      "to": "Tokyo, Japan",
+      "type": "filming-to-depicted",
+      "originalFrom": "Tokyo, Japan (animation production)",
+      "originalTo": "Near-future Tokyo (dream landscapes)"
+    },
+    {
+      "movie": "Primer",
+      "year": "2004",
+      "from": "Dallas, Texas, USA",
+      "to": "Texas, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Dallas, Texas, USA",
+      "originalTo": "Texas suburbs (USA)"
+    },
+    {
+      "movie": "Screamers",
+      "year": "1995",
+      "from": "Montreal, Canada",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Quebec, Canada",
+      "originalTo": "Sirius 6B (extraterrestrial mining planet)"
+    },
+    {
+      "movie": "Strange Days",
+      "year": "1995",
+      "from": "Los Angeles, California, USA",
+      "to": "Los Angeles, California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Los Angeles, 1999"
+    },
+    {
+      "movie": "Tenet",
+      "year": "2020",
+      "from": "Tallinn, Estonia",
+      "to": "Siberia, Russia",
+      "type": "filming-to-depicted",
+      "originalFrom": "Tallinn, Oslo, Mumbai, Italy, LA",
+      "originalTo": "Global Earth"
+    },
+    {
+      "movie": "The Fifth Element",
+      "year": "1997",
+      "from": "London, UK",
+      "to": "New York City, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Pinewood Studios (UK) + Mauritania",
+      "originalTo": "New York City (futuristic) + Fhloston Paradise (extraterrestrial)"
+    },
+    {
+      "movie": "The Martian",
+      "year": "2015",
+      "from": "Budapest, Hungary",
+      "to": "Mars",
+      "type": "filming-to-depicted",
+      "originalFrom": "Wadi Rum (Jordan), Budapest",
+      "originalTo": "Mars"
+    },
+    {
+      "movie": "The Matrix",
+      "year": "1999",
+      "from": "Sydney, Australia",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Sydney, Australia",
+      "originalTo": "The Matrix (simulated Earth) + real-world future Earth"
+    },
+    {
+      "movie": "The Time Machine",
+      "year": "2002",
+      "from": "Culver City, California, USA",
+      "to": "London, UK",
+      "type": "filming-to-depicted",
+      "originalFrom": "Metro-Goldwyn-Mayer Studios, Culver City, California, USA",
+      "originalTo": "Far-future Earth (Eloi/Morlock world)"
+    },
+    {
+      "movie": "Vanilla Sky",
+      "year": "2001",
+      "from": "New York City, New York, USA",
+      "to": "New York City, New York, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "New York City, USA",
+      "originalTo": "New York City (dream/LC tech layers)"
+    },
+    {
+      "movie": "Star Trek II: The Wrath of Khan",
+      "year": "1982",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Paramount Studios, Hollywood, USA",
+      "originalTo": "Milky Way Galaxy (Enterprise & Regula I station)"
+    },
+    {
+      "movie": "Dune",
+      "year": "2000",
+      "from": "Czech Republic",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Prague (Barrandov Studios), Czech Republic",
+      "originalTo": "Arrakis (extraterrestrial planet)"
+    },
+    {
+      "movie": "Mr. Robot",
+      "year": "2015",
+      "from": "New York City, New York, USA",
+      "to": "New York City, New York, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "New York City",
+      "originalTo": "New York City"
+    },
+    {
+      "movie": "Neon Genesis Evangelion",
+      "year": "1995–1996",
+      "from": "Tokyo, Japan",
+      "to": "Tokyo, Japan",
+      "type": "filming-to-depicted",
+      "originalFrom": "Japan (animation production)",
+      "originalTo": "Tokyo-3 & various apocalyptic Earth sites"
+    },
+    {
+      "movie": "Rick and Morty",
+      "year": "2013",
+      "from": "Burbank, California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles (animation production)",
+      "originalTo": "Multiverse (various planets/dimensions)"
+    },
+    {
+      "movie": "Star Trek: The Next Generation",
+      "year": "1987–1994",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Paramount Studios, Hollywood, USA",
+      "originalTo": "The Milky Way Galaxy (USS Enterprise-D)"
+    },
+    {
+      "movie": "Star Trek: The Original Series",
+      "year": "1966–1969",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Desilu Studios & Paramount Studios, Hollywood, USA",
+      "originalTo": "The Milky Way Galaxy (USS Enterprise & various planets)"
+    },
+    {
+      "movie": "Stargate Atlantis",
+      "year": "2004–2009",
+      "from": "Vancouver, British Columbia, Canada",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Vancouver, British Columbia, Canada",
+      "originalTo": "Pegasus Galaxy (Atlantis city-ship)"
+    },
+    {
+      "movie": "The Prisoner",
+      "year": "1967–1968",
+      "from": "Portmeirion, Wales, UK",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Portmeirion, Wales (primary)",
+      "originalTo": "'The Village' (fictional isolated control settlement)"
+    },
+    {
+      "movie": "Woman in the Moon",
+      "year": "1929",
+      "from": "Berlin, Germany",
+      "to": "Moon",
+      "type": "filming-to-depicted",
+      "originalFrom": "Berlin, Germany",
+      "originalTo": "Moon"
+    },
+    {
+      "movie": "The Lost World",
+      "year": "1925",
+      "from": "New York City, New York, USA",
+      "to": "London, England, UK",
+      "type": "filming-to-depicted",
+      "originalFrom": "New York City, USA",
+      "originalTo": "London, England"
+    },
+    {
+      "movie": "High Treason",
+      "year": "1929",
+      "from": "London, England, UK",
+      "to": "London, England, UK",
+      "type": "filming-to-depicted",
+      "originalFrom": "London, England",
+      "originalTo": "London, England"
+    },
+    {
+      "movie": "Frankenstein",
+      "year": "1931",
+      "from": "Los Angeles, California, USA",
+      "to": "Paris, France",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Central Europe (fictional village based on Bavaria / Swiss Alps)"
+    },
+    {
+      "movie": "Just Imagine",
+      "year": "1930",
+      "from": "Los Angeles, California, USA",
+      "to": "Mars",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Mars"
+    },
+    {
+      "movie": "The Invisible Man",
+      "year": "1933",
+      "from": "Sydney, Australia",
+      "to": "California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Sydney, Australia",
+      "originalTo": "California (fictional coastal town)"
+    },
+    {
+      "movie": "Deluge",
+      "year": "1933",
+      "from": "Los Angeles, California, USA",
+      "to": "New York City, New York, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "New York City, USA"
+    },
+    {
+      "movie": "Bride of Frankenstein",
+      "year": "1935",
+      "from": "Los Angeles, California, USA",
+      "to": "Paris, France",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Central Europe (fictional villages modeled on Bavaria / Swiss Alps)"
+    },
+    {
+      "movie": "Flash Gordon's Trip to Mars",
+      "year": "1938",
+      "from": "Los Angeles, California, USA",
+      "to": "Mars",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Mars"
+    },
+    {
+      "movie": "Buck Rogers",
+      "year": "1939",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Outer space locations"
+    },
+    {
+      "movie": "Things to Come",
+      "year": "1936",
+      "from": "England, UK",
+      "to": "London, UK",
+      "type": "filming-to-depicted",
+      "originalFrom": "Buckinghamshire, England",
+      "originalTo": "Everytown (fictional British city)"
+    },
+    {
+      "movie": "Flash Gordon Conquers the Universe",
+      "year": "1940",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Planet Mongo (extraterrestrial)"
+    },
+    {
+      "movie": "Invisible Agent",
+      "year": "1942",
+      "from": "Los Angeles, California, USA",
+      "to": "Germany",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Germany"
+    },
+    {
+      "movie": "The Invisible Man Returns",
+      "year": "1940",
+      "from": "Los Angeles, California, USA",
+      "to": "England, UK",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Rural England"
+    },
+    {
+      "movie": "The Beginning or the End",
+      "year": "1947",
+      "from": "Los Angeles, California, USA",
+      "to": "New Mexico, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Los Alamos, New Mexico, USA"
+    },
+    {
+      "movie": "Destination Moon",
+      "year": "1950",
+      "from": "Los Angeles, California, USA",
+      "to": "Moon",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Moon"
+    },
+    {
+      "movie": "The Day the Earth Stood Still",
+      "year": "1951",
+      "from": "Los Angeles, California, USA",
+      "to": "Washington, D.C., USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Washington, D.C., USA"
+    },
+    {
+      "movie": "The War of the Worlds",
+      "year": "1953",
+      "from": "Los Angeles, California, USA",
+      "to": "Los Angeles, California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Los Angeles, California, USA"
+    },
+    {
+      "movie": "Invasion of the Body Snatchers",
+      "year": "1956",
+      "from": "California, USA",
+      "to": "Los Angeles, California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Sierra Madre, California, USA + Allied Artists Studios",
+      "originalTo": "Santa Mira (fictional California town)"
+    },
+    {
+      "movie": "The Fly",
+      "year": "1958",
+      "from": "Los Angeles, California, USA",
+      "to": "Montreal, Quebec, Canada",
+      "type": "filming-to-depicted",
+      "originalFrom": "20th Century Fox Studios, Los Angeles, California, USA",
+      "originalTo": "Montreal, Canada (in-film setting)"
+    },
+    {
+      "movie": "Journey to the Center of the Earth",
+      "year": "1959",
+      "from": "New Mexico, USA",
+      "to": "Iceland",
+      "type": "filming-to-depicted",
+      "originalFrom": "20th Century Fox Studios + Carlsbad Caverns (New Mexico, USA) + Edinburgh exteriors",
+      "originalTo": "Iceland → Subterranean world beneath the Earth"
+    },
+    {
+      "movie": "Assignment: Outer Space",
+      "year": "1960",
+      "from": "Rome, Italy",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Rome, Italy (Cines Studios)",
+      "originalTo": "Outer space (various spacecraft) + futuristic Earth"
+    },
+    {
+      "movie": "Voyage to the End of the Universe",
+      "year": "1963",
+      "from": "Prague, Czech Republic",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Barrandov Studios, Prague, Czechoslovakia",
+      "originalTo": "Interstellar spacecraft Ikaria XB-1"
+    },
+    {
+      "movie": "Beyond the Time Barrier",
+      "year": "1960",
+      "from": "Dallas, Texas, USA",
+      "to": "Global Earth",
+      "type": "filming-to-depicted",
+      "originalFrom": "Dallas, Texas, USA (various airbase & local sets)",
+      "originalTo": "Post-apocalyptic future Earth (underground city)"
+    },
+    {
+      "movie": "First Spaceship on Venus",
+      "year": "1960",
+      "from": "East Germany",
+      "to": "Venus",
+      "type": "filming-to-depicted",
+      "originalFrom": "East Germany",
+      "originalTo": "Venus"
+    },
+    {
+      "movie": "Mysterious Island",
+      "year": "1961",
+      "from": "London, England, UK",
+      "to": "Pacific Island",
+      "type": "filming-to-depicted",
+      "originalFrom": "Pinewood Studios (UK) + Spain & Canary Islands exteriors",
+      "originalTo": "Remote uncharted Pacific island"
+    },
+    {
+      "movie": "The Nutty Professor",
+      "year": "1963",
+      "from": "California, USA",
+      "to": "San Francisco, California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Paramount Studios, Hollywood, California, USA",
+      "originalTo": "Fictional U.S. university campus"
+    },
+    {
+      "movie": "Doctor Who (Dr. Who and the Daleks)",
+      "year": "1964",
+      "from": "London, England",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Shepperton Studios, Middlesex, England",
+      "originalTo": "Planet Skaro (Dalek homeworld)"
+    },
+    {
+      "movie": "Dr. Strangelove",
+      "year": "1964",
+      "from": "London, England",
+      "to": "Washington, D.C., USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Shepperton Studios, Middlesex, England (primary)",
+      "originalTo": "United States (Pentagon, B-52 bomber) + USSR (nuclear target zones)"
+    },
+    {
+      "movie": "Cyborg 2087",
+      "year": "1966",
+      "from": "Los Angeles, California, USA",
+      "to": "Global Earth",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Future Earth (2087) + mid-20th-century America"
+    },
+    {
+      "movie": "Daleks' Invasion Earth 2150 A.D.",
+      "year": "1966",
+      "from": "London, England",
+      "to": "London, England, UK",
+      "type": "filming-to-depicted",
+      "originalFrom": "Shepperton Studios, England",
+      "originalTo": "Post-apocalyptic Earth (ruined London)"
+    },
+    {
+      "movie": "Alphaville",
+      "year": "1965",
+      "from": "Paris, France",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Paris, France",
+      "originalTo": "Alphaville (dystopian sci-fi city on Earth)"
+    },
+    {
+      "movie": "Fantastic Voyage",
+      "year": "1966",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "20th Century Fox Studios, Los Angeles, USA",
+      "originalTo": "Inside the human body (miniaturized submarine mission)"
+    },
+    {
+      "movie": "Planet of the Apes",
+      "year": "1968",
+      "from": "California, USA",
+      "to": "Global Earth",
+      "type": "filming-to-depicted",
+      "originalFrom": "Arizona, California & Utah (USA)",
+      "originalTo": "Future Earth (ruins of human civilization)"
+    },
+    {
+      "movie": "The Illustrated Man",
+      "year": "1969",
+      "from": "California, USA",
+      "to": "Global Earth",
+      "type": "filming-to-depicted",
+      "originalFrom": "California & Nevada (USA)",
+      "originalTo": "Various future Earth settings (anthology format)"
+    },
+    {
+      "movie": "Beneath the Planet of the Apes",
+      "year": "1970",
+      "from": "Los Angeles, California, USA",
+      "to": "New York City, New York, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "20th Century Fox Studios, California, USA",
+      "originalTo": "Post-apocalyptic Earth (ruins of New York City)"
+    },
+    {
+      "movie": "Crimes of the Future",
+      "year": "1970",
+      "from": "Toronto, Ontario, Canada",
+      "to": "Toronto, Ontario, Canada",
+      "type": "filming-to-depicted",
+      "originalFrom": "Toronto, Ontario, Canada",
+      "originalTo": "Near-future dystopian Canada"
+    },
+    {
+      "movie": "I Killed Einstein, Gentlemen",
+      "year": "1970",
+      "from": "Prague, Czech Republic",
+      "to": "Paris, France",
+      "type": "filming-to-depicted",
+      "originalFrom": "Prague, Czechoslovakia (Barrandov Studios)",
+      "originalTo": "Future Earth (primarily Europe)"
+    },
+    {
+      "movie": "The Mind of Mr. Soames",
+      "year": "1970",
+      "from": "London, England",
+      "to": "London, UK",
+      "type": "filming-to-depicted",
+      "originalFrom": "Shepperton Studios, England",
+      "originalTo": "United Kingdom (medical research facility)"
+    },
+    {
+      "movie": "Signals: A Space Adventure",
+      "year": "1970",
+      "from": "Berlin, Germany",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "East Germany (DEFA Studios, Babelsberg)",
+      "originalTo": "Outer space (interplanetary ship)"
+    },
+    {
+      "movie": "Colossus: The Forbin Project",
+      "year": "1970",
+      "from": "Los Angeles, California, USA",
+      "to": "United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "Universal Studios + Golden Gate Park & UCLA (California, USA)",
+      "originalTo": "United States (Colossus HQ) + USSR (Guardian AI system)"
+    },
+    {
+      "movie": "Solaris",
+      "year": "1972",
+      "from": "Moscow, Russia",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Mosfilm Studios (Moscow, USSR)",
+      "originalTo": "Orbiting research station above Planet Solaris"
+    },
+    {
+      "movie": "Westworld",
+      "year": "1973",
+      "from": "California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Metro-Goldwyn-Mayer Studios + Arizona & California desert locations",
+      "originalTo": "Delos theme park (futuristic, fictional)"
+    },
+    {
+      "movie": "Close Encounters of the Third Kind",
+      "year": "1977",
+      "from": "California, USA",
+      "to": "Devils Tower, Wyoming, United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "Alabama, Wyoming, and California (USA)",
+      "originalTo": "Devils Tower, Wyoming (primary)"
+    },
+    {
+      "movie": "A Boy and His Dog",
+      "year": "1975",
+      "from": "Arizona, USA",
+      "to": "Texas, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Arizona, USA",
+      "originalTo": "Post-apocalyptic American Southwest"
+    },
+    {
+      "movie": "Logan's Run",
+      "year": "1976",
+      "from": "Dallas, Texas, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Dallas/Fort Worth, Texas (USA)",
+      "originalTo": "Domed future city (fictional Earth metropolis)"
+    },
+    {
+      "movie": "Star Wars",
+      "year": "1977",
+      "from": "Tunisia",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Tunisia + Elstree Studios (UK) + Guatemala (Yavin IV)",
+      "originalTo": "A galaxy far, far away (extraterrestrial)"
+    },
+    {
+      "movie": "Stalker",
+      "year": "1979",
+      "from": "Estonia",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Estonia & Tajikistan (Soviet Union)",
+      "originalTo": "The Zone (fictional restricted area)"
+    },
+    {
+      "movie": "Alien",
+      "year": "1979",
+      "from": "London, England",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Shepperton Studios, England",
+      "originalTo": "Deep space (Nostromo spaceship + LV-426)"
+    },
+    {
+      "movie": "The Adventures of Buckaroo Banzai Across the 8th Dimension",
+      "year": "1984",
+      "from": "Los Angeles, California, USA",
+      "to": "New Jersey, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "New Jersey & the 8th Dimension (extradimensional)"
+    },
+    {
+      "movie": "The Terminator",
+      "year": "1984",
+      "from": "Los Angeles, California, USA",
+      "to": "Los Angeles, California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Post-apocalyptic Earth (2029) + Los Angeles (1984)"
+    },
+    {
+      "movie": "E.T. the Extra-Terrestrial",
+      "year": "1982",
+      "from": "California, USA",
+      "to": "California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "California, USA (Los Angeles & Northridge)",
+      "originalTo": "Suburban California, USA"
+    },
+    {
+      "movie": "The Empire Strikes Back",
+      "year": "1980",
+      "from": "Norway",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Norway (Hoth), Elstree Studios UK",
+      "originalTo": "A galaxy far, far away (Hoth, Dagobah, Cloud City)"
+    },
+    {
+      "movie": "Escape from New York",
+      "year": "1981",
+      "from": "Missouri, USA",
+      "to": "New York City, New York, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "St. Louis, Missouri (doubling as NYC)",
+      "originalTo": "New York City (maximum-security prison city)"
+    },
+    {
+      "movie": "Return of the Jedi",
+      "year": "1983",
+      "from": "California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "California (Redwood forests), Yuma Desert (Arizona), UK studios",
+      "originalTo": "A galaxy far, far away (Endor, Tatooine, Death Star)"
+    },
+    {
+      "movie": "Aliens",
+      "year": "1986",
+      "from": "Pinewood Studios, England",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Pinewood Studios, England",
+      "originalTo": "LV-426 (extraterrestrial moon)"
+    },
+    {
+      "movie": "Predator",
+      "year": "1987",
+      "from": "Mexico",
+      "to": "Mexico",
+      "type": "filming-to-depicted",
+      "originalFrom": "Puerto Vallarta & Jalisco, Mexico",
+      "originalTo": "Central American jungle (fictional country)"
+    },
+    {
+      "movie": "RoboCop",
+      "year": "1987",
+      "from": "Dallas, Texas, USA",
+      "to": "Detroit, United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "Dallas, Texas, USA",
+      "originalTo": "Detroit, Michigan (fictionalized future city)"
+    },
+    {
+      "movie": "Mad Max Beyond Thunderdome",
+      "year": "1985",
+      "from": "Australia",
+      "to": "Australia",
+      "type": "filming-to-depicted",
+      "originalFrom": "New South Wales & Broken Hill, Australia",
+      "originalTo": "Post-apocalyptic Australian wasteland"
+    },
+    {
+      "movie": "Back to the Future",
+      "year": "1985",
+      "from": "Los Angeles, California, USA",
+      "to": "Hill Valley, California, United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "Universal Studios & Los Angeles, California, USA",
+      "originalTo": "Hill Valley, California (fictional town)"
+    },
+    {
+      "movie": "Cyborg",
+      "year": "1989",
+      "from": "North Carolina, USA",
+      "to": "United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "North Carolina (Wilmington), USA",
+      "originalTo": "Post-apocalyptic United States"
+    },
+    {
+      "movie": "The Abyss",
+      "year": "1989",
+      "from": "South Carolina, USA",
+      "to": "Caribbean trench",
+      "type": "filming-to-depicted",
+      "originalFrom": "Gaffney, South Carolina (abandoned nuclear reactor tank) & Bahamas",
+      "originalTo": "Deep-sea environment (Caribbean trench region)"
+    },
+    {
+      "movie": "The Dark Side of the Moon",
+      "year": "1990",
+      "from": "Los Angeles, California, USA",
+      "to": "Moon",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "The Moon (extraterrestrial) + Earth orbit"
+    },
+    {
+      "movie": "Back to the Future Part III",
+      "year": "1990",
+      "from": "California, USA",
+      "to": "Hill Valley, California, United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "Sonora & Jamestown, California (USA)",
+      "originalTo": "Old West Hill Valley (American frontier)"
+    },
+    {
+      "movie": "Hardware",
+      "year": "1990",
+      "from": "London, England, UK",
+      "to": "Global Earth",
+      "type": "filming-to-depicted",
+      "originalFrom": "London, England & Morocco",
+      "originalTo": "Post-apocalyptic future Earth (urban wasteland)"
+    },
+    {
+      "movie": "Circuitry Man",
+      "year": "1990",
+      "from": "Los Angeles, California, USA",
+      "to": "United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Cyberpunk post-apocalyptic United States"
+    },
+    {
+      "movie": "Crash and Burn",
+      "year": "1990",
+      "from": "California, USA",
+      "to": "United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "California, USA",
+      "originalTo": "Dystopian future Earth (collapsed US regions)"
+    },
+    {
+      "movie": "Terminator 2: Judgment Day",
+      "year": "1991",
+      "from": "Los Angeles, California, USA",
+      "to": "Los Angeles, California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Los Angeles, 1995"
+    },
+    {
+      "movie": "Jurassic Park",
+      "year": "1993",
+      "from": "Hawaii, USA",
+      "to": "Costa Rica",
+      "type": "filming-to-depicted",
+      "originalFrom": "Hawaii (Kauai, Oahu) + Universal Studios",
+      "originalTo": "Isla Nublar (fictional island near Costa Rica)"
+    },
+    {
+      "movie": "Total Recall",
+      "year": "1990",
+      "from": "Mexico",
+      "to": "Mars",
+      "type": "filming-to-depicted",
+      "originalFrom": "Mexico City, Mexico",
+      "originalTo": "Mars (extraterrestrial) + Earth (futuristic cities)"
+    },
+    {
+      "movie": "Alien 3",
+      "year": "1992",
+      "from": "Pinewood Studios, England",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Pinewood Studios, England",
+      "originalTo": "Fiorina 161 (extraterrestrial prison planet)"
+    },
+    {
+      "movie": "Star Trek: Deep Space Nine",
+      "year": "1993",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Paramount Studios, Hollywood, USA",
+      "originalTo": "Deep Space Nine station (orbit of planet Bajor)"
+    },
+    {
+      "movie": "Star Wars: Episode I – The Phantom Menace",
+      "year": "1999",
+      "from": "England, UK",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "England (Leavesden Studios), Tunisia, Italy",
+      "originalTo": "A galaxy far, far away (Naboo, Tatooine, Coruscant)"
+    },
+    {
+      "movie": "Independence Day",
+      "year": "1996",
+      "from": "Utah, USA",
+      "to": "United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "Utah, New Mexico, California (USA)",
+      "originalTo": "Earth (primarily USA, cities globally attacked)"
+    },
+    {
+      "movie": "Armageddon",
+      "year": "1998",
+      "from": "California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Texas, Florida, California (USA)",
+      "originalTo": "Earth + asteroid in deep space"
+    },
+    {
+      "movie": "Galaxy Quest",
+      "year": "1999",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, USA",
+      "originalTo": "Earth + NSEA Protector starship"
+    },
+    {
+      "movie": "Star Wars: Episode II – Attack of the Clones",
+      "year": "2002",
+      "from": "Australia",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Fox Studios Australia; Tunisia; Italy; Spain",
+      "originalTo": "A galaxy far, far away (Coruscant, Naboo, Kamino, Geonosis)"
+    },
+    {
+      "movie": "X-Men",
+      "year": "2000",
+      "from": "Toronto, Canada",
+      "to": "United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "Toronto, Ontario, Canada",
+      "originalTo": "United States (various locations)"
+    },
+    {
+      "movie": "A.I. Artificial Intelligence",
+      "year": "2001",
+      "from": "California, USA",
+      "to": "Global Earth",
+      "type": "filming-to-depicted",
+      "originalFrom": "Oregon, Washington, California (USA)",
+      "originalTo": "Future flooded Earth (various regions)"
+    },
+    {
+      "movie": "The Matrix Reloaded",
+      "year": "2003",
+      "from": "Sydney, Australia",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Sydney & Alameda (USA freeway set)",
+      "originalTo": "The Matrix + post-apocalyptic real Earth"
+    },
+    {
+      "movie": "Eternal Sunshine of the Spotless Mind",
+      "year": "2004",
+      "from": "New York City, New York, USA",
+      "to": "New York City, New York, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "New York City & New Jersey, USA",
+      "originalTo": "New York/New Jersey"
+    },
+    {
+      "movie": "Star Wars: Episode III – Revenge of the Sith",
+      "year": "2005",
+      "from": "Australia",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Fox Studios Australia; UK; Italy; Thailand",
+      "originalTo": "A galaxy far, far away (Coruscant, Mustafar, etc.)"
+    },
+    {
+      "movie": "The Hitchhiker's Guide to the Galaxy",
+      "year": "2005",
+      "from": "England, UK",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "UK (Shepperton Studios) & Namibia",
+      "originalTo": "Earth → various galactic locations"
+    },
+    {
+      "movie": "War of the Worlds",
+      "year": "2005",
+      "from": "New York City, New York, USA",
+      "to": "United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "New York, New Jersey, Virginia (USA)",
+      "originalTo": "United States (alien invasion)"
+    },
+    {
+      "movie": "Sunshine",
+      "year": "2007",
+      "from": "London, England, UK",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "3 Mills Studios, London (UK)",
+      "originalTo": "Interstellar spacecraft Icarus II (solar mission)"
+    },
+    {
+      "movie": "I Am Legend",
+      "year": "2007",
+      "from": "New York City, New York, USA",
+      "to": "New York City, New York, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "New York City, USA",
+      "originalTo": "Post-apocalyptic Manhattan"
+    },
+    {
+      "movie": "Iron Man",
+      "year": "2008",
+      "from": "California, USA",
+      "to": "California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "California (USA) + Nevada desert",
+      "originalTo": "Malibu, California & Afghanistan"
+    },
+    {
+      "movie": "Stargate Universe",
+      "year": "2009",
+      "from": "Vancouver, British Columbia, Canada",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Vancouver, British Columbia, Canada",
+      "originalTo": "Ancient starship Destiny (deep space)"
+    },
+    {
+      "movie": "Avatar",
+      "year": "2009",
+      "from": "Wellington, New Zealand",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Wellington (New Zealand), Los Angeles performance capture",
+      "originalTo": "Pandora (extraterrestrial moon)"
+    },
+    {
+      "movie": "Black Mirror",
+      "year": "2011",
+      "from": "England, UK",
+      "to": "Global Earth",
+      "type": "filming-to-depicted",
+      "originalFrom": "United Kingdom (various)",
+      "originalTo": "Near-future Earth (varies by episode)"
+    },
+    {
+      "movie": "Rise of the Planet of the Apes",
+      "year": "2011",
+      "from": "Vancouver, British Columbia, Canada",
+      "to": "San Francisco, California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Vancouver, Canada",
+      "originalTo": "San Francisco, USA"
+    },
+    {
+      "movie": "Oblivion",
+      "year": "2013",
+      "from": "New York City, New York, USA",
+      "to": "Global Earth",
+      "type": "filming-to-depicted",
+      "originalFrom": "Iceland, New York, Louisiana",
+      "originalTo": "Post-apocalyptic Earth"
+    },
+    {
+      "movie": "Snowpiercer",
+      "year": "2013",
+      "from": "Prague, Czech Republic",
+      "to": "Global Earth",
+      "type": "filming-to-depicted",
+      "originalFrom": "Prague, Austria, South Korea",
+      "originalTo": "Earth (global freezing catastrophe)"
+    },
+    {
+      "movie": "Gravity",
+      "year": "2013",
+      "from": "England, UK",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Shepperton Studios, UK",
+      "originalTo": "Low Earth Orbit (ISS, Shenzhou)"
+    },
+    {
+      "movie": "Interstellar",
+      "year": "2014",
+      "from": "Iceland",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Iceland, Alberta, Los Angeles",
+      "originalTo": "Earth → space → Gargantua system"
+    },
+    {
+      "movie": "Transcendence",
+      "year": "2014",
+      "from": "New Mexico, USA",
+      "to": "United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "New Mexico, California",
+      "originalTo": "United States (near-future scientific setting)"
+    },
+    {
+      "movie": "The Avengers",
+      "year": "2012",
+      "from": "New York City, New York, USA",
+      "to": "New York City, New York, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Cleveland, Albuquerque, New York City",
+      "originalTo": "New York City"
+    },
+    {
+      "movie": "Captain America: The Winter Soldier",
+      "year": "2014",
+      "from": "Washington, D.C., USA",
+      "to": "Washington, D.C., USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Cleveland, Los Angeles, Washington D.C.",
+      "originalTo": "Washington D.C."
+    },
+    {
+      "movie": "Ready Player One",
+      "year": "2018",
+      "from": "England, UK",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Birmingham (UK), Ohio (USA)",
+      "originalTo": "Columbus, Ohio + OASIS virtual universe"
+    },
+    {
+      "movie": "Avengers: Endgame",
+      "year": "2019",
+      "from": "Atlanta, Georgia, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Atlanta, USA",
+      "originalTo": "Earth + space (various locations)"
+    },
+    {
+      "movie": "Avengers: Infinity War",
+      "year": "2018",
+      "from": "New York City, New York, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Atlanta, Edinburgh, New York (stand-in set)",
+      "originalTo": "Earth + Titan + various galactic sites"
+    },
+    {
+      "movie": "Star Wars: Episode IX – The Rise of Skywalker",
+      "year": "2019",
+      "from": "England, UK",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Jordan, England, Wadi Rum",
+      "originalTo": "A galaxy far, far away"
+    },
+    {
+      "movie": "Dune: Part Two",
+      "year": "2024",
+      "from": "Budapest, Hungary",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Budapest, Abu Dhabi, Jordan",
+      "originalTo": "Arrakis"
+    },
+    {
+      "movie": "Jurassic World Dominion",
+      "year": "2022",
+      "from": "Malta",
+      "to": "Global Earth",
+      "type": "filming-to-depicted",
+      "originalFrom": "British Columbia, Malta, UK",
+      "originalTo": "Global Earth"
+    },
+    {
+      "movie": "Avatar: The Way of Water",
+      "year": "2022",
+      "from": "New Zealand",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "New Zealand & LA performance capture",
+      "originalTo": "Pandora (extraterrestrial moon)"
+    },
+    {
+      "movie": "Ghostbusters: Afterlife",
+      "year": "2021",
+      "from": "Alberta, Canada",
+      "to": "Oklahoma",
+      "type": "filming-to-depicted",
+      "originalFrom": "Alberta, Canada",
+      "originalTo": "Small-town Oklahoma"
+    },
+    {
+      "movie": "The Invisible Man",
+      "year": "2020",
+      "from": "Sydney, Australia",
+      "to": "California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Sydney, Australia",
+      "originalTo": "California (fictional coastal town)"
+    },
+    {
+      "movie": "Don't Look Up",
+      "year": "2021",
+      "from": "Massachusetts, USA",
+      "to": "United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "Boston & Massachusetts (USA)",
+      "originalTo": "United States + global"
+    },
+    {
+      "movie": "Nope",
+      "year": "2022",
+      "from": "California, USA",
+      "to": "Agua Dulce, California",
+      "type": "filming-to-depicted",
+      "originalFrom": "Santa Clarita Valley, California",
+      "originalTo": "Agua Dulce, California"
+    },
+    {
+      "movie": "Everything Everywhere All at Once",
+      "year": "2022",
+      "from": "California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Simi Valley & San Fernando Valley, California",
+      "originalTo": "Multiverse (various timelines/universes)"
+    },
+    {
+      "movie": "King of the Rocket Men",
+      "year": "1949",
+      "from": "California, USA",
+      "to": "United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "Republic Pictures Studios, Hollywood, California, USA",
+      "originalTo": "United States (various urban/scientific sites)"
+    },
+    {
+      "movie": "Krakatit",
+      "year": "1948",
+      "from": "Prague, Czech Republic",
+      "to": "Prague, Czech Republic",
+      "type": "filming-to-depicted",
+      "originalFrom": "Barrandov Studios, Prague, Czechoslovakia",
+      "originalTo": "Czechoslovakia (postwar scientific/industrial environments)"
+    },
+    {
+      "movie": "The Jungle Captive",
+      "year": "1945",
+      "from": "Los Angeles, California, USA",
+      "to": "United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "Universal Studios, Hollywood, California, USA",
+      "originalTo": "United States (laboratories + forests/jungle-like areas)"
+    },
+    {
+      "movie": "Bloodshot",
+      "year": "2020",
+      "from": "Cape Town, South Africa",
+      "to": "Global Earth",
+      "type": "filming-to-depicted",
+      "originalFrom": "Cape Town, South Africa; Prague, Czech Republic",
+      "originalTo": "Multiple urban locations (global, near-future setting)"
+    },
+    {
+      "movie": "Spider-Man: No Way Home",
+      "year": "2021",
+      "from": "New York City, New York, USA",
+      "to": "New York City, New York, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "Atlanta, Georgia; Los Angeles; New York City",
+      "originalTo": "New York City + multiverse crossover settings"
+    },
+    {
+      "movie": "Deadpool & Wolverine",
+      "year": "2024",
+      "from": "London, England, UK",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "London, UK; Buckinghamshire; Pinewood Studios",
+      "originalTo": "Multiple timelines/universes (Marvel multiverse)"
+    },
+    {
+      "movie": "Black Widow",
+      "year": "2021",
+      "from": "Budapest, Hungary",
+      "to": "Budapest, Hungary",
+      "type": "filming-to-depicted",
+      "originalFrom": "Budapest, Hungary",
+      "originalTo": "Budapest, Hungary"
+    },
+    {
+      "movie": "The Matrix Resurrections",
+      "year": "2021",
+      "from": "San Francisco, California, USA",
+      "to": "San Francisco, California, USA",
+      "type": "filming-to-depicted",
+      "originalFrom": "San Francisco, California, United States",
+      "originalTo": "San Francisco, California, United State"
+    },
+    {
+      "movie": "Spiderman: Across the Spiderverse",
+      "year": "2023",
+      "from": "Los Angeles, California, USA",
+      "to": "Fictional Locations",
+      "type": "filming-to-depicted",
+      "originalFrom": "Los Angeles, California, United States (animated)",
+      "originalTo": "Parallel Worlds"
+    },
+    {
+      "movie": "Looper",
+      "year": "2012",
+      "from": "New South Wales, Australia",
+      "to": "Australia",
+      "type": "filming-to-depicted",
+      "originalFrom": "New South Wales, Australia",
+      "originalTo": "Post-apocalyptic Australia"
+    },
+    {
+      "movie": "10 Cloverfield Lane",
+      "year": "2016",
+      "from": "New Orleans, Louisiana, United States",
+      "to": "New Orleans, Louisiana, United States",
+      "type": "filming-to-depicted",
+      "originalFrom": "New Orleans, Louisiana, United States",
+      "originalTo": "New Orleans, Louisiana, United States"
+    }
+  ]
+}

@@ -1,0 +1,2049 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Technological Network — Library of Futures</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="navigation-menu.css">
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+		<script src="https://d3js.org/d3.v7.min.js"></script>
+		<style>
+		body {
+			margin: 0;
+			font-family:'IBM Plex Sans', sans-serif;
+			background: #0e0e0f;
+			color: #cccccc;
+			overflow: hidden;
+		}
+			
+			/* Page Header */
+			.page-header {
+				position: fixed;
+				top: 40px;
+				left: 40px;
+				z-index: 50;
+			}
+
+			/* Chord Intro Message */
+			.chord-intro-message {
+				position: fixed;
+				top: 60px;
+				left: 60px;
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				font-family: 'IBM Plex Sans', sans-serif;
+				z-index: 5000;
+				pointer-events: none;
+			}
+
+			.chord-intro-icon {
+				width: 16px;
+				height: 16px;
+				min-width: 16px;
+				min-height: 16px;
+				max-width: 16px;
+				max-height: 16px;
+				background-color: #ffffff;
+				opacity: 0;
+				transform: scale(0);
+				flex-shrink: 0;
+				flex-grow: 0;
+				box-sizing: border-box;
+				animation: boxAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+			}
+
+			@keyframes boxAppear {
+				0% {
+					opacity: 0;
+					transform: scale(0);
+				}
+				100% {
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
+
+			.chord-intro-text {
+				font-size: 11px;
+				color: #ffffff;
+				letter-spacing: 1px;
+				text-transform: uppercase;
+				max-width: 600px;
+				line-height: 1.4;
+				opacity: 0;
+				transition: opacity 0.5s ease;
+			}
+
+			.chord-intro-message.show-text .chord-intro-text {
+				opacity: 1;
+			}
+
+			.chord-intro-text.typing::after {
+				content: '|';
+				display: inline-block;
+				margin-left: 2px;
+				animation: blinkCursor 1s infinite;
+			}
+
+			@keyframes blinkCursor {
+				0%, 50% {
+					opacity: 1;
+				}
+				51%, 100% {
+					opacity: 0;
+				}
+			}
+			
+			.back-link {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+      color: #cccccca4;
+				text-decoration: none;
+      font-size: 12px;
+				letter-spacing: 1px;
+				transition: color 0.3s;
+				text-transform: uppercase;
+      position: fixed;
+         top: 20px;
+         left: 40px;
+         z-index: 200;
+			}
+			
+			.back-link:hover {
+				color: #ffffff;
+			}
+			
+			.back-arrow {
+				font-size: 20px;
+			}
+			
+			/* Sidebar */
+			.sidebar {
+				position: fixed;
+				left: 40px;
+				top: 200px;
+				width: 480px;
+				z-index: 50;
+			}
+			
+			.sidebar-label {
+				font-size: 11px;
+				color: #888888;
+				margin: 0 0 16px 0;
+				letter-spacing: 2px;
+				text-transform: uppercase;
+			}
+			
+			.decade-title {
+				font-size: 56px;
+				font-weight: 400;
+				margin: 0 0 24px 0;
+				color: #ffffff;
+				letter-spacing: 2px;
+				transition: opacity 0.2s ease;
+			}
+
+			.sidebar-text {
+				font-size: 18px;
+				line-height: 1.8;
+				color: #ffffff;
+				margin-bottom: 40px;
+				max-width: 440px;
+				transition: opacity 0.2s ease;
+			}
+
+			/* Pill tags style (from parallel.html) */
+			.sidebar-pills {
+				display: flex;
+				gap: 12px;
+				flex-wrap: wrap;
+				margin-bottom: 16px;
+				transition: opacity 0.2s ease;
+			}
+
+			.sidebar-pill {
+				padding: 6px 16px;
+				border-radius: 999px;
+				font-size: 10px;
+				font-weight: 500;
+				letter-spacing: 1px;
+				border: 1px solid rgba(255,255,255,0.45);
+				color: rgba(255,255,255,0.90);
+				background: rgba(255,255,255,0.03);
+				backdrop-filter: blur(4px);
+				text-transform: uppercase;
+				display: inline-block;
+			}
+			
+			/* Timeline Bar */
+			.timeline-bar {
+				display: flex;
+				align-items: flex-end;
+				gap: 3px;
+				height: 60px;
+				margin-top: 40px;
+			}
+			
+			.timeline-decade {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				flex: 1;
+			}
+			
+			.timeline-bar-fill {
+				width: 100%;
+				background: #333333;
+				transition: all 0.3s;
+			}
+			
+			.timeline-bar-fill.active {
+				background: #ffffff;
+			}
+			
+			.timeline-label {
+				font-size: 9px;
+				color: #666666;
+				margin-top: 8px;
+				letter-spacing: 1px;
+			}
+			
+			/* Navigation Buttons */
+			.nav-buttons {
+				position: fixed;
+				top: 50%;
+				right: 40px;
+				z-index: 50;
+			}
+			
+			.nav-btn {
+				background-color: #2a2a2a;
+				border: 1px solid white;
+				color: #cccccc;
+				padding: 14px 28px;
+				font-family:'IBM Plex Sans', sans-serif;
+				font-size: 12px;
+				letter-spacing: 1.5px;
+				cursor: pointer;
+				transition: all 0.3s;
+				text-decoration: none;
+				display: inline-block;
+				text-transform: uppercase;
+			}
+			
+			.nav-btn:hover {
+				background-color: #3a3a3a;
+				border-color: #666666;
+				color: #ffffff;
+			}
+			
+			/* Main Container */
+			#chordContainer {
+				width: 100vw;
+				height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: #0e0e0f;
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+			}
+			
+			/* Nudge entire chord graph slightly to the right */
+			#chordContainer svg {
+				transform: translateX(40px);
+			}
+			
+			.loading {
+				color: #666666;
+				font-size: 14px;
+				letter-spacing: 2px;
+			}
+			
+			/* Chord Graph Overrides - allow JS to animate colors dynamically while scrolling */
+			#chordContainer .link {
+				/* default faint link color; JS will override stroke/stroke-width/opacity during setDecade */
+				/* Removed default stroke to allow JS color scale to work */
+				opacity: 0.8;
+				transition: stroke 180ms ease, opacity 180ms ease, stroke-width 180ms ease;
+				stroke-linecap: round !important;
+				stroke-linejoin: round !important;
+				shape-rendering: geometricPrecision !important;
+				-webkit-shape-rendering: geometricPrecision !important;
+			}
+
+			#chordContainer .link:hover {
+				opacity: 1.0;
+			}
+
+			#chordContainer .node circle {
+				/* Invisible circle for interactions only */
+				fill: none;
+				stroke: none;
+			}
+			
+			#chordContainer .node image {
+				pointer-events: none;
+				mix-blend-mode: normal !important;
+				transition: opacity 0.3s ease;
+			}
+			
+			/* Hide default cursor on node hover divs */
+			.node-hover-div {
+				cursor: none !important;
+			}
+			
+			#chordContainer .node image[data-has-connections="true"] {
+				opacity: 1 !important;
+			}
+			
+			#chordContainer .node image[data-has-connections="false"] {
+				opacity: 0.2 !important;
+			}
+			
+			#chordContainer .node-text {
+				fill: #FFFFFF !important;
+				font-size: 18px !important;
+				font-family: 'IBM Plex Sans', sans-serif !important;
+			}
+			
+			/* Label background removed - no box around text */
+			#chordContainer .node-label-bg {
+				display: none !important;
+				opacity: 0 !important;
+				visibility: hidden !important;
+			}
+
+			/* remove default cursor on chord graph nodes */
+#chordContainer svg circle {
+    cursor: none !important;
+}
+
+			/* Movie popup styling - copied from parallel.html tooltip */
+			.movie-popup,
+			#chordGraphPopup {
+				position: fixed !important;
+				z-index: 99999 !important;
+				background: rgba(255, 255, 255, 0.3) !important;
+				color: white !important;
+				border: 1px solid #555 !important;
+				border-radius: 8px !important;
+				padding: 20px !important;
+				min-width: 280px !important;
+				max-width: 320px !important;
+				font-family: 'IBM Plex Sans', sans-serif !important;
+				font-size: 12px !important;
+				max-height: 400px !important;
+				overflow-y: auto !important;
+				box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8) !important;
+				pointer-events: auto !important;
+			}
+
+			
+			.chord-tooltip {
+				background: rgba(26, 26, 26, 0.98) !important;
+				border: 1px solid #444444 !important;
+				color: #cccccc !important;
+			}
+
+			/* Timeline Filter */
+			.timeline-container {
+				margin-top: 40px;
+			}
+
+			.timeline-track {
+				position: relative;
+				width: 100%;
+				height: 6px;
+				background: #333333;
+				border-radius: 3px;
+				cursor: pointer;
+			}
+
+			.timeline-handle {
+				position: absolute;
+				left: 0;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				width: 18px;
+				height: 18px;
+				background: #ffffff;
+				border: 2px solid #444444;
+				border-radius: 50%;
+				cursor: grab;
+				transition: all 0.2s;
+			}
+
+			.timeline-handle:hover {
+				width: 22px;
+				height: 22px;
+				border-color: #60a5fa;
+			}
+
+			.timeline-handle:active {
+				cursor: grabbing;
+				background: #60a5fa;
+			}
+
+			/* Top-left horizontal bars — thicker + lower on the page */
+#bookBars {
+  position: fixed;
+  bottom: 48px; 
+  left: 24px;
+  height: 60px;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  z-index: 2;        /* ← VERY IMPORTANT */
+  pointer-events: auto;   /* ← ensure clicks reach the bars */
+}
+
+#bookBars:hover {
+  cursor: none;
+}
+
+.book-bar.hovered {
+  background: rgba(255,255,255,1);
+  opacity: 1;
+}
+
+
+#bookBars::before {
+  content: "";
+  position: absolute;
+  inset: -20px 0;
+  pointer-events: none;   /* ← FIX */
+}
+
+
+
+
+.book-bar {
+  width: 8px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 2px;
+  pointer-events: auto;
+  transition:
+    height 0.35s ease,
+    transform 0.35s ease,
+    opacity 0.25s ease,
+    background 0.25s ease;
+}
+
+.book-bar.active {
+  background: rgba(255, 255, 255, 1);
+  /* transform: scale(1.15); */
+}
+
+
+#barDateDisplay {
+  position: fixed;
+  top: 90px;            /* adjust as you want */
+  left: 24px;
+  color: #ffffff;
+  font-family:'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  opacity: 0.85;
+  letter-spacing: 1px;
+  z-index: 999999;      /* always visible */
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.barDateLabel {
+  position: fixed;
+  color: #ffffff;
+  font-family:'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -8px); /* centered above bar */
+  z-index: 999999;
+  transition: opacity 0.15s ease, top 0.1s ease, left 0.1s ease;
+}
+
+			/* Page Container for Intro/Main Pages */
+			.page-container {
+				position: relative;
+				width: 100%;
+				height: 100vh;
+				overflow: hidden;
+			}
+
+			/* Page Slide */
+			.page-slide {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+				will-change: transform;
+			}
+
+			.page-slide.active {
+				transform: translateX(0);
+				z-index: 2;
+			}
+
+			.page-slide.next {
+				transform: translateX(100%);
+				z-index: 1;
+			}
+
+			.page-slide.prev {
+				transform: translateX(-100%);
+				z-index: 1;
+			}
+
+			/* Intro Page Styles */
+			.intro-page {
+				display: flex;
+				flex-direction: column;
+				padding: clamp(20px, 4vw, 60px);
+				overflow: visible;
+				min-height: 100vh;
+			}
+
+			.intro-panel {
+				position: relative;
+				width: 70%;
+				max-width: 900px;
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				padding-top: clamp(80px, 15vh, 200px);
+				overflow: visible;
+				min-height: 100vh;
+			}
+
+			.intro-category {
+				display: inline-block;
+				padding: clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 20px);
+				border-radius: 999px;
+				font-size: clamp(12px, 1.5vw, 14px);
+				font-weight: 400;
+				letter-spacing: 1.6px;
+				border: 1px solid rgba(255,255,255,0.45);
+				color: rgba(255,255,255,0.90);
+				background: rgba(255,255,255,0.02);
+				margin-bottom: clamp(16px, 2.5vh, 24px);
+				font-family: 'IBM Plex Sans', sans-serif;
+				width: fit-content;
+			}
+
+			.intro-title {
+				font-family: 'IBM Plex Sans', sans-serif;
+				font-size: clamp(2rem, 5vw, 3.5rem);
+				font-weight: 400;
+				color: #ffffff;
+				margin: 0 0 clamp(20px, 3vh, 32px) 0;
+				line-height: 1.2;
+				letter-spacing: -0.5px;
+			}
+
+			.intro-description {
+				font-family: 'IBM Plex Sans', sans-serif;
+				font-size: clamp(0.875rem, 1.5vw, 1rem);
+				color: #ffffff;
+				line-height: 1.6;
+				margin: 0 0 clamp(24px, 4vh, 40px) 0;
+				max-width: 600px;
+				font-weight: 300;
+			}
+
+			/* Intro Timeline Bars */
+			.intro-timeline {
+				display: flex;
+				align-items: flex-end;
+				gap: 3px;
+				height: 60px;
+				margin-bottom: 16px;
+			}
+
+			.intro-timeline-bar {
+				width: 8px;
+				height: 28px;
+				background: rgba(255, 255, 255, 0.45);
+				border-radius: 2px;
+			}
+
+			.intro-timeline-bar.active {
+				background: rgba(255, 255, 255, 1);
+			}
+
+			.intro-published {
+				font-size: 11px;
+				color: #888888;
+				letter-spacing: 0.5px;
+				font-family: 'IBM Plex Sans', sans-serif;
+			}
+
+			/* Arrow Button - Same style as fiction vs reality page */
+			.intro-arrow-button {
+				display: flex !important;
+				align-items: center;
+				gap: clamp(12px, 2vw, 18px);
+				color: #ffffff;
+				text-decoration: none;
+				font-size: clamp(14px, 2vw, 16px);
+				letter-spacing: 3px;
+				text-transform: uppercase;
+				transition: opacity 0.3s ease;
+				z-index: 10001;
+				font-family: 'IBM Plex Sans', sans-serif;
+				pointer-events: auto;
+				cursor: none !important;
+				margin-top: clamp(40px, 15vh, 200px);
+				background: transparent;
+				border: none;
+				padding: 0;
+				position: relative;
+				visibility: visible !important;
+				opacity: 1 !important;
+			}
+			
+			/* Responsive styles for intro page */
+			@media (max-width: 1024px) {
+				.intro-panel {
+					width: 85%;
+					max-width: 100%;
+				}
+			}
+
+			@media (max-width: 768px) {
+				.intro-page {
+					padding: clamp(16px, 3vw, 40px);
+				}
+
+				.intro-panel {
+					width: 100%;
+					padding-top: clamp(60px, 10vh, 120px);
+				}
+
+				.intro-title {
+					font-size: clamp(1.75rem, 6vw, 2.5rem);
+				}
+
+				.intro-description {
+					font-size: clamp(0.875rem, 2vw, 1rem);
+					max-width: 100%;
+				}
+			}
+
+			@media (max-width: 480px) {
+				.intro-page {
+					padding: 20px;
+				}
+
+				.intro-panel {
+					padding-top: 40px;
+				}
+
+				.intro-category {
+					font-size: 11px;
+					padding: 6px 12px;
+				}
+
+				#introChordGraph {
+					display: none; /* Hide intro graph on very small screens */
+				}
+			}
+
+			@media (max-width: 768px) {
+				#introChordGraph {
+					opacity: 0.3; /* Make it more subtle on tablets */
+					width: 40%;
+				}
+			}
+
+			/* Ensure button is visible on smaller screens */
+			@media (max-height: 800px) {
+				.intro-arrow-button {
+					margin-top: 60px;
+				}
+			}
+			
+			@media (max-height: 600px) {
+				.intro-arrow-button {
+					margin-top: 40px;
+				}
+			}
+
+			.intro-arrow-button,
+			.intro-arrow-button * {
+				cursor: none !important;
+			}
+
+			.intro-arrow-button.hidden {
+				display: none !important;
+				opacity: 0 !important;
+				visibility: hidden !important;
+				pointer-events: none !important;
+				z-index: -1 !important;
+			}
+
+			.intro-arrow-button:hover {
+				opacity: 0.7;
+			}
+
+			.intro-arrow-circle {
+				width: clamp(50px, 8vw, 60px);
+				height: clamp(50px, 8vw, 60px);
+				border: 1px solid #ffffff;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: transform 0.3s ease;
+			}
+
+			.intro-arrow-button:hover .intro-arrow-circle {
+				transform: translateX(3px);
+			}
+
+			.intro-arrow-circle::after {
+				content: '→';
+				font-size: 24px;
+				color: #ffffff;
+			}
+
+			.intro-arrow-circle span {
+				display: none;
+			}
+
+			/* Main Chord Graph Page */
+			.chord-page {
+				z-index: 1;
+				background: #0e0e0f;
+			}
+
+			.chord-page.active {
+				z-index: 2;
+			}
+
+			/* Show chord graph on intro page (transparent, on right side) */
+			.intro-page .chord-page {
+				z-index: 0;
+				opacity: 0.3;
+				pointer-events: none;
+			}
+
+			.intro-page .chord-page #chordContainer {
+				opacity: 0.3;
+			}
+
+			/* Disable pointer events on intro graph to prevent blocking navigation menu */
+			#chordContainerIntro,
+			#chordContainerIntro svg,
+			#chordContainerIntro * {
+				pointer-events: none !important;
+			}
+			
+			/* Ensure intro graph container also has no pointer events */
+			#introChordGraph {
+				pointer-events: none !important;
+				z-index: 0 !important;
+			}
+			
+			/* Completely hide intro graph when on main page */
+			.chord-page.active ~ #introChordGraph,
+			.chord-page.active #introChordGraph,
+			body:has(.chord-page.active) #introChordGraph {
+				display: none !important;
+				visibility: hidden !important;
+				opacity: 0 !important;
+				pointer-events: none !important;
+				z-index: -1 !important;
+			}
+			
+			.chord-page.active ~ #introChordGraph svg,
+			.chord-page.active #introChordGraph svg,
+			body:has(.chord-page.active) #introChordGraph svg {
+				display: none !important;
+				visibility: hidden !important;
+				opacity: 0 !important;
+			}
+			
+			/* Ensure navigation menu is above everything and can receive clicks */
+			.navigation-menu {
+				z-index: 10000 !important;
+				pointer-events: auto !important;
+			}
+			
+			.navigation-menu *,
+			.navigation-menu a,
+			.navigation-menu li,
+			.nav-menu-item,
+			.nav-menu-item a {
+				pointer-events: auto !important;
+				z-index: 10001 !important;
+			}
+			
+			/* Ensure main chord graph container doesn't block menu either */
+			#chordContainer {
+				z-index: 1 !important;
+			}
+			
+			#chordContainer svg {
+				z-index: 1 !important;
+			}
+			
+			/* Hide EXPLORE TIMELINE button on intro page, show only on main page */
+			.intro-page.active ~ * .arrow-button-wrapper[href*="parallel.html"],
+			.intro-page.active .arrow-button-wrapper[href*="parallel.html"],
+			body:has(.intro-page.active) .arrow-button-wrapper[href*="parallel.html"] {
+				opacity: 0 !important;
+				pointer-events: none !important;
+				visibility: hidden !important;
+				display: none !important;
+			}
+			
+			/* Show button only on main chord page - use very high z-index to be above nodes */
+			.chord-page.active ~ * .arrow-button-wrapper[href*="parallel.html"],
+			.chord-page.active .arrow-button-wrapper[href*="parallel.html"],
+			body:has(.chord-page.active) .arrow-button-wrapper[href*="parallel.html"],
+			.arrow-button-wrapper[href*="parallel.html"].show-on-main-page {
+				opacity: 1 !important;
+				pointer-events: auto !important;
+				visibility: visible !important;
+				display: inline-flex !important;
+				z-index: 99999 !important;
+				position: fixed !important;
+			}
+			
+			/* Ensure nothing blocks the button - nodes should be below */
+			#chordContainer,
+			#chordContainer svg,
+			#chordContainer .node,
+			#chordContainer .node-hover-div {
+				z-index: 1 !important;
+			}
+
+			.page-footer {
+				position: fixed;
+				bottom: 20px;
+				left: 0;
+				right: 0;
+				padding: 0 40px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				font-family: 'IBM Plex Sans', sans-serif;
+				font-size: 14px;
+				color: rgba(255,255,255,0.65);
+				z-index: 1000;
+				pointer-events: none;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Navigation Menu -->
+		<div class="navigation-menu" id="navigationMenu"></div>
+
+
+		<!-- Page Container -->
+		<div class="page-container">
+			<!-- Intro Page (Page 1) -->
+			<div class="page-slide intro-page active" id="introPage">
+				<div class="intro-panel">
+					<div>
+						<!-- Back Link -->
+						<a href="bookshelf.html" class="back-link">
+							<span class="back-arrow">←</span>
+							<span>Back</span>
+						</a>
+
+						<!-- Category Pill -->
+						<div class="intro-category">TROPE NETWORK</div>
+
+						<!-- Title -->
+						<!-- <h1 class="intro-title">How do sci-fi share themes across time?</h1> -->
+
+						<!-- Description -->
+						<!-- <p class="intro-description">
+							This chord diagram shows how sci-fi films from different eras reuse and reinterpret the same motifs. Each line connects films that share a trope and how those connection reflect culture.
+						</p> -->
+
+						<h1 class="intro-title">Sci-Fi Trope Connections Across Time</h1>
+
+						<!-- Description -->
+						<p class="intro-description">
+							You will see how the usage of tropes in sci-fi films changes as the genre evolves. Initially, when indulging in escapist or speculative fantasies, sci-fi films tend to incorporate either humanistic/social tropes (social control, free will, surveillance, consciousness) or fantastical ones (AI, robotics, space, transcendence, biology), but not both. But as sci-fi grew as an artform, directors used fantastical tropes to express social issues in the face of hardship. As time progresses, more films include both types of tropes.
+						</p>
+						<!-- BEGIN Button - Same style as fiction vs reality page -->
+						<button class="intro-arrow-button" id="beginChordBtn">
+							<span>BEGIN</span>
+							<div class="intro-arrow-circle"></div>
+						</button>
+					</div>
+
+					<div>
+						<!-- Timeline Bars -->
+						<div class="intro-timeline">
+							<div class="intro-timeline-bar active"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+							<div class="intro-timeline-bar"></div>
+						</div>
+						<div class="intro-published">Published 2025</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Main Chord Graph Page (Page 2) -->
+			<div class="page-slide chord-page next" id="chordPage">
+				<!-- Page Header -->
+				<div class="page-header">
+					<a href="bookshelf.html" class="back-link">
+						<span class="back-arrow">←</span>
+						<span>Back</span>
+					</a>
+				</div>
+
+				<!-- Intro Message with Typing Animation -->
+				<div class="chord-intro-message" id="chordIntroMessage">
+					<div class="chord-intro-icon"></div>
+					<div class="chord-intro-text" id="chordIntroText"></div>
+				</div>
+
+				<!-- Sidebar Content -->
+		<div class="sidebar">
+			<h1 class="decade-title" id="decadeTitle">All 5-Year Windows</h1>
+			<div class="sidebar-pills" id="sidebarPills"></div>
+			<p class="sidebar-text" id="sidebarText">
+				Drag the timeline below to filter movies by decade and see how technological themes evolve across eras.
+			</p>
+			
+			<!-- Timeline Filter -->
+			<div class="timeline-container">
+				<!-- <div class="timeline-track" id="timelineTrack">
+					<div class="timeline-handle" id="timelineHandle"></div>
+				</div> -->
+				<div id="bookBars"></div>
+				<!-- <div id="barDateDisplay"></div> -->
+				<div id="hoverBarDate" class="barDateLabel"></div>
+				<div id="activeBarDate" class="barDateLabel"></div>
+			</div>
+			
+		
+		</div>
+
+		<!-- Navigation Buttons -->
+		<!-- <div class="nav-buttons">
+			<a href="parallel.html" class="nav-btn" id="nextBtn">Next →</a>
+		</div> -->
+
+				<!-- Main Visualization -->
+				<div id="chordContainer">
+					<div class="loading">Loading visualization...</div>
+				</div>
+				
+				<div class="page-footer">
+					<div>Published 2025</div>
+					<div>Created by Michael, Audrey, Tanvir, Sydney</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Chord Graph for Intro Page (transparent, on right side) -->
+		<div id="introChordGraph" style="position: fixed; top: 0; right: clamp(-80px, -5vw, -40px); width: clamp(40%, 50vw, 50%); height: 100vh; z-index: 0; opacity: 0.5; pointer-events: none; overflow: hidden;">
+			<div id="chordContainerIntro" style="width: 200%; height: 100%; display: flex; align-items: center; justify-content: flex-start; background: transparent; position: relative; left: 0;">
+				<div class="loading">Loading visualization...</div>
+			</div>
+		</div>
+
+		<script src="./chordGraph.js"></script>
+		<script src="navigation-menu.js"></script>
+		<script>
+
+			// Chord Graph initialization
+			(async function() {
+				const containerId = 'chordContainer';
+				const cg = new ChordGraph(containerId);
+
+				try {
+					await cg.loadData('./merged_movies_data.csv');
+				} catch (err) {
+					document.getElementById(containerId).innerHTML =
+						'<div style="padding:20px;color:#888888">Failed to load data: ' +
+						(err.message || err) + '</div>';
+					return;
+				}
+
+				// Function to get current dimensions
+				const getDimensions = () => {
+					return {
+						width: Math.min(1400, window.innerWidth - 100),
+						height: Math.min(1000, window.innerHeight - 100)
+					};
+				};
+				
+				// Render all themes (no specific movie required)
+				try {
+					const dims = getDimensions();
+					cg.render(null, dims);
+
+						// Center the visualization
+						setTimeout(() => {
+							try {
+								const svgEl = d3.select('#' + containerId + ' svg');
+								svgEl.attr('preserveAspectRatio', 'xMidYMid meet')
+									.style('display', 'block')
+									.style('margin', '0 auto');
+
+								// initialize decade visuals (show All)
+								if (cg && typeof cg.setDecade === 'function') cg.setDecade(null);
+								
+								// Handle window resize - re-render with new dimensions
+								let resizeTimeout;
+								window.addEventListener('resize', () => {
+									clearTimeout(resizeTimeout);
+									resizeTimeout = setTimeout(() => {
+										const newDims = getDimensions();
+										cg.render(null, newDims);
+										if (cg && typeof cg.setDecade === 'function') {
+											cg.setDecade(cg.currentDecade);
+										}
+									}, 250);
+								});
+							} catch(e) {}
+						}, 100);
+					} catch(e) {
+						console.error('Render error:', e);
+				}
+
+				// Also create intro chord graph (transparent, on right side)
+				const introContainerId = 'chordContainerIntro';
+				let cgIntro = null;
+				try {
+					cgIntro = new ChordGraph(introContainerId);
+					await cgIntro.loadData('./merged_movies_data.csv');
+					const introDims = getDimensions();
+					cgIntro.render(null, introDims);
+					// Make it transparent
+					if (cgIntro && typeof cgIntro.setDecade === 'function') {
+						cgIntro.setDecade(null);
+					}
+					// Store reference globally so we can stop it later
+					window.introChordGraphInstance = cgIntro;
+				} catch(e) {
+					console.error('Intro chord graph error:', e);
+				}
+
+				// Timeline functionality (5-year windows)
+				const minYear =1925;
+				const maxYear = 2020;
+				const yearStep = 5; // 5-year windows
+				const years = [];
+				for (let y = minYear; y <= maxYear; y += yearStep) {
+					years.push(y);
+				}
+				let currentIndex = 0;                 // index in the 5-year windows
+				let currentStartYear = years[0];      // default = first window (1950)
+
+				// Decade descriptions
+				const decadeContent = {
+					null: {
+						title: 'All Decades',
+						text: 'Each line between two tropes represents a film that includes both tropes. Use the timeline below or scroll to see how these trope connections evolve over time.',
+						pills: []
+					},
+					1925: {
+						title: '1925-1929',
+						text: 'As sci-fi began developing as a film genre, directors first explored blending themes of robots and space with  genres related to the human condition, which were more traditional for movies of the time.',
+						pills: ['ROARING 20\'S', 'INVENTION OF THE FUEL ROCKET', 'TRANSATLANTIC PHONE CALLS']
+					},
+					1930: {
+						title: '1930-1934',
+						text: 'With the great depression, more societal themes began developing prolifically in sci-fi films. Common trope pairs related to human struggle emerge, like consciousness and free will.',
+						pills: ['great depression', 'pluto discovered', 'prohibition ends']
+					},
+					1935: {
+						title: '1935-1939',
+						text: 'As the great depression progresses and global tensions rise, demand for escapist media increases. This leads to more imaginative recurring trope pairs like space-robot movies and the emergence of films with themes of transcendence.',
+						pills: ['great depression', 'global tensions rise', 'ww2 begins']
+					},
+					1940: {
+						title: '1940-1944',
+						text: 'World War II continues to rage, and many resources are diverted to the war effort. Less technologically savvy films are produced, and so common trope pairings have more to do with the human condition instead of imaginative science fiction.',
+						// pills: ['great depression', 'global tensions rise', 'ww2 begins']
+						pills: ['WW2 ROARS ON', 'PEARL HARBOR ATTACK', 'FALL OF FRANCE']
+					},
+					1945: {
+						title: '1945-1949',
+						text: 'Since many resources were diverted to the war effort during the early 40\'s, fewer technologically advanced sci-fi films finish production in the mid-to-late 40\'s, just as in the first part of the decade. ',
+						// pills: ['great depression', 'global tensions rise', 'ww2 begins']
+						pills: ['WW2 ENDS', 'ATOMIC BOMBS DROPPED', 'COLD WAR BEGINS']
+					},
+					1950: {
+						title: '1950-1954',
+						// text: 'The dawn of the atomic age. Cold War anxieties and innovations manifest in tales of alien invasions and nuclear mutations. Science fiction emerges as a serious literary genre.',
+						// text: 'The dawn of the atomic age. Cold War anxieties and innovations manifest in tales of alien invasions and space travel. Scientifically imaginative tropes become reintegrated in films, as popular trope pairings are now evenly distributed among scientific topics and humanistic ones.',
+						text: 'The dawn of the atomic age. Cold War innovations manifest in tales of alien invasions and space travel. Scientifically imaginative tropes become reintegrated in films.',
+						// pills: ['ATOMIC', 'COLDWAR']
+						pills: ['COLD WAR', 'KOREAN WAR', 'COLORED TV INVENTED']
+					},
+					1955: {
+						title: '1955-1959',
+						text: 'In the post-war era, classic sci-fi tropes like mutated biology and space continued to be reintegrated in film.',
+						// pills: ['SPUTNIK', 'SPACE']
+						pills: ['COLD WAR', 'SPACE RACE', 'VIETNAM WAR BEGINS']
+					},
+					1960: {
+						title: '1960-1964',
+						// text: 'Space race optimism meets counterculture rebellion. From lunar landings to dystopian warnings, the decade explores both the promise and peril of progress.',
+						// text: 'Cold war inventions spark more enthusiasm for scientific imagination. Films with these tropes often focus more on their fantastical aspects instead of sociological implications, as reflected by the lack of trope pairings between scientific and humanistic tropes.',
+						text: 'Cold war inventions spark more enthusiasm for scientific imagination. Films with sci-fi tropes like transcendence and space travel tend to be less likely to include more humanistic tropes like surveillance or free will. In essence, fantastical sci-fi films begin to focus more on fantasy and less on social commentary.',
+						// pills: ['MOON', 'REBELLION']
+						pills: ['COLD WAR', 'LASERS INVENTED', 'APOLLO PROGRAM BEGINS']
+					},
+					1965: {
+						title: '1965-1969',
+						// text: 'Space race optimism meets counterculture rebellion. From lunar landings to dystopian warnings, the decade explores both the promise and peril of progress.',
+						// text: 'Though the moon landing and cold war technologies propel scientific imagination, criticism of the Vietnam War propels directors to integrate these scientific tropes in a societal lens. This is represented by the many  pairings between scientific and humanistic tropes.',
+						text: 'The moon landing sparks inspiration while the Vietname War sparks anxiety. Directors react by mixing humanistic tropes with more imaginative sci-fi tropes. Fantastical sci-fi begins to incorporate social commentary.',
+						// pills: ['APOLLO', 'COUNTERCULTURE']
+						pills: ['COLD WAR', 'MOON LANDING', 'VIETNAM WAR ESCALATES']
+					},
+					1970: {
+						title: '1970-1974',
+						// text: 'Post-apocalyptic visions and ecological collapse. Growing environmental consciousness and economic uncertainty reshape sci-fi into darker, more cynical narratives.',
+						text: 'Environmental concerns and the Vietnam War continue to incentivize directors to create films incorporating both fantastical and social tropes.',
+						// pills: ['ECOLOGY', 'OIL']
+						pills: ['COLD WAR', 'ENVIRONMENTAL MOVEMENT', 'EMAIL INVENTED']
+					},
+					1975: {
+						title: '1975-1979',
+						// text: 'Post-apocalyptic visions and ecological collapse. Growing environmental consciousness and economic uncertainty reshape sci-fi into darker, more cynical narratives.',
+						// text: 'Continued innovation after the Vietnam War sparks the creation of sci-fi movies that focus more on the fantastical aspects of sci-fi technology. Films based on social commentary still are produced but are separated more from the fantastical sci-fi films.',
+						text: 'Continued innovation after the Vietnam War inspires more sci-fi films with fantastical tropes. Social commentary is less in demand so these movies with fantastical tropes tend to have fewer humanistic/social tropes. Instead, these films tend to include multiple fantastical tropes.',
+						// pills: ['STAGFLATION', 'APOCALYPSE']
+						pills: ['COLD WAR', 'APPLE COMPUTER INVENTED', 'THREE MILE ISLAND NUCLEAR DISASTER']
+					},
+					1980: {
+						title: '1980-1984',
+						// text: 'Cyberpunk emerges as computers enter homes. Corporate dystopias, virtual realities, and the merger of human and machine define a new technological anxiety.',
+						text: 'Again, innovation after the Vietnam War inspires more sci-fi films with fantastical tropes. Social commentary is less in demand so these movies with fantastical tropes tend to have fewer humanistic/social tropes.  Instead, these films tend to include multiple fantastical tropes.',
+						// pills: ['COMPUTERS', 'CORPORATE']
+						pills: ['COLD WAR', 'REAGAN ELECTED', 'CD FORMAT LAUNCHED']
+					},
+					1985: {
+						title: '1985-1989',
+						// text: 'Cyberpunk emerges as computers enter homes. Corporate dystopias, virtual realities, and the merger of human and machine define a new technological anxiety.',
+						text:'Cold war tech and a booming economy inspire more sci-fi films with fantastical tropes. Social commentary is less in demand so these movies with fantastical tropes tend to have fewer humanistic/social tropes. Instead, these films tend to include multiple fantastical tropes.',
+						// pills: ['CYBERPUNK', 'VIRTUAL']
+						pills: ['COLD WAR', 'STOCK MARKET BOOMS', 'CHERNOBYL DISASTER']
+					},
+					1990: {
+						title: '1990-1994',
+						// text: 'The internet revolution begins. Virtual worlds, digital consciousness, and questioning reality itself become central themes as the millennium approaches.',
+						text: 'Technology from the Cold War and a booming economy inspire more sci-fi films with fantastical tropes. Social commentary is less in demand so these movies with fantastical tropes tend to have fewer humanistic/social tropes. Instead, these films tend to include multiple fantastical tropes.',
+						// pills: ['INTERNET', 'DIGITAL']
+						pills: ['COLD WAR ENDS', 'INTERNET COMMERCIALIZATION', 'US DOMINANCE']
+					},
+					1995: {
+						title: '1995-1999',
+						// text: 'The internet revolution begins. Virtual worlds, digital consciousness, and questioning reality itself become central themes as the millennium approaches.',
+						text: 'Though films with fantastical tropes generally tend to have other fantastical tropes instead of humanistic ones (and vice versa), as sci-fi establishes itself as a versatile artform, directors begin using fantastical sci-fi elements in tandem with humanistic/social tropes.',
+						// pills: ['Y2K', 'MATRIX']
+						pills: ['DOT COM BOOM', 'WINDOWS 95 LAUNCHES','GOOGLE FOUNDED']
+					},
+					2000: {
+						title: '2000-2004',
+						// text: 'Post-9/11 surveillance states and the war on terror. Superhero narratives dominate as society grapples with security, privacy, and global connectivity.',
+						text: 'A volatile economy and a post-9/11 surveillance state give all the more reason for directors to use fantastical sci-fi tropes as a way to comment on social issues. Films with fantastical sci-fi tropes now tend to include humanistic/social ones too.',
+						// pills: ['9/11', 'SURVEILLANCE']
+						pills: ['DOT COM CRASH', '9/11 ATTACKS', 'HUMAN GENOME COMPLETED']
+					},
+					2005: {
+						title: '2005-2009',
+						// text: 'Post-9/11 surveillance states and the war on terror. Superhero narratives dominate as society grapples with security, privacy, and global connectivity.',
+						text: 'A recession, climate crisis, and post-9/11 surveillance state give all the more reason for directors to use fantastical sci-fi tropes as a way to comment on social issues. Films with fantastical sci-fi tropes now tend to include humanistic/social ones too.',
+						// pills: ['SUPERHERO', 'TERROR']
+						pills: ['GREAT RECESSION', 'iPHONE INTRODUCED', 'HURRICANE KATRINA']
+					},
+					2010: {
+						title: '2010-2014',
+						// text: 'AI awakening and climate crisis. Automation anxiety, social media dystopias, and existential questions about humanity\'s future in an age of machine intelligence.',
+						text: 'Geopolitical and scientific concerns inspire directors to further use fantastical sci-fi tropes as a way to comment on social issues. Films with fantastical sci-fi tropes now tend to include humanistic/social ones too.',
+						// pills: ['AI', 'CLIMATE']
+						pills: ['Edward Snowden leaks', 'SYRIAN WAR', 'CRISPR BREAKTHROUGH']
+					},
+					2015: {
+						title: '2015-2019',
+						// text: 'AI awakening and climate crisis. Automation anxiety, social media dystopias, and existential questions about humanity\'s future in an age of machine intelligence.',
+						text: 'Political and climate concerns inspire directors to further use fantastical sci-fi tropes as a way to comment on social issues. Films with fantastical sci-fi tropes now tend to include humanistic/social ones too.',
+						// pills: ['SOCIAL', 'AUTOMATION']
+						pills: ['Brexit', '#METOO MOVEMENT', 'Paris Climate Accord']
+					},
+					2020: {
+						title: '2020-2024',
+						// text: 'Pandemic futures and multiverse theory. Reality becomes increasingly fluid as science fiction and present-day concerns blur into one another.',
+						text: 'The pandemic, war, and AI misusage inspire directors to further use fantastical sci-fi tropes as a way to comment on social issues. Films with fantastical sci-fi tropes now tend to include humanistic/social ones too.',
+						// pills: ['PANDEMIC', 'MULTIVERSE']
+						pills: ['Covid pandemic', 'invasion of Ukraine', 'AI boom']
+					}
+				};
+
+				function updateDecadeDisplay(startYear, skipAnimation = false) {
+					const decadeTitle = document.getElementById('decadeTitle');
+					const sidebarText = document.getElementById('sidebarText');
+					const sidebarPills = document.getElementById('sidebarPills');
+
+					let content = null;
+					let displayTitle = '';
+					
+					if (!startYear) {
+						content = decadeContent[null];
+						displayTitle = content.title;
+					} else {
+						// Generate 5-year range title (e.g., "1950-1954", "1955-1959")
+						const endYear = startYear + 4;
+						displayTitle = `${startYear}-${endYear}`;
+						
+						// Try to find exact match first, then nearest decade description
+						content = decadeContent[startYear];
+						if (!content) {
+							const decadeKey = Math.floor(startYear / 10) * 10;
+							content = decadeContent[decadeKey] || decadeContent[null];
+						}
+					}
+
+					if (content) {
+						// Update pills
+						if (sidebarPills) {
+							sidebarPills.innerHTML = '';
+							if (content.pills && content.pills.length > 0) {
+								content.pills.forEach(pillText => {
+									const pill = document.createElement('span');
+									pill.className = 'sidebar-pill';
+									pill.textContent = pillText;
+									sidebarPills.appendChild(pill);
+								});
+							}
+						}
+
+						if (skipAnimation) {
+							decadeTitle.textContent = displayTitle;
+							sidebarText.textContent = content.text;
+						} else {
+							decadeTitle.style.opacity = '0';
+							sidebarText.style.opacity = '0';
+							if (sidebarPills) sidebarPills.style.opacity = '0';
+							setTimeout(() => {
+								decadeTitle.textContent = displayTitle;
+								sidebarText.textContent = content.text;
+								decadeTitle.style.opacity = '1';
+								sidebarText.style.opacity = '1';
+								if (sidebarPills) sidebarPills.style.opacity = '1';
+							}, 100);
+						}
+					}
+				}
+
+				// Initialize with "All" decade display (no animation on first load)
+				updateDecadeDisplay(null, true);
+/* -----------------------------------------------------------
+   SCROLLING
+----------------------------------------------------------- */
+
+function scrollToWindow(direction) {
+    // direction = +1 (scroll down → go forward), -1 (scroll up → go backward)
+    const bars = document.querySelectorAll(".book-bar");
+
+    // Update index safely
+    currentIndex += direction;
+
+    // Clamp so we never go out of range
+    if (currentIndex < 0) currentIndex = 0;
+    if (currentIndex >= years.length) currentIndex = years.length - 1;
+
+    // Determine new year window
+    currentStartYear = years[currentIndex];
+
+    // Update visuals
+    updateActiveBookBar(currentIndex);
+    updateDecadeDisplay(currentStartYear);
+    cg.setDecade(currentStartYear);
+
+    // Optional: move labels
+    const activeLabel = document.getElementById("activeBarDate");
+    positionLabelOverBar(activeLabel, bars[currentIndex], currentStartYear);
+}
+/* -----------------------------------------------------------
+   SCROLLING TO MOVE THROUGH 5-YEAR WINDOWS
+----------------------------------------------------------- */
+
+let lastScrollTime = 0;
+const scrollCooldown = 120;  // ms → lowers sensitivity
+
+window.addEventListener("wheel", (e) => {
+    const now = performance.now();
+    if (now - lastScrollTime < scrollCooldown) return;
+    lastScrollTime = now;
+
+    const direction = e.deltaY > 0 ? +1 : -1;
+    scrollToWindow(direction);
+});
+
+
+
+/* -----------------------------------------------------------
+   TOP-LEFT BOOK BARS (one per book)
+----------------------------------------------------------- */
+
+const bookBarsContainer = document.getElementById("bookBars");
+
+function buildBookBars() {
+  bookBarsContainer.innerHTML = "";
+  years.forEach((b, i) => {
+    const bar = document.createElement("div");
+    bar.classList.add("book-bar");
+    bar.dataset.index = i;
+    bookBarsContainer.appendChild(bar);
+  });
+}
+
+buildBookBars();
+
+/* -----------------------------------------------------------
+   Active bar highlight (centered book)
+----------------------------------------------------------- */
+function updateActiveBookBar(index) {
+  document.querySelectorAll(".book-bar").forEach((bar, i) => {
+    bar.classList.toggle("active", i === index);
+  });
+}
+
+/* -----------------------------------------------------------
+   Click → jump to book
+----------------------------------------------------------- */
+function jumpToBook(index) {
+    updateActiveBookBar(index);
+    currentIndex = index;                 // ← sync scroll index
+    currentStartYear = years[index];
+    updateDecadeDisplay(currentStartYear);
+    cg.setDecade(currentStartYear);
+}
+
+/* -----------------------------------------------------------
+   CLICK HANDLER (works reliably)
+----------------------------------------------------------- */
+document.querySelectorAll(".book-bar").forEach(bar => {
+  bar.addEventListener("click", (e) => {
+    e.stopPropagation();
+						e.preventDefault();
+
+    const index = Number(bar.dataset.index);
+
+    // Scroll to that book
+    jumpToBook(index);
+
+    // Highlight the selected bar
+    updateActiveBookBar(index);
+
+    // ❌ DO NOT reset the wave here
+    // Wave should stay as long as the mouse is inside the container
+  });
+});
+
+
+/* -----------------------------------------------------------
+   CLICK-SAFE MOVEMENT SUPPRESSION
+   (prevents wave logic from interfering with clicks)
+----------------------------------------------------------- */
+let suppressWaveUntil = 0;
+window.addEventListener("mousedown", () => {
+  suppressWaveUntil = performance.now() + 120;
+});
+
+/* -----------------------------------------------------------
+   AREA-AWARE HOVER (sinusoidal wave)
+----------------------------------------------------------- */
+const barsContainer = document.getElementById("bookBars");
+let hoveredBarIndex = null;
+let lastMouseX = null;
+
+barsContainer.addEventListener("mousemove", (e) => {
+
+  if (performance.now() < suppressWaveUntil) return;
+
+  const bars = Array.from(document.querySelectorAll(".book-bar"));
+  const rect = barsContainer.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+
+  let closestIndex = 0;
+  let closestDist = Infinity;
+
+  bars.forEach((bar, i) => {
+    const barRect = bar.getBoundingClientRect();
+    const barCenter = barRect.left - rect.left + barRect.width / 2;
+    const dist = Math.abs(mouseX - barCenter);
+
+    if (dist < closestDist) {
+      closestDist = dist;
+      closestIndex = i;
+    }
+  });
+
+  hoveredBarIndex = closestIndex;
+  applyWaveEffect(closestIndex);
+
+  // highlight nearest bar
+  bars.forEach((bar, i) =>
+    bar.classList.toggle("hovered", i === hoveredBarIndex)
+  );
+
+  // NEW — position labels on the two highlighted bars
+  const hoverLabel = document.getElementById("hoverBarDate");
+  const activeLabel = document.getElementById("activeBarDate");
+
+  positionLabelOverBar(hoverLabel, bars[closestIndex], years[closestIndex]);
+
+  const activeIndex = bars.findIndex(b => b.classList.contains("active"));
+  if (activeIndex !== -1) {
+    positionLabelOverBar(activeLabel, bars[activeIndex], years[activeIndex]);
+  }
+});
+
+/* -----------------------------------------------------------
+   CLICK ANYWHERE → ALWAYS CLICK THE HOVERED BAR
+----------------------------------------------------------- */
+barsContainer.addEventListener("click", (e) => {
+																											e.preventDefault();
+    e.stopPropagation();
+
+    // If no bar is hovered, do nothing
+    if (hoveredBarIndex == null) return;
+
+    // Force-click the highlighted bar
+    jumpToBook(hoveredBarIndex);
+
+    // Update visuals
+    updateActiveBookBar(hoveredBarIndex);
+
+    // Reposition active label
+    const bars = document.querySelectorAll(".book-bar");
+    const activeLabel = document.getElementById("activeBarDate");
+    positionLabelOverBar(activeLabel, bars[hoveredBarIndex], years[hoveredBarIndex]);
+});
+
+/* -----------------------------------------------------------
+   ENTER / LEAVE (disable arrow cursor + reset wave)
+----------------------------------------------------------- */
+
+let hoveringBars = false;
+
+barsContainer.addEventListener("mouseenter", () => {
+  hoveringBars = true;
+  cursor.classList.remove("arrow-left", "arrow-right");
+});
+
+barsContainer.addEventListener("mouseleave", () => {
+  hoveringBars = false;
+  hoveredBarIndex = null;
+  resetWave();
+
+  document.querySelectorAll(".book-bar").forEach(bar =>
+    bar.classList.remove("hovered")
+  );
+
+  document.getElementById("hoverBarDate").style.opacity = 0;
+  document.getElementById("activeBarDate").style.opacity = 0;
+});
+
+
+
+/* -----------------------------------------------------------
+   UPDATE BAR FOR CENTERED BOOK (during scroll)
+----------------------------------------------------------- */
+// function updateBarForCenteredBook() {
+//   let closestIndex = 0;
+//   let closestDist = Infinity;
+
+//   books.forEach((b, i) => {
+//     const dist = Math.abs(b.mesh.position.x + shelfOffset);
+//     if (dist < closestDist) {
+//       closestDist = dist;
+//       closestIndex = i;
+//     }
+//   });
+
+//   updateActiveBookBar(closestIndex);
+// }
+
+/* -----------------------------------------------------------
+   FULL-WIDTH SINUSOIDAL WAVE EFFECT
+----------------------------------------------------------- */
+
+const BASE_HEIGHT = 12;       // height at edges
+const PEAK_HEIGHT = 70;       // tallest at hovered bar
+
+function applyWaveEffect(centerIndex) {
+  const bars = document.querySelectorAll(".book-bar");
+  const total = bars.length;
+
+  for (let i = 0; i < total; i++) {
+
+    // absolute distance from hovered bar
+    const dist = Math.abs(i - centerIndex);
+
+    // normalize into [0, 1]
+    const t = dist / (total - 1);
+
+    // FULL-WIDTH cosine wave (peak in middle, edges low)
+    // t = 0 → peak = 1
+    // t = 1 → edge = 0
+    const wave = Math.cos(1.5 * t * Math.PI) * 0.75  / (1+t**2) + 0.5;
+
+    const height = BASE_HEIGHT + wave * (PEAK_HEIGHT - BASE_HEIGHT);
+
+    bars[i].style.height = `${height}px`;
+  }
+}
+
+
+function resetWave() {
+  document.querySelectorAll(".book-bar").forEach(bar => {
+    bar.style.height = BASE_HEIGHT + "px";
+    bar.classList.remove("hovered");
+  });
+}
+
+const barDateDisplay = document.getElementById("barDateDisplay");
+
+function showBarDates(hoverIndex) {
+  const activeIndex = [...document.querySelectorAll(".book-bar")]
+    .findIndex(bar => bar.classList.contains("active"));
+
+//   const hoverYear  = booksMeta[hoverIndex]?.year;
+//   const activeYear = booksMeta[activeIndex]?.year;
+
+  if (hoverYear === undefined || activeYear === undefined) return;
+
+  barDateDisplay.textContent = `Selected: ${activeYear}    Hovering: ${hoverYear}`;
+  barDateDisplay.style.opacity = 1;
+}
+
+function hideBarDates() {
+  barDateDisplay.style.opacity = 0;
+}
+
+// Function to format year as 5-year range (e.g., 1960 -> "1960-1964")
+function formatYearRange(year) {
+  if (year === null || year === undefined) return '';
+  const startYear = parseInt(year);
+  const endYear = startYear + 4;
+  return `${startYear}-${endYear}`;
+}
+
+function positionLabelOverBar(labelEl, barEl, year) {
+  if (!barEl) {
+    labelEl.style.opacity = 0;
+    return;
+  }
+
+  const rect = barEl.getBoundingClientRect();
+
+  // Format year as 5-year range
+  labelEl.textContent = formatYearRange(year);
+  labelEl.style.left = rect.left + rect.width / 2 + "px";
+  labelEl.style.top  = rect.top - 12 + "px";
+  labelEl.style.opacity = 0.9;
+}
+
+
+
+			})();
+		</script>
+		    <link rel="stylesheet" href="arrowButton.css">
+			<script src="arrowButton.js"></script>
+			
+			<script>
+				// Typing animation for chord intro message
+				// Store typing timeout to allow cancellation
+				let chordTypingTimeout = null;
+				let chordTypingIndex = 0;
+				let chordTypingText = '';
+				let chordTypingElement = null;
+
+				function typeText(element, text, speed = 30) {
+					// Cancel any existing typing animation
+					if (chordTypingTimeout) {
+						clearTimeout(chordTypingTimeout);
+						chordTypingTimeout = null;
+					}
+					
+					// Reset state
+					element.textContent = '';
+					element.innerHTML = '';
+					element.classList.add('typing');
+					
+					// Store current typing state
+					chordTypingElement = element;
+					chordTypingText = text;
+					chordTypingIndex = 0;
+					
+					function type() {
+						if (chordTypingIndex < chordTypingText.length && chordTypingElement === element) {
+							element.textContent = chordTypingText.substring(0, chordTypingIndex + 1);
+							chordTypingIndex++;
+							chordTypingTimeout = setTimeout(type, speed);
+						} else {
+							if (chordTypingElement === element) {
+								element.classList.remove('typing');
+								chordTypingTimeout = null;
+								chordTypingElement = null;
+							}
+						}
+					}
+					type();
+				}
+
+				// Track if intro message has been shown to prevent multiple calls
+				let chordIntroMessageShown = false;
+
+				// Show intro message with typing animation
+				function showChordIntroMessage() {
+					const introMessage = document.getElementById('chordIntroMessage');
+					const introText = document.getElementById('chordIntroText');
+					
+					if (introMessage && introText && !chordIntroMessageShown) {
+						chordIntroMessageShown = true;
+						
+						// Cancel any existing typing
+						if (chordTypingTimeout) {
+							clearTimeout(chordTypingTimeout);
+							chordTypingTimeout = null;
+						}
+						
+						// Show the message container
+						introMessage.style.display = 'flex';
+						
+						// Wait for box animation, then start typing
+						setTimeout(() => {
+							introMessage.classList.add('show-text');
+							// Correct order: Hover first, then Scroll
+							const text = "Hover over paths to reveal shared themes. Scroll to travel through time.";
+							// Clear any existing text first
+							introText.textContent = '';
+							introText.innerHTML = '';
+							typeText(introText, text, 30);
+						}, 650);
+					}
+				}
+
+				// Trigger when page loads
+				document.addEventListener('DOMContentLoaded', () => {
+					setTimeout(showChordIntroMessage, 500);
+				});
+			</script>
+			<div data-arrow-button 
+			text="EXPLORE TIMELINE" 
+			href="parallel.html"
+			delay="0"
+			id="text3ArrowButton">
+			</div>
+
+		    <div id="cursorCircle"></div>
+			<link rel="stylesheet" href="cursor.css">
+			<script src="cursor.js" defer></script>
+			
+			<script>
+				// Initially hide EXPLORE TIMELINE button on page load
+				document.addEventListener('DOMContentLoaded', () => {
+					const hideExploreButton = () => {
+						const wrappers = document.querySelectorAll('.arrow-button-wrapper[href*="parallel.html"]');
+						wrappers.forEach(wrapper => {
+							wrapper.style.opacity = "0";
+							wrapper.style.pointerEvents = "none";
+							wrapper.style.visibility = "hidden";
+						});
+					};
+					
+					// Hide immediately and keep checking
+					hideExploreButton();
+					setTimeout(hideExploreButton, 100);
+					setTimeout(hideExploreButton, 500);
+					setTimeout(hideExploreButton, 1000);
+				});
+			</script>
+
+		<script>
+			// Page navigation
+			let currentPage = 0;
+			const pages = document.querySelectorAll('.page-slide');
+			const navMenu = document.getElementById('navigationMenu');
+			const beginBtn = document.getElementById('beginChordBtn');
+			const introChordGraph = document.getElementById('introChordGraph');
+
+			// Function to transition from intro to main page (used by both button click and scroll)
+			function goToMainPage() {
+				if (currentPage < pages.length - 1) {
+					// Hide the BEGIN arrow button immediately using class
+					if (beginBtn) {
+						beginBtn.classList.add('hidden');
+					}
+					// Immediately clear and hide intro chord graph before page transition
+					const introChordGraphEl = document.getElementById('introChordGraph');
+					const introContainerEl = document.getElementById('chordContainerIntro');
+					
+					// Stop any intervals or animations from the intro graph instance
+					if (window.introChordGraphInstance) {
+						// Clear any update intervals
+						if (window.introChordGraphInstance.hoverUpdateInterval) {
+							clearInterval(window.introChordGraphInstance.hoverUpdateInterval);
+						}
+						// Clear the instance reference
+						window.introChordGraphInstance = null;
+					}
+					
+					if (introChordGraphEl) {
+						introChordGraphEl.style.display = 'none';
+						introChordGraphEl.style.visibility = 'hidden';
+						introChordGraphEl.style.opacity = '0';
+						introChordGraphEl.style.pointerEvents = 'none';
+						introChordGraphEl.style.zIndex = '-1';
+					}
+					if (introContainerEl) {
+						// Remove SVG to stop rendering
+						const svg = introContainerEl.querySelector('svg');
+						if (svg) {
+							svg.remove();
+						}
+						// Remove all child elements
+						introContainerEl.innerHTML = '';
+						introContainerEl.style.pointerEvents = 'none';
+						introContainerEl.style.zIndex = '-1';
+						introContainerEl.style.opacity = '0';
+						introContainerEl.style.display = 'none';
+					}
+					currentPage++;
+					updatePages();
+					// Show EXPLORE TIMELINE button after transitioning to main page
+					// Use multiple timeouts to ensure it works in Chrome
+					const enableExploreTimelineButton = () => {
+						// The arrowButton.js replaces the div with a wrapper, find it by href
+						const arrowWrappers = document.querySelectorAll('.arrow-button-wrapper');
+						arrowWrappers.forEach(wrapper => {
+							if (wrapper.href && (wrapper.href.includes('parallel.html') || wrapper.getAttribute('href') === 'parallel.html')) {
+								// Add class to trigger CSS
+								wrapper.classList.add('show-on-main-page');
+								
+								// Show and enable the button with very high z-index
+								wrapper.style.opacity = "1";
+								wrapper.style.pointerEvents = "auto";
+								wrapper.style.visibility = "visible";
+								wrapper.style.zIndex = "99999";
+								wrapper.style.position = "fixed";
+								wrapper.style.display = "inline-flex";
+								wrapper.style.top = "50%";
+								wrapper.style.right = "40px";
+								wrapper.style.transform = "translateY(-50%)";
+								
+								// Ensure it's clickable
+								wrapper.setAttribute('tabindex', '0');
+								
+								// Ensure the href is set correctly
+								if (!wrapper.href || !wrapper.href.includes('parallel.html')) {
+									wrapper.href = 'parallel.html';
+								}
+								
+								// Remove any click handlers that might prevent navigation
+								const newClickHandler = (e) => {
+									// Allow default navigation
+									window.location.href = wrapper.href;
+								};
+								
+								// Remove old listeners and add new one
+								wrapper.onclick = newClickHandler;
+								
+								// Add cursor hover effect
+								const cursorEl = document.getElementById('cursorCircle');
+								if (cursorEl && !wrapper.dataset.cursorHoverSetup) {
+									wrapper.dataset.cursorHoverSetup = 'true';
+									wrapper.addEventListener('mouseenter', () => {
+										cursorEl.classList.add('hover');
+										cursorEl.style.setProperty('width', '45px', 'important');
+										cursorEl.style.setProperty('height', '45px', 'important');
+										cursorEl.style.setProperty('opacity', '0.7', 'important');
+										cursorEl.style.setProperty('background', 'white', 'important');
+									});
+									wrapper.addEventListener('mouseleave', () => {
+										cursorEl.classList.remove('hover');
+										cursorEl.style.setProperty('width', '18px', 'important');
+										cursorEl.style.setProperty('height', '18px', 'important');
+										cursorEl.style.setProperty('opacity', '1', 'important');
+										cursorEl.style.setProperty('background', 'rgba(200, 200, 200, 0.5)', 'important');
+									});
+								}
+							}
+						});
+					};
+					
+					// Try multiple times to catch the button at different creation times
+					setTimeout(enableExploreTimelineButton, 100);
+					setTimeout(enableExploreTimelineButton, 500);
+					setTimeout(enableExploreTimelineButton, 1000);
+					setTimeout(enableExploreTimelineButton, 2000);
+					
+					// Show intro message text after chord graph is revealed
+					setTimeout(() => {
+						if (typeof showChordIntroMessage === 'function') {
+							showChordIntroMessage();
+						}
+					}, 500);
+				}
+			}
+
+			function updatePages() {
+				pages.forEach((page, index) => {
+					page.classList.remove('active', 'next', 'prev');
+					if (index === currentPage) {
+						page.classList.add('active');
+						// Navigation menu always visible
+						if (navMenu) navMenu.style.display = '';
+						
+						if (index === 0) {
+							// Hide EXPLORE TIMELINE button on intro page
+							const exploreButtons = document.querySelectorAll('.arrow-button-wrapper[href*="parallel.html"]');
+							exploreButtons.forEach(btn => {
+								btn.style.opacity = "0";
+								btn.style.pointerEvents = "none";
+								btn.style.visibility = "hidden";
+							});
+						}
+						
+						if (index === 1) {
+							// Hide BEGIN button when on main page
+							if (beginBtn) beginBtn.classList.add('hidden');
+							// Completely remove and stop rendering intro chord graph when on main page
+							// Stop any intervals or animations from the intro graph instance
+							if (window.introChordGraphInstance) {
+								if (window.introChordGraphInstance.hoverUpdateInterval) {
+									clearInterval(window.introChordGraphInstance.hoverUpdateInterval);
+								}
+								window.introChordGraphInstance = null;
+							}
+							
+							if (introChordGraph) {
+								introChordGraph.style.display = 'none';
+								introChordGraph.style.visibility = 'hidden';
+								introChordGraph.style.pointerEvents = 'none';
+								introChordGraph.style.zIndex = '-1';
+								introChordGraph.style.opacity = '0';
+							}
+							// Clear the intro container's content to stop rendering
+							const introContainer = document.getElementById('chordContainerIntro');
+							if (introContainer) {
+								// Remove all SVG and child elements to stop rendering
+								const svg = introContainer.querySelector('svg');
+								if (svg) {
+									svg.remove();
+								}
+								// Clear all content completely
+								introContainer.innerHTML = '';
+								introContainer.style.pointerEvents = 'none';
+								introContainer.style.zIndex = '-1';
+								introContainer.style.opacity = '0';
+								introContainer.style.display = 'none';
+							}
+							
+							// Show EXPLORE TIMELINE button on main page
+							const showExploreButton = () => {
+								const arrowWrappers = document.querySelectorAll('.arrow-button-wrapper');
+								arrowWrappers.forEach(wrapper => {
+									if (wrapper.href && (wrapper.href.includes('parallel.html') || wrapper.getAttribute('href') === 'parallel.html')) {
+										// Add class to trigger CSS
+										wrapper.classList.add('show-on-main-page');
+										
+										// Show and enable the button with very high z-index
+										wrapper.style.opacity = "1";
+										wrapper.style.pointerEvents = "auto";
+										wrapper.style.visibility = "visible";
+										wrapper.style.zIndex = "99999";
+										wrapper.style.position = "fixed";
+										wrapper.style.display = "inline-flex";
+										wrapper.style.top = "50%";
+										wrapper.style.right = "40px";
+										wrapper.style.transform = "translateY(-50%)";
+										
+										// Ensure it's clickable
+										wrapper.setAttribute('tabindex', '0');
+										
+										// Ensure the href is set correctly
+										if (!wrapper.href || !wrapper.href.includes('parallel.html')) {
+											wrapper.href = 'parallel.html';
+										}
+										
+										// Ensure the link works
+										wrapper.onclick = (e) => {
+											window.location.href = wrapper.href;
+										};
+										
+										// Add cursor hover effect
+										const cursorEl = document.getElementById('cursorCircle');
+										if (cursorEl && !wrapper.dataset.cursorHoverSetup) {
+											wrapper.dataset.cursorHoverSetup = 'true';
+											wrapper.addEventListener('mouseenter', () => {
+												cursorEl.classList.add('hover');
+												cursorEl.style.setProperty('width', '45px', 'important');
+												cursorEl.style.setProperty('height', '45px', 'important');
+												cursorEl.style.setProperty('opacity', '0.7', 'important');
+												cursorEl.style.setProperty('background', 'white', 'important');
+											});
+											wrapper.addEventListener('mouseleave', () => {
+												cursorEl.classList.remove('hover');
+												cursorEl.style.setProperty('width', '18px', 'important');
+												cursorEl.style.setProperty('height', '18px', 'important');
+												cursorEl.style.setProperty('opacity', '1', 'important');
+												cursorEl.style.setProperty('background', 'rgba(200, 200, 200, 0.5)', 'important');
+											});
+										}
+										
+										console.log('EXPLORE TIMELINE button enabled:', wrapper);
+									}
+								});
+							};
+							
+							// Try multiple times to catch the button - also check if button exists
+							const checkAndShow = () => {
+								const button = document.querySelector('[data-arrow-button][href*="parallel.html"], [data-arrow-button][id="text3ArrowButton"]');
+								const wrapper = document.querySelector('.arrow-button-wrapper[href*="parallel.html"]');
+								
+								if (button) {
+									console.log('Button placeholder found, waiting for arrowButton.js to create wrapper...');
+								}
+								if (wrapper) {
+									console.log('Button wrapper found, enabling...');
+									showExploreButton();
+								} else {
+									console.log('Button wrapper not found yet, will retry...');
+								}
+							};
+							
+							// Try immediately and multiple times
+							checkAndShow();
+							setTimeout(checkAndShow, 100);
+							setTimeout(checkAndShow, 500);
+							setTimeout(checkAndShow, 1000);
+							setTimeout(checkAndShow, 2000);
+							setTimeout(checkAndShow, 3000);
+							
+							// Show intro message text after chord graph is revealed
+							setTimeout(() => {
+								if (typeof showChordIntroMessage === 'function') {
+									showChordIntroMessage();
+								}
+							}, 500);
+						} else {
+							// Show BEGIN button on intro page
+							if (beginBtn) beginBtn.classList.remove('hidden');
+							// Show intro chord graph on intro page
+							if (introChordGraph) {
+								introChordGraph.style.display = 'block';
+								introChordGraph.style.visibility = 'visible';
+								introChordGraph.style.pointerEvents = 'none'; // Still no pointer events on intro
+								introChordGraph.style.zIndex = '0';
+								introChordGraph.style.opacity = '0.5';
+							}
+						}
+					} else if (index > currentPage) {
+						page.classList.add('next');
+					} else {
+						page.classList.add('prev');
+					}
+				});
+			}
+
+			// Arrow button click handler
+			if (beginBtn) {
+				// Add cursor hover effects
+				const cursorEl = document.getElementById('cursorCircle');
+				if (cursorEl) {
+					beginBtn.addEventListener('mouseenter', () => {
+						cursorEl.classList.add('hover');
+						cursorEl.style.setProperty('width', '45px', 'important');
+						cursorEl.style.setProperty('height', '45px', 'important');
+						cursorEl.style.setProperty('opacity', '0.7', 'important');
+						cursorEl.style.setProperty('background', 'white', 'important');
+						document.body.style.cursor = 'none'; // Hide default cursor
+					});
+					beginBtn.addEventListener('mouseleave', () => {
+						cursorEl.classList.remove('hover');
+						cursorEl.style.setProperty('width', '18px', 'important');
+						cursorEl.style.setProperty('height', '18px', 'important');
+						cursorEl.style.setProperty('opacity', '1', 'important');
+						cursorEl.style.setProperty('background', 'rgba(200, 200, 200, 0.5)', 'important');
+						document.body.style.cursor = 'auto'; // Restore default cursor
+					});
+				}
+
+				beginBtn.addEventListener('click', (e) => {
+					e.preventDefault();
+					goToMainPage();
+				});
+			}
+
+			// Scroll functionality on intro page
+			let scrollCooldown = false;
+			let lastScrollTime = 0;
+			const SCROLL_THRESHOLD = 50; // Minimum scroll delta to trigger
+			const SCROLL_COOLDOWN_MS = 500; // Prevent rapid scrolling
+
+			window.addEventListener('wheel', (e) => {
+				// Only handle scroll on intro page (page 0)
+				if (currentPage !== 0) {
+					return;
+				}
+
+				// Prevent default scrolling behavior on intro page
+				e.preventDefault();
+
+				const now = Date.now();
+				
+				// Cooldown check
+				if (scrollCooldown || (now - lastScrollTime < SCROLL_COOLDOWN_MS)) {
+					return;
+				}
+
+				// Trigger on scroll in either direction (up or down)
+				if (Math.abs(e.deltaY) > SCROLL_THRESHOLD) {
+					lastScrollTime = now;
+					scrollCooldown = true;
+
+					// Transition to main page
+					goToMainPage();
+					
+					// Reset cooldown
+					setTimeout(() => {
+						scrollCooldown = false;
+					}, SCROLL_COOLDOWN_MS);
+				}
+			}, { passive: false });
+
+			// Initialize
+			updatePages();
+		</script>
+	</body>
+</html>

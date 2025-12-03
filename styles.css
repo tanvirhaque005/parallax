@@ -1,10 +1,51 @@
 html, body {
   margin: 0;
   height: 100%;
-  background: radial-gradient(#0b1020, #05060b);
+  background: #0e0e0f;
   overflow: hidden;
   color: #e5e7eb;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+  font-family: 'IBM Plex Sans', monospace;
+}
+
+.breadcrumb {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  color: #888888;
+  font-size: 12px;
+  font-weight: 400;
+  z-index: 10;
+  letter-spacing: 1px;
+}
+
+/* Header */
+#header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  padding: 20px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+  pointer-events: none;
+}
+
+#header h1 {
+  color: #cccccc;
+  font-size: 2rem;
+  margin: 0 0 8px 0;
+  pointer-events: auto;
+  font-family: 'IBM Plex Sans', monospace;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+#header p {
+  color: #888888;
+  font-size: 0.85rem;
+  margin: 0;
+  pointer-events: auto;
+  letter-spacing: 1px;
 }
 
 /* Base shelf canvas */
@@ -14,7 +55,7 @@ html, body {
   width: 100%;
   height: 100%;
   display: block;
-  z-index: 1; /* base layer */
+  z-index: 1;
 }
 
 /* Overlay canvas: draws only the selected book ABOVE the overlay card */
@@ -23,43 +64,73 @@ html, body {
   inset: 0;
   width: 100%;
   height: 100%;
-  display: none;        /* shown only when overlay is open */
-  pointer-events: none; /* let clicks go to UI */
-  z-index: 6;           /* higher than the full-screen card */
+  display: none;
+  pointer-events: none;
+  z-index: 6;
 }
 
 /* Scroll controls */
 #controls {
   position: absolute;
-  top: 50%;
-  left: 0; right: 0;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 2rem;
-  transform: translateY(-50%);
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
   pointer-events: none;
   z-index: 2;
+  display: none;
 }
+
+#scrollLeft {
+  position: fixed;
+  left: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+  z-index: 10001 !important; /* Higher than navigation menu (10000) */
+  pointer-events: auto !important;
+}
+
+#scrollRight {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+  z-index: 10001 !important; /* Higher than navigation menu (10000) */
+  pointer-events: auto !important;
+}
+
 #controls button {
-  pointer-events: all;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #e5e7eb;
+  pointer-events: auto !important;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cccccc;
   font-size: 1.8rem;
   padding: 0.5rem 1.2rem;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.2s ease;
   backdrop-filter: blur(4px);
+  font-family: 'IBM Plex Sans', monospace;
+  z-index: 10001 !important; /* Higher than navigation menu */
 }
-#controls button:hover { background: rgba(255,255,255,0.2); transform: scale(1.08); }
-#controls button:active { transform: scale(0.96); }
+
+#controls button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+#controls button:active {
+  transform: scale(0.96);
+}
 
 /* ---------------- Full-screen overlay ---------------- */
 #bookinfo {
   position: absolute;
   inset: 0;
-  z-index: 5;          /* below activeBookCanvas (6), above shelf (1) */
+  z-index: 5;
   opacity: 0;
   pointer-events: none;
   transition: opacity .25s ease;
@@ -76,45 +147,101 @@ html, body {
   inset: 0;
   width: 100vw;
   height: 100vh;
-  overflow: auto;                 /* important: scroll large content */
-  background: #0e111a;            /* SOLID color (change as desired) */
+  overflow: auto;
+  /* background: #2a2a2a; */
   color: #e5e7eb;
   padding: clamp(16px, 4vw, 40px) clamp(16px, 5vw, 60px);
-  box-shadow: none;               /* no transparency/blur/border */
+  box-shadow: none;
   border: none;
+  padding-left: 100px;
 }
 
 /* Content styling */
-.title { font-size: clamp(1.6rem, 3vw, 2rem); font-weight: 800; margin: 0 0 6px; }
-.meta  { opacity: 0.9; margin-bottom: 14px; font-size: 1rem; }
-.blurb { line-height: 1.6; font-size: 1.05rem; margin-bottom: 16px; }
+.title {
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-weight: 700;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Sans', monospace;
+  letter-spacing: 2px;
+}
 
-.row   { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
-.pill  {
-  border: 1px solid rgba(255,255,255,0.18);
+.meta {
+  opacity: 0.8;
+  margin-bottom: 14px;
+  font-size: 0.95rem;
+  color: #888888;
+}
+
+.blurb {
+  line-height: 1.6;
+  font-size: 1.05rem;
+  margin-bottom: 16px;
+  color: #aaaaaa;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.pill {
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 999px;
   padding: 6px 12px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   opacity: 0.9;
+  background: rgba(255, 255, 255, 0.621);
+  color: #cccccc;
+
 }
 
-.long { margin-top: 18px; }
-.long h2 { margin: 14px 0 8px; font-size: 1.25rem; }
-.long p { margin: 0 0 10px; line-height: 1.65; }
+.long {
+  margin-top: 18px;
+}
 
-.actions { display: flex; gap: 10px; margin-top: 16px; }
+.long h2 {
+  margin: 14px 0 8px;
+  font-size: 1.25rem;
+  color: #cccccc;
+  font-family: 'IBM Plex Sans', sans-serif;
+  letter-spacing: 1px;
+}
+
+.long p {
+  margin: 0 0 10px;
+  line-height: 1.65;
+  color: #aaaaaa;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
 
 .btn {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cccccc;
   padding: 10px 14px;
-  border-radius: 10px;
+  border-radius: 6px;
   cursor: pointer;
   transition: transform .15s ease, background .2s ease;
+  font-family: 'IBM Plex Sans', monospace;
+  letter-spacing: 1px;
 }
-.btn:hover { transform: translateY(-1px); background: rgba(255,255,255,0.16); }
-.btn:active { transform: translateY(1px); }
+
+.btn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
 
 .btn.close {
   float: right;
@@ -125,32 +252,870 @@ html, body {
 
 /* Color swatches */
 .colorSwatch {
-  width: 14px; height: 14px; border-radius: 4px; display: inline-block; margin-right: 6px;
-  border: 1px solid rgba(255,255,255,0.4);
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-right: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 /* Reduce motion */
 @media (prefers-reduced-motion: reduce) {
-  #bookinfo { transition: none !important; }
-  #controls button { transition: none !important; }
+  #bookinfo {
+    transition: none !important;
+  }
+  #controls button {
+    transition: none !important;
+  }
 }
 
 /* Card-view next/prev arrows */
 .btn.cardNav {
-  position: fixed;          /* stays visible while the card scrolls */
-  top: 50%;
+  position: fixed;
+  top: 15%;
   transform: translateY(-50%);
-  z-index: 7;               /* above the card content (card is z=5) */
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.25);
+  z-index: 7;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   font-size: 1.6rem;
   line-height: 1;
   padding: 10px 14px;
   border-radius: 999px;
   backdrop-filter: blur(4px);
 }
-#cardPrev { left: 16px; }
-#cardNext { right: 16px; }
 
-#cardPrev:hover, #cardNext:hover { background: rgba(255,255,255,0.2); }
-#cardPrev:active, #cardNext:active { transform: translateY(-50%) scale(0.96); }
+#cardPrev {
+  left: 16px;
+}
+
+#cardNext {
+  right: 16px;
+}
+
+#cardPrev:hover,
+#cardNext:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+#cardPrev:active,
+#cardNext:active {
+  transform: translateY(-50%) scale(0.96);
+}
+
+/* Tanvir's edits */
+.film-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px 40px 40px;
+}
+
+.film-poster {
+  order: 1;
+}
+
+.poster-placeholder {
+  width: 100%;
+  height: 400px;
+  background: #3a3a3a;
+  border: 1px solid #555555;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888888;
+  font-size: 18px;
+  font-family: 'IBM Plex Sans', monospace;
+}
+
+.film-details {
+  order: 2;
+  padding-top: 80px;
+  padding-left: 30%;
+  white-space: normal; 
+  max-width: 60vw;
+
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin: 0;
+  font-family: 'IBM Plex Sans', monospace;
+  letter-spacing: 2px;
+}
+
+.rating-badge {
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  color: #cccccc;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.tags-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-direction: row;
+  height: 20px;
+}
+
+
+.tag-pill {
+  padding: 4px 12px;
+  background: rgba(217, 217, 217, 0.227);
+  border: 1px solid rgba(255, 255, 255, 0.293);
+  border-radius: 9999px;
+  font-size: 13px;
+
+  white-space: normal;   /* allow text to wrap inside the pill */
+}
+.tag-pill {
+  white-space: nowrap;        /* keep text on ONE line */
+  overflow: hidden;           /* prevent spilling out */
+  text-overflow: ellipsis;    /* optional: '...' if container is too small */
+  display: inline-flex;       /* expand pill width automatically */
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  max-width: 100%;            /* prevents breakouts */
+}
+
+
+.plot {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 50vw;
+}
+
+.film-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 8px;
+}
+
+.film-header {
+  display: grid;
+  grid-template-rows: auto auto auto;
+}
+
+/* Title row stays as-is */
+.title-row {
+  grid-row: 1;
+}
+
+/* Arrange info-label, info-value, tags-row in one line */
+.film-info-grid .info-item {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  grid-template-areas:
+    "tags tags tags"
+    "label value .";
+  row-gap: 0.4rem;
+  column-gap: 1rem;
+}
+
+
+
+.info-label {
+  grid-area: value;
+}
+
+.info-value {
+  grid-area: label;
+}
+
+
+
+/* Plot on row 3 */
+.plot {
+  grid-row: 3;
+}
+
+
+.info-item {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.info-label {
+  font-size: 13px;
+  margin-bottom: 4px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding-top: 5px;
+  text-transform: uppercase;
+}
+
+.info-value {
+  font-size: 16px;
+  flex-direction: row;
+  white-space: nowrap;
+}
+
+.motifs-section {
+  margin-top: 8px;
+}
+
+.motifs-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  font-family: 'IBM Plex Sans', monospace;
+  letter-spacing: 1px;
+}
+
+.motifs-desc {
+  font-size: 14px;
+  margin-bottom: 24px;
+  width: 50vw;
+}
+
+.motifs-container {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.motif-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #3a3a3a;
+  border: 2px solid #555555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 600;
+  font-size: 12px;
+  color: #aaaaaa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.motif-circle:hover {
+  background: #4a4a4a;
+  border-color: #777777;
+  transform: scale(1.05);
+}
+
+.motif-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.motif-circle.highlighted::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 12px;
+  height: 12px;
+  background: #ff0080;
+  border-radius: 50%;
+  border: 2px solid #1a1a1a;
+}
+
+.bottomBox {
+  margin-bottom: 50px;
+  padding-bottom: 50px;
+}
+
+.back-btn {
+  margin-top: 8px;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #cccccc;
+  font-family: 'IBM Plex Sans', monospace;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Chord Graph Button */
+.chord-button-container {
+  margin: 20px 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.chord-button-container .btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #cccccc;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-family: 'IBM Plex Sans', monospace;
+  letter-spacing: 1px;
+}
+
+.chord-button-container .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.chord-button-container .btn:active {
+  transform: translateY(0px);
+}
+
+/* --- FOOTER FIXED AT BOTTOM --- */
+#footerLogo {
+  position: fixed;
+  bottom: 50px;      /* distance from bottom edge */
+  left: 2%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 18px;
+  z-index: 0;       /* stays above canvas */
+  pointer-events: none; /* makes sure it doesn't block clicks */
+}
+
+.footer-icon {
+  width: 6vw;
+  height: 6vw;
+  background: #e5e5e5;
+  border-radius: 2px;
+}
+
+.footer-text {
+  font-family: "Zen Dots", sans-serif;
+  font-size: 5vw;
+  color: #f1f1f1;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Base custom cursor */
+/* Base custom cursor */
+#cursorCircle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+  pointer-events: none !important;
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.25s cubic-bezier(0.25, 0.1, 0.25, 1),
+    height 0.25s cubic-bezier(0.25, 0.1, 0.25, 1),
+    background 0.25s ease,
+    opacity 0.25s ease,
+    transform 0.15s ease;
+  z-index: 9999;
+}
+
+/* Enlarged + more visible while hovering interactive elements */
+#cursorCircle.hover {
+  width: 45px;
+  height: 45px;
+  opacity: 0.5;
+  background: white
+}
+
+
+
+body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circle {
+  cursor: none !important;
+}
+
+/* Arrow mode – right */
+#cursorCircle.arrow-right {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+#cursorCircle.arrow-right::after {
+  content: '→';
+  position: absolute;
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.85);
+  left: 50%;
+  top: 50%;
+  transform: translate(-40%, -50%); /* slight nudge left */
+}
+
+/* Arrow mode – left */
+#cursorCircle.arrow-left {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+#cursorCircle.arrow-left::after {
+  content: '←';
+  position: absolute;
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.85);
+  left: 50%;
+  top: 50%;
+  transform: translate(-60%, -50%);  /* slight nudge right */
+}
+
+ /* Top-left horizontal bars — thicker + lower on the page */
+#bookBars {
+  position: fixed;
+  bottom: 48px; 
+  left: 24px;
+  height: 60px;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  z-index: 2;        /* ← VERY IMPORTANT */
+  pointer-events: auto;   /* ← ensure clicks reach the bars */
+}
+
+#bookBars:hover {
+  cursor: none;
+}
+
+.book-bar.hovered {
+  background: rgba(255,255,255,1);
+  opacity: 1;
+}
+
+
+#bookBars::before {
+  content: "";
+  position: absolute;
+  inset: -20px 0;
+  pointer-events: none;   /* ← FIX */
+}
+
+
+
+
+.book-bar {
+  width: 4px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 2px;
+  pointer-events: auto;
+  transition:
+    height 0.35s ease,
+    transform 0.35s ease,
+    opacity 0.25s ease,
+    background 0.25s ease;
+}
+
+.book-bar.active {
+  background: rgba(255, 255, 255, 1);
+  /* transform: scale(1.15); */
+}
+
+
+#barDateDisplay {
+  position: fixed;
+  top: 90px;            /* adjust as you want */
+  left: 24px;
+  color: #ffffff;
+  font-family: 'IBM Plex Sans', monospace;
+  font-size: 14px;
+  opacity: 0.85;
+  letter-spacing: 1px;
+  z-index: 999999;      /* always visible */
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.barDateLabel {
+  position: fixed;
+  color: #ffffff;
+  font-family: 'IBM Plex Sans', monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -8px); /* centered above bar */
+  z-index: 999999;
+  transition: opacity 0.15s ease, top 0.1s ease, left 0.1s ease;
+}
+
+/* Intro Panel */
+.intro-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100vh;
+  background: #000000;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to right, #000 0%, rgba(0,0,0,0) 700%);
+  justify-content: center;
+  padding: 60px;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+  pointer-events: auto;
+}
+
+.intro-panel.hidden {
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro-title {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 32px 0;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.intro-description {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 1rem;
+  color: #ffffff;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 600px;
+  font-weight: 300;
+}
+
+/* Grid View Styles */
+.grid-view-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: #000000;
+  z-index: 10;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  scroll-behavior: smooth;
+}
+
+/* Allow scrolling when grid view is active */
+body:has(#gridView[style*="display: block"]) {
+  overflow: hidden;
+}
+
+.grid-view-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.grid-view-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.grid-view-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.grid-view-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.grid-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 24px 60px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0));
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  pointer-events: none;
+}
+
+.grid-header .back-button {
+  position: relative;
+  top: 0;
+  left: 0;
+  margin-bottom: 0;
+}
+
+.grid-header .page-header {
+  pointer-events: none;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 12;
+}
+
+/* Make grid view intro message bigger */
+.grid-header .page-header .intro-icon {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+}
+
+.grid-header .page-header .intro-text {
+  font-size: 13px !important;
+  letter-spacing: 1.2px !important;
+}
+
+.back-button {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0;
+  font-family: 'IBM Plex Sans', monospace;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: color 0.2s ease;
+}
+
+.back-button:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.page-header {
+  position: fixed;
+  top: 40px;
+  left: 40px;
+  z-index: 50;
+}
+
+.back-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #cccccca4;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 1px;
+      transition: color 0.3s;
+      text-transform: uppercase;
+      position: fixed;
+         top: 20px;
+         left: 40px;
+         z-index: 200;
+    }
+
+    .page-header.disabled {
+      pointer-events: none !important;
+      opacity: 0.15 !important;
+      filter: grayscale(100%) brightness(60%);
+    }
+    
+
+.grid-header-text {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  pointer-events: none;
+}
+
+.grid-content {
+  padding: 120px 60px 200px 60px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.grid-section-title {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 40px 0;
+  letter-spacing: 0.5px;
+}
+
+.decade-section {
+  margin-bottom: 80px;
+}
+
+.decade-title {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 0 0 32px 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.movie-card {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.movie-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.movie-title-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  padding: 16px 12px 12px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.movie-card:hover .movie-title-overlay {
+  opacity: 1;
+}
+
+.movie-title-text {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  color: #ffffff;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Footer Styles */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px 60px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0));
+  z-index: 11;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+.footer-left {
+  pointer-events: none;
+}
+
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+.view-label {
+  font-family: 'IBM Plex Sans', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Pill-shaped container for toggle buttons */
+.view-toggle-buttons {
+  display: flex;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 2px;
+  gap: 0;
+  position: relative;
+}
+
+.view-button {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 8px 20px;
+  font-family: 'IBM Plex Sans', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+  border-radius: 999px;
+  position: relative;
+  z-index: 1;
+}
+
+.view-button:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.view-button.active {
+  background: #ffffff;
+  color: #000000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.footer-creators {
+  pointer-events: none;
+}
+
+.footer-text {
+  font-family: 'IBM Plex Sans', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.5px;
+}

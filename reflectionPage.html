@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library of Futures - Reflection</title>
+    <link rel="stylesheet" href="navigation-menu.css">
+    <link rel="stylesheet" href="introMessage.css">
+    <link rel="stylesheet" href="cursor.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            font-family:'IBM Plex Sans', sans-serif;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            overflow: auto;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Page Container */
+        .page-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Page Slide */
+        .page-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 40px 60px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+            overflow-y: auto;
+        }
+
+        .page-slide.active {
+            transform: translateX(0);
+        }
+
+        .page-slide.next {
+            transform: translateX(100%);
+        }
+
+        .page-slide.prev {
+            transform: translateX(-100%);
+        }
+
+        /* Header */
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .header-number {
+            font-size: 11px;
+            color: #888888;
+            letter-spacing: 1px;
+        }
+
+        /* Use introMessage styles - add animation trigger for reflection page */
+        .reflection-page.active .intro-icon {
+            animation: boxAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* First Page Styles */
+        .intro-page {
+            justify-content: flex-start;
+            padding-top: 8vh;
+        }
+
+        .intro-page .page-header {
+            margin-bottom: 40px;
+        }
+        
+        /* Use introMessage styles - add animation trigger for intro page */
+        .intro-page.active .intro-icon {
+            animation: boxAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .intro-main-title {
+            font-size: 56px;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            line-height: 1.2;
+            max-width: 900px;
+        }
+
+        .intro-paragraph {
+            font-size: 18px;
+            color: #ffffff;
+            line-height: 1.6;
+            letter-spacing: 0.2px;
+            margin-bottom: 30px;
+            max-width: 800px;
+            font-weight: 400;
+        }
+
+        .explored-section {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .explored-line {
+            width: 2px;
+            background-color: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .explored-content {
+            flex: 1;
+        }
+
+        .explored-title {
+            font-size: 22px;
+            color: #ffffff;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            font-weight: 400;
+        }
+
+        .explored-list {
+            list-style: none;
+        }
+
+        .explored-list li {
+            font-size: 18px;
+            color: #ffffff;
+            line-height: 1.6;
+            letter-spacing: 0.2px;
+            margin-bottom: 12px;
+            padding-left: 0;
+            font-weight: 400;
+        }
+
+        /* Second Page Styles */
+        .reflection-page {
+            justify-content: space-between;
+        }
+
+        .reflection-main-title {
+            font-size: 48px;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            line-height: 1.2;
+        }
+
+        .reflection-boxes {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .reflection-box {
+            width: 320px;
+            height: 320px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .reflection-box:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .reflection-box-number {
+            font-size: 64px;
+            font-weight: 400;
+            color: #ffffff;
+            margin-bottom: 16px;
+            line-height: 1;
+        }
+
+        .reflection-box-category {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .reflection-box p {
+            font-size: 16px;
+            color: #ffffff;
+            line-height: 1.6;
+            letter-spacing: 0.2px;
+            text-align: left;
+            margin: 0;
+        }
+
+        /* Footer */
+        .page-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: auto;
+        }
+
+        .credits-section {
+            font-size: 11px;
+            color: #888888;
+            letter-spacing: 0.5px;
+            line-height: 1.8;
+        }
+
+        .credits-title {
+            font-size: 11px;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .credits-section p {
+            margin-bottom: 6px;
+        }
+
+        .restart-button {
+            position: fixed;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .restart-button:hover {
+            opacity: 0.8;
+        }
+
+        .restart-circle {
+            width: 60px;
+            height: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .restart-button:hover .restart-circle {
+            border-color: rgba(255, 255, 255, 1);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .restart-arrow {
+            font-size: 24px;
+            color: #ffffff;
+        }
+
+        /* CTA Button - matches restart button style */
+        .cta-button {
+            position: fixed;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            z-index: 100;
+            padding: 0;
+        }
+        
+        /* Hide continue button on reflection page */
+        .reflection-page .cta-button {
+            display: none;
+        }
+
+        .cta-button:hover {
+            opacity: 0.8;
+        }
+
+        .cta-arrow {
+            width: 60px;
+            height: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover .cta-arrow {
+            border-color: rgba(255, 255, 255, 1);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-arrow::after {
+            content: '→';
+            font-size: 24px;
+            color: #ffffff;
+        }
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #cccccca4;
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            text-transform: uppercase;
+            position: fixed;
+                top: 20px;
+                left: 40px;
+                z-index: 200;
+            }
+
+            .explore-list {
+                list-style: none;
+                margin-left: 0;
+                padding-left: 0;
+                padding-bottom: 20px;
+                max-width: calc(100% - 200px);
+            }
+
+            .explore-list li {
+                font-size: 18px;
+                color: #ffffff;
+                line-height: 1.6;
+                letter-spacing: 0.2px;
+                margin-bottom: 12px;
+                padding-left: 0;
+                font-weight: 400;
+                position: relative;
+                padding-left: 24px;
+            }
+
+            .explore-list li::before {
+                content: '•';
+                position: absolute;
+                left: 0;
+                color: #ffffff;
+                font-size: 18px;
+            }
+			
+    </style>
+</head>
+<body>
+    <!-- Page Header -->
+		<div class="page-header">
+			<a href="morph.html" class="back-link">
+				<span class="back-arrow">←</span>
+				<span>Back</span>
+			</a>
+		</div>
+    <!-- Custom Cursor -->
+    <div id="cursorCircle"></div>
+    
+    <!-- Intro Message Container -->
+    <div id="introMessageDefault" data-text="Let's reflect on what 100 years of sci-fi reveals about us—and about our own imagination."></div>
+    
+    <!-- Navigation Menu -->
+    <div class="navigation-menu" id="navigationMenu"></div>
+
+    <div class="page-container">
+        <!-- Intro Page (Page 1) -->
+        <div class="page-slide intro-page active" id="introPage">
+            <div class="page-header">
+                <div class="intro-icon"></div>
+                <span class="intro-text" id="introPageTitle"></span>
+            </div>
+            
+            <h1 class="intro-main-title">100 Years of Imagination</h1>
+            
+            <p class="intro-paragraph">Together, we saw that...</p>
+            <ul class="explore-list">
+                <li>As sci-fi grew as an artform, directors would use fantastical sci-fi tropes like robots and space in tandem with humanistic tropes like free will and social control to provide social commentary.
+                </li>
+                <li>As time progressed, sci-fi changed from depicting large time leaps to small leaps as the intention shifted from escapism and speculation to confronting contemporary anxieties.
+                </li>
+                <li>Over time, the role of distant worlds in sci-fi evolved from serving as destinations for escapist or speculative adventures to acting as allegorical settings that comment on domestic issues.
+                </li>
+            </ul>
+            
+            <div class="explored-section">
+                <div class="explored-line"></div>
+                <div class="explored-content">
+                    <div class="explored-title">So what?</div>
+                    <p class="intro-paragraph" style="margin-bottom: 0;">So, how did people’s attitudes towards sci-fi change over time? Originally it started as technological entertainment meant to either distract or speculate. As time went on, it progressed into an artform meant to depict contemporary social commentary through a fantastical lens.                    </p>
+                </div>
+            </div>
+
+            <a href="#" class="cta-button" id="continueToReflectionBtn">
+                <span>CONTINUE</span>
+                <div class="cta-arrow"></div>
+            </a>
+        </div>
+
+        <!-- Reflection Page (Page 2) -->
+        <div class="page-slide reflection-page next" id="reflectionPage">
+            <div>
+                <div class="page-header">
+                    <div class="intro-icon"></div>
+                    <span class="intro-text" id="reflectionPageTitle">Closing</span>
+                </div>
+
+                <h1 class="reflection-main-title">Reflection</h1>
+                
+                <div class="reflection-boxes">
+                    <div class="reflection-box">
+                        <div class="reflection-box-number">01</div>
+                        <div class="reflection-box-category">AMBITION</div>
+                        <p>Are we imagining bigger or smaller futures today?</p>
+                    </div>
+                    <div class="reflection-box">
+                        <div class="reflection-box-number">02</div>
+                        <div class="reflection-box-category">DRIVERS</div>
+                        <p>What shapes the stories we tell...fear, curiosity, or hope?</p>
+                    </div>
+                    <div class="reflection-box">
+                        <div class="reflection-box-number">03</div>
+                        <div class="reflection-box-category">PERSONAL</div>
+                        <p>What future would you imagine next?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-footer">
+                <div class="credits-section">
+                    <div class="credits-title">CREDITS</div>
+                    <p>Harvard University, CS1710 Data Visualization | Advised by Prof. Hans Pfister</p>
+                    <p>Data Sources: Film metadata databases, scholarly archives, and structured research collected across the project.</p>
+                    <p>Published 2025</p>
+                    <p>Created by Audrey Yang, Michael Cai, Tanvir Haque, Sydney Nguyen</p>
+                </div>
+            </div>
+            
+            <!-- Restart button positioned in right middle -->
+            <a href="index.html" class="restart-button">
+                <span>RESTART</span>
+                <div class="restart-circle">
+                    <span class="restart-arrow">→</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script src="navigation-menu.js"></script>
+    <script src="cursor.js" defer></script>
+    <script src="introMessage.js" defer></script>
+    <script>
+        // Page navigation
+        const pages = document.querySelectorAll('.page-slide');
+        let currentPage = 0;
+
+        const continueBtn = document.getElementById('continueToReflectionBtn');
+
+        function updatePages() {
+            pages.forEach((page, index) => {
+                page.classList.remove('active', 'next', 'prev');
+                if (index === currentPage) {
+                    page.classList.add('active');
+                    // Trigger animations when intro page becomes active
+                    if (index === 0) {
+                        const headerIcon = page.querySelector('.intro-icon');
+                        const headerTitle = document.getElementById('introPageTitle') || page.querySelector('.intro-text');
+                        if (headerIcon && headerTitle) {
+                            // Reset and trigger box animation
+                            headerIcon.style.animation = 'none';
+                            // Force reflow
+                            void headerIcon.offsetHeight;
+                            headerIcon.style.animation = '';
+                            
+                            // Clear any existing text first
+                            headerTitle.textContent = '';
+                            
+                            // Trigger typing animation after box appears
+                            setTimeout(() => {
+                                const introText = "Closing";
+                                console.log('About to type:', introText, 'on element:', headerTitle);
+                                typeText(headerTitle, introText, 30);
+                            }, 650);
+                        } else {
+                            console.error('Could not find elements:', { headerIcon, headerTitle });
+                        }
+                    }
+                    // Trigger animations when reflection page becomes active
+                    if (index === 1) {
+                        const headerIcon = page.querySelector('.intro-icon');
+                        const headerTitle = page.querySelector('.intro-text');
+                        if (headerIcon && headerTitle) {
+                            // Reset and trigger box animation
+                            headerIcon.style.animation = 'none';
+                            setTimeout(() => {
+                                headerIcon.style.animation = '';
+                            }, 10);
+                            // Trigger typing animation after box appears
+                            setTimeout(() => {
+                                typeText(headerTitle, 'Closing', 30);
+                            }, 600);
+                        }
+                        // Don't show intro message on reflection page - we have our own header text
+                    }
+                } else if (index > currentPage) {
+                    page.classList.add('next');
+                } else {
+                    page.classList.add('prev');
+                }
+            });
+        }
+
+        let currentTypingInterval = null;
+        
+        function typeText(element, text, speed = 100) {
+            if (!element) {
+                console.error('typeText: element is null');
+                return;
+            }
+            
+            // Clear any existing typing animation
+            if (currentTypingInterval) {
+                clearInterval(currentTypingInterval);
+                currentTypingInterval = null;
+            }
+            
+            const textToType = String(text || '').trim();
+            
+            // Clear element completely
+            element.textContent = '';
+            element.innerHTML = '';
+            // Make text visible and remove uppercase
+            element.style.opacity = '1';
+            element.style.textTransform = 'none';
+            element.classList.add('typing');
+            
+            let i = 0;
+            currentTypingInterval = setInterval(() => {
+                if (i < textToType.length) {
+                    // Build text from start to current position
+                    element.textContent = textToType.substring(0, i + 1);
+                    i++;
+                } else {
+                    clearInterval(currentTypingInterval);
+                    currentTypingInterval = null;
+                    setTimeout(() => {
+                        element.classList.remove('typing');
+                    }, 500);
+                }
+            }, speed);
+        }
+
+        continueBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentPage < pages.length - 1) {
+                currentPage++;
+                updatePages();
+            }
+        });
+
+        // Initialize
+        updatePages();
+        
+        // Prevent introMessage from showing on first page - do this immediately
+        if (window.hideDefaultIntro) {
+            window.hideDefaultIntro();
+        }
+        
+        // Don't show intro message on reflection page - we have our own header text
+        // Hide it if it's showing
+        setTimeout(() => {
+            if (window.hideDefaultIntro) {
+                window.hideDefaultIntro();
+            }
+        }, 100);
+
+        /* ---------------------------------------------------------
+        DISCRETE SCROLL DETECTOR (1 scroll = 1 gesture)
+        For: ONLY "CONTINUE"
+        --------------------------------------------------------- */
+
+        let scrollingReflection = false;
+        let scrollTimeoutReflection;
+
+        window.addEventListener("wheel", (e) => {
+            // Momentum protection
+            if (scrollingReflection) return;
+            scrollingReflection = true;
+
+            const direction = e.deltaY > 0 ? "down" : "up";
+
+            /* ============================
+            SCROLL DOWN → CONTINUE
+            (Equivalent to clicking CONTINUE)
+            ============================= */
+            if (direction === "down") {
+                if (currentPage === 0) {
+                    currentPage = 1;
+                    updatePages();
+                }
+            }
+
+            /* ============================
+            SCROLL UP → GO BACK
+            ============================= */
+            if (direction === "up") {
+                if (currentPage === 1) {
+                    currentPage = 0;
+                    updatePages();
+                }
+            }
+
+            // Unlock scrolling after gesture ends
+            clearTimeout(scrollTimeoutReflection);
+            scrollTimeoutReflection = setTimeout(() => {
+                scrollingReflection = false;
+            }, 180); // debounce duration
+        });
+
+    </script>
+</body>
+</html>

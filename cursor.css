@@ -1,0 +1,66 @@
+/* Base custom cursor */
+#cursorCircle {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(200, 200, 200, 0.5);
+    pointer-events: none !important;
+    transform: translate(-50%, -50%);
+    transition:
+      width 0.25s cubic-bezier(0.25, 0.1, 0.25, 1),
+      height 0.25s cubic-bezier(0.25, 0.1, 0.25, 1),
+      background 0.25s ease,
+      opacity 0.25s ease,
+      transform 0.15s ease;
+    z-index: 99999;
+    opacity: 1;
+    display: block;
+  }
+  
+  #cursorCircle.hover {
+    width: 45px !important;
+    height: 45px !important;
+    opacity: 0.7 !important;
+    background: white !important;
+  }
+  
+  /* Arrow right */
+  #cursorCircle.arrow-right {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.18);
+  }
+  #cursorCircle.arrow-right::after {
+    content: '→';
+    position: absolute;
+    font-size: 28px;
+    color: rgba(255, 255, 255, 0.85);
+    left: 50%;
+    top: 50%;
+    transform: translate(-40%, -50%);
+  }
+  
+  /* Arrow left */
+  #cursorCircle.arrow-left {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.18);
+  }
+  #cursorCircle.arrow-left::after {
+    content: '←';
+    position: absolute;
+    font-size: 28px;
+    color: rgba(255, 255, 255, 0.85);
+    left: 50%;
+    top: 50%;
+    transform: translate(-60%, -50%);
+  }
+  
+  /* Remove default cursor globally */
+  body, button, a, .btn {
+    cursor: none !important;
+  }
+  

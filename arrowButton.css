@@ -1,0 +1,87 @@
+.floating-red-square {
+  position: fixed;  
+  top: 0;
+  right: 0;
+  width: 40vw;
+  height: 100vh;
+
+  background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.0),   /* left: transparent black */
+      rgba(0, 0, 0, 0.6)    /* right: fully opaque black */
+  );
+
+  pointer-events: none;
+  z-index: 9998;
+}
+
+
+/* The entire button sticks to right-center */
+.arrow-button-wrapper {
+    position: fixed;        /* <— makes it float regardless of page layout */
+    top: 50%;               /* <— halfway down the screen */
+    right: 40px;            /* <— distance from right edge (change if needed) */
+    transform: translateY(-50%);
+    
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    cursor: default;
+cursor: auto;
+cursor: grab;
+
+    user-select: none;
+    text-decoration: none;
+    z-index: 9999;          /* stays above all content */
+  }
+  
+  /* TEXT */
+  .arrow-button-text {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: white;
+    transition: opacity 0.25s ease;
+  }
+  
+  /* ARROW CIRCLE */
+  .arrow-button-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border 0.2s ease, background 0.2s ease;
+  }
+  
+  .arrow-button-circle span {
+    font-size: 26px;
+    color: white;
+    transition: transform 0.25s ease;
+  }
+  
+  /* HOVER EFFECTS */
+  .arrow-button-wrapper:hover .arrow-button-circle {
+    border-color: white;
+    background: rgba(255,255,255,0.15);
+  }
+  
+  .arrow-button-wrapper:hover .arrow-button-circle span {
+    transform: translateX(4px);
+  }
+  
+  .arrow-button-wrapper:hover .arrow-button-text {
+    opacity: 0.85;
+  }
+  
+  .arrow-button-wrapper {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  
+.arrow-button-wrapper,
+.arrow-button-wrapper * {
+  cursor: none !important;
+}

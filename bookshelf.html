@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>3D Bookshelf (Full-Screen Details)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="navigation-menu.css">
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="introMessage.css">
+    <style>
+      #gridViewHeader {
+        top: 30px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navigation Menu -->
+    <div class="navigation-menu" id="navigationMenu"></div>
+
+      <!-- Page Header -->
+    <div class="page-header">
+      <a href="index.html" class="back-link">
+        <span class="back-arrow">←</span>
+        <span>Back</span>
+      </a>
+    </div>
+    
+    <!-- Intro Panel (shown initially, hidden on scroll) -->
+    <div id="introPanel" class="intro-panel">
+      <h1 class="intro-title">Explore the Library of Futures</h1>
+      <p class="intro-description">Browse the films in our dataset. Move through decades to see how sci-fi storytelling changes over time. Select a film to step into its world. 
+        </p>
+        <br/><br/>
+        <p class="intro-description">Scroll to move through time, watching how storytelling evolves across generations.</p>
+    </div>
+    
+    <!-- ONLY SEE WHEN NOT IN OVERLAY -->
+    <div id="introMessageDefault" data-text="Click any movie cover to step inside its world. Scroll to navigate through the timeline of movies! "></div>
+    <script src="introMessage.js" defer></script>
+  
+    <div id="bookBars"></div>
+    <!-- <div id="barDateDisplay"></div> -->
+    <div id="hoverBarDate" class="barDateLabel"></div>
+    <div id="activeBarDate" class="barDateLabel"></div>
+    
+
+
+    <div id="controls">
+      <button id="scrollLeft" aria-label="Scroll left">⟵</button>
+      <button id="scrollRight" aria-label="Scroll right">⟶</button>
+    </div>
+    <!-- Base shelf canvas -->
+    <canvas id="bookCanvas" aria-label="Interactive 3D bookshelf"></canvas>
+
+    <!-- <div id="header">
+      <h1>Library of Futures</h1>
+      <p>An archive of sci-fi films arranged by how far they imagined the future. Click on a movie to explore.</p>
+    </div> -->
+
+    <!-- Overlay canvas -->
+    <canvas id="activeBookCanvas" aria-hidden="true"></canvas>
+
+
+    <link rel="stylesheet" href="arrowButton.css">
+    <script src="arrowButton.js"></script>
+    <div data-arrow-button 
+    text="Explore Tropes" 
+    href="chordGraph.html"
+    delay="0"
+    id="exploreTropesButton">
+    </div>
+
+    <!-- Card overlay -->
+    <div id="bookinfo" aria-hidden="true">
+      <div class="card" role="dialog" aria-modal="true">
+
+        <!-- <div class="breadcrumb">Library > Film</div> -->
+        <!-- ONLY SEE WHEN IN OVERLAY -->
+        <div id="introMessageOverlay" data-text="Click a theme to see how this film connects to recurring sci-fi ideas across time."></div>
+        <script src="introMessage.js" defer></script>
+    
+        <button id="closeInfo" class="btn close">✕</button>
+
+        <!-- <button id="cardPrev" class="btn cardNav">L</button>
+        <button id="cardNext" class="btn cardNav">R</button> -->
+
+        <div class="film-details">
+          <div class="film-header">
+
+            <div class="title-row">
+              <h1 class="title" id="bookTitle">Title</h1>
+            </div>
+
+            <div class="film-info-grid">
+              <div class="info-item">
+                <div class="tags-row" id="pillContainer"></div>
+                <div class="info-value" id="director">Director</div>
+                <!-- <div class="info-label">Director</div> -->
+                
+                
+              </div>
+            </div>
+            <p class="plot" id="bookBlurb">Blurb</p>
+        </div>
+
+          <div class="motifs-section">
+            <h2 class="motifs-title">Technological Motifs</h2>
+            <!-- <p class="motifs-desc">Click a motif to explore its connection to other films.</p> -->
+            <div class="motifs-container" id="motifsContainer"></div>
+          </div>
+
+          <div class="bottomBox">
+            <div class="actions">
+              <div class="back-link" id="backToShelf">← Return to Library</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid View Container -->
+    <div id="gridView" class="grid-view-container" style="display: none;">
+      <div class="grid-header">
+        <!-- <button class="back-button" id="backToListView">← BACK</button> -->
+        <div class="page-header" id="gridViewHeader">
+          <div class="intro-icon"></div>
+          <span class="intro-text" id="gridViewTitle"></span>
+        </div>
+      </div>
+      
+      <div class="grid-content" id="gridContent">
+        <div class="grid-section-title">1.1 | If sorted by decade</div>
+        <!-- Decade sections will be inserted here -->
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer" class="footer">
+      <div class="footer-left">
+        <span class="footer-text">Published 2025</span>
+      </div>
+      <div class="footer-right">
+        <div class="view-toggle">
+          <span class="view-label">View by</span>
+          <div class="view-toggle-buttons">
+            <button class="view-button" id="listViewBtn" data-view="list">LIST</button>
+            <button class="view-button" id="gridViewBtn" data-view="grid">GRID</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./bookshelf.js"></script>
+    <script src="navigation-menu.js"></script>
+
+    <div id="cursorCircle"></div>
+    <link rel="stylesheet" href="cursor.css">
+    <script src="cursor.js" defer></script>
+  </body>
+</html>

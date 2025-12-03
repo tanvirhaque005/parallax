@@ -1,56 +1,645 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>3D Bookshelf (Full-Screen Details)</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body>
-    <div id="controls">
-      <button id="scrollLeft" aria-label="Scroll left">⟵</button>
-      <button id="scrollRight" aria-label="Scroll right">⟶</button>
-    </div>
+    <!-- MAIN FILE -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library of Futures - About</title>
+    <link rel="stylesheet" href="navigation-menu.css">
+    <link rel="stylesheet" href="introMessage.css">
+    <link rel="stylesheet" href="cursor.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Base shelf canvas (all covers) -->
-    <canvas id="bookCanvas" aria-label="Interactive 3D bookshelf"></canvas>
-    <h1>whats up my slimes</h1>
-    <h2>BTW i didnt include the dates on the bookshelf since idk if we wanna use a bookshelf given the perspective of the 3d books / the floating animation</h2>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'IBM Plex Sans', sans-serif !important;
 
-    <canvas id="activeBookCanvas" aria-hidden="true"></canvas>
+        }
 
-    <!-- card overlay -->
-    <div id="bookinfo" aria-hidden="true">
-      
-      <div class="card" role="dialog" aria-modal="true" aria-labelledby="bookTitle">
-        <p>Library > Film</p>
-        <button id="closeInfo" class="btn close" aria-label="Close details">✕</button>
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
 
-        <button id="cardPrev" class="btn cardNav" aria-label="Previous book">⟵</button>
-        <button id="cardNext" class="btn cardNav" aria-label="Next book">⟶</button>
-        <h6>BTW guys I made the cover on the right because the math to get the tilt ok on the left was really annoying</h6>
-        <h1 class="title" id="bookTitle">Title</h1>
-        <div class="meta" id="bookMeta">Author · Year</div>
-        <p class="blurb" id="bookBlurb">Blurb</p>
+        :root, body, body * {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+}
+
+        /* Page Container */
+        .page-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Page Slide */
+        .page-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+        }
+
+        .page-slide.active {
+            transform: translateX(0);
+        }
+
+        .page-slide.next {
+            transform: translateX(100%);
+        }
+
+        .page-slide.prev {
+            transform: translateX(-100%);
+        }
+
+        /* Header */
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        /* Cover page header - top left, white box only */
+        .cover-page .page-header {
+            display: none;
+        }
+
+        /* White square in top left corner */
+        .cover-page .top-left-box {
+            position: fixed;
+            top: 60px;
+            left: 60px;
+            width: 16px;
+            height: 16px;
+            background-color: #ffffff;
+            z-index: 10;
+        }
+
+        .header-number {
+            font-size: 11px;
+            color: #888888;
+            letter-spacing: 1px;
+        }
+
+        /* Use introMessage styles - add animation trigger for about page */
+        .about-page.active .intro-icon {
+            animation: boxAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* Cover Page Styles */
+        .cover-page {
+            justify-content: flex-start;
+            padding: 0;
+            position: relative;
+        }
+
+        /* Hide navigation menu on cover page
+        .cover-page.active ~ * .navigation-menu {
+            display: none !important;
+        } */
+
+        .cover-subtitle {
+            font-size: 14px;
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+        }
+
+        .cover-main-title {
+            font-size: 72px;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+            line-height: 1.1;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+        }
+        
+        /* Ensure text doesn't scale with screen size */
+        @media (max-width: 1600px) {
+            .cover-main-title {
+                font-size: 72px;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .cover-main-title {
+                font-size: 72px;
+            }
+        }
+
+        .cover-description {
+            font-size: 16px;
+            color: #ffffff;
+            line-height: 1.6;
+            max-width: 500px;
+            opacity: 0.9;
+        }
+        
+        /* Ensure description text doesn't scale */
+        @media (max-width: 1600px) {
+            .cover-description {
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .cover-description {
+                font-size: 16px;
+            }
+        }
+
+        /* Background Gradient Effect - bottom left with text */
+        /* Globe/semi-circle size - scales with viewport, always circular */
+        .cover-gradient {
+            position: fixed;
+            bottom: -30vh;
+            left: -30vh;
+            width: 120vh;
+            height: 120vh;
+            min-width: 120vh;
+            max-width: 120vh;
+            min-height: 120vh;
+            max-height: 120vh;
+            background: radial-gradient(circle, transparent 0%, rgba(255, 255, 255, 0.02) 15%, rgba(255, 255, 255, 0.06) 35%, rgba(255, 255, 255, 0.10) 55%, rgba(255, 255, 255, 0.15) 75%, rgba(255, 255, 255, 0.18) 100%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(0px);
+            box-shadow: 0 0 8vh 4vh rgba(255, 255, 255, 0.2),
+                        0 0 14vh 7vh rgba(255, 255, 255, 0.1),
+                        0 0 20vh 10vh rgba(255, 255, 255, 0.05);
+            transform: none;
+            transform-origin: 0 0;
+            box-sizing: border-box;
+        }
+
+        /* Globe visibility controlled by JavaScript */
+
+        .cover-description-text {
+            color: #ffffff;
+            font-size: 18px;
+            letter-spacing: 0.2px;
+            opacity: 0.95;
+            max-width: 100%;
+            line-height: 1.75;
+            font-weight: 400;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+            margin-top: 20px;
+        }
+        
+        /* Ensure description text doesn't scale with screen size */
+        @media (max-width: 1600px) {
+            .cover-description-text {
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .cover-description-text {
+                font-size: 16px;
+            }
+        }
+
+        .cover-content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Position text on the semi-circle */
+        .cover-page .cover-text-container {
+            position: fixed;
+            left: 4vw;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+            padding-left: 0;
+            max-width: 40vw;
+        }
+
+        /* About Page Styles */
+        .about-page {
+            justify-content: flex-start;
+            padding-top: 80px;
+        }
+
+        .about-main-title {
+            font-size: 56px;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            margin-top: 120px;
+            line-height: 1.2;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+        }
+
+        .about-intro {
+            font-size: 16px;
+            color: #ffffff;
+            line-height: 1.8;
+            max-width: 700px;
+            margin-bottom: 60px;
+            opacity: 0.9;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+        }
+
+        .explore-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+    margin: 40px 0;
+    position: relative;
+}
+
+.explore-line {
+    width: 2px;
+    min-height: 115px;      /* ✔ forces the line to appear */
+    background-color: #ffffff;
+    opacity: 0.9;
+    flex-shrink: 0;
+    margin-top: 4px;        /* aligns visually with text */
+}
+
+.explore-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.explore-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: #ffffff;
+    opacity: 0.95;
+    font-family: 'IBM Plex Sans', sans-serif !important;
+}
+
+.explore-list {
+    list-style: disc;      /* default round bullets (matching screenshot) */
+    margin-left: 20px;     /* indent exactly like screenshot */
+    padding-left: 0;
+}
+
+.explore-list li {
+    font-size: 15px;
+    color: #ffffff;
+    opacity: 0.9;
+    line-height: 1.6;
+    margin-bottom: 6px;
+    font-family: 'IBM Plex Sans', sans-serif !important;
+}
 
 
-        <div class="row" id="pillContainer"></div>
+        /* CTA Button - positioned on right side, vertically centered */
+        .cover-page .cta-button {
+            position: fixed;
+            top: 50%;
+            right: 60px;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+        }
+        
+        .cta-button {
+            position: absolute;
+            bottom: 120px;
+            right: 60px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+        }
 
-        <div class="long">
-          <h2>More Information</h2>
-          <p>
-            This area will eventually contain a lot of information. 
-          </p>
-          <button class="btn" id="exploreThemesBtn" onclick="location.href='/infoPage.html?movie=2001%3A%20A%20Space%20Odyssey'">View Theme Analysis (Placeholder: 2001)</button>
-          <div id="tropeDiv"></div>
+        .cta-button:hover {
+            opacity: 0.7;
+        }
+
+        .cta-arrow {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover .cta-arrow {
+            transform: translateX(3px);
+        }
+
+        .about-page .cta-button:hover {
+            transform: translateY(-50%);
+        }
+
+        .cta-arrow::after {
+            content: '→';
+            font-size: 24px;
+            color: #ffffff;
+        }
+
+        /* Second page button - middle right */
+        .about-page .cta-button {
+            bottom: auto;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Footer */
+        .page-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: auto;
+            font-size: 11px;
+            color: #888888;
+            letter-spacing: 0.5px;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+        }
+
+        /* Cover page footer - bottom left and right */
+        .cover-page .cover-footer {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 0 60px;
+            font-size: 11px;
+            color: #888888;
+            letter-spacing: 0.5px;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+            z-index: 10;
+            gap: 8px;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div id="cursorCircle"></div>
+    
+    <!-- Intro Message Container -->
+    <!-- <div id="introMessageDefault" data-text="Welcome to the Library of Futures. Explore how science fiction has imagined our tomorrow."></div> -->
+    
+    <!-- Navigation Menu -->
+    <div class="navigation-menu" id="navigationMenu"></div>
+
+    <div class="page-container">
+        <!-- Cover Page (Page 1) -->
+        <div class="page-slide cover-page active" id="coverPage">
+            <div class="cover-gradient"></div>
+            <div class="top-left-box"></div>
+            <div class="cover-content">
+                <div class="cover-text-container">
+                    <div class="cover-subtitle">A CENTURY OF SCI-FI IMAGINATION</div>
+                    <div class="cover-main-title">Library of Futures</div>
+                    <p class="cover-description-text">Discover how stories have predicted, warned, and dreamed about our futures time and worlds.</p>
+                </div>
+
+                <a href="#" class="cta-button" id="beginExplorationBtn">
+                    <span>BEGIN EXPLORATION</span>
+                    <div class="cta-arrow"></div>
+                </a>
+            </div>
+            <div class="cover-footer">
+                <div>Published 2025</div>
+                <div>Created by Audrey Yang, Michael Cai,<br>Tanvir Haque, Sydney Nguyen</div>
+            </div>
         </div>
 
-        <div class="actions">
-          <button class="btn" id="backToShelf">← Back to shelf</button>
+        <!-- About Page (Page 2) -->
+        <div class="page-slide about-page next" id="aboutPage">
+            <div>
+                <div class="page-header">
+                    <div class="intro-icon"></div>
+                    <span class="intro-text" id="aboutPageTitle"></span>
+                </div>
+
+                <div class="about-main-title">100 Years of Sci-Fi Stories</div>
+                
+                <p class="about-intro">This visualization uses data from culturally significant sci-fi films across each decade. Combined with thematic research on world-building and technology in cinema, it reveals how sci-fi mirrors the world and how those visions evolve over time.</p>
+
+                <div class="explore-section">
+                    <div class="explore-line"></div>
+                
+                    <div class="explore-content">
+                        <div class="explore-title">You’ll explore:</div>
+                
+                        <ul class="explore-list">
+                            <li>How sci-fi tropes shift across decades</li>
+                            <li>How far each film looks into the future</li>
+                            <li>Where films were made vs. where they imagine</li>
+                        </ul>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="page-footer">
+                <div>Published 2025</div>
+                <div>Created by Michael, Audrey, Tanvir, Sydney</div>
+            </div>
+
+            <a href="bookshelf.html" class="cta-button">
+                <span>ENTER LIBRARY</span>
+                <div class="cta-arrow"></div>
+            </a>
         </div>
-      </div>
     </div>
 
-    <script type="module" src="./index.js"></script>
-  </body>
+    <script src="navigation-menu.js"></script>
+    <script>
+        let currentPage = 0;
+        const pages = document.querySelectorAll('.page-slide');
+        const beginExplorationBtn = document.getElementById('beginExplorationBtn');
+
+        function typeText(element, text, speed = 20) {
+            const originalText = element.textContent || text;
+            const textToType = text || originalText;
+            element.textContent = '';
+            element.classList.add('typing');
+            let i = 0;
+            const typeInterval = setInterval(() => {
+                if (i < textToType.length) {
+                    element.textContent += textToType.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typeInterval);
+                    setTimeout(() => {
+                        element.classList.remove('typing');
+                    }, 500);
+                }
+            }, speed);
+        }
+
+        function updatePages() {
+            const navMenu = document.getElementById('navigationMenu');
+            const globe = document.querySelector('.cover-gradient');
+            pages.forEach((page, index) => {
+                page.classList.remove('active', 'next', 'prev');
+                if (index === currentPage) {
+                    page.classList.add('active');
+                    // Show/hide navigation menu based on page
+                    if (index === 0) {
+                        // Hide menu on cover page
+                        if (navMenu) navMenu.style.display = 'none';
+                    } else {
+                        // Show menu on other pages
+                        if (navMenu) navMenu.style.display = '';
+                    }
+                    // Trigger animations when about page becomes active
+                    if (navMenu) navMenu.style.display = '';
+
+                    if (index === 1) {
+                        const headerIcon = page.querySelector('.intro-icon');
+                        const headerTitle = page.querySelector('.intro-text');
+                        if (headerIcon && headerTitle) {
+                            // Reset and trigger box animation
+                            headerIcon.style.animation = 'none';
+                            setTimeout(() => {
+                                headerIcon.style.animation = '';
+                            }, 10);
+                            // Trigger typing animation after box appears
+                            setTimeout(() => {
+                                typeText(headerTitle, 'ABOUT', 80);
+                            }, 600);
+                        }
+                        // Show intro message when about page becomes active
+                        setTimeout(() => {
+                            if (window.showDefaultIntro) {
+                                window.showDefaultIntro(true);
+                            }
+                        }, 100);
+                    }
+                } else if (index > currentPage) {
+                    page.classList.add('next');
+                } else {
+                    page.classList.add('prev');
+                }
+            });
+        }
+
+        beginExplorationBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentPage < pages.length - 1) {
+                currentPage++;
+                updatePages();
+            }
+        });
+
+        // Initialize
+        updatePages();
+        
+        // Show intro message when page loads (if on about page)
+        setTimeout(() => {
+            if (window.showDefaultIntro && currentPage === 1) {
+                window.showDefaultIntro(true);
+            }
+        }, 200);
+
+        /* ---------------------------------------------------------
+   DISCRETE SCROLL DETECTOR (1 scroll per wheel gesture)
+--------------------------------------------------------- */
+
+let scrolling = false;
+let scrollTimeout;
+let aboutScrollCount = 0;
+
+window.addEventListener("wheel", (e) => {
+    // If already scrolling, ignore continuous events
+    if (scrolling) return;
+
+    scrolling = true;
+
+    const direction = e.deltaY > 0 ? "down" : "up";
+
+    /* ---- SCROLL DOWN LOGIC ---- */
+    if (direction === "down") {
+
+        // Page 0 → Page 1
+        if (currentPage === 0) {
+            currentPage = 1;
+            aboutScrollCount = 0;
+            updatePages();
+        }
+
+        // Page 1 → Require 2 discrete scroll gestures
+        else if (currentPage === 1) {
+            aboutScrollCount++;
+
+            console.log("SCROLL STEP:", aboutScrollCount);
+
+            if (aboutScrollCount === 1) {
+                // optional hint
+                console.log("Scroll once more to enter the library…");
+            }
+
+            if (aboutScrollCount >= 2) {
+                window.location.href = "bookshelf.html";
+            }
+        }
+    }
+
+    /* ---- SCROLL UP LOGIC ---- */
+    if (direction === "up") {
+        if (currentPage === 1) {
+            currentPage = 0;
+            aboutScrollCount = 0;
+            updatePages();
+        }
+    }
+
+    // Reset scrolling state after gesture ends
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        scrolling = false;
+    }, 1000); // adjust if needed
+});
+
+    </script>
+    <script src="cursor.js" defer></script>
+    <script src="introMessage.js" defer></script>
+</body>
 </html>
