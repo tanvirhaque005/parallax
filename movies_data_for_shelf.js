@@ -704,7 +704,7 @@ let data = [
       "filmingLocation": "Toronto, Ontario, Canada",
       "depictedLocation": "Near-future dystopian Canada",
       "id": 48,
-      "color": "#52292b",
+      "color": "#c18987",
       "director": "David Cronenberg",
       "blurb": "In a decaying near-future, mutated diseases reshape humanity in a surreal meditation on control and identity."
     },
@@ -803,7 +803,7 @@ let data = [
       "filmingLocation": "Mosfilm Studios (Moscow, USSR)",
       "depictedLocation": "Orbiting research station above Planet Solaris",
       "id": 54,
-      "color": "#46292c",
+      "color": "#6c7262",
       "director": "Andrei Tarkovsky",
       "blurb": "A psychologist confronts living memories and impossible manifestations aboard a space station orbiting a sentient planet."
     },
@@ -899,7 +899,7 @@ let data = [
       "filmingLocation": "Estonia & Tajikistan (Soviet Union)",
       "depictedLocation": "The Zone (fictional restricted area)",
       "id": 60,
-      "color": "#383030",
+      "color": "#67625f",
       "director": "Andrei Tarkovsky",
       "blurb": "Three men journey into a forbidden Zone where reality bends and a hidden Room promises to grant one\u2019s deepest desire."
     },
@@ -1748,7 +1748,7 @@ let data = [
       "filmingLocation": "New York, New Jersey, Virginia (USA)",
       "depictedLocation": "United States (alien invasion)",
       "id": 116,
-      "color": "#383533",
+      "color": "#4d2c28",
       "director": "Steven Spielberg",
       "blurb": "A father races to protect his children as alien tripods devastate the world with overwhelming force."
     },
@@ -1780,7 +1780,7 @@ let data = [
       "filmingLocation": "3 Mills Studios, London (UK)",
       "depictedLocation": "Interstellar spacecraft Icarus II (solar mission)",
       "id": 118,
-      "color": "#e7224c",
+      "color": "#856234",
       "director": "Danny Boyle",
       "blurb": "Astronauts voyage to rekindle the dying Sun, confronting cosmic terror and the fragility of human purpose."
     },
@@ -1929,7 +1929,7 @@ let data = [
       "filmingLocation": "United Kingdom (various)",
       "depictedLocation": "Near-future Earth (varies by episode)",
       "id": 127,
-      "color": "#a0988b",
+      "color": "#24242c",
       "director": "Charlie Brooker (series creator); various directors",
       "blurb": "Anthology stories explore near-future dystopias shaped by invasive technology and fragile identity."
     },
