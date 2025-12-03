@@ -8,13 +8,13 @@
 		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 		<script src="https://d3js.org/d3.v7.min.js"></script>
 		<style>
-			body {
-				margin: 0;
-				font-family:'IBM Plex Sans', sans-serif;
-				background: #1a1a1a;
-				color: #cccccc;
-				overflow: hidden;
-			}
+		body {
+			margin: 0;
+			font-family:'IBM Plex Sans', sans-serif;
+			background: #0e0e0f;
+			color: #cccccc;
+			overflow: hidden;
+		}
 			
 			/* Page Header */
 			.page-header {
@@ -246,7 +246,7 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				background: #1a1a1a;
+				background: #0e0e0f;
 				position: fixed;
 				top: 0;
 				left: 0;
@@ -507,7 +507,7 @@
 			.intro-page {
 				display: flex;
 				flex-direction: column;
-				padding: 60px;
+				padding: clamp(20px, 4vw, 60px);
 				overflow: visible;
 				min-height: 100vh;
 			}
@@ -515,46 +515,47 @@
 			.intro-panel {
 				position: relative;
 				width: 70%;
+				max-width: 900px;
 				height: 100%;
 				display: flex;
 				flex-direction: column;
 				justify-content: space-between;
-				padding-top: 200px;
+				padding-top: clamp(80px, 15vh, 200px);
 				overflow: visible;
 				min-height: 100vh;
 			}
 
 			.intro-category {
 				display: inline-block;
-				padding: 10px 20px;
+				padding: clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 20px);
 				border-radius: 999px;
-				font-size: 14px;
+				font-size: clamp(12px, 1.5vw, 14px);
 				font-weight: 400;
 				letter-spacing: 1.6px;
 				border: 1px solid rgba(255,255,255,0.45);
 				color: rgba(255,255,255,0.90);
 				background: rgba(255,255,255,0.02);
-				margin-bottom: 24px;
+				margin-bottom: clamp(16px, 2.5vh, 24px);
 				font-family: 'IBM Plex Sans', sans-serif;
 				width: fit-content;
 			}
 
 			.intro-title {
 				font-family: 'IBM Plex Sans', sans-serif;
-				font-size: 3.5rem;
+				font-size: clamp(2rem, 5vw, 3.5rem);
 				font-weight: 400;
 				color: #ffffff;
-				margin: 0 0 32px 0;
+				margin: 0 0 clamp(20px, 3vh, 32px) 0;
 				line-height: 1.2;
 				letter-spacing: -0.5px;
 			}
 
 			.intro-description {
 				font-family: 'IBM Plex Sans', sans-serif;
-				font-size: 1rem;
+				font-size: clamp(0.875rem, 1.5vw, 1rem);
 				color: #ffffff;
 				line-height: 1.6;
-				margin: 0 0 40px 0;
+				margin: 0 0 clamp(24px, 4vh, 40px) 0;
 				max-width: 600px;
 				font-weight: 300;
 			}
@@ -590,10 +591,10 @@
 			.intro-arrow-button {
 				display: flex !important;
 				align-items: center;
-				gap: 18px;
+				gap: clamp(12px, 2vw, 18px);
 				color: #ffffff;
 				text-decoration: none;
-				font-size: 16px;
+				font-size: clamp(14px, 2vw, 16px);
 				letter-spacing: 3px;
 				text-transform: uppercase;
 				transition: opacity 0.3s ease;
@@ -601,7 +602,7 @@
 				font-family: 'IBM Plex Sans', sans-serif;
 				pointer-events: auto;
 				cursor: none !important;
-				margin-top: 200px;
+				margin-top: clamp(40px, 15vh, 200px);
 				background: transparent;
 				border: none;
 				padding: 0;
@@ -610,6 +611,60 @@
 				opacity: 1 !important;
 			}
 			
+			/* Responsive styles for intro page */
+			@media (max-width: 1024px) {
+				.intro-panel {
+					width: 85%;
+					max-width: 100%;
+				}
+			}
+
+			@media (max-width: 768px) {
+				.intro-page {
+					padding: clamp(16px, 3vw, 40px);
+				}
+
+				.intro-panel {
+					width: 100%;
+					padding-top: clamp(60px, 10vh, 120px);
+				}
+
+				.intro-title {
+					font-size: clamp(1.75rem, 6vw, 2.5rem);
+				}
+
+				.intro-description {
+					font-size: clamp(0.875rem, 2vw, 1rem);
+					max-width: 100%;
+				}
+			}
+
+			@media (max-width: 480px) {
+				.intro-page {
+					padding: 20px;
+				}
+
+				.intro-panel {
+					padding-top: 40px;
+				}
+
+				.intro-category {
+					font-size: 11px;
+					padding: 6px 12px;
+				}
+
+				#introChordGraph {
+					display: none; /* Hide intro graph on very small screens */
+				}
+			}
+
+			@media (max-width: 768px) {
+				#introChordGraph {
+					opacity: 0.3; /* Make it more subtle on tablets */
+					width: 40%;
+				}
+			}
+
 			/* Ensure button is visible on smaller screens */
 			@media (max-height: 800px) {
 				.intro-arrow-button {
@@ -641,8 +696,8 @@
 			}
 
 			.intro-arrow-circle {
-				width: 60px;
-				height: 60px;
+				width: clamp(50px, 8vw, 60px);
+				height: clamp(50px, 8vw, 60px);
 				border: 1px solid #ffffff;
 				border-radius: 50%;
 				display: flex;
@@ -668,7 +723,7 @@
 			/* Main Chord Graph Page */
 			.chord-page {
 				z-index: 1;
-				background: #1a1a1a;
+				background: #0e0e0f;
 			}
 
 			.chord-page.active {
@@ -891,7 +946,7 @@
 		</div>
 
 		<!-- Chord Graph for Intro Page (transparent, on right side) -->
-		<div id="introChordGraph" style="position: fixed; top: 0; right: -80px; width: 50%; height: 100vh; z-index: 0; opacity: 0.5; pointer-events: none; overflow: hidden;">
+		<div id="introChordGraph" style="position: fixed; top: 0; right: clamp(-80px, -5vw, -40px); width: clamp(40%, 50vw, 50%); height: 100vh; z-index: 0; opacity: 0.5; pointer-events: none; overflow: hidden;">
 			<div id="chordContainerIntro" style="width: 200%; height: 100%; display: flex; align-items: center; justify-content: flex-start; background: transparent; position: relative; left: 0;">
 				<div class="loading">Loading visualization...</div>
 			</div>
