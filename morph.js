@@ -9,7 +9,7 @@ import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 // ==========================================================
 const periodTexts = {
   'All': {
-    description: 'Most sci-fi futures originate from the same real cities—Los Angeles, Vancouver, London. Real landscapes anchor imagined ones.'
+    description: 'Each line between locations represents a film. A dot indicates that the film\'s depicted location is the same as the real location. '
   },
   1925: {
     description: 'The silent era unleashed pure visual imagination. Without dialogue, filmmakers stretched reality through expressionist sets and fantastical machines, creating worlds unbound by language.'
