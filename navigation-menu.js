@@ -20,9 +20,9 @@
   // Menu items configuration
   const menuItems = [
     { text: 'Introduction', href: 'aboutPage.html' },
-    { text: 'Bookshelf', href: 'bookshelf.html' },
-    { text: 'Technology Network', href: 'chordGraph.html' },
-    { text: 'Fiction vs Reality', href: 'parallel.html' },
+    { text: 'Library', href: 'bookshelf.html' },
+    { text: 'Trope Network', href: 'chordGraph.html' },
+    { text: 'Depicted vs Reality', href: 'parallel.html' },
     { text: 'World Building', href: 'morph.html' },
     { text: 'Reflection', href: 'reflectionPage.html' }
   ];
