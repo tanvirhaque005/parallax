@@ -427,6 +427,30 @@ for (let y = minYear; y <= maxYear; y += WINDOW_STEP) {
   });
 }
 
+// Historical events data - 2 key events per 5-year period
+const eventData = {
+  1925: ['FUEL ROCKET', 'PHONE CALLS'],
+  1930: ['GREAT DEPRESSION', 'PLUTO'],
+  1935: ['GLOBAL TENSIONS', 'WW2 BEGINS'],
+  1940: ['PEARL HARBOR', 'FALL OF FRANCE'],
+  1945: ['WW2 ENDS', 'COLD WAR BEGINS'],
+  1950: ['KOREAN WAR', 'COLOR TV'],
+  1955: ['SPACE RACE', 'VIETNAM WAR'],
+  1960: ['LASERS', 'APOLLO PROGRAM'],
+  1965: ['MOON LANDING', 'VIETNAM ESCALATES'],
+  1970: ['ENVIRONMENT', 'EMAIL'],
+  1975: ['APPLE COMPUTER', 'THREE MILE ISLAND'],
+  1980: ['REAGAN', 'CD FORMAT'],
+  1985: ['STOCK BOOM', 'CHERNOBYL'],
+  1990: ['COLD WAR ENDS', 'INTERNET'],
+  1995: ['DOT COM BOOM', 'GOOGLE'],
+  2000: ['DOT COM CRASH', '9/11'],
+  2005: ['GREAT RECESSION', 'iPHONE'],
+  2010: ['SNOWDEN LEAKS', 'CRISPR'],
+  2015: ['PARIS AGREEMENT', 'AI BOOM'],
+  2020: ['COVID-19', 'SPACEX']
+};
+
 
 // const yearStep = 10; // Decade steps
 const yearStep = WINDOW_STEP; // now 5
@@ -522,8 +546,46 @@ function updateDecadeDisplay(decade) {
 
   }
 
+  // Update event pills
+  updateEventPills(decade);
+
   // Update text overlay when decade changes
   updateTextOverlay();
+}
+
+// Function to update event pills based on current decade
+function updateEventPills(decade) {
+  const pillsContainer = document.getElementById('eventPills');
+  if (!pillsContainer) return;
+
+  // Clear existing pills
+  pillsContainer.innerHTML = '';
+
+  // If no decade selected (All Years), hide pills
+  if (!decade) {
+    pillsContainer.classList.remove('visible');
+    return;
+  }
+
+  // Get events for this decade
+  const events = eventData[decade];
+  
+  if (events && events.length > 0) {
+    // Create pill elements
+    events.forEach(eventText => {
+      const pill = document.createElement('div');
+      pill.className = 'event-pill';
+      pill.textContent = eventText;
+      pillsContainer.appendChild(pill);
+    });
+    
+    // Show pills with slight delay for animation
+    setTimeout(() => {
+      pillsContainer.classList.add('visible');
+    }, 100);
+  } else {
+    pillsContainer.classList.remove('visible');
+  }
 }
 
 // Expose to window for page transition script
@@ -1281,7 +1343,7 @@ function updatePieChart() {
   const data = [
     { label: 'US', count: usCount, color: '#2e4046' },
     { label: 'World', count: worldCount, color: '#46AACB' },
-    { label: 'Galaxy', count: solarCount, color: '#73d1f0' }
+    { label: 'Universe', count: solarCount, color: '#73d1f0' }
   ];
 
   // Only show non-zero segments
@@ -1360,7 +1422,7 @@ function updatePieChart() {
   const legendData = [
     { label: 'US', color: '#2e4046' },
     { label: 'World', color: '#46AACB' },
-    { label: 'Galaxy', color: '#73d1f0' }
+    { label: 'Universe', color: '#73d1f0' }
   ];
 
   const legendSpacing = 32; // Spacing between legend items
