@@ -549,7 +549,6 @@ let data = [
         "depicted": 2008,
         "tropes": [
           "Free Will",
-          "Social Control",
           "AI",
           "Consciousness"
         ],
@@ -645,7 +644,7 @@ let data = [
         "id": 58
       },
       {
-        "title": "Star Wars",
+        "title": "Star Wars: Episode IV – A New Hope",
         "year": 1977,
         "depicted": 1000,
         "tropes": ["Space", "AI", "Robotics"],
@@ -685,7 +684,7 @@ let data = [
           "title": "The Terminator",
           "year": 1984,
           "depicted": 2029,
-          "tropes": ["AI", "Robotics", "Surveillance", "Social Control"],
+          "tropes": ["AI", "Robotics", "Surveillance"],
           "filmingLocation": "Los Angeles, California, USA",
           "depictedLocation": "Post-apocalyptic Earth (2029) + Los Angeles (1984)",
           "id": 63
@@ -694,7 +693,7 @@ let data = [
           "title": "E.T. the Extra-Terrestrial",
           "year": 1982,
           "depicted": 1982,
-          "tropes": ["Consciousness", "Evolution", "Social Control"],
+          "tropes": ["Evolution", "Space"],
           "filmingLocation": "California, USA (Los Angeles & Northridge)",
           "depictedLocation": "Suburban California, USA",
           "id": 64
@@ -703,7 +702,7 @@ let data = [
           "title": "Blade Runner",
           "year": 1982,
           "depicted": 2019,
-          "tropes": ["AI", "Robotics", "Social Control"],
+          "tropes": ["AI",  "Social Control"],
           "filmingLocation": "Los Angeles, California, USA (Warner Bros. Studios)",
           "depictedLocation": "Los Angeles, 2019",
           "id": 65
@@ -730,7 +729,7 @@ let data = [
           "title": "Escape from New York",
           "year": 1981,
           "depicted": 1997,
-          "tropes": ["Social Control"],
+          "tropes": ["Social Control", "Surveillance"],
           "filmingLocation": "St. Louis, Missouri (doubling as NYC)",
           "depictedLocation": "New York City (maximum-security prison city)",
           "id": 68
@@ -739,7 +738,7 @@ let data = [
           "title": "Star Trek II: The Wrath of Khan",
           "year": 1982,
           "depicted": 2285,
-          "tropes": ["Space", "Evolution", "AI", "Free Will", "Robotics"],
+          "tropes": ["Space", "Evolution", "AI", "Robotics"],
           "filmingLocation": "Paramount Studios, Hollywood, USA",
           "depictedLocation": "Milky Way Galaxy (Enterprise & Regula I station)",
           "id": 69
@@ -884,7 +883,7 @@ let data = [
             "title": "Terminator 2: Judgment Day",
             "year": 1991,
             "depicted": 2029,
-            "tropes": ["AI", "Robotics", "Surveillance", "Free Will"],
+            "tropes": ["AI", "Robotics", "Surveillance"],
             "filmingLocation": "Los Angeles, California, USA",
             "depictedLocation": "Post-apocalyptic Earth (2029) + Los Angeles (1990s)",
             "id": 86
@@ -930,7 +929,7 @@ let data = [
             "title": "Star Wars: Episode I - The Phantom Menace",
             "year": 1999,
             "depicted": 1000,
-            "tropes": ["Space", "Robotics"],
+            "tropes": ["Space", "Robotics", "AI"],
             "filmingLocation": "England (Leavesden Studios), Tunisia, Italy",
             "depictedLocation": "A galaxy far, far away (Naboo, Tatooine, Coruscant)",
             "id": 92
@@ -1041,7 +1040,9 @@ let data = [
             "depicted": 1000,
             "tropes": [
               "Space",
-              "Robotics"
+              "Robotics",
+              "AI",
+              "Evolution"
             ],
             "filmingLocation": "Fox Studios Australia; Tunisia; Italy; Spain",
             "depictedLocation": "A galaxy far, far away (Coruscant, Naboo, Kamino, Geonosis)",
@@ -1186,7 +1187,8 @@ let data = [
             "tropes": [
               "Space",
               "AI",
-              "Robotics"
+              "Robotics",
+              "Evolution"
             ],
             "filmingLocation": "Fox Studios Australia; UK; Italy; Thailand",
             "depictedLocation": "A galaxy far, far away (Coruscant, Mustafar, etc.)",
@@ -1482,7 +1484,7 @@ let data = [
                 "title": "Blade Runner 2049",
                 "year": 2017,
                 "depicted": 2049,
-                "tropes": ["AI", "Robotics", "Social Control"],
+                "tropes": ["AI", "Social Control"],
                 "filmingLocation": "Budapest, Hungary",
                 "depictedLocation": "Los Angeles, 2049",
                 "id": 145

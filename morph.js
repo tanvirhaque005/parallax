@@ -18,22 +18,26 @@ const periodTexts = {
     description: 'Sound arrived, but imagination contracted. The Great Depression grounded fantasies in economic reality. Escapism became more practical, less cosmic—monsters closer to home.'
   },
   1935: {
-    description: 'Pre-war tension sharpened focus. Imagination turned from distant planets to immediate threats. Science became weapon, not wonder—a shift from exploration to survival.'
+    description: 'Pre-war tension and economic hardship sharpened desires for escapist fantasies. Imagination turned outward to distant worlds in order to escape from domestic troubles. '
+    // from distant planets to immediate threats. Science became weapon, not wonder—a shift from exploration to survival.'
   },
   1940: {
-    description: 'War narrowed vision. Filmmakers worked with limited resources, imagining futures constrained by present scarcity. Imagination became tactical, not transcendent.'
+    description: 'Though escapist interplanetary films that began production during the pre-war era were still being released, the genre began declining as resources were directed from technologically savvy films to the war effort.'
+    // 'War narrowed vision. Filmmakers worked with limited resources, imagining futures constrained by present scarcity. Imagination became tactical, not transcendent.'
   },
   1945: {
-    description: 'In the midst of the second world war, imagination narrowed even further. People were more fixated on reality and did not have the luxury to dream of far-off places and futuristic technologies.'
+    description: 'In the midst of the second world war, imagination narrowed even further as resources for film were stretched thin. People were more fixated on depicting reality and did not have the luxury to portray of far-off places.'
   },
   1950: {
-    description: 'Cold War paranoia channeled imagination inward. Fear of invasion replaced wonder at discovery. Sci-fi became warning system, mapping anxieties onto familiar American landscapes.'
+    description: 'Post-war technologies and motivation allowed for the creation of more fantastical sci-fi films that depicted interplanetary stories.'
+    // description: 'Cold War paranoia channeled imagination inward. Fear of invasion replaced wonder at discovery. Sci-fi became warning system, mapping anxieties onto familiar American landscapes.'
   },
   1955: {
     description: 'Space race optimism lifted imagination skyward. Rockets made the impossible plausible. Nationalism within the U.S. stemming from post-World War reconstruction drove nation-centric depictions.'
   },
   1960: {
-    description: 'Counterculture questioned everything. Imagination broke from authority, exploring consciousness and identity. Sci-fi became philosophical, not just technological.'
+    description: 'As increasing technological advancement inspired the production of more fantastical, far-off stories, counterculture questioned everything. Imagination broke from authority, exploring consciousness and identity.' 
+    // Sci-fi became philosophical, not just technological.'
   },
   1965: {
     description: 'Social upheaval darkened visions. Imagination turned dystopian, reflecting real-world chaos. Future cities became prisons; technology, oppressor. Cynicism replaced wonder.'
