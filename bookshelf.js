@@ -823,7 +823,7 @@ function rebuildOverlayForIndex() {
     if (imageName) {
       return `
         <div class="motif-circle" data-motif="${t}"
-             onclick="location.href='/chordGraph.html'">
+             onclick="location.href='chordGraph.html'">
           <img src="node-images/${imageName}" alt="${t}" class="motif-image" />
         </div>
       `;
@@ -831,7 +831,7 @@ function rebuildOverlayForIndex() {
       // Fallback to text if no image found
       return `
         <div class="motif-circle" data-motif="${t}"
-             onclick="location.href='/chordGraph.html'">
+             onclick="location.href='chordGraph.html'">
           ${t}
         </div>
       `;
