@@ -126,10 +126,12 @@ function switchView(view) {
   const bookinfo = document.getElementById('bookinfo');
   
   if (view === 'grid') {
+    // Close overlay if open
     if (bookinfo && bookinfo.classList.contains('open')) {
       closeOverlay();
     }
     
+    // Hide all list view elements
     baseCanvas.style.display = 'none';
     overlayCanvas.style.display = 'none';
     const bookBars = document.getElementById('bookBars');
@@ -142,6 +144,7 @@ function switchView(view) {
     if (scrollLeftBtn) scrollLeftBtn.style.display = 'none';
     if (scrollRightBtn) scrollRightBtn.style.display = 'none';
     
+    // Show grid view
     if (gridView) {
       gridView.style.display = 'block';
       document.body.style.overflow = 'hidden';
@@ -162,13 +165,16 @@ function switchView(view) {
       }, 100);
     }
     
+    // Update button states
     if (listViewBtn) listViewBtn.classList.remove('active');
     if (gridViewBtn) gridViewBtn.classList.add('active');
   } else {
+    // Close overlay if open
     if (bookinfo && bookinfo.classList.contains('open')) {
       closeOverlay();
     }
     
+    // Reset book states
     if (activeBook) {
       activeBook.isPresented = false;
       activeBook.targetRotY = Math.PI / 2;
@@ -183,11 +189,12 @@ function switchView(view) {
       b.mesh.visible = true;
     });
     
+    // Reset overlay state
     currentIndex = -1;
     activeBook = null;
-    
     overlayCanvas.style.display = 'none';
     
+    // Show list view elements
     baseCanvas.style.display = 'block';
     const bookBars = document.getElementById('bookBars');
     if (bookBars) bookBars.style.display = 'flex';
@@ -196,11 +203,14 @@ function switchView(view) {
     const introMessage = document.getElementById('introMessageDefault');
     if (introMessage) introMessage.style.display = 'block';
     
+    // Hide grid view
     if (gridView) gridView.style.display = 'none';
     document.body.style.overflow = 'hidden';
     
+    // Update UI
     updateScrollButtons();
     
+    // Update button states
     if (listViewBtn) listViewBtn.classList.add('active');
     if (gridViewBtn) gridViewBtn.classList.remove('active');
   }
@@ -708,15 +718,37 @@ function openOverlayForIndex(i) {
   const footer = document.getElementById('footer');
   if (footer) footer.style.display = 'none';
 
+  // Show backdrop
+  const backdrop = document.getElementById('bookinfoBackdrop');
+  if (backdrop) backdrop.classList.add('active');
+
+  // Ensure overlay canvas is on top (higher than bookinfo which is 1000)
   overlayCanvas.style.display = 'block';
+  overlayCanvas.style.zIndex = '1001';
   bookinfo.classList.add('open');
 
-  // 🚫 Disable header
+  // 🚫 Disable header (but keep it visible - backdrop will dim background)
   document.querySelector(".page-header")?.classList.add("disabled");
   
   // Hide scroll buttons when overlay is open
   if (scrollLeftBtn) scrollLeftBtn.style.display = 'none';
   if (scrollRightBtn) scrollRightBtn.style.display = 'none';
+  
+  // Hide explore tropes button and book bars
+  // The arrow button script replaces the element with .arrow-button-wrapper
+  // Find it by href to chordGraph.html or by text content
+  const exploreTropesButton = document.querySelector('.arrow-button-wrapper[href="chordGraph.html"]') ||
+                               Array.from(document.querySelectorAll('.arrow-button-wrapper')).find(
+                                 el => el.textContent.includes('EXPLORE TORPES') || el.textContent.includes('EXPLORE TROPES')
+                               );
+  if (exploreTropesButton) {
+    exploreTropesButton.style.display = 'none';
+    exploreTropesButton.style.opacity = '0';
+    exploreTropesButton.style.pointerEvents = 'none';
+    exploreTropesButton.style.visibility = 'hidden';
+  }
+  const bookBars = document.getElementById('bookBars');
+  if (bookBars) bookBars.style.display = 'none';
 }
 
 
@@ -724,6 +756,10 @@ function closeOverlay() {
   hideOverlayIntro();
   bookinfo.classList.remove('open');
   overlayCanvas.style.display = 'none';
+
+  // Hide backdrop
+  const backdrop = document.getElementById('bookinfoBackdrop');
+  if (backdrop) backdrop.classList.remove('active');
 
   // ✅ Re-enable header
   document.querySelector(".page-header")?.classList.remove("disabled");
@@ -733,6 +769,24 @@ function closeOverlay() {
   
   // Show scroll buttons when overlay is closed (if in list view)
   updateScrollButtons();
+  
+  // Show explore tropes button and book bars (only if in list view)
+  // The arrow button script replaces the element with .arrow-button-wrapper
+  // Find it by href to chordGraph.html or by text content
+  const exploreTropesButton = document.querySelector('.arrow-button-wrapper[href="chordGraph.html"]') ||
+                               Array.from(document.querySelectorAll('.arrow-button-wrapper')).find(
+                                 el => el.textContent.includes('EXPLORE TORPES') || el.textContent.includes('EXPLORE TROPES')
+                               );
+  if (exploreTropesButton) {
+    exploreTropesButton.style.display = 'inline-flex';
+    exploreTropesButton.style.opacity = '1';
+    exploreTropesButton.style.pointerEvents = 'auto';
+    exploreTropesButton.style.visibility = 'visible';
+  }
+  const bookBars = document.getElementById('bookBars');
+  if (bookBars && currentView === 'list') {
+    bookBars.style.display = 'flex';
+  }
 
   if (overlayBook) overlayScene.remove(overlayBook);
 

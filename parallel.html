@@ -62,6 +62,11 @@
 
     /* Make the intro overlay translucent so the chart shows behind it */
     .intro-page {
+        display: flex;
+        flex-direction: column;
+        padding: clamp(20px, 4vw, 60px);
+        overflow: visible;
+        min-height: 100vh;
         pointer-events: auto;
         backdrop-filter: blur(6px);
         z-index: 5;
@@ -111,31 +116,30 @@
 
 
 
-    /* Intro Panel Styles */
+    /* Intro Panel Styles - matching chordGraph.html */
     .intro-panel {
-      position: fixed;
-      top: 5%;
-      left: 0;
+      position: relative;
       width: 70%;
-      height: 100vh;
-      z-index: 3;
+      max-width: 900px;
+      height: 100%;
       display: flex;
       flex-direction: column;
-      padding: 60px;
-      pointer-events: auto;
+      padding-top: clamp(80px, 15vh, 200px);
+      overflow: visible;
+      min-height: 100vh;
     }
 
     .intro-category {
       display: inline-block;
-      padding: clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 20px);
-      border-radius: 999px;
-      font-size: clamp(12px, 1.5vw, 14px);
+      padding: 16px;
+      font-size: 22px;
       font-weight: 400;
       letter-spacing: 1.6px;
-      border: 1px solid rgba(255,255,255,0.45);
       color: rgba(255,255,255,0.90);
-      background: rgba(255,255,255,0.02);
-      margin-bottom: clamp(16px, 2.5vh, 24px);
+      border-radius: 100px;
+      border: 1px solid #FFF;
+      background: rgba(255, 255, 255, 0.10);
+      margin-bottom: 16px;
       font-family: 'IBM Plex Sans', sans-serif;
       width: fit-content;
     }
@@ -145,18 +149,18 @@
       font-size: clamp(2rem, 5vw, 3.5rem);
       font-weight: 400;
       color: #ffffff;
-      margin: 0 0 clamp(20px, 3vh, 32px) 0;
+      margin: 0 0 20px 0;
       line-height: 1.2;
       letter-spacing: -0.5px;
     }
 
     .intro-description {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: clamp(0.875rem, 1.5vw, 1rem);
+      font-size: 26px;
       color: #ffffff;
       line-height: 1.6;
-      margin: 0 0 clamp(24px, 4vh, 40px) 0;
-      max-width: 600px;
+      margin: 0 0 24px 0;
+      max-width: 800px;
       font-weight: 300;
     }
 
@@ -176,13 +180,13 @@
 
     .slope-line {
       flex-shrink: 0;
-      width: 32px;
-      height: 16px;
+      width: 64px;
+      height: 32px;
     }
 
     .slope-legend-text {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 12px;
+      font-size: 24px;
       color: rgba(255, 255, 255, 0.85);
       font-weight: 300;
       letter-spacing: 0.2px;
@@ -190,8 +194,8 @@
 
 
 
-    /* The First Decade Button */
-    .first-decade-button {
+    /* The First Decade Button - using intro-arrow-button style */
+    .intro-arrow-button {
       display: flex !important;
       align-items: center;
       gap: clamp(12px, 2vw, 18px);
@@ -205,43 +209,66 @@
       font-family: 'IBM Plex Sans', sans-serif;
       pointer-events: auto;
       cursor: none !important;
-      margin-top: clamp(40px, 15vh, 200px);
       background: transparent;
       border: none;
       padding: 0;
-      position: relative;
+      /* Pin to right middle of viewport, vertically centered */
+      position: fixed;
+      top: 50%;
+      right: 60px;
+      transform: translateY(-50%);
       visibility: visible !important;
       opacity: 1 !important;
     }
+    
+    /* Hide button when not on intro page - using body class or direct sibling check */
+    body:has(.chart-page.active) .intro-arrow-button {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+    
+    /* Show button only when intro page is active */
+    body:has(.intro-page.active) .intro-arrow-button {
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+    }
 
-    .first-decade-button,
-    .first-decade-button * {
+    .intro-arrow-button,
+    .intro-arrow-button * {
       cursor: none !important;
     }
 
-    .first-decade-button:hover {
+    .intro-arrow-button:hover {
       opacity: 0.7;
     }
 
-    .first-decade-arrow {
-      width: clamp(50px, 8vw, 60px);
-      height: clamp(50px, 8vw, 60px);
-      border: 1px solid #ffffff;
-      border-radius: 50%;
+    .intro-arrow-circle {
       display: flex;
+      width: 80px;
+      height: 80px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      border: 1px solid #ffffff;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.20);
+      box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0.30);
+      backdrop-filter: blur(2px);
       align-items: center;
       justify-content: center;
       transition: transform 0.3s ease;
     }
 
-    .first-decade-button:hover .first-decade-arrow {
+    .intro-arrow-button:hover .intro-arrow-circle {
       transform: translateX(3px);
     }
 
-    .first-decade-arrow::after {
-      content: '→';
-      font-size: 24px;
-      color: #ffffff;
+    .intro-arrow-circle img {
+      width: 32px;
+      height: 32px;
+      display: block;
     }
 
     /* Responsive styles for intro page */
@@ -259,45 +286,55 @@
         font-size: 11px;
         padding: 6px 12px;
       }
+      
+      /* On smaller screens, keep button fixed but adjust position */
+      .intro-arrow-button {
+        right: 40px;
+      }
     }
 
     /* Ensure button is visible on smaller screens */
     @media (max-height: 800px) {
-      .first-decade-button {
-        margin-top: 60px;
+      .intro-arrow-button {
+        top: 50%;
       }
     }
     
     @media (max-height: 600px) {
-      .first-decade-button {
-        margin-top: 40px;
+      .intro-arrow-button {
+        top: 50%;
       }
     }
 
     .page-header {
       position: fixed;
-      top: 40px;
-      left: 40px;
-      z-index: 50;
+      top: 60px;
+      left: 60px;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    
+
+    .page-header .back-link {
+      position: static;
+      left: auto;
+      top: auto;
+    }
+
     .back-link {
       display: flex;
       align-items: center;
       gap: 12px;
       color: #cccccca4;
       text-decoration: none;
-      font-size: 12px;
+      font-size: 20px;
       letter-spacing: 1px;
       transition: color 0.3s;
       text-transform: uppercase;
-      position: fixed;
-         top: 20px;
-         left: 40px;
-         z-index: 200;
     }
     .back-link:hover { color: #ffffff; }
-    .back-arrow { font-size: 20px;
+    .back-arrow { font-size: 24px;
       }
 
     .nav-buttons {
@@ -341,7 +378,7 @@
       left: 70px;
       top: 220px;
 
-      width: 450px;
+      width: 500px;
       padding: 28px 32px 40px 32px;
 
       /* background: rgba(255,255,255,0.03); */
@@ -367,7 +404,7 @@
     /* Large decade header */
     .left-card h2 {
       margin: 0;
-      font-size: 36px;
+      font-size: 56px;
       font-weight: 300;
       letter-spacing: -1px;
     }
@@ -383,7 +420,7 @@
     .left-card .tag {
       padding: 6px 16px;
       border-radius: 999px;
-      font-size: 10px;
+      font-size: 18px;
       font-weight: 500;
       letter-spacing: 1px;
       border: 1px solid rgba(255,255,255,0.45);
@@ -396,7 +433,7 @@
 
     /* Description paragraph */
     .left-card .desc {
-      font-size: 20px;
+      font-size: 26px;
       line-height: 1.55;
       color: rgba(255,255,255,0.80);
       letter-spacing: 0.3px;
@@ -582,7 +619,7 @@
 
     #movieHoverCard h2 {
       margin: 0 0 12px 0;
-      font-size: 22px;
+      font-size: 26px;
       line-height: 1.25;
       font-weight: 600;
     }
@@ -603,7 +640,7 @@
     }
 
     .movieHoverDetails {
-      font-size: 14px;
+      font-size: 18px;
       line-height: 1.4;
       color: rgba(255,255,255,0.9);
     }
@@ -660,24 +697,34 @@
         text-align: center;
     }
 
-    /* Footer */
-    .page-footer {
+    /* Cover footer - matching index.html design */
+    .cover-footer {
         position: fixed;
-        bottom: 20px;
+        bottom: 60px;
         left: 0;
         right: 0;
-        padding: 0 40px;
-
         display: flex;
-        justify-content: space-between;
+        flex-direction: row;
         align-items: center;
+        justify-content: space-between;
+        padding: 0 60px;
+        font-size: 11px;
+        color: #888888;
+        letter-spacing: 0.5px;
+        font-family: 'IBM Plex Sans', sans-serif !important;
+        z-index: 9999;
+        gap: 0;
+    }
 
-        font-family: 'IBM Plex Sans', sans-serif;
-        font-size: 14px;
-        color: rgba(255,255,255,0.65);
-
-        z-index: 99999;
-        pointer-events: none;
+    .cover-footer-text {
+        color: #FFF;
+        font-family: 'IBM Plex Sans', sans-serif !important;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 0.6px;
+        opacity: 0.6;
     }
 
     /* Footer */
@@ -717,6 +764,7 @@
 <body>
   <!-- Page Header -->
   <div class="page-header">
+    <div class="intro-icon"></div>
     <a href="chordGraph.html" class="back-link">
       <span class="back-arrow">←</span>
       <span>Back</span>
@@ -732,10 +780,10 @@
     <!-- Intro Page (Page 1) -->
     <div class="page-slide active intro-page" id="introPage">
       <div class="intro-panel">
-        <div class="intro-category">DEPICTED YEAR VS REALITY TIMELINE</div>
-          <h1 class="intro-title">Sci-Fi Time Leaps<br>Depicted Year vs Release Year</h1>
+        <div class="intro-category">FICTION VS REALITY TIMELINE</div>
+          <h1 class="intro-title">How far ito the future does sci-fi imagine?</h1>
           <p class="intro-description">
-            You will see how the setting of sci-fi films changes as the genre evolves. Initially, sci-fi indulged in large time leaps to paint fantastical worlds that distracted from societal issues or reflected people’s hopes. But as we get to modern day, fictional settings more so reflect contemporary times to address contemporary anxieties.
+             Older films leapt centuries ahead for escape and speculation. Modern films stay closer to the present, using near-future settings to explore today’s fears and tensions. The imagined future moves closer as our real challenges feel more immediate.
           </p>
         <!-- Slope Example Legend -->
         <div class="slope-legend">
@@ -752,13 +800,15 @@
             <span class="slope-legend-text">Flatter = Big Time Leap</span>
           </div>
         </div>
-
-        <div class="first-decade-button" id="firstDecadeBtn">
-          <span>BEGIN</span>
-          <div class="first-decade-arrow"></div>
-        </div>
       </div>
     </div>
+    
+    <!-- Intro Arrow Button - positioned outside container for viewport-relative positioning -->
+    <button class="intro-arrow-button" id="firstDecadeBtn">
+      <div class="intro-arrow-circle">
+        <img src="asset/arrow_vector.svg" alt="" />
+      </div>
+    </button>
 
     <!-- Parallel Chart Page (Page 2) -->
     <div class="page-slide next chart-page" id="chartPage">
@@ -842,9 +892,9 @@
     </div>
   </div>
  
-  <div class="page-footer">
-    <div>Published 2025</div>
-    <div>Created by Michael, Audrey, Tanvir, Sydney</div>
+  <div class="cover-footer">
+    <div class="cover-footer-text" style="opacity: 0">Published 2025</div>
+    <div class="cover-footer-text">Created by Audrey Yang, Michael Cai, Tanvir Haque, Sydney Nguyen</div>
   </div>
 
   <div id="cursorCircle"></div>

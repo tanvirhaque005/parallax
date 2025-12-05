@@ -13,6 +13,53 @@
       #gridViewHeader {
         top: 30px;
       }
+      .intro-category {
+      display: inline-block;
+      padding: 16px;
+      font-size: 22px;
+      font-weight: 400;
+      letter-spacing: 1.6px;
+      color: rgba(255,255,255,0.90);
+      border-radius: 100px;
+      border: 1px solid #FFF;
+      background: rgba(255, 255, 255, 0.10);
+      margin-bottom: 16px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      width: fit-content;
+    }
+
+    /* Cover footer - matching index.html design */
+    .cover-footer {
+      position: fixed;
+      bottom: 60px;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px;
+      font-size: 11px;
+      color: #888888;
+      letter-spacing: 0.5px;
+      font-family: 'IBM Plex Sans', sans-serif !important;
+      z-index: 50004;
+      gap: 0;
+    }
+
+    .cover-footer-text {
+      color: #FFF;
+      font-family: 'IBM Plex Sans', sans-serif !important;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: 0.6px;
+      opacity: 0.6;
+    }
+    .back-arrow {
+      font-size: 24px !important;
+    }
     </style>
   </head>
 
@@ -21,24 +68,26 @@
     <div class="navigation-menu" id="navigationMenu"></div>
 
       <!-- Page Header -->
-    <div class="page-header">
-      <a href="index.html" class="back-link">
-        <span class="back-arrow">←</span>
-        <span>Back</span>
-      </a>
+      <div class="page-header">
+        <a href="index.html" class="back-link">
+          <div class="back-arrow" style="font-size: 24px;">←</span>
+          <span>Back</span>
+        </a>
+        <div class="intro-icon"></div>
     </div>
     
     <!-- Intro Panel (shown initially, hidden on scroll) -->
+    
     <div id="introPanel" class="intro-panel">
-      <h1 class="intro-title">Explore the Library of Futures</h1>
-      <p class="intro-description">Browse the films in our dataset. Move through decades to see how sci-fi storytelling changes over time. Select a film to step into its world. 
-        </p>
-        <br/><br/>
-        <p class="intro-description">Scroll to move through time, watching how storytelling evolves across generations.</p>
-    </div>
+      <div class="intro-category" style="margin-top: -230px;">LIBRARY OF FUTURES</div>
+      <h1 class="intro-title" style="font-size: 80px; font-weight: 400">Explore stories of future</h1>
+      <p class="intro-description">
+        Browse the films in our dataset. Scroll through decades or filter by subgenre to see how sci-fi storytelling changes over time. Select a film to step into its world.
+      </p>
+   </div>
     
     <!-- ONLY SEE WHEN NOT IN OVERLAY -->
-    <div id="introMessageDefault" data-text="Click any movie cover to step inside its world. Scroll to navigate through the timeline of movies! "></div>
+    <div id="introMessageDefault" data-text="Click on any movie cover to step inside its world. Scroll through a century of sci-fi films."></div>
     <script src="introMessage.js" defer></script>
   
     <div id="bookBars"></div>
@@ -67,19 +116,22 @@
     <link rel="stylesheet" href="arrowButton.css">
     <script src="arrowButton.js"></script>
     <div data-arrow-button 
-    text="Explore Tropes" 
+    text="EXPLORE TORPES" 
     href="chordGraph.html"
     delay="0"
     id="exploreTropesButton">
     </div>
 
+    <!-- Backdrop overlay -->
+    <div id="bookinfoBackdrop"></div>
+    
     <!-- Card overlay -->
     <div id="bookinfo" aria-hidden="true">
       <div class="card" role="dialog" aria-modal="true">
 
         <!-- <div class="breadcrumb">Library > Film</div> -->
         <!-- ONLY SEE WHEN IN OVERLAY -->
-        <div id="introMessageOverlay" data-text="Click a theme to see how this film connects to recurring sci-fi ideas across time."></div>
+        <div id="introMessageOverlay" data-text="Click a theme to see how this film connects to recurring sci-fi ideas across time." font-family:></div>
         <script src="introMessage.js" defer></script>
     
         <button id="closeInfo" class="btn close">✕</button>
@@ -94,15 +146,15 @@
               <h1 class="title" id="bookTitle">Title</h1>
             </div>
 
-            <div class="film-info-grid">
+            <!-- <div class="film-info-grid"> -->
               <div class="info-item">
-                <div class="tags-row" id="pillContainer"></div>
                 <div class="info-value" id="director">Director</div>
+                <div class="tags-row" id="pillContainer"></div>
                 <!-- <div class="info-label">Director</div> -->
                 
                 
               </div>
-            </div>
+            <!-- </div> -->
             <p class="plot" id="bookBlurb">Blurb</p>
         </div>
 
@@ -114,7 +166,8 @@
 
           <div class="bottomBox">
             <div class="actions">
-              <div class="back-link" id="backToShelf">← Return to Library</div>
+              <span class="back-arrow" style="opacity: 0"> ←</span>
+              <div class="back-link" id="backToShelf" style="opacity: 0">Return to Library</div>
             </div>
           </div>
 
@@ -139,17 +192,13 @@
     </div>
 
     <!-- Footer -->
-    <div id="footer" class="footer">
-      <div class="footer-left">
-        <span class="footer-text">Published 2025</span>
-      </div>
-      <div class="footer-right">
-        <div class="view-toggle">
-          <span class="view-label">View by</span>
-          <div class="view-toggle-buttons">
-            <button class="view-button" id="listViewBtn" data-view="list">LIST</button>
-            <button class="view-button" id="gridViewBtn" data-view="grid">GRID</button>
-          </div>
+    <div class="cover-footer">
+      <div class="cover-footer-text" style="opacity: 0">Published 2025</div>
+      <div class="view-toggle">
+        <span class="view-label" style="font-size: 20px;">View by</span>
+        <div class="view-toggle-buttons">
+          <button class="view-button" id="listViewBtn" data-view="list" style="font-size: 20px;">LIST</button>
+          <button class="view-button" id="gridViewBtn" data-view="grid" style="font-size: 20px;">GRID</button>
         </div>
       </div>
     </div>

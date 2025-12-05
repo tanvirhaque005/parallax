@@ -247,9 +247,36 @@ function isSolarSystemBody(locationName) {
 
 function createArc(a,b,h){
   const mid = { x:(a.x+b.x)/2, y:(a.y+b.y)/2 };
+  
+  // Calculate perpendicular direction for more natural flight path curve
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const dist = Math.hypot(dx, dy);
+  
+  if (dist === 0) {
+    // If points are the same, return a straight line
+    return new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(a.x,a.y,0),
+      new THREE.Vector3(mid.x,mid.y,h),
+      new THREE.Vector3(b.x,b.y,0)
+    );
+  }
+  
+  // Perpendicular vector (rotated 90 degrees) for curve direction
+  // This creates a great circle arc effect like real flight paths
+  const perpX = -dy / dist;
+  const perpY = dx / dist;
+  
+  // Offset the control point perpendicular to the line for a more flight-path-like curve
+  // Flight paths typically curve outward from the direct line
+  const curveOffset = h * 0.6; // Horizontal offset for arc effect
+  const controlX = mid.x + perpX * curveOffset;
+  const controlY = mid.y + perpY * curveOffset;
+  const controlZ = h * 1.3; // Increase vertical height for more pronounced curve
+  
   return new THREE.QuadraticBezierCurve3(
     new THREE.Vector3(a.x,a.y,0),
-    new THREE.Vector3(mid.x,mid.y,h),
+    new THREE.Vector3(controlX, controlY, controlZ),
     new THREE.Vector3(b.x,b.y,0)
   );
 }
@@ -348,7 +375,8 @@ async function loadPaths(){
     }
 
     const dist = Math.hypot(p2.x-p1.x, p2.y-p1.y);
-    const curve = createArc(p1,p2, dist*0.15);
+    // Increase curve height for more pronounced flight path effect
+    const curve = createArc(p1,p2, dist*0.25);
 
     // Get points from curve for line geometry - more points = smoother
     const points = curve.getPoints(200);
@@ -1420,7 +1448,7 @@ function updatePieChart() {
     .attr('d', arc)
     .attr('fill', d => d.data.color)
     .attr('stroke', 'white')
-    .attr('stroke-width', 2)
+    .attr('stroke-width', 1)
     .style('opacity', 0.85);
 
   // Add labels
@@ -1443,7 +1471,7 @@ function updatePieChart() {
     .attr('text-anchor', 'middle')
     .attr('dy', '-0.2em')
     .attr('font-family', 'IBM Plex Sans, sans-serif')
-    .attr('font-size', '22px')
+    .attr('font-size', '16px')
     .attr('font-weight', '700')
     .attr('fill', 'white')
     .style('text-shadow', '0 0 4px rgba(0,0,0,0.8)')
@@ -1785,6 +1813,7 @@ function animate(){
                        !solarScrollIndicator.classList.contains('hidden');
     if (shouldShow) {
       solarScrollIndicator.classList.add('visible');
+      solarScrollIndicator.style.opacity = '0.8';
     } else {
       solarScrollIndicator.classList.remove('visible');
     }
@@ -2835,15 +2864,18 @@ window.addEventListener('wheel', (event) => {
       // Just entered WORLD view - show indicator
       if (!worldScrollIndicator.classList.contains('hidden')) {
         worldScrollIndicator.classList.add('visible');
+        worldScrollIndicator.style.opacity = '0.8';
       }
     } else if (currentZoomState !== ZOOM_STATES.WORLD && previousZoomState === ZOOM_STATES.WORLD) {
       // Just left WORLD view - hide indicator
       worldScrollIndicator.classList.add('hidden');
       worldScrollIndicator.classList.remove('visible');
+      worldScrollIndicator.style.opacity = '0';
     } else if (currentZoomState === ZOOM_STATES.WORLD && previousZoomState === ZOOM_STATES.WORLD) {
       // Still in WORLD view but scrolled - hide after first scroll
       worldScrollIndicator.classList.add('hidden');
       worldScrollIndicator.classList.remove('visible');
+      worldScrollIndicator.style.opacity = '0';
     }
   }
 
@@ -2854,15 +2886,18 @@ window.addEventListener('wheel', (event) => {
       // Just entered SOLAR view - show indicator
       if (!solarScrollIndicator.classList.contains('hidden')) {
         solarScrollIndicator.classList.add('visible');
+        solarScrollIndicator.style.opacity = '0.8';
       }
     } else if (currentZoomState !== ZOOM_STATES.SOLAR && previousZoomState === ZOOM_STATES.SOLAR) {
       // Just left SOLAR view - hide indicator
       solarScrollIndicator.classList.add('hidden');
       solarScrollIndicator.classList.remove('visible');
+      solarScrollIndicator.style.opacity = '0';
     } else if (currentZoomState === ZOOM_STATES.SOLAR && previousZoomState === ZOOM_STATES.SOLAR) {
       // Still in SOLAR view but scrolled - hide after first scroll
       solarScrollIndicator.classList.add('hidden');
       solarScrollIndicator.classList.remove('visible');
+      solarScrollIndicator.style.opacity = '0';
     }
   }
 
@@ -2943,15 +2978,18 @@ window.addEventListener('touchmove', (event) => {
             // Just entered WORLD view - show indicator
             if (!worldScrollIndicator.classList.contains('hidden')) {
               worldScrollIndicator.classList.add('visible');
+              worldScrollIndicator.style.opacity = '0.8';
             }
           } else if (currentZoomState !== ZOOM_STATES.WORLD && previousZoomState === ZOOM_STATES.WORLD) {
             // Just left WORLD view - hide indicator
             worldScrollIndicator.classList.add('hidden');
             worldScrollIndicator.classList.remove('visible');
+            worldScrollIndicator.style.opacity = '0';
           } else if (currentZoomState === ZOOM_STATES.WORLD && previousZoomState === ZOOM_STATES.WORLD) {
             // Still in WORLD view but scrolled - hide after first scroll
             worldScrollIndicator.classList.add('hidden');
             worldScrollIndicator.classList.remove('visible');
+            worldScrollIndicator.style.opacity = '0';
           }
         }
 
@@ -2962,6 +3000,7 @@ window.addEventListener('touchmove', (event) => {
             // Just entered SOLAR view - show indicator
             if (!solarScrollIndicator.classList.contains('hidden')) {
               solarScrollIndicator.classList.add('visible');
+              solarScrollIndicator.style.opacity = '0.8';
             }
           } else if (currentZoomState !== ZOOM_STATES.SOLAR && previousZoomState === ZOOM_STATES.SOLAR) {
             // Just left SOLAR view - hide indicator

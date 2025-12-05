@@ -1,0 +1,4 @@
+127.0.0.1 - - [04/Dec/2025 11:59:12] "GET /landingPage.html HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 11:59:15] "HEAD /landingPage.html HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 12:00:23] "GET /landingPage.html HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 12:00:26] "GET /landingPage.html HTTP/1.1" 200 -

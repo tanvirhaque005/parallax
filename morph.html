@@ -1,12 +1,15 @@
 <!-- !TODO (DO NOT delete!) -- (1) cursor stuff is weird, (2) "EXPLORE THE MAP" should trigger by scrolling -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Map Morph to Globe</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="navigation-menu.css">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="introMessage.css">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="cursor.css">
   <style>
     body {
@@ -69,7 +72,8 @@
     /* Force cursor to be on top of everything */
     #cursorCircle {
       position: fixed !important;
-      z-index: 2147483647 !important; /* Maximum z-index value */
+      z-index: 2147483647 !important;
+      /* Maximum z-index value */
       opacity: 1 !important;
       display: block !important;
       visibility: visible !important;
@@ -91,6 +95,7 @@
       height: 60px !important;
       background: rgba(255, 255, 255, 0.18) !important;
     }
+
     #cursorCircle.arrow-right::after {
       content: '→';
       position: absolute;
@@ -107,6 +112,7 @@
       height: 60px !important;
       background: rgba(255, 255, 255, 0.18) !important;
     }
+
     #cursorCircle.arrow-left::after {
       content: '←';
       position: absolute;
@@ -154,31 +160,39 @@
       transform: translateX(-100%);
     }
 
-    /* Intro Panel Styles */
-    .intro-panel {
-      position: fixed;
-      top: 10%;
-      left: 0;
-      width: 70%;
-      height: 100vh;
-      z-index: 3;
+    /* Intro Page Styles */
+    .intro-page {
       display: flex;
       flex-direction: column;
-      padding: 60px;
-      pointer-events: auto;
+      padding: clamp(20px, 4vw, 60px);
+      overflow: visible;
+      min-height: 100vh;
+    }
+
+    /* Intro Panel Styles - matching chordGraph.html */
+    .intro-panel {
+      position: relative;
+      width: 70%;
+      max-width: 900px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding-top: clamp(80px, 15vh, 200px);
+      overflow: visible;
+      min-height: 100vh;
     }
 
     .intro-category {
       display: inline-block;
-      padding: clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 20px);
-      border-radius: 999px;
-      font-size: clamp(12px, 1.5vw, 14px);
+      padding: 16px;
+      font-size: 22px;
       font-weight: 400;
       letter-spacing: 1.6px;
-      border: 1px solid rgba(255,255,255,0.45);
-      color: rgba(255,255,255,0.90);
-      background: rgba(255,255,255,0.02);
-      margin-bottom: clamp(16px, 2.5vh, 24px);
+      color: rgba(255, 255, 255, 0.90);
+      border-radius: 100px;
+      border: 1px solid #FFF;
+      background: rgba(255, 255, 255, 0.10);
+      margin-bottom: 16px;
       font-family: 'IBM Plex Sans', sans-serif;
       width: fit-content;
     }
@@ -188,18 +202,18 @@
       font-size: clamp(2rem, 5vw, 3.5rem);
       font-weight: 400;
       color: #ffffff;
-      margin: 0 0 clamp(20px, 3vh, 32px) 0;
+      margin: 0 0 20px 0;
       line-height: 1.2;
       letter-spacing: -0.5px;
     }
 
     .intro-description {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: clamp(0.875rem, 1.5vw, 1rem);
+      font-size: 26px;
       color: #ffffff;
       line-height: 1.6;
-      margin: 0 0 clamp(24px, 4vh, 40px) 0;
-      max-width: 600px;
+      margin: 0 0 24px 0;
+      max-width: 800px;
       font-weight: 300;
     }
 
@@ -218,11 +232,14 @@
       font-family: 'IBM Plex Sans', sans-serif;
       pointer-events: auto;
       cursor: none !important;
-      margin-top: clamp(40px, 15vh, 200px);
       background: transparent;
       border: none;
       padding: 0;
-      position: relative;
+      /* Pin to right middle of viewport, vertically centered */
+      position: fixed;
+      top: 50%;
+      right: 60px;
+      transform: translateY(-50%);
       visibility: visible !important;
       opacity: 1 !important;
     }
@@ -231,25 +248,31 @@
       opacity: 0.7;
     }
 
-    .enter-map-arrow {
-      width: clamp(50px, 8vw, 60px);
-      height: clamp(50px, 8vw, 60px);
-      border: 1px solid #ffffff;
-      border-radius: 50%;
+    .enter-map-circle {
       display: flex;
+      width: 80px;
+      height: 80px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      border: 1px solid #ffffff;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.20);
+      box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0.30);
+      backdrop-filter: blur(2px);
       align-items: center;
       justify-content: center;
       transition: transform 0.3s ease;
     }
 
-    .enter-map-button:hover .enter-map-arrow {
+    .enter-map-button:hover .enter-map-circle {
       transform: translateX(3px);
     }
 
-    .enter-map-arrow::after {
-      content: '→';
-      font-size: 24px;
-      color: #ffffff;
+    .enter-map-circle img {
+      width: 32px;
+      height: 32px;
+      display: block;
     }
 
     /* Responsive styles for intro page */
@@ -272,30 +295,61 @@
     /* Ensure button is visible on smaller screens */
     @media (max-height: 800px) {
       .enter-map-button {
-        margin-top: 60px;
+        top: 50%;
       }
     }
-    
+
     @media (max-height: 600px) {
       .enter-map-button {
-        margin-top: 40px;
+        top: 50%;
       }
     }
-  /* Page Header */
+
+    /* On smaller screens, keep button fixed but adjust position */
+    @media (max-width: 768px) {
+      .enter-map-button {
+        right: 40px;
+      }
+    }
+
+    /* Hide button when not on intro page */
+    body:has(.map-page.active) .enter-map-button {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    /* Show button only when intro page is active */
+    body:has(.intro-page.active) .enter-map-button {
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+    }
+
+    /* Page Header */
     .page-header {
       position: fixed;
-      top: 40px;
-      left: 40px;
-      z-index: 50;
+      top: 60px;
+      left: 60px;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .page-header .back-link {
+      position: static;
+      left: auto;
+      top: auto;
+      font-size: 20px;
     }
 
     .back-link {
       display: flex;
       align-items: center;
       gap: 12px;
-      color: #cccccc;
+      color: #cccccca4;
       text-decoration: none;
-      font-size: 13px;
       letter-spacing: 1px;
       transition: color 0.3s;
       text-transform: uppercase;
@@ -306,7 +360,7 @@
     }
 
     .back-arrow {
-      font-size: 20px;
+      font-size: 24px;
     }
 
     /* Navigation Buttons */
@@ -343,14 +397,15 @@
       top: 20px;
       left: 20px;
       z-index: 10;
-      background: rgba(255,255,255,0.9);
+      background: rgba(255, 255, 255, 0.9);
       padding: 12px 18px;
       border-radius: 8px;
       font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 14px;
       color: #333;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
+
     #flightPathTooltip {
       position: fixed;
       color: #ffffff;
@@ -369,17 +424,19 @@
       width: auto;
       display: inline-block;
     }
+
     .planet-label {
       color: white;
       font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 14px;
       font-weight: 600;
-      text-shadow: 0 0 4px rgba(0,0,0,0.8);
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
       pointer-events: none;
       user-select: none;
       text-transform: capitalize;
       z-index: 1 !important;
     }
+
     /* MAIN TIMELINE BAR */
     #timelineBar {
       position: fixed;
@@ -425,7 +482,8 @@
       border: 2px solid rgba(255, 255, 255, 0.15);
       font-family: 'Inter', sans-serif;
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-      display: none; /* Hide the middle counter */
+      display: none;
+      /* Hide the middle counter */
     }
 
     /* TRACK — now a visible flat dark bar */
@@ -433,7 +491,8 @@
       width: 420px;
       height: 10px;
 
-      background: #333333;     /* <— brings back visible track */
+      background: #333333;
+      /* <— brings back visible track */
       border-radius: 4px;
 
       position: relative;
@@ -454,9 +513,10 @@
       background: #ffffff;
 
       cursor: grab;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 
-      left: 0%;   /* JS updates this */
+      left: 0%;
+      /* JS updates this */
       transition: background 0.2s;
       display: none;
     }
@@ -479,8 +539,10 @@
       display: flex;
       align-items: flex-end;
       gap: 8px;
-      z-index: 2;        /* ← VERY IMPORTANT */
-      pointer-events: auto;   /* ← ensure clicks reach the bars */
+      z-index: 2;
+      /* ← VERY IMPORTANT */
+      pointer-events: auto;
+      /* ← ensure clicks reach the bars */
     }
 
     #bookBars:hover {
@@ -488,7 +550,7 @@
     }
 
     .book-bar.hovered {
-      background: rgba(255,255,255,1);
+      background: rgba(255, 255, 255, 1);
       opacity: 1;
     }
 
@@ -497,7 +559,8 @@
       content: "";
       position: absolute;
       inset: -20px 0;
-      pointer-events: none;   /* ← FIX */
+      pointer-events: none;
+      /* ← FIX */
     }
 
 
@@ -524,14 +587,16 @@
 
     #barDateDisplay {
       position: fixed;
-      top: 90px;            /* adjust as you want */
+      top: 90px;
+      /* adjust as you want */
       left: 24px;
       color: #ffffff;
       font-family: 'Courier New', monospace;
       font-size: 14px;
       opacity: 0.85;
       letter-spacing: 1px;
-      z-index: 999999;      /* always visible */
+      z-index: 999999;
+      /* always visible */
       pointer-events: none;
       transition: opacity 0.2s ease;
     }
@@ -544,7 +609,8 @@
       letter-spacing: 1px;
       pointer-events: none;
       opacity: 0;
-      transform: translate(-50%, -8px); /* centered above bar */
+      transform: translate(-50%, -8px);
+      /* centered above bar */
       z-index: 999999;
       transition: opacity 0.15s ease, top 0.1s ease, left 0.1s ease;
     }
@@ -554,7 +620,7 @@
       position: fixed;
       bottom: 330px;
       left: 60px;
-      max-width: 800px;
+      max-width: 400px;
       pointer-events: none;
       z-index: 100;
     }
@@ -571,20 +637,20 @@
     }
 
     .main-title {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-family: 'IBM Plex Sans';
       font-size: 64px;
       font-weight: 300;
       color: #ffffff;
-      margin: 0 0 20px 0;
+      margin: 0 0 0px 0;
       line-height: 1.1;
       letter-spacing: -1px;
       white-space: nowrap;
     }
 
     .description {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-family: 'IBM Plex Sans';
       font-size: 18px;
-      font-weight: 300;
+      font-weight: 400;
       color: rgba(255, 255, 255, 0.85);
       line-height: 1.6;
       margin: 0;
@@ -620,7 +686,7 @@
       background: rgba(255, 255, 255, 0.287);
       backdrop-filter: blur(8px);
       border-radius: 18px;
-      border: 2px solid rgba(255,255,255,0.15);
+      border: 2px solid rgba(255, 255, 255, 0.15);
       color: white;
       font-family: "Inter", sans-serif;
       opacity: 0;
@@ -693,12 +759,12 @@
     .movieHoverDetails {
       font-size: 14px;
       line-height: 1.6;
-      color: rgba(255,255,255,0.9);
+      color: rgba(255, 255, 255, 0.9);
       flex: 1;
     }
 
     .movieHoverDetails strong {
-      color: rgba(255,255,255,1);
+      color: rgba(255, 255, 255, 1);
       font-weight: 600;
     }
 
@@ -770,9 +836,9 @@
       transition: color 0.3s;
       text-transform: uppercase;
       position: fixed;
-         top: 20px;
-         left: 40px;
-         z-index: 200;
+      top: 20px;
+      left: 40px;
+      z-index: 200;
     }
 
     /* Event Pills Container */
@@ -782,7 +848,7 @@
       gap: 12px;
       flex-wrap: wrap;
       max-width: 600px;
-      margin: 20px 0;
+      margin: 0px 0;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.4s ease;
@@ -798,9 +864,9 @@
       font-size: 10px;
       font-weight: 500;
       letter-spacing: 1px;
-      border: 1px solid rgba(255,255,255,0.45);
-      color: rgba(255,255,255,0.90);
-      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      color: rgba(255, 255, 255, 0.90);
+      background: rgba(255, 255, 255, 0.03);
       backdrop-filter: blur(4px);
       text-transform: uppercase;
       display: inline-block;
@@ -810,10 +876,10 @@
     /* Scroll Indicator Arrow */
     #scrollIndicator {
       position: fixed;
-      bottom: 80px;
+      bottom: 120px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 100;
+      z-index: 10;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.5s ease;
@@ -839,8 +905,9 @@
     }
 
     #scrollIndicatorArrow {
-      width: 50px;
-      height: 50px;
+      width: 20px;
+      height: 20px;
+      margin-bottom: -10px;
       position: relative;
       animation: chevronBounceUp 2s infinite;
     }
@@ -859,12 +926,19 @@
     }
 
     @keyframes chevronBounce {
-      0%, 20%, 50%, 80%, 100% {
+
+      0%,
+      20%,
+      50%,
+      80%,
+      100% {
         transform: translateY(0);
       }
+
       40% {
         transform: translateY(-10px);
       }
+
       60% {
         transform: translateY(-5px);
       }
@@ -873,7 +947,7 @@
     /* World Map Scroll Indicator Arrow */
     #worldScrollIndicator {
       position: fixed;
-      bottom: 80px;
+      bottom: 120px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 100;
@@ -902,19 +976,27 @@
     }
 
     #worldScrollIndicatorArrow {
-      width: 50px;
-      height: 50px;
+      width: 20px;
+      height: 20px;
+      margin-bottom: -5px;
       position: relative;
       animation: chevronBounceUp 2s infinite;
     }
 
     @keyframes chevronBounceUp {
-      0%, 20%, 50%, 80%, 100% {
+
+      0%,
+      20%,
+      50%,
+      80%,
+      100% {
         transform: translateY(0);
       }
+
       40% {
         transform: translateY(10px);
       }
+
       60% {
         transform: translateY(5px);
       }
@@ -923,7 +1005,7 @@
     /* Solar System Scroll Indicator Arrow */
     #solarScrollIndicator {
       position: fixed;
-      bottom: 80px;
+      bottom: 120px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 100;
@@ -952,8 +1034,9 @@
     }
 
     #solarScrollIndicatorArrow {
-      width: 50px;
-      height: 50px;
+      width: 20px;
+      height: 20px;
+      margin-bottom: -10px;
       position: relative;
       animation: chevronBounce 2s infinite;
     }
@@ -984,33 +1067,56 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
-    .page-footer {
-        position: fixed;
-        bottom: 5px;
-        left: 0;
-        right: 0;
-        padding: 0 40px;
-
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        font-family: 'IBM Plex Sans', sans-serif;
-        font-size: 14px;
-        color: rgba(255,255,255,0.65);
-
-        z-index: 99999;
-        pointer-events: none;
+    /* Cover footer - matching index.html design */
+    .cover-footer {
+      position: fixed;
+      bottom: 60px;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px;
+      font-size: 11px;
+      color: #888888;
+      letter-spacing: 0.5px;
+      font-family: 'IBM Plex Sans', sans-serif !important;
+      z-index: 9999;
+      gap: 0;
     }
 
-    .page-footer {
-      padding: 20px 40px;
+    .cover-footer-text {
+      color: #FFF;
+      font-family: 'IBM Plex Sans', sans-serif !important;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: 0.6px;
+      opacity: 0.6;
+    }
+
+    .intro-legend {
+      margin-top: 20px;
       display: flex;
-      justify-content: space-between;
+      flex-direction: row;
+      gap: 30px;
+      color: #ffffff;
+      font-size: 24px;
+    }
+
+    .intro-legend-item {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
       align-items: center;
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 14px;
-      color: rgba(255,255,255,0.65);
+    }
+
+    .legend-line {
+      width: 80px;
+      height: 4px;
+      background: #ffffff;
     }
   </style>
   <link rel="stylesheet" href="mapIntroMessage.css">
@@ -1019,6 +1125,7 @@
 <body>
   <!-- Page Header -->
   <div class="page-header">
+    <div class="intro-icon"></div>
     <a href="parallel.html" class="back-link">
       <span class="back-arrow">←</span>
       <span>Back</span>
@@ -1029,64 +1136,73 @@
     <div class="page-slide active intro-page" id="introPage">
       <div class="intro-panel">
         <div class="intro-category">WORLD BUILDING MAP</div>
-          <h1 class="intro-title">Depicted Settings vs Real Locations</h1>
-          <p class="intro-description">You will see how attitudes to science fiction films change as time progresses and sci-fi evolves. While distant worlds used to be depicted for escapism or hope, in recent times, faraway places are used to mirror domestic issues.</p>
-  
-        <div class="enter-map-button" id="enterMapBtn">
-          <span>BEGIN</span>
-          <div class="enter-map-arrow"></div>
+        <h1 class="intro-title">Why do faraway worlds mirror issues at home?</h1>
+        <p class="intro-description">Early sci-fi used distant planets and imagined places for escapism or hope.
+          Recently in the 2000's, director use these settings as allegories - shooting in familiar cities to comment on
+          domestic hardship, global instability, or cultural change.</p>
+        <div class="intro-legend">
+          <div class="intro-legend-item">
+            <div class="legend-line" style="background:#9747FF"></div>
+            <div>Production location</div>
+          </div>
+          <div class="intro-legend-item">
+            <div class="legend-line" style="background:#46AACB"></div>
+            <div>Depecited location</div>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Map Page (Page 2) -->
-    <div class="page-slide next map-page" id="mapPage">
-      <!-- Map Intro Message Container -->
-      <div id="mapIntroContainer" data-text="Hover paths to reveal film details. Click left and right to travel through time."></div>
-      <script src="mapIntroMessage.js" defer></script>
-
- 
-
-  <!-- Navigation Buttons -->
-
-  <div id="flightPathTooltip"></div>
-
-  <!-- Movie Hover Card -->
-  <div id="movieHoverCard">
-    <h2 id="movieHoverTitle"></h2>
-    <div class="movieHoverDivider"></div>
-    <div id="movieHoverContent"></div>
   </div>
 
-  <!-- Gradient Legend -->
-  <div id="gradientLegend">
-    <div class="legend-line"></div>
-    <div class="legend-labels">
-      <div class="legend-label legend-start">
-        <span class="legend-color purple-dot"></span>
-        <span class="legend-text">Production Location</span>
+  <!-- Map Page (Page 2) -->
+  <div class="page-slide next map-page" id="mapPage">
+    <!-- Map Intro Message Container -->
+    <div id="mapIntroContainer"" data-text=" Hover paths to reveal film details. Click left and right to travel through
+      time."></div>
+    <script src="mapIntroMessage.js" defer></script>
+
+
+
+    <!-- Navigation Buttons -->
+
+    <div id="flightPathTooltip"></div>
+
+    <!-- Movie Hover Card -->
+    <div id="movieHoverCard">
+      <h2 id="movieHoverTitle"></h2>
+      <div class="movieHoverDivider"></div>
+      <div id="movieHoverContent"></div>
+    </div>
+
+    <!-- Gradient Legend -->
+    <!-- <div id="gradientLegend">
+      <div class="legend-line"></div>
+      <div class="legend-labels">
+        <div class="legend-label legend-start">
+          <span class="legend-color purple-dot"></span>
+          <span class="legend-text">Production Location</span>
+        </div>
+        <div class="legend-label legend-end">
+          <span class="legend-color teal-dot"></span>
+          <span class="legend-text">Depicted Location</span>
+        </div>
       </div>
-      <div class="legend-label legend-end">
-        <span class="legend-color teal-dot"></span>
-        <span class="legend-text">Depicted Location</span>
+    </div> -->
+
+    <div id="timelineBar">
+      <div id="decadeValue"></div>
+      <div id="timelineTrack">
+        <div id="timelineHandle"></div>
       </div>
     </div>
-  </div>
 
-  <div id="timelineBar">
-    <div id="decadeValue"></div>
-    <div id="timelineTrack">
-      <div id="timelineHandle"></div>
-    </div>
-  </div>
+    <div id="bookBars"></div>
+    <div id="hoverBarDate" class="barDateLabel"></div>
+    <div id="activeBarDate" class="barDateLabel"></div>
 
-  <div id="bookBars"></div>
-  <div id="hoverBarDate" class="barDateLabel"></div>
-  <div id="activeBarDate" class="barDateLabel"></div>
-
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="https://d3js.org/d3-geo-projection.v4.min.js"></script>
-  <script type="importmap">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v4.min.js"></script>
+    <script type="importmap">
     {
       "imports": {
         "three": "https://unpkg.com/three@0.164.0/build/three.module.js",
@@ -1094,241 +1210,240 @@
       }
     }
   </script>
-  <script type="module" src="morph.js"></script>
-  <script src="navigation-menu.js"></script>
+    <script type="module" src="morph.js"></script>
+    <script src="navigation-menu.js"></script>
 
-  <link rel="stylesheet" href="arrowButton.css">
-  <script src="arrowButton.js"></script>
-  <div data-arrow-button
-  text="CLOSING"
-  href="reflectionPage.html"
-  delay="999999"
-  id="closingArrowButton">
-  </div>
+    <link rel="stylesheet" href="arrowButton.css">
+    <script src="arrowButton.js"></script>
+    <div data-arrow-button text="CLOSING" href="reflectionPage.html" delay="999999" id="closingArrowButton">
+    </div>
 
 
-  <script>
-    // Create cursor element immediately and append to body AFTER all other elements
-    (function() {
-      function createCursor() {
-        // Remove existing cursor if any
-        const existing = document.getElementById('cursorCircle');
-        if (existing) {
-          existing.remove();
+    <script>
+      // Create cursor element immediately and append to body AFTER all other elements
+      (function () {
+        function createCursor() {
+          // Remove existing cursor if any
+          const existing = document.getElementById('cursorCircle');
+          if (existing) {
+            existing.remove();
+          }
+
+          // Create new cursor element
+          const cursor = document.createElement('div');
+          cursor.id = 'cursorCircle';
+          // Use CSS classes instead of inline styles for hover effect to work
+          cursor.className = '';
+          // Don't use !important for width, height, background so CSS classes can override them
+          cursor.style.cssText = 'position: fixed !important; top: 50% !important; left: 50% !important; pointer-events: none !important; transform: translate(-50%, -50%) !important; z-index: 2147483647 !important; opacity: 1 !important; display: block !important; visibility: visible !important;';
+
+          // Append to body - this ensures it's on top of everything
+          document.body.appendChild(cursor);
+
+          // Update cursor position on mouse move
+          const mousemoveHandler = (e) => {
+            cursor.style.top = `${e.clientY}px`;
+            cursor.style.left = `${e.clientX}px`;
+          };
+          window.addEventListener('mousemove', mousemoveHandler, { passive: true });
+
+          // Set up hover effects for arrow buttons using event delegation
+          // This will work even for dynamically created buttons
+          const cursorEl = cursor;
+
+          const handleMouseOver = (e) => {
+            const target = e.target.closest('.arrow-button-wrapper') ||
+              e.target.closest('[data-arrow-button]') ||
+              e.target.closest('a') ||
+              e.target.closest('button') ||
+              e.target.closest('.cta-button') ||
+              e.target.closest('.enter-map-button');
+            if (target && cursorEl) {
+              cursorEl.classList.add('hover');
+              // Set styles directly with !important to override inline styles
+              cursorEl.style.setProperty('width', '45px', 'important');
+              cursorEl.style.setProperty('height', '45px', 'important');
+              cursorEl.style.setProperty('opacity', '0.5', 'important');
+              cursorEl.style.setProperty('background', 'white', 'important');
+            }
+          };
+
+          const handleMouseOut = (e) => {
+            const target = e.target.closest('.arrow-button-wrapper') ||
+              e.target.closest('[data-arrow-button]') ||
+              e.target.closest('a') ||
+              e.target.closest('button') ||
+              e.target.closest('.cta-button') ||
+              e.target.closest('.enter-map-button');
+            if (target && cursorEl) {
+              cursorEl.classList.remove('hover');
+              // Only reset to default if not in edge zone (arrow classes indicate edge zone)
+              if (!cursorEl.classList.contains('arrow-left') && !cursorEl.classList.contains('arrow-right')) {
+                cursorEl.style.setProperty('width', '18px', 'important');
+                cursorEl.style.setProperty('height', '18px', 'important');
+                cursorEl.style.setProperty('opacity', '1', 'important');
+                cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+              }
+              // If in edge zone, the mousemove handler in morph.js will maintain the 60px size
+            }
+          };
+
+          // Add event listeners using capture phase to catch events early
+          document.addEventListener('mouseover', handleMouseOver, true);
+          document.addEventListener('mouseout', handleMouseOut, true);
+
+          // Also set up direct listeners after arrow button is created (3 second delay)
+          setTimeout(() => {
+            const arrowButtons = document.querySelectorAll('.arrow-button-wrapper');
+            arrowButtons.forEach(btn => {
+              btn.addEventListener('mouseenter', () => {
+                if (cursorEl) {
+                  cursorEl.classList.add('hover');
+                  cursorEl.style.setProperty('width', '45px', 'important');
+                  cursorEl.style.setProperty('height', '45px', 'important');
+                  cursorEl.style.setProperty('opacity', '0.5', 'important');
+                  cursorEl.style.setProperty('background', 'white', 'important');
+                }
+              });
+              btn.addEventListener('mouseleave', () => {
+                if (cursorEl) {
+                  cursorEl.classList.remove('hover');
+                  // Only reset to default if not in edge zone (arrow classes indicate edge zone)
+                  if (!cursorEl.classList.contains('arrow-left') && !cursorEl.classList.contains('arrow-right')) {
+                    cursorEl.style.setProperty('width', '18px', 'important');
+                    cursorEl.style.setProperty('height', '18px', 'important');
+                    cursorEl.style.setProperty('opacity', '1', 'important');
+                    cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+                  }
+                  // If in edge zone, the mousemove handler in morph.js will maintain the 60px size
+                }
+              });
+            });
+          }, 3500);
+
+          // Make cursor available globally
+          window.cursorElement = cursor;
+
+          console.log('Cursor created and appended to body');
+          return cursor;
         }
 
-        // Create new cursor element
-        const cursor = document.createElement('div');
-        cursor.id = 'cursorCircle';
-        // Use CSS classes instead of inline styles for hover effect to work
-        cursor.className = '';
-        // Don't use !important for width, height, background so CSS classes can override them
-        cursor.style.cssText = 'position: fixed !important; top: 50% !important; left: 50% !important; pointer-events: none !important; transform: translate(-50%, -50%) !important; z-index: 2147483647 !important; opacity: 1 !important; display: block !important; visibility: visible !important;';
+        // Create cursor immediately
+        let cursor = createCursor();
 
-        // Append to body - this ensures it's on top of everything
-        document.body.appendChild(cursor);
-
-        // Update cursor position on mouse move
-        const mousemoveHandler = (e) => {
-          cursor.style.top = `${e.clientY}px`;
-          cursor.style.left = `${e.clientX}px`;
-        };
-        window.addEventListener('mousemove', mousemoveHandler, { passive: true });
-
-        // Set up hover effects for arrow buttons using event delegation
-        // This will work even for dynamically created buttons
-        const cursorEl = cursor;
-
-        const handleMouseOver = (e) => {
-          const target = e.target.closest('.arrow-button-wrapper') ||
-                        e.target.closest('[data-arrow-button]') ||
-                        e.target.closest('a') ||
-                        e.target.closest('button') ||
-                        e.target.closest('.cta-button') ||
-                        e.target.closest('.enter-map-button');
-          if (target && cursorEl) {
-            cursorEl.classList.add('hover');
-            // Set styles directly with !important to override inline styles
-            cursorEl.style.setProperty('width', '45px', 'important');
-            cursorEl.style.setProperty('height', '45px', 'important');
-            cursorEl.style.setProperty('opacity', '0.5', 'important');
-            cursorEl.style.setProperty('background', 'white', 'important');
-          }
-        };
-
-        const handleMouseOut = (e) => {
-          const target = e.target.closest('.arrow-button-wrapper') ||
-                        e.target.closest('[data-arrow-button]') ||
-                        e.target.closest('a') ||
-                        e.target.closest('button') ||
-                        e.target.closest('.cta-button') ||
-                        e.target.closest('.enter-map-button');
-          if (target && cursorEl) {
-            cursorEl.classList.remove('hover');
-            // Only reset to default if not in edge zone (arrow classes indicate edge zone)
-            if (!cursorEl.classList.contains('arrow-left') && !cursorEl.classList.contains('arrow-right')) {
-              cursorEl.style.setProperty('width', '18px', 'important');
-              cursorEl.style.setProperty('height', '18px', 'important');
-              cursorEl.style.setProperty('opacity', '1', 'important');
-              cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
-            }
-            // If in edge zone, the mousemove handler in morph.js will maintain the 60px size
-          }
-        };
-
-        // Add event listeners using capture phase to catch events early
-        document.addEventListener('mouseover', handleMouseOver, true);
-        document.addEventListener('mouseout', handleMouseOut, true);
-
-        // Also set up direct listeners after arrow button is created (3 second delay)
+        // Also create after a delay to ensure it's after CSS2DRenderer
         setTimeout(() => {
-          const arrowButtons = document.querySelectorAll('.arrow-button-wrapper');
-          arrowButtons.forEach(btn => {
-            btn.addEventListener('mouseenter', () => {
-              if (cursorEl) {
-                cursorEl.classList.add('hover');
-                cursorEl.style.setProperty('width', '45px', 'important');
-                cursorEl.style.setProperty('height', '45px', 'important');
-                cursorEl.style.setProperty('opacity', '0.5', 'important');
-                cursorEl.style.setProperty('background', 'white', 'important');
-              }
-            });
-            btn.addEventListener('mouseleave', () => {
-              if (cursorEl) {
-                cursorEl.classList.remove('hover');
-                // Only reset to default if not in edge zone (arrow classes indicate edge zone)
-                if (!cursorEl.classList.contains('arrow-left') && !cursorEl.classList.contains('arrow-right')) {
-                  cursorEl.style.setProperty('width', '18px', 'important');
-                  cursorEl.style.setProperty('height', '18px', 'important');
-                  cursorEl.style.setProperty('opacity', '1', 'important');
-                  cursorEl.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
-                }
-                // If in edge zone, the mousemove handler in morph.js will maintain the 60px size
-              }
-            });
+          cursor = createCursor();
+        }, 100);
+
+        setTimeout(() => {
+          cursor = createCursor();
+        }, 500);
+
+        // Create after DOM is ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', () => {
+            cursor = createCursor();
           });
-        }, 3500);
+        }
 
-        // Make cursor available globally
-        window.cursorElement = cursor;
-
-        console.log('Cursor created and appended to body');
-        return cursor;
-      }
-
-      // Create cursor immediately
-      let cursor = createCursor();
-
-      // Also create after a delay to ensure it's after CSS2DRenderer
-      setTimeout(() => {
-        cursor = createCursor();
-      }, 100);
-
-      setTimeout(() => {
-        cursor = createCursor();
-      }, 500);
-
-      // Create after DOM is ready
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
+        // Create after window loads
+        window.addEventListener('load', () => {
           cursor = createCursor();
         });
-      }
 
-      // Create after window loads
-      window.addEventListener('load', () => {
-        cursor = createCursor();
-      });
-
-      // Continuously ensure cursor exists and is visible
-      setInterval(() => {
-        let cursor = document.getElementById('cursorCircle');
-        if (!cursor) {
-          cursor = createCursor();
-        } else {
-          // Force visibility
-          const computed = window.getComputedStyle(cursor);
-          if (computed.display === 'none' || computed.opacity === '0' || computed.visibility === 'hidden') {
-            cursor.style.display = 'block';
-            cursor.style.opacity = '1';
-            cursor.style.visibility = 'visible';
-            cursor.style.zIndex = '2147483647';
+        // Continuously ensure cursor exists and is visible
+        setInterval(() => {
+          let cursor = document.getElementById('cursorCircle');
+          if (!cursor) {
+            cursor = createCursor();
+          } else {
+            // Force visibility
+            const computed = window.getComputedStyle(cursor);
+            if (computed.display === 'none' || computed.opacity === '0' || computed.visibility === 'hidden') {
+              cursor.style.display = 'block';
+              cursor.style.opacity = '1';
+              cursor.style.visibility = 'visible';
+              cursor.style.zIndex = '2147483647';
+            }
+            // Ensure it's at the end of body
+            if (cursor.parentNode !== document.body || cursor.nextSibling !== null) {
+              cursor.remove();
+              document.body.appendChild(cursor);
+            }
           }
-          // Ensure it's at the end of body
-          if (cursor.parentNode !== document.body || cursor.nextSibling !== null) {
-            cursor.remove();
-            document.body.appendChild(cursor);
-          }
-        }
-      }, 300);
-    })();
-  </script>
-  <script src="cursor.js"></script>
-  <script>
-    // Additional hover effect setup after arrow button is created
-    // Wait for arrow button to be created (after 3 second delay)
-    setTimeout(() => {
-      const cursor = document.getElementById('cursorCircle');
-      if (cursor) {
-        // Set up hover effect specifically for arrow buttons
-        const setupArrowHover = () => {
-          const arrowButtons = document.querySelectorAll('.arrow-button-wrapper');
-          arrowButtons.forEach(btn => {
-            btn.addEventListener('mouseenter', () => {
-              if (cursor) {
-                cursor.classList.add('hover');
-                cursor.style.setProperty('width', '45px', 'important');
-                cursor.style.setProperty('height', '45px', 'important');
-                cursor.style.setProperty('opacity', '0.5', 'important');
-                cursor.style.setProperty('background', 'white', 'important');
-              }
-            });
-            btn.addEventListener('mouseleave', () => {
-              if (cursor) {
-                cursor.classList.remove('hover');
-                // Only reset to default if not in edge zone (arrow classes indicate edge zone)
-                if (!cursor.classList.contains('arrow-left') && !cursor.classList.contains('arrow-right')) {
-                  cursor.style.setProperty('width', '18px', 'important');
-                  cursor.style.setProperty('height', '18px', 'important');
-                  cursor.style.setProperty('opacity', '1', 'important');
-                  cursor.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+        }, 300);
+      })();
+    </script>
+    <script src="cursor.js"></script>
+    <script>
+      // Additional hover effect setup after arrow button is created
+      // Wait for arrow button to be created (after 3 second delay)
+      setTimeout(() => {
+        const cursor = document.getElementById('cursorCircle');
+        if (cursor) {
+          // Set up hover effect specifically for arrow buttons
+          const setupArrowHover = () => {
+            const arrowButtons = document.querySelectorAll('.arrow-button-wrapper');
+            arrowButtons.forEach(btn => {
+              btn.addEventListener('mouseenter', () => {
+                if (cursor) {
+                  cursor.classList.add('hover');
+                  cursor.style.setProperty('width', '45px', 'important');
+                  cursor.style.setProperty('height', '45px', 'important');
+                  cursor.style.setProperty('opacity', '0.5', 'important');
+                  cursor.style.setProperty('background', 'white', 'important');
                 }
-                // If in edge zone, the mousemove handler in morph.js will maintain the 80px size
-              }
+              });
+              btn.addEventListener('mouseleave', () => {
+                if (cursor) {
+                  cursor.classList.remove('hover');
+                  // Only reset to default if not in edge zone (arrow classes indicate edge zone)
+                  if (!cursor.classList.contains('arrow-left') && !cursor.classList.contains('arrow-right')) {
+                    cursor.style.setProperty('width', '18px', 'important');
+                    cursor.style.setProperty('height', '18px', 'important');
+                    cursor.style.setProperty('opacity', '1', 'important');
+                    cursor.style.setProperty('background', 'rgba(95, 95, 95, 0.28)', 'important');
+                  }
+                  // If in edge zone, the mousemove handler in morph.js will maintain the 80px size
+                }
+              });
             });
-          });
-        };
+          };
 
-        setupArrowHover();
-        // Also try a bit later to be sure
-        setTimeout(setupArrowHover, 500);
-      }
-    }, 3500);
-  </script>
+          setupArrowHover();
+          // Also try a bit later to be sure
+          setTimeout(setupArrowHover, 500);
+        }
+      }, 3500);
+    </script>
 
-  <!-- Add this to your HTML body, after your existing elements -->
+    <!-- Add this to your HTML body, after your existing elements -->
 
-<!-- Text Overlay Container -->
-<div id="textOverlay">
-  <!-- US Zoom Text -->
-  <div class="zoom-text" data-zoom="US">
-    <h1 class="main-title">1925-2020</h1>
-    
-    <!-- Event Pills Container -->
-    <div id="eventPills"></div>
-    
-    <p class="description">
-      Each line between locations represents a film. A dot indicates that the film's depicted location is the same as the real location. 
-    </p>
-  </div>
+    <!-- Text Overlay Container -->
+    <div id="textOverlay">
+      <!-- US Zoom Text -->
+      <div class="zoom-text" data-zoom="US">
+        <h1 class="main-title">1925-2020</h1>
 
-  <div class="page-footer">
-    <div>Published 2025</div>
-    <div>Created by Michael, Audrey, Tanvir, Sydney</div>
-  </div>
-</div>
-    </div> <!-- End map-page -->
+        <!-- Event Pills Container -->
+        <div id="eventPills"></div>
+
+        <p class="description">
+          Each line between locations represents a film. A dot indicates that the film's depicted location is the same
+          as the real location.
+        </p>
+      </div>
+    </div>
+  </div> <!-- End map-page -->
   </div> <!-- End page-container -->
+
+  <!-- Enter Map Button - positioned outside container for viewport-relative positioning -->
+  <button class="enter-map-button" id="enterMapBtn">
+    <div class="enter-map-circle">
+      <img src="asset/arrow_vector.svg" alt="" />
+    </div>
+  </button>
 
   <!-- Scroll Indicator Arrow -->
   <div id="scrollIndicator">
@@ -1339,13 +1454,13 @@
   <!-- World Map Scroll Indicator Arrow -->
   <div id="worldScrollIndicator">
     <div id="worldScrollIndicatorArrow"></div>
-    <div id="worldScrollIndicatorText">Keep scrolling!</div>
+    <div id="worldScrollIndicatorText">Keep scrolling</div>
   </div>
 
   <!-- Solar System Scroll Indicator Arrow -->
   <div id="solarScrollIndicator">
-    <div id="solarScrollIndicatorText">Now scroll down to zoom back in!</div>
     <div id="solarScrollIndicatorArrow"></div>
+    <div id="solarScrollIndicatorText">Scroll down to zoom back</div>
   </div>
 
   <!-- Navigation Menu - outside page slides so always visible -->
@@ -1490,7 +1605,7 @@
       e.preventDefault();
 
       const now = Date.now();
-      
+
       // Cooldown check
       if (scrollCooldown || (now - lastScrollTime < SCROLL_COOLDOWN_MS)) {
         return;
@@ -1503,7 +1618,7 @@
 
         // Transition to map page
         goToMapPage();
-        
+
         // Reset cooldown
         setTimeout(() => {
           scrollCooldown = false;
@@ -1530,7 +1645,7 @@
   <!-- Pie Chart Container -->
   <div id="pieChartContainer" style="
     position: fixed;
-    bottom: 125px;
+    bottom: 150px;
     left: 60px;
     width: 260px;
     height: 180px;
@@ -1541,5 +1656,12 @@
   ">
     <svg id="pieChart" width="260" height="180"></svg>
   </div>
+
+  <!-- Footer -->
+  <div class="cover-footer">
+    <div class="cover-footer-text" style="opacity: 0">Published 2025</div>
+    <div class="cover-footer-text">Created by Audrey Yang, Michael Cai, Tanvir Haque, Sydney Nguyen</div>
+  </div>
 </body>
+
 </html>

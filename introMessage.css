@@ -1,13 +1,18 @@
   .timeline-intro {
     position: fixed;
-    top: 60px;
-    left: 60px;
+    top: 110px;
+    left: 112px;
     display: flex;
     align-items: center;
     gap: 12px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
     z-index: 5000;
     pointer-events: none;
+  }
+
+  /* Hide the timeline-intro icon to avoid overlap with page-header icon */
+  .timeline-intro .intro-icon {
+    display: none;
   }
 
   /* Ensure page-header doesn't affect icon sizing */
@@ -24,12 +29,13 @@
   
   .timeline-intro .intro-icon,
   .page-header .intro-icon {
-    width: 16px;
-    height: 16px;
-    min-width: 16px;
-    min-height: 16px;
-    max-width: 16px;
-    max-height: 16px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    margin-right: 0;
     background-color: #ffffff;
     opacity: 0;
     transform: scale(0);
@@ -37,6 +43,8 @@
     flex-grow: 0;
     box-sizing: border-box;
     animation: boxAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    z-index: 10001;
+    position: relative;
   }
 
   @keyframes boxAppear {
@@ -52,14 +60,31 @@
   
   .timeline-intro .intro-text,
   .page-header .intro-text {
-    font-size: 11px;
+    font-size: 30px;
     color: #ffffff;
     letter-spacing: 1px;
     text-transform: uppercase;
-    max-width: 1050px;
+    max-width: 1150px;
     line-height: 1.4;
     opacity: 0;
+    /* left: 115px;
+    top: 99px; */
+    /* position: absolute; */
     transition: opacity 0.5s ease;
+  }
+
+  .back-arrow {
+    font-size: 24px;
+  }
+
+  /* Make the default introMessage text smaller without changing other intros */
+  #introMessageDefault .intro-text {
+    font-size: 20px;
+  }
+
+  /* Make the overlay intro strip text smaller as well */
+  #introMessageOverlay .intro-text {
+    font-size: 20px;
   }
   
   .timeline-intro.show-text .intro-text {
@@ -89,4 +114,7 @@
 .page-header .intro-icon {
     opacity: 1 !important;
     transform: scale(1) !important;
+    position: fixed !important;
+    top: 100px !important;
+    left: 60px !important;
 }

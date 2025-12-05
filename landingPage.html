@@ -127,6 +127,36 @@
             text-align: right;
         }
 
+        /* Cover footer - matching index.html design */
+        .cover-footer {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 60px;
+            font-size: 11px;
+            color: #888888;
+            letter-spacing: 0.5px;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+            z-index: 9999;
+            gap: 0;
+        }
+
+        .cover-footer-text {
+            color: #FFF;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            letter-spacing: 0.6px;
+            opacity: 0.6;
+        }
+
         /* Menu Sidebar */
         .menu-sidebar {
             position: fixed;
@@ -232,13 +262,9 @@
     </div>
 
     <!-- Footer -->
-    <div class="footer">
-        <div class="credits-left">
-            Created by: Michael, Audrey, Tanvir, Sydney
-        </div>
-        <div class="credits-right">
-            Course: CS171O Data Visualization with Professor Hans
-        </div>
+    <div class="cover-footer">
+        <div class="cover-footer-text">Published 2025</div>
+        <div class="cover-footer-text">Created by Audrey Yang, Michael Cai, Tanvir Haque, Sydney Nguyen</div>
     </div>
 
     <script src="navigation-menu.js"></script>

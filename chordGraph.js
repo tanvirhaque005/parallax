@@ -112,12 +112,12 @@ class ChordGraph {
       }) : ['No movies found for this time period'];
       
       const html = `
-        <div style="font-weight:700; margin-bottom:12px; color:#ffffff; font-size:16px; letter-spacing:0.5px;">${themeName}</div>
-        <div style="font-size:11px; color:#ffffff; line-height:1.6; margin-bottom:12px; opacity:0.9;">
+        <div style="font-weight:400; margin-bottom:12px; color:#ffffff; font-size:28px; letter-spacing:0.5px;">${themeName}</div>
+        <div style="font-size:18px; color:#ffffff; line-height:1.6; margin-bottom:12px; opacity:0.9;">
           ${description}
         </div>
         <div style="width:100%; height:1px; background-color:rgba(255,255,255,0.3); margin-bottom:12px;"></div>
-        <div style="font-size:11px; color:#ffffff; line-height:1.8; margin-top:12px;">
+        <div style="font-size:14px; color:#ffffff; line-height:1.8; margin-top:12px;">
           ${formattedMovies.map(m => `<div style="padding:2px 0;">${m}</div>`).join('')}
         </div>
       `;

@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
   
       wrapper.innerHTML = `
         <div class="arrow-button-text">${text}</div>
-        <div class="arrow-button-circle">
-          <span>→</span>
+        <div class="cta-arrow">
+          <img src="asset/arrow_vector.svg" alt="" class="cta-arrow-icon" />
         </div>
       `;
   

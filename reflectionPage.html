@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,8 @@
     <link rel="stylesheet" href="navigation-menu.css">
     <link rel="stylesheet" href="introMessage.css">
     <link rel="stylesheet" href="cursor.css">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -17,12 +19,13 @@
 
         body {
             background-color: #0a0a0a;
-            font-family:'IBM Plex Sans', sans-serif;
+            font-family: 'IBM Plex Sans', sans-serif;
             color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
             overflow: auto;
             min-height: 100vh;
             position: relative;
+            cursor: none !important;
         }
 
         /* Page Container */
@@ -62,10 +65,40 @@
 
         /* Header */
         .page-header {
+            position: fixed !important;
+            top: 60px;
+            left: 60px;
+            z-index: 10000;
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 40px;
+            /* Ensure it doesn't inherit transform from page-slide */
+            transform: none !important;
+            will-change: auto;
+        }
+
+        /* Page headers inside page-slides should also be fixed and not move */
+        .page-slide .page-header {
+            position: fixed !important;
+            transform: none !important;
+        }
+
+        /* Ensure intro-icon and intro-text appear side by side */
+        .page-header .intro-icon {
+            flex-shrink: 0;
+        }
+
+        .page-header .intro-text {
+            display: inline-block;
+            opacity: 1 !important;
+            position: absolute;
+            top: 38px;
+            left: 50px;
+        }
+
+        .page-header .back-link {
+            position: absolute;
+            top: 0px;
         }
 
         .header-number {
@@ -79,44 +112,98 @@
             animation: boxAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
-        /* First Page Styles */
+        /* Ensure intro-text appears next to intro-icon */
+        .reflection-page .page-header .intro-text {
+            opacity: 1 !important;
+        }
+
+        .reflection-page.active .page-header .intro-text {
+            opacity: 1 !important;
+        }
+
+        /* Ensure intro-icon and intro-text don't slide with page - they're fixed */
+        .page-header .intro-icon {
+            /* Prevent inheriting transform from page-slide, but allow animation */
+            transform-origin: center;
+        }
+
+        .page-header .intro-text {
+            /* Prevent inheriting transform from page-slide */
+            transform: none !important;
+        }
+
+        /* First Page Styles - matching chordGraph.html */
         .intro-page {
-            justify-content: flex-start;
-            padding-top: 8vh;
+            display: flex;
+            flex-direction: column;
+            padding: clamp(20px, 4vw, 60px);
+            overflow: visible;
+            min-height: 100vh;
         }
 
         .intro-page .page-header {
             margin-bottom: 40px;
         }
-        
+
         /* Use introMessage styles - add animation trigger for intro page */
         .intro-page.active .intro-icon {
             animation: boxAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
-        .intro-main-title {
-            font-size: 56px;
-            font-weight: 400;
-            color: #ffffff;
-            letter-spacing: 3px;
-            margin-bottom: 30px;
-            line-height: 1.2;
-            max-width: 900px;
+        /* Intro Panel Styles - matching chordGraph.html */
+        .intro-panel {
+            position: relative;
+            width: 80%;
+            max-width: 2000px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding-top: clamp(80px, 15vh, 200px);
+            overflow: visible;
+            min-height: 100vh;
         }
 
+        .intro-category {
+            display: inline-block;
+            padding: 16px;
+            font-size: 22px;
+            font-weight: 400;
+            letter-spacing: 1.6px;
+            color: rgba(255, 255, 255, 0.90);
+            border-radius: 100px;
+            border: 1px solid #FFF;
+            background: rgba(255, 255, 255, 0.10);
+            margin-bottom: 16px;
+            font-family: 'IBM Plex Sans', sans-serif;
+            width: fit-content;
+        }
+
+        .intro-title,
+        .intro-main-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            color: #ffffff;
+            margin: 0 0 20px 0;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+
+        .intro-description,
         .intro-paragraph {
-            font-size: 18px;
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 22px;
             color: #ffffff;
             line-height: 1.6;
-            letter-spacing: 0.2px;
-            margin-bottom: 30px;
+            margin: 0 0 24px 0;
             max-width: 800px;
-            font-weight: 400;
+            font-weight: 300;
         }
+
 
         .explored-section {
             display: flex;
-            gap: 20px;
+            gap: 20xpx;
             margin-bottom: 30px;
         }
 
@@ -131,7 +218,7 @@
         }
 
         .explored-title {
-            font-size: 22px;
+            font-size: 40px;
             color: #ffffff;
             letter-spacing: 1px;
             margin-bottom: 16px;
@@ -192,6 +279,7 @@
         }
 
         .reflection-box-number {
+            font-family: 'IBM Plex Sans', sans-serif;
             font-size: 64px;
             font-weight: 400;
             color: #ffffff;
@@ -200,6 +288,7 @@
         }
 
         .reflection-box-category {
+            font-family: 'IBM Plex Sans', sans-serif;
             font-size: 16px;
             font-weight: 600;
             color: #ffffff;
@@ -209,39 +298,43 @@
         }
 
         .reflection-box p {
-            font-size: 16px;
+            font-size: 28px;
             color: #ffffff;
-            line-height: 1.6;
+            line-height: 1.3;
             letter-spacing: 0.2px;
             text-align: left;
+            font-weight: 200;
             margin: 0;
         }
 
-        /* Footer */
-        .page-footer {
+        /* Cover footer - matching index.html design */
+        .cover-footer {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
             display: flex;
+            flex-direction: row;
+            align-items: center;
             justify-content: space-between;
-            align-items: flex-end;
-            margin-top: auto;
-        }
-
-        .credits-section {
+            padding: 0 60px;
             font-size: 11px;
             color: #888888;
             letter-spacing: 0.5px;
-            line-height: 1.8;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+            z-index: 9999;
+            gap: 0;
         }
 
-        .credits-title {
-            font-size: 11px;
-            color: #ffffff;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-        }
-
-        .credits-section p {
-            margin-bottom: 6px;
+        .cover-footer-text {
+            color: #FFF;
+            font-family: 'IBM Plex Sans', sans-serif !important;
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            letter-spacing: 0.6px;
+            opacity: 0.6;
         }
 
         .restart-button {
@@ -249,202 +342,267 @@
             right: 60px;
             top: 50%;
             transform: translateY(-50%);
-            display: inline-flex;
+            display: flex !important;
             align-items: center;
-            gap: 15px;
+            gap: clamp(12px, 2vw, 18px);
             color: #ffffff;
             text-decoration: none;
-            font-size: 13px;
-            letter-spacing: 1px;
+            font-size: clamp(14px, 2vw, 16px);
+            letter-spacing: 3px;
             text-transform: uppercase;
-            transition: all 0.3s ease;
-            z-index: 100;
+            transition: opacity 0.3s ease;
+            z-index: 10001;
+            font-family: 'IBM Plex Sans', sans-serif;
+            pointer-events: auto;
+            cursor: none !important;
+            background: transparent;
+            border: none;
+            padding: 0;
         }
 
         .restart-button:hover {
-            opacity: 0.8;
+            opacity: 0.7;
         }
 
         .restart-circle {
-            width: 60px;
-            height: 60px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
             display: flex;
+            width: 80px;
+            height: 80px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            border: 1px solid #ffffff;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.20);
+            box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0.30);
+            backdrop-filter: blur(2px);
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease;
         }
 
         .restart-button:hover .restart-circle {
-            border-color: rgba(255, 255, 255, 1);
-            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(3px);
         }
 
-        .restart-arrow {
-            font-size: 24px;
-            color: #ffffff;
+        .restart-circle img {
+            width: 32px;
+            height: 32px;
+            display: block;
         }
 
-        /* CTA Button - matches restart button style */
+        /* CTA Button - matches morph.html enter-map-button style */
         .cta-button {
             position: fixed;
             right: 60px;
             top: 50%;
             transform: translateY(-50%);
-            display: inline-flex;
+            display: flex !important;
             align-items: center;
-            gap: 15px;
+            gap: clamp(12px, 2vw, 18px);
             background: transparent;
             border: none;
             color: #ffffff;
             text-decoration: none;
-            font-size: 13px;
-            letter-spacing: 1px;
+            font-size: clamp(14px, 2vw, 16px);
+            letter-spacing: 3px;
             text-transform: uppercase;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            z-index: 100;
+            transition: opacity 0.3s ease;
+            cursor: none !important;
+            z-index: 10001;
+            font-family: 'IBM Plex Sans', sans-serif;
+            pointer-events: auto;
             padding: 0;
         }
-        
+
         /* Hide continue button on reflection page */
         .reflection-page .cta-button {
             display: none;
         }
 
         .cta-button:hover {
-            opacity: 0.8;
+            opacity: 0.7;
         }
 
         .cta-arrow {
-            width: 60px;
-            height: 60px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
             display: flex;
+            width: 80px;
+            height: 80px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            border: 1px solid #ffffff;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.20);
+            box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0.30);
+            backdrop-filter: blur(2px);
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease;
         }
 
         .cta-button:hover .cta-arrow {
-            border-color: rgba(255, 255, 255, 1);
-            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(3px);
         }
 
-        .cta-arrow::after {
-            content: '→';
-            font-size: 24px;
-            color: #ffffff;
+        .cta-arrow img {
+            width: 32px;
+            height: 32px;
+            display: block;
         }
+
         .back-link {
             display: flex;
             align-items: center;
             gap: 12px;
             color: #cccccca4;
             text-decoration: none;
-            font-size: 12px;
+            font-size: 20px;
+            position: absolute;
+            top: 0px;
             letter-spacing: 1px;
             transition: color 0.3s;
             text-transform: uppercase;
-            position: fixed;
-                top: 20px;
-                left: 40px;
-                z-index: 200;
-            }
+        }
 
-            .explore-list {
-                list-style: none;
-                margin-left: 0;
-                padding-left: 0;
-                padding-bottom: 20px;
-                max-width: calc(100% - 200px);
-            }
+        .back-arrow {
+            font-size: 24px;
+        }
 
-            .explore-list li {
-                font-size: 18px;
-                color: #ffffff;
-                line-height: 1.6;
-                letter-spacing: 0.2px;
-                margin-bottom: 12px;
-                padding-left: 0;
-                font-weight: 400;
-                position: relative;
-                padding-left: 24px;
-            }
+        .explore-list {
+            list-style: none;
+            margin-left: 0;
+            padding-left: 0;
+            padding-bottom: 20px;
+            max-width: calc(100% - 200px);
+        }
 
-            .explore-list li::before {
-                content: '•';
-                position: absolute;
-                left: 0;
-                color: #ffffff;
-                font-size: 18px;
-            }
-			
+        .explore-list li {
+            font-size: 18px;
+            color: #ffffff;
+            line-height: 1.6;
+            letter-spacing: 0.2px;
+            margin-bottom: 12px;
+            padding-left: 0;
+            font-weight: 400;
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .explore-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #ffffff;
+            font-size: 18px;
+            /* Center the bullet with the first line of text */
+            top: 0.3em;
+            line-height: 1;
+        }
+
+        .credit {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 0.3;
+            font-family: 'IBM Plex Sans', sans-serif;
+        }
+
+        .credit-title {
+            font-size: 24px;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+        
+        .credit-text {
+            font-size: 18px;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 0.2px;
+        }
     </style>
 </head>
+
 <body>
     <!-- Page Header -->
-		<div class="page-header">
-			<a href="morph.html" class="back-link">
-				<span class="back-arrow">←</span>
-				<span>Back</span>
-			</a>
-		</div>
+    <div class="page-header">
+        <div class="intro-icon"></div>
+        <a href="morph.html" class="back-link">
+            <span class="back-arrow">←</span>
+            <span>Back</span>
+        </a>
+    </div>
     <!-- Custom Cursor -->
     <div id="cursorCircle"></div>
-    
+
     <!-- Intro Message Container -->
-    <div id="introMessageDefault" data-text="Let's reflect on what 100 years of sci-fi reveals about us—and about our own imagination."></div>
-    
+    <div id="introMessageDefault"
+        data-text="Let's reflect on what 100 years of sci-fi reveals about us—and about our own imagination."></div>
+
     <!-- Navigation Menu -->
     <div class="navigation-menu" id="navigationMenu"></div>
 
     <div class="page-container">
         <!-- Intro Page (Page 1) -->
         <div class="page-slide intro-page active" id="introPage">
-            <div class="page-header">
-                <div class="intro-icon"></div>
-                <span class="intro-text" id="introPageTitle"></span>
-            </div>
-            
-            <h1 class="intro-main-title">100 Years of Imagination</h1>
-            
-            <p class="intro-paragraph">Together, we saw that...</p>
-            <ul class="explore-list">
-                <li>As sci-fi grew as an artform, directors would use fantastical sci-fi tropes like robots and space in tandem with humanistic tropes like free will and social control to provide social commentary.
-                </li>
-                <li>As time progressed, sci-fi changed from depicting large time leaps to small leaps as the intention shifted from escapism and speculation to confronting contemporary anxieties.
-                </li>
-                <li>Over time, the role of distant worlds in sci-fi evolved from serving as destinations for escapist or speculative adventures to acting as allegorical settings that comment on domestic issues.
-                </li>
-            </ul>
-            
-            <div class="explored-section">
-                <div class="explored-line"></div>
-                <div class="explored-content">
-                    <div class="explored-title">So what?</div>
-                    <p class="intro-paragraph" style="margin-bottom: 0;">So, how did people’s attitudes towards sci-fi change over time? Originally it started as technological entertainment meant to either distract or speculate. As time went on, it progressed into an artform meant to depict contemporary social commentary through a fantastical lens.                    </p>
+            <div class="intro-panel">
+                <div>
+                    <div class="page-header">
+                        <!-- <div class="intro-icon"></div> -->
+                        <span class="intro-text" id="introPageTitle"></span>
+                    </div>
+
+                    <!-- <div class="intro-category">REFLECTION</div> -->
+
+                    <h1 class="intro-title">100 Years of Imagination</h1>
+
+                    <p class="intro-description">Across these views, you saw:</p>
+                    <ul class="explore-list">
+                        <li>
+                            As sci-fi matured, directors began blending fantastical tropes (robots, space) with human
+                            themes (free will, social control) as social commentary.
+                        </li>
+                        <li>
+                            The future leap shrank as the genre shifted from escapism to confronting present anxieties.
+                        </li>
+                        <li>
+                            And distant worlds transformed from pure escape to allegories for issues at home.
+                        </li>
+                    </ul>
+
+                    <div class="explored-section">
+                        <div class="explored-line"></div>
+                        <div class="explored-content" style="margin-left: 20px;">
+                            <div class="explored-title">So what does that say about us?</div>
+                            <p class="intro-paragraph" style="margin-bottom: 0; font-size: 18px;">
+                                Sci-fi has shifted from entertainment as distraction to a social commentary that
+                                reflects our hopes and fears. As the real world grows more uncertain, it no longer needs
+                                distant futures. The future isn’t “out there” anymore...it’s here.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <a href="#" class="cta-button" id="continueToReflectionBtn">
+            <button class="cta-button" id="continueToReflectionBtn">
                 <span>CONTINUE</span>
-                <div class="cta-arrow"></div>
-            </a>
+                <div class="cta-arrow">
+                    <img src="asset/arrow_vector.svg" alt="" />
+                </div>
+            </button>
         </div>
 
         <!-- Reflection Page (Page 2) -->
         <div class="page-slide reflection-page next" id="reflectionPage">
             <div>
                 <div class="page-header">
-                    <div class="intro-icon"></div>
-                    <span class="intro-text" id="reflectionPageTitle">Closing</span>
+                    <!-- <div class="intro-icon"></div> -->
+                    <span class="intro-text" id="reflectionPageTitle" style="font-size: 20px; top: 45px;">Closing</span>
                 </div>
 
-                <h1 class="reflection-main-title">Reflection</h1>
-                
+                <h1 class="reflection-main-title" style="margin-top: 150px;">Reflection</h1>
+
                 <div class="reflection-boxes">
                     <div class="reflection-box">
                         <div class="reflection-box-number">01</div>
@@ -462,23 +620,21 @@
                         <p>What future would you imagine next?</p>
                     </div>
                 </div>
-            </div>
+                <div class="credit">
+                    <div class="credit-title">CREDITS</div>
+                    <div class="credit-text">Harvard University, CS1710 Data Visualization | Advised by Prof. Hans Pfister <br />
+                        Data Sources: Film metadata databases, scholarly archives, and structured research collected
+                        across the project.
+                    </div>
 
-            <div class="page-footer">
-                <div class="credits-section">
-                    <div class="credits-title">CREDITS</div>
-                    <p>Harvard University, CS1710 Data Visualization | Advised by Prof. Hans Pfister</p>
-                    <p>Data Sources: Film metadata databases, scholarly archives, and structured research collected across the project.</p>
-                    <p>Published 2025</p>
-                    <p>Created by Audrey Yang, Michael Cai, Tanvir Haque, Sydney Nguyen</p>
                 </div>
             </div>
-            
+
             <!-- Restart button positioned in right middle -->
             <a href="index.html" class="restart-button">
                 <span>RESTART</span>
                 <div class="restart-circle">
-                    <span class="restart-arrow">→</span>
+                    <img src="asset/arrow_vector.svg" alt="" />
                 </div>
             </a>
         </div>
@@ -509,10 +665,10 @@
                             // Force reflow
                             void headerIcon.offsetHeight;
                             headerIcon.style.animation = '';
-                            
+
                             // Clear any existing text first
                             headerTitle.textContent = '';
-                            
+
                             // Trigger typing animation after box appears
                             setTimeout(() => {
                                 const introText = "Closing";
@@ -549,21 +705,21 @@
         }
 
         let currentTypingInterval = null;
-        
+
         function typeText(element, text, speed = 100) {
             if (!element) {
                 console.error('typeText: element is null');
                 return;
             }
-            
+
             // Clear any existing typing animation
             if (currentTypingInterval) {
                 clearInterval(currentTypingInterval);
                 currentTypingInterval = null;
             }
-            
+
             const textToType = String(text || '').trim();
-            
+
             // Clear element completely
             element.textContent = '';
             element.innerHTML = '';
@@ -571,7 +727,7 @@
             element.style.opacity = '1';
             element.style.textTransform = 'none';
             element.classList.add('typing');
-            
+
             let i = 0;
             currentTypingInterval = setInterval(() => {
                 if (i < textToType.length) {
@@ -598,12 +754,12 @@
 
         // Initialize
         updatePages();
-        
+
         // Prevent introMessage from showing on first page - do this immediately
         if (window.hideDefaultIntro) {
             window.hideDefaultIntro();
         }
-        
+
         // Don't show intro message on reflection page - we have our own header text
         // Hide it if it's showing
         setTimeout(() => {
@@ -656,5 +812,12 @@
         });
 
     </script>
+
+    <!-- Footer -->
+    <div class="cover-footer">
+        <div class="cover-footer-text">Published 2025</div>
+        <div class="cover-footer-text">Created by Audrey Yang, Michael Cai, Tanvir Haque, Sydney Nguyen</div>
+    </div>
 </body>
+
 </html>

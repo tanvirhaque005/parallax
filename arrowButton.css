@@ -38,38 +38,38 @@ cursor: grab;
   /* TEXT */
   .arrow-button-text {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 20px;
+    font-size: 30px;
     letter-spacing: 2px;
     color: white;
     transition: opacity 0.25s ease;
   }
   
-  /* ARROW CIRCLE */
-  .arrow-button-circle {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.7);
+  /* CTA-style arrow circle reused from index cover page */
+  .cta-arrow {
     display: flex;
+    width: 80px;
+    height: 80px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    border: 1px solid #ffffff;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.20);
+    box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0.30);
     align-items: center;
     justify-content: center;
-    transition: border 0.2s ease, background 0.2s ease;
+    transition: transform 0.3s ease;
   }
-  
-  .arrow-button-circle span {
-    font-size: 26px;
-    color: white;
-    transition: transform 0.25s ease;
+
+  .cta-arrow-icon {
+    width: 32px;
+    height: 32px;
+    display: block;
   }
-  
+
   /* HOVER EFFECTS */
-  .arrow-button-wrapper:hover .arrow-button-circle {
-    border-color: white;
-    background: rgba(255,255,255,0.15);
-  }
-  
-  .arrow-button-wrapper:hover .arrow-button-circle span {
-    transform: translateX(4px);
+  .arrow-button-wrapper:hover .cta-arrow {
+    transform: translateX(3px);
   }
   
   .arrow-button-wrapper:hover .arrow-button-text {

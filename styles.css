@@ -55,18 +55,33 @@ html, body {
   width: 100%;
   height: 100%;
   display: block;
+  z-index: 0;
+  pointer-events: auto; /* Allow clicks on books when overlay is closed */
+}
+
+
+/* Ensure bookCanvas is visible when overlay is not open */
+#bookinfo:not(.open) ~ #bookCanvas,
+body:not(:has(#bookinfo.open)) #bookCanvas {
   z-index: 1;
+  pointer-events: auto; /* Allow clicks on books when overlay is closed */
+}
+
+/* When overlay is open, disable pointer events on base canvas so it doesn't block navigation */
+#bookinfo.open ~ #bookCanvas,
+body:has(#bookinfo.open) #bookCanvas {
+  pointer-events: none;
 }
 
 /* Overlay canvas: draws only the selected book ABOVE the overlay card */
 #activeBookCanvas {
-  position: absolute;
+  position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
   display: none;
-  pointer-events: none;
-  z-index: 6;
+  pointer-events: none; /* Never block clicks - it's just visual */
+  z-index: 1001;
 }
 
 /* Scroll controls */
@@ -126,19 +141,75 @@ html, body {
   transform: scale(0.96);
 }
 
-/* ---------------- Full-screen overlay ---------------- */
-#bookinfo {
-  position: absolute;
+/* Backdrop overlay - dims the background when book card is open */
+#bookinfoBackdrop {
+  position: fixed;
   inset: 0;
-  z-index: 5;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999; /* Behind the overlay (1000) but above base content */
   opacity: 0;
   pointer-events: none;
   transition: opacity .25s ease;
 }
 
+#bookinfoBackdrop.active {
+  opacity: 1;
+  pointer-events: none; /* Don't block clicks - backdrop is visual only */
+}
+
+/* ---------------- Full-screen overlay ---------------- */
+#bookinfo {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+  height: 120vh;
+  width: 120vw;
+}
+
 #bookinfo.open {
   opacity: 1;
   pointer-events: auto;
+  z-index: 1000;
+}
+
+/* Ensure UI elements stay above overlay even when it's open - must be position: fixed */
+.navigation-menu {
+  z-index: 999999 !important; /* Highest z-index - always on top */
+  position: fixed !important;
+}
+
+.page-header {
+  z-index: 50001 !important;
+  position: fixed !important;
+}
+
+.page-header .back-link {
+  z-index: 50002 !important;
+  position: fixed !important;
+}
+
+.btn.close {
+  z-index: 50003 !important;
+  position: relative !important; /* Relative to card, but z-index still works */
+}
+
+.cover-footer {
+  z-index: 50004 !important;
+  position: fixed !important;
+}
+
+/* When overlay is open, ensure all UI elements stay on top */
+#bookinfo.open ~ .navigation-menu,
+#bookinfo.open ~ .page-header,
+#bookinfo.open ~ .cover-footer,
+body:has(#bookinfo.open) .navigation-menu,
+body:has(#bookinfo.open) .page-header,
+body:has(#bookinfo.open) .cover-footer {
+  z-index: 50000 !important;
+  position: fixed !important;
 }
 
 /* The card is now the entire screen, with solid background and its own scroll */
@@ -154,11 +225,12 @@ html, body {
   box-shadow: none;
   border: none;
   padding-left: 100px;
+  z-index: 0;
 }
 
 /* Content styling */
 .title {
-  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-size: 60px;
   font-weight: 700;
   margin: 0 0 6px;
   font-family: 'IBM Plex Sans', monospace;
@@ -248,6 +320,8 @@ html, body {
   line-height: 1;
   padding: 6px 10px;
   margin: -6px -6px 8px 8px;
+  z-index: 50003;
+  position: relative;
 }
 
 /* Color swatches */
@@ -337,7 +411,8 @@ html, body {
   padding-left: 30%;
   white-space: normal; 
   max-width: 60vw;
-
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .title-row {
@@ -345,14 +420,19 @@ html, body {
   align-items: center;
   gap: 16px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .title {
-  font-size: 2.5rem;
+  font-size: 60px;
   font-weight: 300;
   margin: 0;
   font-family: 'IBM Plex Sans', monospace;
   letter-spacing: 2px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .rating-badge {
@@ -370,17 +450,24 @@ html, body {
   gap: 8px;
   margin-bottom: 24px;
   flex-direction: row;
-  height: 20px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+/* When inside film-info-grid, remove margins so director and tags wrap together */
+.film-info-grid .tags-row {
+  margin-bottom: 0;
+  margin-top: 0;
 }
 
 
 .tag-pill {
-  padding: 4px 12px;
+  padding: 20px;
   background: rgba(217, 217, 217, 0.227);
-  border: 1px solid rgba(255, 255, 255, 0.293);
+  border: 1px solid #fff;
   border-radius: 9999px;
-  font-size: 13px;
-
+  font-size: 24px;
+  display: flex;
   white-space: normal;   /* allow text to wrap inside the pill */
 }
 .tag-pill {
@@ -389,17 +476,19 @@ html, body {
   text-overflow: ellipsis;    /* optional: '...' if container is too small */
   display: inline-flex;       /* expand pill width automatically */
   align-items: center;
-  padding: 4px 10px;
+  padding: 20px;
   border-radius: 999px;
   max-width: 100%;            /* prevents breakouts */
 }
 
 
 .plot {
-  font-size: 16px;
+  font-size: 24px;
   line-height: 1.6;
   margin-bottom: 24px;
   max-width: 50vw;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .film-info-grid {
@@ -412,6 +501,11 @@ html, body {
 .film-header {
   display: grid;
   grid-template-rows: auto auto auto;
+  margin-top: 100px;
+  margin-left: 100px;
+  max-width: calc(100vw - 200px);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Title row stays as-is */
@@ -419,15 +513,40 @@ html, body {
   grid-row: 1;
 }
 
-/* Arrange info-label, info-value, tags-row in one line */
-.film-info-grid .info-item {
-  display: grid;
-  grid-template-columns: auto auto 1fr;
-  grid-template-areas:
-    "tags tags tags"
-    "label value .";
-  row-gap: 0.4rem;
-  column-gap: 1rem;
+/* Director and tags: flex column until full width, then wrap */
+.info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* When there's enough space, switch to row layout */
+@media (min-width: 800px) {
+  .info-item {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+
+/* Make director and tags wrap within their containers */
+.info-item .info-value {
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  flex-shrink: 1;
+}
+
+.info-item .tags-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
 }
 
 
@@ -448,10 +567,40 @@ html, body {
 }
 
 
+/* Director and tags: flex column until full width, then wrap */
 .info-item {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 20px;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* When there's enough space, switch to row layout */
+@media (min-width: 800px) {
+  .info-item {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+
+/* Make director and tags wrap within their containers */
+.info-item .info-value {
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  flex-shrink: 1;
+}
+
+.info-item .tags-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
 }
 
 .info-label {
@@ -464,19 +613,22 @@ html, body {
 }
 
 .info-value {
-  font-size: 16px;
+  font-size: 30px;
   flex-direction: row;
-  white-space: nowrap;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .motifs-section {
-  margin-top: 8px;
+  margin-top: 80px;
 }
 
 .motifs-title {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 40px;
+  font-weight: 400;
   margin: 0 0 8px 0;
+  margin-left: 100px;
   font-family: 'IBM Plex Sans', monospace;
   letter-spacing: 1px;
 }
@@ -488,17 +640,20 @@ html, body {
 }
 
 .motifs-container {
+  margin-left: 100px;
+margin-top: 20px;
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
 }
 
 .motif-circle {
-  width: 80px;
-  height: 80px;
+  margin-right: 50px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   background: #3a3a3a;
-  border: 2px solid #555555;
+  /* border: 2px solid #555555; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -698,7 +853,7 @@ body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circl
   display: flex;
   align-items: flex-end;
   gap: 2px;
-  z-index: 2;        /* ← VERY IMPORTANT */
+  z-index: 50005 !important;        /* Above overlay and navigation */
   pointer-events: auto;   /* ← ensure clicks reach the bars */
 }
 
@@ -775,6 +930,7 @@ body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circl
   left: 0;
   width: 50%;
   height: 100vh;
+  z-index: 50006 !important;
   background: #000000;
   z-index: 3;
   display: flex;
@@ -794,21 +950,21 @@ body, button, a, .btn, .menu-button, .menu-close, #motifsContainer, .motif-circl
 
 .intro-title {
   font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 3rem;
+  font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 400;
   color: #ffffff;
-  margin: 0 0 32px 0;
+  margin: 0 0 20px 0;
   line-height: 1.2;
   letter-spacing: -0.5px;
 }
 
 .intro-description {
   font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 1rem;
+  font-size: 26px;
   color: #ffffff;
   line-height: 1.6;
-  margin: 0;
-  max-width: 600px;
+  margin: 0 0 24px 0;
+  max-width: 800px;
   font-weight: 300;
 }
 
@@ -890,7 +1046,7 @@ body:has(#gridView[style*="display: block"]) {
 }
 
 .grid-header .page-header .intro-text {
-  font-size: 13px !important;
+  font-size: 30px !important;
   letter-spacing: 1.2px !important;
 }
 
@@ -912,10 +1068,24 @@ body:has(#gridView[style*="display: block"]) {
 }
 
 .page-header {
-  position: fixed;
-  top: 40px;
-  left: 40px;
-  z-index: 50;
+  position: fixed !important;
+  top: 100px;
+  left: 60px;
+  z-index: 50001 !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-header .back-link {
+  position: fixed !important;
+  left: 60px;
+  top: 60px;
+  z-index: 50002 !important;
+}
+
+.back-arrow {
+  font-size: 24px !important;
 }
 
 .back-link {
@@ -924,20 +1094,32 @@ body:has(#gridView[style*="display: block"]) {
       gap: 12px;
       color: #cccccca4;
       text-decoration: none;
-      font-size: 12px;
+      font-size: 20px;
       letter-spacing: 1px;
       transition: color 0.3s;
       text-transform: uppercase;
-      position: fixed;
-         top: 20px;
-         left: 40px;
-         z-index: 200;
+    }
+
+    .back-arrow {
+      font-size: 24px !important;
     }
 
     .page-header.disabled {
       pointer-events: none !important;
-      opacity: 0.15 !important;
-      filter: grayscale(100%) brightness(60%);
+      /* No opacity change - keep it fully visible, backdrop will dim the background */
+      z-index: 50001 !important; /* Keep high z-index even when disabled */
+      position: fixed !important; /* Ensure it stays fixed */
+    }
+    
+    /* Ensure page header stays visible even when disabled */
+    .page-header.disabled,
+    .page-header.disabled .back-link {
+      z-index: 50001 !important;
+      position: fixed !important;
+    }
+    
+    .page-header.disabled .back-link {
+      z-index: 50002 !important;
     }
     
 

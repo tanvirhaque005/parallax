@@ -5,6 +5,7 @@
 		<title>Technological Network — Library of Futures</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="navigation-menu.css">
+		<link rel="stylesheet" href="introMessage.css">
 		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 		<script src="https://d3js.org/d3.v7.min.js"></script>
 		<style>
@@ -19,9 +20,27 @@
 			/* Page Header */
 			.page-header {
 				position: fixed;
-				top: 40px;
-				left: 40px;
-				z-index: 50;
+				top: 60px;
+				left: 60px;
+				z-index: 10000;
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+
+			.page-header .intro-icon {
+				width: 40px;
+				height: 40px;
+				background-color: #ffffff;
+				opacity: 1 !important;
+				transform: scale(1) !important;
+				animation: none !important;
+			}
+
+			.page-header .back-link {
+				position: static;
+				left: auto;
+				top: auto;
 			}
 
 			/* Chord Intro Message */
@@ -69,7 +88,8 @@
 				color: #ffffff;
 				letter-spacing: 1px;
 				text-transform: uppercase;
-				max-width: 600px;
+				max-width: 100%;
+				width: 100%;
 				line-height: 1.4;
 				opacity: 0;
 				transition: opacity 0.5s ease;
@@ -101,14 +121,14 @@
 				gap: 12px;
       color: #cccccca4;
 				text-decoration: none;
-      font-size: 12px;
+      font-size: 20px;
 				letter-spacing: 1px;
 				transition: color 0.3s;
 				text-transform: uppercase;
       position: fixed;
-         top: 20px;
-         left: 40px;
-         z-index: 200;
+         top: 60px;
+         left: 60px;
+         z-index: 10003;
 			}
 			
 			.back-link:hover {
@@ -116,7 +136,7 @@
 			}
 			
 			.back-arrow {
-				font-size: 20px;
+				font-size: 24px;
 			}
 			
 			/* Sidebar */
@@ -146,7 +166,7 @@
 			}
 
 			.sidebar-text {
-				font-size: 18px;
+				font-size: 26px;
 				line-height: 1.8;
 				color: #ffffff;
 				margin-bottom: 40px;
@@ -166,7 +186,7 @@
 			.sidebar-pill {
 				padding: 6px 16px;
 				border-radius: 999px;
-				font-size: 10px;
+				font-size: 22px;
 				font-weight: 500;
 				letter-spacing: 1px;
 				border: 1px solid rgba(255,255,255,0.45);
@@ -527,17 +547,17 @@
 
 			.intro-category {
 				display: inline-block;
-				padding: clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 20px);
-				border-radius: 999px;
-				font-size: clamp(12px, 1.5vw, 14px);
-				font-weight: 400;
-				letter-spacing: 1.6px;
-				border: 1px solid rgba(255,255,255,0.45);
-				color: rgba(255,255,255,0.90);
-				background: rgba(255,255,255,0.02);
-				margin-bottom: clamp(16px, 2.5vh, 24px);
-				font-family: 'IBM Plex Sans', sans-serif;
-				width: fit-content;
+      padding: 16px;
+      font-size: 22px;
+      font-weight: 400;
+      letter-spacing: 1.6px;
+      color: rgba(255,255,255,0.90);
+      border-radius: 100px;
+      border: 1px solid #FFF;
+      background: rgba(255, 255, 255, 0.10);
+      margin-bottom: 16px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      width: fit-content;
 			}
 
 			.intro-title {
@@ -545,18 +565,18 @@
 				font-size: clamp(2rem, 5vw, 3.5rem);
 				font-weight: 400;
 				color: #ffffff;
-				margin: 0 0 clamp(20px, 3vh, 32px) 0;
+				margin: 0 0 20px 0;
 				line-height: 1.2;
 				letter-spacing: -0.5px;
 			}
 
 			.intro-description {
 				font-family: 'IBM Plex Sans', sans-serif;
-				font-size: clamp(0.875rem, 1.5vw, 1rem);
+				font-size: 26px;
 				color: #ffffff;
 				line-height: 1.6;
-				margin: 0 0 clamp(24px, 4vh, 40px) 0;
-				max-width: 600px;
+				margin: 0 0 24px 0;
+				max-width: 800px;
 				font-weight: 300;
 			}
 
@@ -602,11 +622,14 @@
 				font-family: 'IBM Plex Sans', sans-serif;
 				pointer-events: auto;
 				cursor: none !important;
-				margin-top: clamp(40px, 15vh, 200px);
 				background: transparent;
 				border: none;
 				padding: 0;
-				position: relative;
+				/* Pin to extreme right of viewport, vertically centered */
+				position: fixed;
+				top: 45%;
+				right: 250px;
+				transform: translateY(-50%);
 				visibility: visible !important;
 				opacity: 1 !important;
 			}
@@ -636,6 +659,13 @@
 				.intro-description {
 					font-size: clamp(0.875rem, 2vw, 1rem);
 					max-width: 100%;
+				}
+
+				/* On smaller screens, stack the button under the text */
+				.intro-arrow-button {
+					position: static;
+					transform: none;
+					margin-top: 40px;
 				}
 			}
 
@@ -694,30 +724,35 @@
 			.intro-arrow-button:hover {
 				opacity: 0.7;
 			}
-
+			
 			.intro-arrow-circle {
-				width: clamp(50px, 8vw, 60px);
-				height: clamp(50px, 8vw, 60px);
-				border: 1px solid #ffffff;
-				border-radius: 50%;
+				/* Match cta-arrow styling */
 				display: flex;
+				width: 80px;
+				height: 80px;
+				flex-direction: column;
+				align-items: flex-start;
+				gap: 10px;
+				border: 1px solid #ffffff;
+				border-radius: 50px;
+				background: rgba(255, 255, 255, 0.20);
+				box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0.30);
+
+				backdrop-filter: blur(2px);
 				align-items: center;
 				justify-content: center;
 				transition: transform 0.3s ease;
 			}
-
+			
 			.intro-arrow-button:hover .intro-arrow-circle {
 				transform: translateX(3px);
 			}
-
-			.intro-arrow-circle::after {
-				content: '→';
-				font-size: 24px;
-				color: #ffffff;
-			}
-
-			.intro-arrow-circle span {
-				display: none;
+			
+			/* SVG icon inside intro arrow circle */
+			.intro-arrow-circle img {
+				width: 32px;
+				height: 32px;
+				display: block;
 			}
 
 			/* Main Chord Graph Page */
@@ -828,20 +863,46 @@
 				z-index: 1 !important;
 			}
 
-			.page-footer {
+			/* Cover footer - matching index.html design */
+			.cover-footer {
 				position: fixed;
-				bottom: 20px;
+				bottom: 60px;
 				left: 0;
 				right: 0;
-				padding: 0 40px;
 				display: flex;
-				justify-content: space-between;
+				flex-direction: row;
 				align-items: center;
-				font-family: 'IBM Plex Sans', sans-serif;
-				font-size: 14px;
-				color: rgba(255,255,255,0.65);
-				z-index: 1000;
-				pointer-events: none;
+				justify-content: space-between;
+				padding: 0 60px;
+				font-size: 11px;
+				color: #888888;
+				letter-spacing: 0.5px;
+				font-family: 'IBM Plex Sans', sans-serif !important;
+				z-index: 9999;
+				gap: 0;
+			}
+
+			.cover-footer-text {
+				color: #FFF;
+				font-family: 'IBM Plex Sans', sans-serif !important;
+				font-size: 20px;
+				font-style: normal;
+				font-weight: 400;
+				line-height: normal;
+				letter-spacing: 0.6px;
+				opacity: 0.6;
+			}
+
+			#chordIntroMessage {
+				position: absolute;
+				top: 105px;
+				left: 110px;
+			}
+
+			#chordIntroText{
+				font-size: 20px;
+				max-width: 100%;
+				width: 100%;
 			}
 		</style>
 	</head>
@@ -873,16 +934,17 @@
 							This chord diagram shows how sci-fi films from different eras reuse and reinterpret the same motifs. Each line connects films that share a trope and how those connection reflect culture.
 						</p> -->
 
-						<h1 class="intro-title">Sci-Fi Trope Connections Across Time</h1>
+						<h1 class="intro-title">How does sci-fi share themes across time?</h1>
 
 						<!-- Description -->
 						<p class="intro-description">
-							You will see how the usage of tropes in sci-fi films changes as the genre evolves. Initially, when indulging in escapist or speculative fantasies, sci-fi films tend to incorporate either humanistic/social tropes (social control, free will, surveillance, consciousness) or fantastical ones (AI, robotics, space, transcendence, biology), but not both. But as sci-fi grew as an artform, directors used fantastical tropes to express social issues in the face of hardship. As time progresses, more films include both types of tropes.
+							Early films relied on either humanistic tropes (free will, social control, surveillance) or fantastical ones (AI, robots, space). As the genre matured, directors began blending both—using speculative technologies to comment on real social issues. Over time, most films mix these worlds, reflecting more complex anxieties.
 						</p>
 						<!-- BEGIN Button - Same style as fiction vs reality page -->
 						<button class="intro-arrow-button" id="beginChordBtn">
-							<span>BEGIN</span>
-							<div class="intro-arrow-circle"></div>
+							<div class="intro-arrow-circle">
+								<img src="asset/arrow_vector.svg" alt="" />
+							</div>
 						</button>
 					</div>
 
@@ -905,7 +967,7 @@
 							<div class="intro-timeline-bar"></div>
 							<div class="intro-timeline-bar"></div>
 						</div>
-						<div class="intro-published">Published 2025</div>
+						<div class="intro-published" style="opacity: 0">Published 2025</div>
 					</div>
 				</div>
 			</div>
@@ -914,6 +976,7 @@
 			<div class="page-slide chord-page next" id="chordPage">
 				<!-- Page Header -->
 				<div class="page-header">
+					<div class="intro-icon"></div>
 					<a href="bookshelf.html" class="back-link">
 						<span class="back-arrow">←</span>
 						<span>Back</span>
@@ -922,7 +985,7 @@
 
 				<!-- Intro Message with Typing Animation -->
 				<div class="chord-intro-message" id="chordIntroMessage">
-					<div class="chord-intro-icon"></div>
+					<!-- <div class="chord-intro-icon"></div> -->
 					<div class="chord-intro-text" id="chordIntroText"></div>
 				</div>
 
@@ -956,11 +1019,6 @@
 				<!-- Main Visualization -->
 				<div id="chordContainer">
 					<div class="loading">Loading visualization...</div>
-				</div>
-				
-				<div class="page-footer">
-					<div>Published 2025</div>
-					<div>Created by Michael, Audrey, Tanvir, Sydney</div>
 				</div>
 			</div>
 		</div>
@@ -2045,5 +2103,11 @@ function positionLabelOverBar(labelEl, barEl, year) {
 			// Initialize
 			updatePages();
 		</script>
+
+		<!-- Footer -->
+		<div class="cover-footer">
+			<div class="cover-footer-text" style="opacity: 0">Published 2025</div>
+			<div class="cover-footer-text">Created by Audrey Yang, Michael Cai, Tanvir Haque, Sydney Nguyen</div>
+		</div>
 	</body>
 </html>
